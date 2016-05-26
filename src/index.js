@@ -1,3 +1,3 @@
 // export this package's api
-import MListview from './MListview';
-export default MListview;
+import ListView from './ListView.web';
+export default ListView;

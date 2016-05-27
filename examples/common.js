@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		2:0
+/******/ 		3:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"more","1":"simple"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"more","1":"paging","2":"simple"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -21152,7 +21152,8 @@
 	
 	    var alwaysBounceVertical = this.props.alwaysBounceVertical !== undefined ? this.props.alwaysBounceVertical : !this.props.horizontal;
 	
-	    var handleScroll = function handleScroll() {};
+	    // let handleScroll = () => {};
+	    var handleScroll = this.handleScroll;
 	    if (this.props.scrollEventThrottle && this.props.onScroll) {
 	      handleScroll = (0, _throttle2.default)(this.handleScroll, this.props.scrollEventThrottle);
 	    }
@@ -21171,10 +21172,10 @@
 	      onStartShouldSetResponder: this.scrollResponderHandleStartShouldSetResponder,
 	      onStartShouldSetResponderCapture: this.scrollResponderHandleStartShouldSetResponderCapture,
 	      // onScrollShouldSetResponder: this.scrollResponderHandleScrollShouldSetResponder,
-	      // onScroll: handleScroll,
+	      onScroll: handleScroll,
 	      onScrollShouldSetResponder: handleScroll,
 	      // replace onScroll in the props
-	      onScroll: function onScroll() {},
+	      // onScroll: () => {},
 	      onResponderGrant: this.scrollResponderHandleResponderGrant,
 	      onResponderTerminationRequest: this.scrollResponderHandleTerminationRequest,
 	      onResponderTerminate: this.scrollResponderHandleTerminate,
@@ -21416,6 +21417,7 @@
 	
 	var styles = _StyleSheet2.default.create({
 	  base: {
+	    position: 'relative',
 	    overflow: 'scroll',
 	    WebkitOverflowScrolling: 'touch',
 	    flex: 1

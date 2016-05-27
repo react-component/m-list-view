@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>util.js - example - rmc-listview@0.1.0</title>
+  <title>util.js - example - rmc-listview@0.2.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,25 +258,38 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-listview@0.1.0</h1>
+      <h1>rmc-listview@0.2.0</h1>
 
       <p>m-listview ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> THUMB_URLS = [
-  <span class="hljs-comment">// require('./Thumbnails/like.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/dislike.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/call.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/fist.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/bandaged.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/flowers.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/heart.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/liking.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/party.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/poke.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/superlike.png'),</span>
-  <span class="hljs-comment">// require('./Thumbnails/victory.png'),</span>
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">const</span> victory = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/kwihkdUVljwUURM.png'</span>;
+<span class="hljs-keyword">const</span> superlike = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/pmXtSKUFLsIEJLh.png'</span>;
+<span class="hljs-keyword">const</span> poke = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/ZlYzyBcrtLqnbjN.png'</span>;
+<span class="hljs-keyword">const</span> party = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/mIrghdvucaPOLhc.png'</span>;
+<span class="hljs-keyword">const</span> liking = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/DrcLpisGZWASeoj.png'</span>;
+<span class="hljs-keyword">const</span> like = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/jloFMiDVGaHrHIO.png'</span>;
+<span class="hljs-keyword">const</span> heart = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/QFjTyLzmuJQIflm.png'</span>;
+<span class="hljs-keyword">const</span> flowers = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/rgahTjFqZATwqqL.png'</span>;
+<span class="hljs-keyword">const</span> fist = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/KcyBnnVZlfIDgci.png'</span>;
+<span class="hljs-keyword">const</span> dislike = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/FmMzrxqOhiogBOX.png'</span>;
+<span class="hljs-keyword">const</span> call = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/TKlynYhJACDNwKw.png'</span>;
+<span class="hljs-keyword">const</span> bandaged = <span class="hljs-string">'https://os.alipayobjects.com/rmsportal/htJwTSIUpppWwSb.png'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> THUMB_URLS = [
+  like,
+  dislike,
+  call,
+  fist,
+  bandaged,
+  flowers,
+  heart,
+  liking,
+  party,
+  poke,
+  superlike,
+  victory,
 ];
 
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_genRows</span>(<span class="hljs-params">pressData</span>) </span>{
@@ -319,9 +332,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableHighlight = React.createClass({
   render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">const</span> props = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{props.onPress}</span>&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   },
 });
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableOpacity = TouchableHighlight;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> styles = {
   row: {
@@ -338,6 +352,116 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     flex: <span class="hljs-number">1</span>,
   },
 };
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> pagingStyles = {
+  listview: {
+    height: <span class="hljs-string">'100%'</span>,
+    backgroundColor: <span class="hljs-string">'#B0C4DE'</span>,
+  },
+  header: {
+    height: <span class="hljs-number">40</span>,
+    justifyContent: <span class="hljs-string">'center'</span>,
+    alignItems: <span class="hljs-string">'center'</span>,
+    backgroundColor: <span class="hljs-string">'#3B5998'</span>,
+    flexDirection: <span class="hljs-string">'row'</span>,
+  },
+  text: {
+    color: <span class="hljs-string">'white'</span>,
+    paddingHorizontal: <span class="hljs-number">8</span>,
+  },
+  rowText: {
+    color: <span class="hljs-string">'#888888'</span>,
+  },
+  thumbText: {
+    fontSize: <span class="hljs-number">20</span>,
+    color: <span class="hljs-string">'#888888'</span>,
+  },
+  buttonContents: {
+    flexDirection: <span class="hljs-string">'row'</span>,
+    justifyContent: <span class="hljs-string">'center'</span>,
+    alignItems: <span class="hljs-string">'center'</span>,
+    marginHorizontal: <span class="hljs-number">5</span>,
+    marginVertical: <span class="hljs-number">3</span>,
+    padding: <span class="hljs-number">5</span>,
+    backgroundColor: <span class="hljs-string">'#EAEAEA'</span>,
+    borderRadius: <span class="hljs-number">3</span>,
+    paddingVertical: <span class="hljs-number">10</span>,
+  },
+  img: {
+    width: <span class="hljs-number">64</span>,
+    height: <span class="hljs-number">64</span>,
+    marginHorizontal: <span class="hljs-number">10</span>,
+    backgroundColor: <span class="hljs-string">'transparent'</span>,
+  },
+  section: {
+    flexDirection: <span class="hljs-string">'column'</span>,
+    justifyContent: <span class="hljs-string">'center'</span>,
+    alignItems: <span class="hljs-string">'flex-start'</span>,
+    padding: <span class="hljs-number">6</span>,
+    backgroundColor: <span class="hljs-string">'#5890ff'</span>,
+  },
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flattenStyle</span>(<span class="hljs-params">style, processor</span>) </span>{
+  <span class="hljs-keyword">if</span> (!style) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+  }
+
+  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Array</span>.isArray(style)) {
+    <span class="hljs-keyword">return</span> (processor &amp;&amp; processor(style)) || style;
+  } <span class="hljs-keyword">else</span> {
+
+    <span class="hljs-keyword">var</span> result = {};
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; style.length; ++i) {
+      <span class="hljs-keyword">var</span> computedStyle = flattenStyle(style[i]);
+      <span class="hljs-keyword">if</span> (computedStyle) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> computedStyle) {
+          result[key] = computedStyle[key];
+        }
+      }
+    }
+
+    <span class="hljs-keyword">return</span> (processor &amp;&amp; processor(result)) || result;;
+  }
+
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Thumb = React.createClass({
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> {thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(), dir: <span class="hljs-string">'row'</span>};
+  },
+  componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// UIManager.setLayoutAnimationEnabledExperimental &amp;&amp;</span>
+    <span class="hljs-comment">//   UIManager.setLayoutAnimationEnabledExperimental(true);</span>
+  },
+  _getThumbIdx: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * THUMB_URLS.length);
+  },
+  _onPressThumb: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(),
+      dir: <span class="hljs-keyword">this</span>.state.dir === <span class="hljs-string">'row'</span> ? <span class="hljs-string">'column'</span> : <span class="hljs-string">'row'</span>,
+    });
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableOpacity</span>
+        <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{this._onPressThumb}</span>
+        <span class="hljs-attribute">style</span>=<span class="hljs-value">{flattenStyle([pagingStyles.buttonContents,</span> {<span class="hljs-attribute">flexDirection:</span> <span class="hljs-attribute">this.state.dir</span>}])}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        {this.state.dir === 'column' ?
+          <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>
+            Oooo, look at this new text!  So awesome it may just be crazy.
+            Let me keep typing here so it wraps at least one line.
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span> :
+          <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> /&gt;</span>
+        }
+      <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableOpacity</span>&gt;</span>
+    )</span>;
+  }
+});
 </code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-listview">

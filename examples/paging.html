@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>more.js - example - rmc-listview@0.2.0</title>
+  <title>paging.js - example - rmc-listview@0.2.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -270,71 +270,111 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-listview'</span>;
-<span class="hljs-keyword">import</span> { View, Text, Image, _genRows, hashCode, THUMB_URLS, LOREM_IPSUM, styles,
-  RecyclerViewBackedScrollView, TouchableHighlight,  } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-keyword">import</span> { View, Text, Image, _genRows, hashCode, THUMB_URLS, LOREM_IPSUM,
+  pagingStyles <span class="hljs-keyword">as</span> styles, TouchableOpacity,
+  RecyclerViewBackedScrollView, TouchableHighlight, Thumb  } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+
+<span class="hljs-keyword">var</span> NUM_SECTIONS = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">var</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
 
 <span class="hljs-keyword">const</span> Demo = React.createClass({
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">var</span> ds = <span class="hljs-keyword">new</span> ListView.DataSource({rowHasChanged: (r1, r2) =&gt; r1 !== r2});
+    <span class="hljs-keyword">var</span> getSectionData = (dataBlob, sectionID) =&gt; {
+      <span class="hljs-keyword">return</span> dataBlob[sectionID];
+    };
+    <span class="hljs-keyword">var</span> getRowData = (dataBlob, sectionID, rowID) =&gt; {
+      <span class="hljs-keyword">return</span> dataBlob[rowID];
+    };
+
+    <span class="hljs-keyword">var</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
+      getRowData: getRowData,
+      getSectionHeaderData: getSectionData,
+      rowHasChanged: (row1, row2) =&gt; row1 !== row2,
+      sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
+    });
+
+    <span class="hljs-keyword">var</span> dataBlob = {};
+    <span class="hljs-keyword">var</span> sectionIDs = [];
+    <span class="hljs-keyword">var</span> rowIDs = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
+      <span class="hljs-keyword">var</span> sectionName = <span class="hljs-string">'Section '</span> + ii;
+      sectionIDs.push(sectionName);
+      dataBlob[sectionName] = sectionName;
+      rowIDs[ii] = [];
+
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
+        <span class="hljs-keyword">var</span> rowName = <span class="hljs-string">'S'</span> + ii + <span class="hljs-string">', R'</span> + jj;
+        rowIDs[ii].push(rowName);
+        dataBlob[rowName] = rowName;
+      }
+    }
     <span class="hljs-keyword">return</span> {
-      dataSource: ds.cloneWithRows(_genRows({})),
+      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      headerPressCount: <span class="hljs-number">0</span>,
     };
   },
 
-  _pressData: {},
-
-  componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">this</span>._pressData = {};
+  renderRow: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">rowData: string, sectionID: string, rowID: string</span>): <span class="hljs-title">ReactElement</span>&lt;<span class="hljs-title">any</span>&gt; </span>{
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Thumb</span> <span class="hljs-attribute">text</span>=<span class="hljs-value">{rowData}</span>/&gt;</span>)</span>;
   },
 
-  _renderRow: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number</span>) =&gt; <span class="hljs-title">void</span>) </span>{
-    <span class="hljs-keyword">var</span> rowHash = <span class="hljs-built_in">Math</span>.abs(hashCode(rowData));
-    <span class="hljs-keyword">var</span> imgSource = THUMB_URLS[rowHash % THUMB_URLS.length];
+  renderSectionHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sectionData: string, sectionID: string</span>) </span>{
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableHighlight</span> <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{()</span> =&gt;</span> {
-          this._pressRow(rowID);
-          highlightRow(sectionID, rowID);
-        }}&gt;
-        <span class="hljs-tag">&lt;<span class="hljs-title">View</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.row}</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.thumb}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{imgSource}</span> /&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>
-              {rowData + ' - ' + LOREM_IPSUM.substr(0, rowHash % 301 + 10)}
-            <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableHighlight</span>&gt;</span>
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.section}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>
+          {sectionData}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
     )</span>;
   },
-  _pressRow: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">rowID: number</span>) </span>{
-    <span class="hljs-keyword">this</span>._pressData[rowID] = !<span class="hljs-keyword">this</span>._pressData[rowID];
-    <span class="hljs-keyword">this</span>.setState({dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(
-      _genRows(<span class="hljs-keyword">this</span>._pressData)
-    )});
+
+  renderHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">var</span> headerLikeText = <span class="hljs-keyword">this</span>.state.headerPressCount % <span class="hljs-number">2</span> ?
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>1 Like<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span> :
+      null;
+    return (
+      <span class="hljs-tag">&lt;<span class="hljs-title">TouchableOpacity</span> <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{this._onPressHeader}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.header}</span>&gt;</span>
+        {headerLikeText}
+        <span class="hljs-tag">&lt;<span class="hljs-title">View</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>
+            Table Header (click me)
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableOpacity</span>&gt;</span>
+    )</span>;
   },
 
-  _renderSeperator: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sectionID: number, rowID: number, adjacentRowHighlighted: bool</span>) </span>{
-    <span class="hljs-built_in">console</span>.log(adjacentRowHighlighted);
+  renderFooter: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span>
-        <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span>
-        <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-          <span class="hljs-attribute">height:</span> <span class="hljs-attribute">adjacentRowHighlighted</span> ? <span class="hljs-attribute">4</span> <span class="hljs-attribute">:</span> <span class="hljs-attribute">1</span>,
-          <span class="hljs-attribute">backgroundColor:</span> <span class="hljs-attribute">adjacentRowHighlighted</span> ? '#<span class="hljs-attribute">3B5998</span>' <span class="hljs-attribute">:</span> '#<span class="hljs-attribute">CCCCCC</span>',
-        }}
-      /&gt;</span>
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.header}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{()</span> =&gt;</span> console.log('Footer!')} style={styles.text}&gt;
+          Table Footer
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
     )</span>;
   },
 
   render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:</span> <span class="hljs-attribute">10</span>, <span class="hljs-attribute">height:</span> <span class="hljs-attribute">300</span>}}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+        <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.listview}</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
-        <span class="hljs-attribute">renderRow</span>=<span class="hljs-value">{this._renderRow}</span>
-        <span class="hljs-attribute">renderScrollComponent</span>=<span class="hljs-value">{props</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">RecyclerViewBackedScrollView</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
-        renderSeparator={this._renderSeperator}
+        <span class="hljs-attribute">onChangeVisibleRows</span>=<span class="hljs-value">{(visibleRows,</span> <span class="hljs-attribute">changedRows</span>) =&gt;</span> console.log({visibleRows, changedRows})}
+        renderHeader={this.renderHeader}
+        renderFooter={this.renderFooter}
+        renderSectionHeader={this.renderSectionHeader}
+        renderRow={this.renderRow}
+        initialListSize={10}
+        pageSize={4}
+        scrollRenderAheadDistance={500}
       /&gt;
-    )</span>;
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+  },
+
+  _onPressHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];</span>
+    <span class="hljs-comment">// LayoutAnimation.configureNext(config);</span>
+    <span class="hljs-keyword">this</span>.setState({headerPressCount: <span class="hljs-keyword">this</span>.state.headerPressCount + <span class="hljs-number">1</span>});
   },
 });
 
@@ -349,7 +389,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   
   <script src="common.js?nowrap"></script>
-  <script src="more.js?nowrap"></script>
+  <script src="paging.js?nowrap"></script>
 </body>
 
 </html>

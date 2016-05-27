@@ -43,11 +43,12 @@ const Demo = React.createClass({
   _pressRow: function(rowID: number) {
     this._pressData[rowID] = !this._pressData[rowID];
     this.setState({dataSource: this.state.dataSource.cloneWithRows(
-      this._genRows(this._pressData)
+      _genRows(this._pressData)
     )});
   },
 
   _renderSeperator: function(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
+    console.log(adjacentRowHighlighted);
     return (
       <View
         key={`${sectionID}-${rowID}`}

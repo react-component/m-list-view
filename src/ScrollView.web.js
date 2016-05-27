@@ -359,7 +359,8 @@ class ScrollView extends React.Component {
         this.props.alwaysBounceVertical :
         !this.props.horizontal;
 
-    let handleScroll = () => {};
+    // let handleScroll = () => {};
+    let handleScroll = this.handleScroll;
     if (this.props.scrollEventThrottle && this.props.onScroll) {
       handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
     }
@@ -379,10 +380,10 @@ class ScrollView extends React.Component {
       onStartShouldSetResponder: this.scrollResponderHandleStartShouldSetResponder,
       onStartShouldSetResponderCapture: this.scrollResponderHandleStartShouldSetResponderCapture,
       // onScrollShouldSetResponder: this.scrollResponderHandleScrollShouldSetResponder,
-      // onScroll: handleScroll,
+      onScroll: handleScroll,
       onScrollShouldSetResponder: handleScroll,
       // replace onScroll in the props
-      onScroll: () => {},
+      // onScroll: () => {},
       onResponderGrant: this.scrollResponderHandleResponderGrant,
       onResponderTerminationRequest: this.scrollResponderHandleTerminationRequest,
       onResponderTerminate: this.scrollResponderHandleTerminate,
@@ -400,6 +401,7 @@ class ScrollView extends React.Component {
 
 let styles = StyleSheet.create({
   base: {
+    position: 'relative',
     overflow: 'scroll',
     WebkitOverflowScrolling: 'touch',
     flex: 1,

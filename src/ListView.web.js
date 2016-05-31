@@ -182,6 +182,8 @@ class ListView extends React.Component {
      */
     stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
     stickyHeader: PropTypes.bool, // for web
+    stickyProps: PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
+    stickyContainerProps: PropTypes.object,
   }
 
   /**
@@ -195,6 +197,8 @@ class ListView extends React.Component {
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     stickyHeaderIndices: [],
+    stickyProps: {},
+    stickyContainerProps: {},
   }
 
   state = {
@@ -324,7 +328,7 @@ class ListView extends React.Component {
           />
         );
         if (this.props.stickyHeader) {
-          renderSectionHeader = <Sticky key={'s_' + sectionID}>{renderSectionHeader}</Sticky>;
+          renderSectionHeader = <Sticky {...this.props.stickyProps} key={'s_' + sectionID}>{renderSectionHeader}</Sticky>;
         }
         bodyComponents.push(renderSectionHeader);
         sectionHeaderIndices.push(totalIndex++);
@@ -399,7 +403,7 @@ class ListView extends React.Component {
     });
 
     if (this.props.stickyHeader) {
-      bodyComponents = <StickyContainer>{bodyComponents}</StickyContainer>;
+      bodyComponents = <StickyContainer {...this.props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
     }
 
     // TODO(ide): Use function refs so we can compose with the scroll

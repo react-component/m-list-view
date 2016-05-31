@@ -99,8 +99,16 @@ const Demo = React.createClass({
         pageSize={4}
         scrollRenderAheadDistance={500}
         stickyHeader
+        stickyProps={{
+          stickyStyle: { top: '10px' },
+          onStickyStateChange: this._onStickyStateChange,
+        }}
       />
     </div>);
+  },
+
+  _onStickyStateChange(isSticky) {
+    console.log(isSticky);
   },
 
   _onPressHeader() {

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import ScrollResponder from './ScrollResponder.web';
 import StyleSheet from './StyleSheet';
 import View from './View.web';
-import throttle from 'domkit/throttle';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
+const throttle = require('domkit/throttle');
 const invariant = require('fbjs/lib/invariant');
 
 const SCROLLVIEW = 'ScrollView';

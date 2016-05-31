@@ -1,5 +1,5 @@
 
-'use strict';
+// 'use strict';
 
 function dismissKeyboard() {
   document.activeElement.blur();

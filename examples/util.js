@@ -27,21 +27,20 @@ export const THUMB_URLS = [
 ];
 
 export function _genRows(pressData) {
-  var dataBlob = [];
-  for (var ii = 0; ii < 100; ii++) {
-    var pressedText = pressData[ii] ? ' (pressed)' : '';
-    dataBlob.push('Row ' + ii + pressedText);
+  const dataBlob = [];
+  for (let ii = 0; ii < 100; ii++) {
+    dataBlob.push(`Row ${ii + pressData[ii] ? ' (pressed)' : ''}`);
   }
   return dataBlob;
 }
 
 export function hashCode(str) {
-  var hash = 15;
-  for (var ii = str.length - 1; ii >= 0; ii--) {
+  let hash = 15;
+  for (let ii = str.length - 1; ii >= 0; ii--) {
     hash = ((hash << 5) - hash) + str.charCodeAt(ii);
   }
   return hash;
-};
+}
 
 export const LOREM_IPSUM = 'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.';
 
@@ -57,14 +56,14 @@ export function View(props) {
 
 import React from 'react';
 export const RecyclerViewBackedScrollView = React.createClass({
-  render: function() {
+  render() {
     const props = this.props;
     return <div {...props}>{props.children}</div>;
   },
 });
 
 export const TouchableHighlight = React.createClass({
-  render: function() {
+  render() {
     const props = this.props;
     return <div {...props} onClick={props.onPress}>{props.children}</div>;
   },
@@ -143,45 +142,44 @@ function flattenStyle(style, processor) {
 
   if (!Array.isArray(style)) {
     return (processor && processor(style)) || style;
-  } else {
-
-    var result = {};
-    for (var i = 0; i < style.length; ++i) {
-      var computedStyle = flattenStyle(style[i]);
-      if (computedStyle) {
-        for (var key in computedStyle) {
+  }
+  const result = {};
+  for (let i = 0; i < style.length; ++i) {
+    const computedStyle = flattenStyle(style[i]);
+    if (computedStyle) {
+      for (const key in computedStyle) {
+        if (computedStyle.hasOwnProperty(key)) {
           result[key] = computedStyle[key];
         }
       }
     }
-
-    return (processor && processor(result)) || result;;
   }
 
+  return (processor && processor(result)) || result;
 }
 
 export const Thumb = React.createClass({
-  getInitialState: function() {
-    return {thumbIndex: this._getThumbIdx(), dir: 'row'};
+  getInitialState() {
+    return { thumbIndex: this._getThumbIdx(), dir: 'row' };
   },
-  componentWillMount: function() {
+  componentWillMount() {
     // UIManager.setLayoutAnimationEnabledExperimental &&
     //   UIManager.setLayoutAnimationEnabledExperimental(true);
   },
-  _getThumbIdx: function() {
+  _getThumbIdx() {
     return Math.floor(Math.random() * THUMB_URLS.length);
   },
-  _onPressThumb: function() {
+  _onPressThumb() {
     this.setState({
       thumbIndex: this._getThumbIdx(),
       dir: this.state.dir === 'row' ? 'column' : 'row',
     });
   },
-  render: function() {
+  render() {
     return (
       <TouchableOpacity
         onPress={this._onPressThumb}
-        style={flattenStyle([pagingStyles.buttonContents, {flexDirection: this.state.dir}])}>
+        style={flattenStyle([pagingStyles.buttonContents, { flexDirection: this.state.dir }])}>
         <Image style={pagingStyles.img} source={THUMB_URLS[this.state.thumbIndex]} />
         <Image style={pagingStyles.img} source={THUMB_URLS[this.state.thumbIndex]} />
         <Image style={pagingStyles.img} source={THUMB_URLS[this.state.thumbIndex]} />
@@ -194,5 +192,5 @@ export const Thumb = React.createClass({
         }
       </TouchableOpacity>
     );
-  }
+  },
 });

@@ -1,5 +1,5 @@
 export default {
-  create: function(styles) {
+  create(styles) {
     return styles;
   },
   flattenStyle: function flattenStyle(style, processor) {
@@ -9,20 +9,19 @@ export default {
 
     if (!Array.isArray(style)) {
       return (processor && processor(style)) || style;
-    } else {
-
-      var result = {};
-      for (var i = 0; i < style.length; ++i) {
-        var computedStyle = flattenStyle(style[i]);
-        if (computedStyle) {
-          for (var key in computedStyle) {
+    }
+    const result = {};
+    for (let i = 0; i < style.length; ++i) {
+      const computedStyle = flattenStyle(style[i]);
+      if (computedStyle) {
+        for (const key in computedStyle) {
+          if (computedStyle.hasOwnProperty(key)) {
             result[key] = computedStyle[key];
           }
         }
       }
-
-      return (processor && processor(result)) || result;;
     }
 
+    return (processor && processor(result)) || result;
   },
 };

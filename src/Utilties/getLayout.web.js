@@ -1,5 +1,5 @@
 
-'use strict';
+// 'use strict';
 
 // get element x, y
 function getCumulativeOffset(obj) {

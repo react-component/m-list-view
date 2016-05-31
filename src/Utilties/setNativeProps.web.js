@@ -1,5 +1,5 @@
 
-'use strict';
+// 'use strict';
 
 var CSSPropertyOperations = require('react/lib/CSSPropertyOperations');
 

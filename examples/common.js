@@ -19787,15 +19787,15 @@
 	
 	var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 	
-	var _objectAssign = __webpack_require__(181);
+	var _objectAssign = __webpack_require__(180);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _reactMixin = __webpack_require__(179);
+	var _reactMixin = __webpack_require__(178);
 	
 	var _reactMixin2 = _interopRequireDefault(_reactMixin);
 	
-	var _autobindDecorator = __webpack_require__(182);
+	var _autobindDecorator = __webpack_require__(181);
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 	
@@ -21018,15 +21018,11 @@
 	
 	var _View2 = _interopRequireDefault(_View);
 	
-	var _throttle = __webpack_require__(178);
-	
-	var _throttle2 = _interopRequireDefault(_throttle);
-	
-	var _reactMixin = __webpack_require__(179);
+	var _reactMixin = __webpack_require__(178);
 	
 	var _reactMixin2 = _interopRequireDefault(_reactMixin);
 	
-	var _autobindDecorator = __webpack_require__(182);
+	var _autobindDecorator = __webpack_require__(181);
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 	
@@ -21042,6 +21038,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
+	var throttle = __webpack_require__(182);
 	var invariant = __webpack_require__(165);
 	
 	var SCROLLVIEW = 'ScrollView';
@@ -21192,7 +21189,7 @@
 	    // let handleScroll = () => {};
 	    var handleScroll = this.handleScroll;
 	    if (this.props.scrollEventThrottle && this.props.onScroll) {
-	      handleScroll = (0, _throttle2.default)(this.handleScroll, this.props.scrollEventThrottle);
+	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
 	    }
 	
 	    var props = _extends({}, otherProps, {
@@ -22057,6 +22054,7 @@
 	  create: function create(styles) {
 	    return styles;
 	  },
+	
 	  flattenStyle: function flattenStyle(style, processor) {
 	    if (!style) {
 	      return undefined;
@@ -22064,20 +22062,20 @@
 	
 	    if (!Array.isArray(style)) {
 	      return processor && processor(style) || style;
-	    } else {
-	
-	      var result = {};
-	      for (var i = 0; i < style.length; ++i) {
-	        var computedStyle = flattenStyle(style[i]);
-	        if (computedStyle) {
-	          for (var key in computedStyle) {
+	    }
+	    var result = {};
+	    for (var i = 0; i < style.length; ++i) {
+	      var computedStyle = flattenStyle(style[i]);
+	      if (computedStyle) {
+	        for (var key in computedStyle) {
+	          if (computedStyle.hasOwnProperty(key)) {
 	            result[key] = computedStyle[key];
 	          }
 	        }
 	      }
-	
-	      return processor && processor(result) || result;;
 	    }
+	
+	    return processor && processor(result) || result;
 	  }
 	};
 	module.exports = exports['default'];
@@ -22136,7 +22134,6 @@
 /* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
 	'use strict';
 	
 	var _react = __webpack_require__(3);
@@ -22178,6 +22175,7 @@
 	    }
 	  }
 	};
+	// 'use strict';
 	
 	module.exports = {
 	  Mixin: LayoutMixin
@@ -22187,11 +22185,11 @@
 /* 174 */
 /***/ function(module, exports) {
 
+	"use strict";
 	
-	'use strict';
+	// 'use strict';
 	
 	// get element x, y
-	
 	function getCumulativeOffset(obj) {
 	  var left, top;
 	  left = top = 0;
@@ -22224,7 +22222,6 @@
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
 	'use strict';
 	
 	var _UIManager = __webpack_require__(176);
@@ -22305,6 +22302,9 @@
 	 * In the future, we should cleanup callbacks by cancelling them instead of
 	 * using this.
 	 */
+	
+	// 'use strict';
+	
 	var mountSafeCallback = function mountSafeCallback(context, callback) {
 	  return function () {
 	    if (!callback || context.isMounted && !context.isMounted()) {
@@ -22340,8 +22340,9 @@
 /* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
 	'use strict';
+	
+	// 'use strict';
 	
 	var CSSPropertyOperations = __webpack_require__(98);
 	
@@ -22379,28 +22380,10 @@
 
 /***/ },
 /* 178 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	module.exports = function(fn, delay) {
-	  var allowSample = true;
-	  return function(e) {
-	    if (allowSample) {
-	      allowSample = false;
-	      setTimeout(function() { allowSample = true; }, delay);
-	      fn(e);
-	    }
-	  };
-	}
-
-
-/***/ },
-/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var mixin = __webpack_require__(180);
-	var assign = __webpack_require__(181);
+	var mixin = __webpack_require__(179);
+	var assign = __webpack_require__(180);
 	
 	var mixinProto = mixin({
 	  // lifecycle stuff is as you'd expect
@@ -22555,7 +22538,7 @@
 
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports) {
 
 	function objToStr(x){ return Object.prototype.toString.call(x); };
@@ -22732,7 +22715,7 @@
 
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22821,7 +22804,7 @@
 
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports) {
 
 	/**
@@ -22923,6 +22906,24 @@
 
 
 /***/ },
+/* 182 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function(fn, delay) {
+	  var allowSample = true;
+	  return function(e) {
+	    if (allowSample) {
+	      allowSample = false;
+	      setTimeout(function() { allowSample = true; }, delay);
+	      fn(e);
+	    }
+	  };
+	}
+
+
+/***/ },
 /* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -22970,8 +22971,6 @@
 	  shouldUpdate: _react.PropTypes.bool.isRequired,
 	  render: _react.PropTypes.func.isRequired
 	};
-	;
-	
 	exports.default = StaticRenderer;
 	module.exports = exports['default'];
 

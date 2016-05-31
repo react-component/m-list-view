@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging.js - example - rmc-listview@0.3.0</title>
+  <title>paging.js - example - rmc-listview@0.3.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-listview@0.3.0</h1>
+      <h1>rmc-listview@0.3.1</h1>
 
       <p>m-listview ui component for react</p>
     </div>
@@ -270,40 +270,38 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-listview'</span>;
-<span class="hljs-keyword">import</span> { View, Text, Image, _genRows, hashCode, THUMB_URLS, LOREM_IPSUM,
-  pagingStyles <span class="hljs-keyword">as</span> styles, TouchableOpacity,
-  RecyclerViewBackedScrollView, TouchableHighlight, Thumb  } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-keyword">import</span> { View, Text, pagingStyles <span class="hljs-keyword">as</span> styles, TouchableOpacity, Thumb } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
-<span class="hljs-keyword">var</span> NUM_SECTIONS = <span class="hljs-number">100</span>;
-<span class="hljs-keyword">var</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
 
 <span class="hljs-keyword">const</span> Demo = React.createClass({
-  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">var</span> getSectionData = (dataBlob, sectionID) =&gt; {
+  getInitialState() {
+    <span class="hljs-keyword">const</span> getSectionData = (dataBlob, sectionID) =&gt; {
       <span class="hljs-keyword">return</span> dataBlob[sectionID];
     };
-    <span class="hljs-keyword">var</span> getRowData = (dataBlob, sectionID, rowID) =&gt; {
+    <span class="hljs-keyword">const</span> getRowData = (dataBlob, sectionID, rowID) =&gt; {
       <span class="hljs-keyword">return</span> dataBlob[rowID];
     };
 
-    <span class="hljs-keyword">var</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
+    <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
       getRowData: getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) =&gt; row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
     });
 
-    <span class="hljs-keyword">var</span> dataBlob = {};
-    <span class="hljs-keyword">var</span> sectionIDs = [];
-    <span class="hljs-keyword">var</span> rowIDs = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
-      <span class="hljs-keyword">var</span> sectionName = <span class="hljs-string">'Section '</span> + ii;
+    <span class="hljs-keyword">const</span> dataBlob = {};
+    <span class="hljs-keyword">const</span> sectionIDs = [];
+    <span class="hljs-keyword">const</span> rowIDs = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
+      <span class="hljs-keyword">const</span> sectionName = <span class="hljs-string">`Section <span class="hljs-subst">${ii}</span>`</span>;
       sectionIDs.push(sectionName);
       dataBlob[sectionName] = sectionName;
       rowIDs[ii] = [];
 
-      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
-        <span class="hljs-keyword">var</span> rowName = <span class="hljs-string">'S'</span> + ii + <span class="hljs-string">', R'</span> + jj;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
+        <span class="hljs-keyword">const</span> rowName = <span class="hljs-string">`S<span class="hljs-subst">${ii}</span>, R<span class="hljs-subst">${jj}</span>`</span>;
         rowIDs[ii].push(rowName);
         dataBlob[rowName] = rowName;
       }
@@ -314,11 +312,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     };
   },
 
-  renderRow: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">rowData: string, sectionID: string, rowID: string</span>): <span class="hljs-title">ReactElement</span>&lt;<span class="hljs-title">any</span>&gt; </span>{
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Thumb</span> <span class="hljs-attribute">text</span>=<span class="hljs-value">{rowData}</span>/&gt;</span>)</span>;
+  renderRow(rowData: string) {
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Thumb</span> <span class="hljs-attribute">text</span>=<span class="hljs-value">{rowData}</span> /&gt;</span>)</span>;
   },
 
-  renderSectionHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sectionData: string, sectionID: string</span>) </span>{
+  renderSectionHeader(sectionData: string) {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.section}</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>
@@ -328,8 +326,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     )</span>;
   },
 
-  renderHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">var</span> headerLikeText = <span class="hljs-keyword">this</span>.state.headerPressCount % <span class="hljs-number">2</span> ?
+  renderHeader() {
+    <span class="hljs-keyword">let</span> headerLikeText = <span class="hljs-keyword">this</span>.state.headerPressCount % <span class="hljs-number">2</span> ?
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.text}</span>&gt;</span>1 Like<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span> :
       null;
     return (
@@ -344,7 +342,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     )</span>;
   },
 
-  renderFooter: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  renderFooter() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.header}</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{()</span> =&gt;</span> console.log('Footer!')} style={styles.text}&gt;
@@ -354,28 +352,27 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     )</span>;
   },
 
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:</span> <span class="hljs-attribute">10</span>, <span class="hljs-attribute">height:</span> <span class="hljs-attribute">300</span>}}&gt;</span>
+  render() {
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">300</span> }}&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.listview}</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
-        <span class="hljs-attribute">onChangeVisibleRows</span>=<span class="hljs-value">{(visibleRows,</span> <span class="hljs-attribute">changedRows</span>) =&gt;</span> console.log({visibleRows, changedRows})}
-        renderHeader={this.renderHeader}
-        renderFooter={this.renderFooter}
-        renderSectionHeader={this.renderSectionHeader}
-        renderRow={this.renderRow}
-        initialListSize={10}
-        pageSize={4}
-        scrollRenderAheadDistance={500}
-        stickyHeader
-      /&gt;
+        <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{this.renderHeader}</span>
+        <span class="hljs-attribute">renderFooter</span>=<span class="hljs-value">{this.renderFooter}</span>
+        <span class="hljs-attribute">renderSectionHeader</span>=<span class="hljs-value">{this.renderSectionHeader}</span>
+        <span class="hljs-attribute">renderRow</span>=<span class="hljs-value">{this.renderRow}</span>
+        <span class="hljs-attribute">initialListSize</span>=<span class="hljs-value">{10}</span>
+        <span class="hljs-attribute">pageSize</span>=<span class="hljs-value">{4}</span>
+        <span class="hljs-attribute">scrollRenderAheadDistance</span>=<span class="hljs-value">{500}</span>
+        <span class="hljs-attribute">stickyHeader</span>
+      /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
   },
 
-  _onPressHeader: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  _onPressHeader() {
     <span class="hljs-comment">// var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];</span>
     <span class="hljs-comment">// LayoutAnimation.configureNext(config);</span>
-    <span class="hljs-keyword">this</span>.setState({headerPressCount: <span class="hljs-keyword">this</span>.state.headerPressCount + <span class="hljs-number">1</span>});
+    <span class="hljs-keyword">this</span>.setState({ headerPressCount: <span class="hljs-keyword">this</span>.state.headerPressCount + <span class="hljs-number">1</span> });
   },
 });
 

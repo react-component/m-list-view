@@ -50,8 +50,7 @@ webpackJsonp([1],{
 	function _genRows(pressData) {
 	  var dataBlob = [];
 	  for (var ii = 0; ii < 100; ii++) {
-	    var pressedText = pressData[ii] ? ' (pressed)' : '';
-	    dataBlob.push('Row ' + ii + pressedText);
+	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
 	  }
 	  return dataBlob;
 	}
@@ -62,7 +61,7 @@ webpackJsonp([1],{
 	    hash = (hash << 5) - hash + str.charCodeAt(ii);
 	  }
 	  return hash;
-	};
+	}
 	
 	var LOREM_IPSUM = exports.LOREM_IPSUM = 'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.';
 	
@@ -86,7 +85,6 @@ webpackJsonp([1],{
 	
 	var RecyclerViewBackedScrollView = exports.RecyclerViewBackedScrollView = _react2.default.createClass({
 	  displayName: 'RecyclerViewBackedScrollView',
-	
 	  render: function render() {
 	    var props = this.props;
 	    return _react2.default.createElement(
@@ -99,7 +97,6 @@ webpackJsonp([1],{
 	
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',
-	
 	  render: function render() {
 	    var props = this.props;
 	    return _react2.default.createElement(
@@ -183,25 +180,24 @@ webpackJsonp([1],{
 	
 	  if (!Array.isArray(style)) {
 	    return processor && processor(style) || style;
-	  } else {
-	
-	    var result = {};
-	    for (var i = 0; i < style.length; ++i) {
-	      var computedStyle = flattenStyle(style[i]);
-	      if (computedStyle) {
-	        for (var key in computedStyle) {
+	  }
+	  var result = {};
+	  for (var i = 0; i < style.length; ++i) {
+	    var computedStyle = flattenStyle(style[i]);
+	    if (computedStyle) {
+	      for (var key in computedStyle) {
+	        if (computedStyle.hasOwnProperty(key)) {
 	          result[key] = computedStyle[key];
 	        }
 	      }
 	    }
-	
-	    return processor && processor(result) || result;;
 	  }
+	
+	  return processor && processor(result) || result;
 	}
 	
 	var Thumb = exports.Thumb = _react2.default.createClass({
 	  displayName: 'Thumb',
-	
 	  getInitialState: function getInitialState() {
 	    return { thumbIndex: this._getThumbIdx(), dir: 'row' };
 	  },
@@ -267,7 +263,6 @@ webpackJsonp([1],{
 	
 	var Demo = _react2.default.createClass({
 	  displayName: 'Demo',
-	
 	  getInitialState: function getInitialState() {
 	    var getSectionData = function getSectionData(dataBlob, sectionID) {
 	      return dataBlob[sectionID];
@@ -307,12 +302,10 @@ webpackJsonp([1],{
 	      headerPressCount: 0
 	    };
 	  },
-	
-	  renderRow: function renderRow(rowData, sectionID, rowID) {
+	  renderRow: function renderRow(rowData) {
 	    return _react2.default.createElement(_util.Thumb, { text: rowData });
 	  },
-	
-	  renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
+	  renderSectionHeader: function renderSectionHeader(sectionData) {
 	    return _react2.default.createElement(
 	      _util.View,
 	      { style: _util.pagingStyles.section },
@@ -323,7 +316,6 @@ webpackJsonp([1],{
 	      )
 	    );
 	  },
-	
 	  renderHeader: function renderHeader() {
 	    var headerLikeText = this.state.headerPressCount % 2 ? _react2.default.createElement(
 	      _util.View,
@@ -349,7 +341,6 @@ webpackJsonp([1],{
 	      )
 	    );
 	  },
-	
 	  renderFooter: function renderFooter() {
 	    return _react2.default.createElement(
 	      _util.View,
@@ -363,17 +354,13 @@ webpackJsonp([1],{
 	      )
 	    );
 	  },
-	
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { style: { margin: 10, height: 300 } },
+	      { style: { height: 300 } },
 	      _react2.default.createElement(_rmcListview2.default, {
 	        style: _util.pagingStyles.listview,
 	        dataSource: this.state.dataSource,
-	        onChangeVisibleRows: function onChangeVisibleRows(visibleRows, changedRows) {
-	          return console.log({ visibleRows: visibleRows, changedRows: changedRows });
-	        },
 	        renderHeader: this.renderHeader,
 	        renderFooter: this.renderFooter,
 	        renderSectionHeader: this.renderSectionHeader,
@@ -385,7 +372,6 @@ webpackJsonp([1],{
 	      })
 	    );
 	  },
-	
 	  _onPressHeader: function _onPressHeader() {
 	    // var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];
 	    // LayoutAnimation.configureNext(config);

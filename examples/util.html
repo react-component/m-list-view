@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>util.js - example - rmc-listview@0.3.0</title>
+  <title>util.js - example - rmc-listview@0.3.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-listview@0.3.0</h1>
+      <h1>rmc-listview@0.3.1</h1>
 
       <p>m-listview ui component for react</p>
     </div>
@@ -293,21 +293,20 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 ];
 
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_genRows</span>(<span class="hljs-params">pressData</span>) </span>{
-  <span class="hljs-keyword">var</span> dataBlob = [];
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">100</span>; ii++) {
-    <span class="hljs-keyword">var</span> pressedText = pressData[ii] ? <span class="hljs-string">' (pressed)'</span> : <span class="hljs-string">''</span>;
-    dataBlob.push(<span class="hljs-string">'Row '</span> + ii + pressedText);
+  <span class="hljs-keyword">const</span> dataBlob = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">100</span>; ii++) {
+    dataBlob.push(<span class="hljs-string">`Row <span class="hljs-subst">${ii + pressData[ii] ? ' (pressed)' : ''}</span>`</span>);
   }
   <span class="hljs-keyword">return</span> dataBlob;
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hashCode</span>(<span class="hljs-params">str</span>) </span>{
-  <span class="hljs-keyword">var</span> hash = <span class="hljs-number">15</span>;
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> ii = str.length - <span class="hljs-number">1</span>; ii &gt;= <span class="hljs-number">0</span>; ii--) {
+  <span class="hljs-keyword">let</span> hash = <span class="hljs-number">15</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = str.length - <span class="hljs-number">1</span>; ii &gt;= <span class="hljs-number">0</span>; ii--) {
     hash = ((hash &lt;&lt; <span class="hljs-number">5</span>) - hash) + str.charCodeAt(ii);
   }
   <span class="hljs-keyword">return</span> hash;
-};
+}
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> LOREM_IPSUM = <span class="hljs-string">'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.'</span>;
 
@@ -323,14 +322,14 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RecyclerViewBackedScrollView = React.createClass({
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  render() {
     <span class="hljs-keyword">const</span> props = <span class="hljs-keyword">this</span>.props;
     <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   },
 });
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableHighlight = React.createClass({
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  render() {
     <span class="hljs-keyword">const</span> props = <span class="hljs-keyword">this</span>.props;
     <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{props.onPress}</span>&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   },
@@ -409,45 +408,44 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
   <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Array</span>.isArray(style)) {
     <span class="hljs-keyword">return</span> (processor &amp;&amp; processor(style)) || style;
-  } <span class="hljs-keyword">else</span> {
-
-    <span class="hljs-keyword">var</span> result = {};
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; style.length; ++i) {
-      <span class="hljs-keyword">var</span> computedStyle = flattenStyle(style[i]);
-      <span class="hljs-keyword">if</span> (computedStyle) {
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> computedStyle) {
+  }
+  <span class="hljs-keyword">const</span> result = {};
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; style.length; ++i) {
+    <span class="hljs-keyword">const</span> computedStyle = flattenStyle(style[i]);
+    <span class="hljs-keyword">if</span> (computedStyle) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">in</span> computedStyle) {
+        <span class="hljs-keyword">if</span> (computedStyle.hasOwnProperty(key)) {
           result[key] = computedStyle[key];
         }
       }
     }
-
-    <span class="hljs-keyword">return</span> (processor &amp;&amp; processor(result)) || result;;
   }
 
+  <span class="hljs-keyword">return</span> (processor &amp;&amp; processor(result)) || result;
 }
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Thumb = React.createClass({
-  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> {thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(), dir: <span class="hljs-string">'row'</span>};
+  getInitialState() {
+    <span class="hljs-keyword">return</span> { thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(), dir: <span class="hljs-string">'row'</span> };
   },
-  componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  componentWillMount() {
     <span class="hljs-comment">// UIManager.setLayoutAnimationEnabledExperimental &amp;&amp;</span>
     <span class="hljs-comment">//   UIManager.setLayoutAnimationEnabledExperimental(true);</span>
   },
-  _getThumbIdx: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  _getThumbIdx() {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * THUMB_URLS.length);
   },
-  _onPressThumb: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  _onPressThumb() {
     <span class="hljs-keyword">this</span>.setState({
       thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(),
       dir: <span class="hljs-keyword">this</span>.state.dir === <span class="hljs-string">'row'</span> ? <span class="hljs-string">'column'</span> : <span class="hljs-string">'row'</span>,
     });
   },
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  render() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableOpacity</span>
         <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{this._onPressThumb}</span>
-        <span class="hljs-attribute">style</span>=<span class="hljs-value">{flattenStyle([pagingStyles.buttonContents,</span> {<span class="hljs-attribute">flexDirection:</span> <span class="hljs-attribute">this.state.dir</span>}])}&gt;</span>
+        <span class="hljs-attribute">style</span>=<span class="hljs-value">{flattenStyle([pagingStyles.buttonContents,</span> { <span class="hljs-attribute">flexDirection:</span> <span class="hljs-attribute">this.state.dir</span> }])}&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
@@ -460,7 +458,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         }
       <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableOpacity</span>&gt;</span>
     )</span>;
-  }
+  },
 });
 </code></pre></div>
   </div>

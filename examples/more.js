@@ -150,8 +150,7 @@ webpackJsonp([0],{
 	function _genRows(pressData) {
 	  var dataBlob = [];
 	  for (var ii = 0; ii < 100; ii++) {
-	    var pressedText = pressData[ii] ? ' (pressed)' : '';
-	    dataBlob.push('Row ' + ii + pressedText);
+	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
 	  }
 	  return dataBlob;
 	}
@@ -162,7 +161,7 @@ webpackJsonp([0],{
 	    hash = (hash << 5) - hash + str.charCodeAt(ii);
 	  }
 	  return hash;
-	};
+	}
 	
 	var LOREM_IPSUM = exports.LOREM_IPSUM = 'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.';
 	
@@ -186,7 +185,6 @@ webpackJsonp([0],{
 	
 	var RecyclerViewBackedScrollView = exports.RecyclerViewBackedScrollView = _react2.default.createClass({
 	  displayName: 'RecyclerViewBackedScrollView',
-	
 	  render: function render() {
 	    var props = this.props;
 	    return _react2.default.createElement(
@@ -199,7 +197,6 @@ webpackJsonp([0],{
 	
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',
-	
 	  render: function render() {
 	    var props = this.props;
 	    return _react2.default.createElement(
@@ -283,25 +280,24 @@ webpackJsonp([0],{
 	
 	  if (!Array.isArray(style)) {
 	    return processor && processor(style) || style;
-	  } else {
-	
-	    var result = {};
-	    for (var i = 0; i < style.length; ++i) {
-	      var computedStyle = flattenStyle(style[i]);
-	      if (computedStyle) {
-	        for (var key in computedStyle) {
+	  }
+	  var result = {};
+	  for (var i = 0; i < style.length; ++i) {
+	    var computedStyle = flattenStyle(style[i]);
+	    if (computedStyle) {
+	      for (var key in computedStyle) {
+	        if (computedStyle.hasOwnProperty(key)) {
 	          result[key] = computedStyle[key];
 	        }
 	      }
 	    }
-	
-	    return processor && processor(result) || result;;
 	  }
+	
+	  return processor && processor(result) || result;
 	}
 	
 	var Thumb = exports.Thumb = _react2.default.createClass({
 	  displayName: 'Thumb',
-	
 	  getInitialState: function getInitialState() {
 	    return { thumbIndex: this._getThumbIdx(), dir: 'row' };
 	  },

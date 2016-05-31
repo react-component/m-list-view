@@ -101,6 +101,7 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
+        stickyHeader
       />
     </div>);
   },

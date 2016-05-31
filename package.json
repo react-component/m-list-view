@@ -1,6 +1,6 @@
 {
   "name": "rmc-listview",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "m-listview ui component for react",
   "keywords": [
     "react",
@@ -53,6 +53,7 @@
     "fbjs": "^0.8.3",
     "object-assign": "^4.1.0",
     "react-mixin": "^3.0.5",
+    "react-sticky": "^5.0.2",
     "react-timer-mixin": "^0.13.3"
   }
 }

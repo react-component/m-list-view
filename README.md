@@ -53,6 +53,11 @@ see examples
 
 same as [React Native ListView](https://facebook.github.io/react-native/docs/listview.html#content)
 
+#### current not support:
+- onChangeVisibleRows
+- stickyHeaderIndices (ios native only)
+    - web replace with stickyHeader
+
 ## Test Case
 
 ```

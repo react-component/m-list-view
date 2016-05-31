@@ -5,9 +5,10 @@ import ScrollView from './ScrollView.web';
 import ScrollResponder from './ScrollResponder.web';
 import StaticRenderer from './StaticRenderer.web';
 import TimerMixin from 'react-timer-mixin';
-import mixin from 'react-mixin';
 import assign from 'object-assign';
+import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 const DEFAULT_PAGE_SIZE = 1;
 const DEFAULT_INITIAL_ROWS = 10;
@@ -180,6 +181,7 @@ class ListView extends React.Component {
      * @platform ios
      */
     stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
+    stickyHeader: PropTypes.bool, // for web
   }
 
   /**
@@ -309,7 +311,8 @@ class ListView extends React.Component {
       if (this.props.renderSectionHeader) {
         let shouldUpdateHeader = rowCount >= this._prevRenderedRowsCount &&
           dataSource.sectionHeaderShouldUpdate(sectionIdx);
-        bodyComponents.push(
+
+        let renderSectionHeader = (
           <StaticRenderer
             key={'s_' + sectionID}
             shouldUpdate={!!shouldUpdateHeader}
@@ -320,6 +323,10 @@ class ListView extends React.Component {
             )}
           />
         );
+        if (this.props.stickyHeader) {
+          renderSectionHeader = <Sticky key={'s_' + sectionID}>{renderSectionHeader}</Sticky>;
+        }
+        bodyComponents.push(renderSectionHeader);
         sectionHeaderIndices.push(totalIndex++);
       }
 
@@ -390,6 +397,10 @@ class ListView extends React.Component {
       onKeyboardDidShow: undefined,
       onKeyboardDidHide: undefined,
     });
+
+    if (this.props.stickyHeader) {
+      bodyComponents = <StickyContainer>{bodyComponents}</StickyContainer>;
+    }
 
     // TODO(ide): Use function refs so we can compose with the scroll
     // component's original ref instead of clobbering it

@@ -6,6 +6,7 @@ import View from './View.web';
 import throttle from 'domkit/throttle';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
+const invariant = require('fbjs/lib/invariant');
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
@@ -252,6 +253,14 @@ class ScrollView extends React.Component {
      * @platform ios
      */
     zoomScale: PropTypes.number,
+
+    /**
+     * A RefreshControl component, used to provide pull-to-refresh
+     * functionality for the ScrollView.
+     *
+     * See [RefreshControl](docs/refreshcontrol.html).
+     */
+    refreshControl: PropTypes.element,
   }
 
   state = this.scrollResponderMixinGetInitialState();
@@ -309,6 +318,11 @@ class ScrollView extends React.Component {
     this.props.onScroll && this.props.onScroll(e);
   }
 
+  _handleContentOnLayout(e) {
+    const {width, height} = e.nativeEvent.layout;
+    this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
+  }
+
   render() {
     let {
       style = {},
@@ -340,8 +354,16 @@ class ScrollView extends React.Component {
     //   );
     // }
 
+    let contentSizeChangeProps = {};
+    if (this.props.onContentSizeChange) {
+      contentSizeChangeProps = {
+        onLayout: this._handleContentOnLayout,
+      };
+    }
+
     let contentContainer =
       <View
+        {...contentSizeChangeProps}
         ref={INNERVIEW}
         style={StyleSheet.flattenStyle(contentContainerStyle)}
         removeClippedSubviews={this.props.removeClippedSubviews}
@@ -391,10 +413,60 @@ class ScrollView extends React.Component {
       onResponderReject: this.scrollResponderHandleResponderReject,
     };
 
+    const { decelerationRate } = this.props;
+    if (decelerationRate) {
+      props.decelerationRate = processDecelerationRate(decelerationRate);
+    }
+
+    let ScrollViewClass = View;
+    // if (Platform.OS === 'ios') {
+    //   ScrollViewClass = RCTScrollView;
+    // } else if (Platform.OS === 'android') {
+    //   if (this.props.horizontal) {
+    //     ScrollViewClass = AndroidHorizontalScrollView;
+    //   } else {
+    //     ScrollViewClass = AndroidScrollView;
+    //   }
+    // }
+    // invariant(
+    //   ScrollViewClass !== undefined,
+    //   'ScrollViewClass must not be undefined'
+    // );
+
+    const refreshControl = this.props.refreshControl;
+    if (refreshControl) {
+      // if (Platform.OS === 'ios') {
+      //   // On iOS the RefreshControl is a child of the ScrollView.
+      //   return (
+      //     <ScrollViewClass {...props} ref={this._setScrollViewRef}>
+      //       {refreshControl}
+      //       {contentContainer}
+      //     </ScrollViewClass>
+      //   );
+      // } else if (Platform.OS === 'android') {
+      //   // On Android wrap the ScrollView with a AndroidSwipeRefreshLayout.
+      //   // Since the ScrollView is wrapped add the style props to the
+      //   // AndroidSwipeRefreshLayout and use flex: 1 for the ScrollView.
+      //   return React.cloneElement(
+      //     refreshControl,
+      //     {style: props.style},
+      //     <ScrollViewClass {...props} style={styles.base} ref={this._setScrollViewRef}>
+      //       {contentContainer}
+      //     </ScrollViewClass>
+      //   );
+      // }
+      return (
+        <ScrollViewClass {...props} ref={SCROLLVIEW}>
+          {refreshControl}
+          {contentContainer}
+        </ScrollViewClass>
+      );
+    }
+
     return (
-      <View {...props} ref={SCROLLVIEW}>
+      <ScrollViewClass {...props} ref={SCROLLVIEW}>
         {contentContainer}
-      </View>
+      </ScrollViewClass>
     );
   }
 };

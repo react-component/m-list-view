@@ -230,7 +230,7 @@ webpackJsonp([0],{
 	    backgroundColor: '#B0C4DE'
 	  },
 	  header: {
-	    height: 40,
+	    height: 140,
 	    justifyContent: 'center',
 	    alignItems: 'center',
 	    backgroundColor: '#3B5998',

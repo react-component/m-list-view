@@ -19893,7 +19893,6 @@
 	   * - renderRow(rowData, sectionID, rowID, highlightRow);
 	   * - renderSectionHeader(sectionData, sectionID);
 	   */
-	  // for web
 	
 	
 	  /**
@@ -20018,7 +20017,7 @@
 	        if (this.props.stickyHeader) {
 	          renderSectionHeader = _react2.default.createElement(
 	            _reactSticky.Sticky,
-	            { key: 's_' + sectionID },
+	            _extends({}, this.props.stickyProps, { key: 's_' + sectionID }),
 	            renderSectionHeader
 	          );
 	        }
@@ -20081,7 +20080,7 @@
 	    if (this.props.stickyHeader) {
 	      bodyComponents = _react2.default.createElement(
 	        _reactSticky.StickyContainer,
-	        null,
+	        this.props.stickyContainerProps,
 	        bodyComponents
 	      );
 	    }
@@ -20385,7 +20384,10 @@
 	   * @platform ios
 	   */
 	  stickyHeaderIndices: _react.PropTypes.arrayOf(_react.PropTypes.number),
-	  stickyHeader: _react.PropTypes.bool });
+	  stickyHeader: _react.PropTypes.bool, // for web
+	  stickyProps: _react.PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
+	  stickyContainerProps: _react.PropTypes.object
+	});
 	ListView.defaultProps = {
 	  initialListSize: DEFAULT_INITIAL_ROWS,
 	  pageSize: DEFAULT_PAGE_SIZE,
@@ -20394,7 +20396,9 @@
 	  },
 	  scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
 	  onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
-	  stickyHeaderIndices: []
+	  stickyHeaderIndices: [],
+	  stickyProps: {},
+	  stickyContainerProps: {}
 	};
 	
 	
@@ -23204,7 +23208,7 @@
 	    }
 	  }, {
 	    key: 'handleUserEvent',
-	    value: function handleUserEvent(forceUpdate) {
+	    value: function handleUserEvent(forceUpdate) {console.log('xxx');
 	      var pageY = window.pageYOffset;
 	      var height = this.getHeight();
 	      var origin = this.getOrigin(pageY);
@@ -23223,7 +23227,7 @@
 	  }, {
 	    key: 'on',
 	    value: function on(events, callback) {
-	      events.forEach(function (evt) {
+	      events.forEach(function (evt) {console.log(evt);
 	        window.addEventListener(evt, callback);
 	      });
 	    }
@@ -23301,6 +23305,7 @@
 	};
 	exports.default = Sticky;
 	module.exports = exports['default'];
+
 
 /***/ },
 /* 187 */

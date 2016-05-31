@@ -130,7 +130,7 @@ webpackJsonp([1],{
 	    backgroundColor: '#B0C4DE'
 	  },
 	  header: {
-	    height: 40,
+	    height: 140,
 	    justifyContent: 'center',
 	    alignItems: 'center',
 	    backgroundColor: '#3B5998',
@@ -368,9 +368,16 @@ webpackJsonp([1],{
 	        initialListSize: 10,
 	        pageSize: 4,
 	        scrollRenderAheadDistance: 500,
-	        stickyHeader: true
+	        stickyHeader: true,
+	        stickyProps: {
+	          stickyStyle: { top: '10px' },
+	          onStickyStateChange: this._onStickyStateChange
+	        }
 	      })
 	    );
+	  },
+	  _onStickyStateChange: function _onStickyStateChange(isSticky) {
+	    console.log(isSticky);
 	  },
 	  _onPressHeader: function _onPressHeader() {
 	    // var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];

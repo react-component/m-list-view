@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging.js - example - rmc-listview@0.3.1</title>
+  <title>paging.js - example - rmc-listview@0.3.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-listview@0.3.1</h1>
+      <h1>rmc-listview@0.3.2</h1>
 
       <p>m-listview ui component for react</p>
     </div>
@@ -365,8 +365,16 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-attribute">pageSize</span>=<span class="hljs-value">{4}</span>
         <span class="hljs-attribute">scrollRenderAheadDistance</span>=<span class="hljs-value">{500}</span>
         <span class="hljs-attribute">stickyHeader</span>
+        <span class="hljs-attribute">stickyProps</span>=<span class="hljs-value">{{</span>
+          <span class="hljs-attribute">stickyStyle:</span> { <span class="hljs-attribute">top:</span> '<span class="hljs-attribute">10px</span>' },
+          <span class="hljs-attribute">onStickyStateChange:</span> <span class="hljs-attribute">this._onStickyStateChange</span>,
+        }}
       /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+  },
+
+  _onStickyStateChange(isSticky) {
+    <span class="hljs-built_in">console</span>.log(isSticky);
   },
 
   _onPressHeader() {

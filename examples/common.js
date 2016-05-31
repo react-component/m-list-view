@@ -19779,25 +19779,27 @@
 	
 	var _ScrollResponder2 = _interopRequireDefault(_ScrollResponder);
 	
-	var _StaticRenderer = __webpack_require__(178);
+	var _StaticRenderer = __webpack_require__(183);
 	
 	var _StaticRenderer2 = _interopRequireDefault(_StaticRenderer);
 	
-	var _reactTimerMixin = __webpack_require__(179);
+	var _reactTimerMixin = __webpack_require__(184);
 	
 	var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 	
-	var _reactMixin = __webpack_require__(174);
-	
-	var _reactMixin2 = _interopRequireDefault(_reactMixin);
-	
-	var _objectAssign = __webpack_require__(176);
+	var _objectAssign = __webpack_require__(181);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _autobindDecorator = __webpack_require__(177);
+	var _reactMixin = __webpack_require__(179);
+	
+	var _reactMixin2 = _interopRequireDefault(_reactMixin);
+	
+	var _autobindDecorator = __webpack_require__(182);
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+	
+	var _reactSticky = __webpack_require__(185);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -19891,6 +19893,7 @@
 	   * - renderRow(rowData, sectionID, rowID, highlightRow);
 	   * - renderSectionHeader(sectionData, sectionID);
 	   */
+	  // for web
 	
 	
 	  /**
@@ -20006,11 +20009,20 @@
 	
 	      if (this.props.renderSectionHeader) {
 	        var shouldUpdateHeader = rowCount >= this._prevRenderedRowsCount && dataSource.sectionHeaderShouldUpdate(sectionIdx);
-	        bodyComponents.push(_react2.default.createElement(_StaticRenderer2.default, {
+	
+	        var renderSectionHeader = _react2.default.createElement(_StaticRenderer2.default, {
 	          key: 's_' + sectionID,
 	          shouldUpdate: !!shouldUpdateHeader,
 	          render: this.props.renderSectionHeader.bind(null, dataSource.getSectionHeaderData(sectionIdx), sectionID)
-	        }));
+	        });
+	        if (this.props.stickyHeader) {
+	          renderSectionHeader = _react2.default.createElement(
+	            _reactSticky.Sticky,
+	            { key: 's_' + sectionID },
+	            renderSectionHeader
+	          );
+	        }
+	        bodyComponents.push(renderSectionHeader);
 	        sectionHeaderIndices.push(totalIndex++);
 	      }
 	
@@ -20065,6 +20077,14 @@
 	      onKeyboardDidShow: undefined,
 	      onKeyboardDidHide: undefined
 	    });
+	
+	    if (this.props.stickyHeader) {
+	      bodyComponents = _react2.default.createElement(
+	        _reactSticky.StickyContainer,
+	        null,
+	        bodyComponents
+	      );
+	    }
 	
 	    // TODO(ide): Use function refs so we can compose with the scroll
 	    // component's original ref instead of clobbering it
@@ -20364,8 +20384,8 @@
 	   * with `horizontal={true}`.
 	   * @platform ios
 	   */
-	  stickyHeaderIndices: _react.PropTypes.arrayOf(_react.PropTypes.number)
-	});
+	  stickyHeaderIndices: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	  stickyHeader: _react.PropTypes.bool });
 	ListView.defaultProps = {
 	  initialListSize: DEFAULT_INITIAL_ROWS,
 	  pageSize: DEFAULT_PAGE_SIZE,
@@ -20998,15 +21018,15 @@
 	
 	var _View2 = _interopRequireDefault(_View);
 	
-	var _throttle = __webpack_require__(173);
+	var _throttle = __webpack_require__(178);
 	
 	var _throttle2 = _interopRequireDefault(_throttle);
 	
-	var _reactMixin = __webpack_require__(174);
+	var _reactMixin = __webpack_require__(179);
 	
 	var _reactMixin2 = _interopRequireDefault(_reactMixin);
 	
-	var _autobindDecorator = __webpack_require__(177);
+	var _autobindDecorator = __webpack_require__(182);
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 	
@@ -21021,6 +21041,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var invariant = __webpack_require__(165);
 	
 	var SCROLLVIEW = 'ScrollView';
 	var INNERVIEW = 'InnerScrollView';
@@ -21111,6 +21133,14 @@
 	    this.props.onScroll && this.props.onScroll(e);
 	  };
 	
+	  ScrollView.prototype._handleContentOnLayout = function _handleContentOnLayout(e) {
+	    var _e$nativeEvent$layout = e.nativeEvent.layout;
+	    var width = _e$nativeEvent$layout.width;
+	    var height = _e$nativeEvent$layout.height;
+	
+	    this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
+	  };
+	
 	  ScrollView.prototype.render = function render() {
 	    var _props = this.props;
 	    var _props$style = _props.style;
@@ -21138,13 +21168,20 @@
 	    //   );
 	    // }
 	
+	    var contentSizeChangeProps = {};
+	    if (this.props.onContentSizeChange) {
+	      contentSizeChangeProps = {
+	        onLayout: this._handleContentOnLayout
+	      };
+	    }
+	
 	    var contentContainer = _react2.default.createElement(
 	      _View2.default,
-	      {
+	      _extends({}, contentSizeChangeProps, {
 	        ref: INNERVIEW,
 	        style: _StyleSheet2.default.flattenStyle(contentContainerStyle),
 	        removeClippedSubviews: this.props.removeClippedSubviews,
-	        collapsable: false },
+	        collapsable: false }),
 	      this.props.children
 	    );
 	
@@ -21183,8 +21220,59 @@
 	      onResponderReject: this.scrollResponderHandleResponderReject
 	    });
 	
+	    var decelerationRate = this.props.decelerationRate;
+	
+	    if (decelerationRate) {
+	      props.decelerationRate = processDecelerationRate(decelerationRate);
+	    }
+	
+	    var ScrollViewClass = _View2.default;
+	    // if (Platform.OS === 'ios') {
+	    //   ScrollViewClass = RCTScrollView;
+	    // } else if (Platform.OS === 'android') {
+	    //   if (this.props.horizontal) {
+	    //     ScrollViewClass = AndroidHorizontalScrollView;
+	    //   } else {
+	    //     ScrollViewClass = AndroidScrollView;
+	    //   }
+	    // }
+	    // invariant(
+	    //   ScrollViewClass !== undefined,
+	    //   'ScrollViewClass must not be undefined'
+	    // );
+	
+	    var refreshControl = this.props.refreshControl;
+	    if (refreshControl) {
+	      // if (Platform.OS === 'ios') {
+	      //   // On iOS the RefreshControl is a child of the ScrollView.
+	      //   return (
+	      //     <ScrollViewClass {...props} ref={this._setScrollViewRef}>
+	      //       {refreshControl}
+	      //       {contentContainer}
+	      //     </ScrollViewClass>
+	      //   );
+	      // } else if (Platform.OS === 'android') {
+	      //   // On Android wrap the ScrollView with a AndroidSwipeRefreshLayout.
+	      //   // Since the ScrollView is wrapped add the style props to the
+	      //   // AndroidSwipeRefreshLayout and use flex: 1 for the ScrollView.
+	      //   return React.cloneElement(
+	      //     refreshControl,
+	      //     {style: props.style},
+	      //     <ScrollViewClass {...props} style={styles.base} ref={this._setScrollViewRef}>
+	      //       {contentContainer}
+	      //     </ScrollViewClass>
+	      //   );
+	      // }
+	      return _react2.default.createElement(
+	        ScrollViewClass,
+	        _extends({}, props, { ref: SCROLLVIEW }),
+	        refreshControl,
+	        contentContainer
+	      );
+	    }
+	
 	    return _react2.default.createElement(
-	      _View2.default,
+	      ScrollViewClass,
 	      _extends({}, props, { ref: SCROLLVIEW }),
 	      contentContainer
 	    );
@@ -21411,7 +21499,15 @@
 	   * The current scale of the scroll view content. The default value is 1.0.
 	   * @platform ios
 	   */
-	  zoomScale: _react.PropTypes.number
+	  zoomScale: _react.PropTypes.number,
+	
+	  /**
+	   * A RefreshControl component, used to provide pull-to-refresh
+	   * functionality for the ScrollView.
+	   *
+	   * See [RefreshControl](docs/refreshcontrol.html).
+	   */
+	  refreshControl: _react.PropTypes.element
 	};
 	;
 	
@@ -22000,43 +22096,289 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _LayoutMixin = __webpack_require__(173);
+	
+	var _NativeMethodsMixin = __webpack_require__(175);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	var View = _react2.default.createClass({
+	  displayName: 'View',
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-	
-	var View = function (_React$Component) {
-	  _inherits(View, _React$Component);
-	
-	  function View() {
-	    _classCallCheck(this, View);
-	
-	    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
-	  }
-	
-	  View.prototype.render = function render() {
+	  mixins: [_LayoutMixin.Mixin, _NativeMethodsMixin.Mixin],
+	  propTypes: {
+	    /**
+	     * Invoked on mount and layout changes with
+	     *
+	     *   {nativeEvent: { layout: {x, y, width, height}}}.
+	     *
+	     * This event is fired immediately once the layout has been calculated, but
+	     * the new layout may not yet be reflected on the screen at the time the
+	     * event is received, especially if a layout animation is in progress.
+	     */
+	    onLayout: _react.PropTypes.func
+	  },
+	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
 	      this.props,
 	      this.props.children
 	    );
-	  };
+	  }
+	});
 	
-	  return View;
-	}(_react2.default.Component);
-	
-	;
+	View.isReactNativeComponent = true;
 	
 	exports.default = View;
 	module.exports = exports['default'];
 
 /***/ },
 /* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	'use strict';
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(160);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _getLayout = __webpack_require__(174);
+	
+	var _getLayout2 = _interopRequireDefault(_getLayout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LayoutMixin = {
+	  getInitialState: function getInitialState() {
+	    return { layout: {} };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.layoutHandle();
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    this.layoutHandle();
+	  },
+	
+	  layoutHandle: function layoutHandle() {
+	    if (this.props.onLayout) {
+	
+	      var layout = (0, _getLayout2.default)(_reactDom2.default.findDOMNode(this));
+	      var stateLayout = this.state.layout;
+	      if (stateLayout.x !== layout.x || stateLayout.y !== layout.y || stateLayout.width !== layout.width || stateLayout.height !== layout.height) {
+	        this.props.onLayout({ nativeEvent: { layout: layout } });
+	        this.setState({ layout: layout });
+	      }
+	    }
+	  }
+	};
+	
+	module.exports = {
+	  Mixin: LayoutMixin
+	};
+
+/***/ },
+/* 174 */
+/***/ function(module, exports) {
+
+	
+	'use strict';
+	
+	// get element x, y
+	
+	function getCumulativeOffset(obj) {
+	  var left, top;
+	  left = top = 0;
+	  if (obj.offsetParent) {
+	    do {
+	      left += obj.offsetLeft;
+	      top += obj.offsetTop;
+	    } while (obj = obj.offsetParent);
+	  }
+	  return {
+	    x: left,
+	    y: top
+	  };
+	}
+	
+	// this functions returns the x, y, width and height of a given dom node
+	function getLayout(element) {
+	  var rect = getCumulativeOffset(element);
+	  return {
+	    x: rect.x,
+	    y: rect.y,
+	    width: element.offsetWidth,
+	    height: element.offsetHeight
+	  };
+	}
+	
+	module.exports = getLayout;
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	'use strict';
+	
+	var _UIManager = __webpack_require__(176);
+	
+	var _UIManager2 = _interopRequireDefault(_UIManager);
+	
+	var _reactDom = __webpack_require__(160);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _setNativeProps2 = __webpack_require__(177);
+	
+	var _setNativeProps3 = _interopRequireDefault(_setNativeProps2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NativeMethodsMixin = {
+	  /**
+	   * Determines the location on screen, width, and height of the given view and
+	   * returns the values via an async callback. If successful, the callback will
+	   * be called with the following arguments:
+	   *
+	   *  - x
+	   *  - y
+	   *  - width
+	   *  - height
+	   *  - pageX
+	   *  - pageY
+	   *
+	   * Note that these measurements are not available until after the rendering
+	   * has been completed in native. If you need the measurements as soon as
+	   * possible, consider using the [`onLayout`
+	   * prop](/react-native/docs/view.html#onlayout) instead.
+	   */
+	  measure: function measure(callback) {
+	    _UIManager2.default.measure(_reactDom2.default.findDOMNode(this), mountSafeCallback(this, callback));
+	  },
+	
+	  /**
+	   * Like [`measure()`](#measure), but measures the view relative an ancestor,
+	   * specified as `relativeToNativeNode`. This means that the returned x, y
+	   * are relative to the origin x, y of the ancestor view.
+	   *
+	   * As always, to obtain a native node handle for a component, you can use
+	   * `ReactDOM.findDOMNode(component)`.
+	   */
+	  measureLayout: function measureLayout(relativeToNativeNode, onSuccess, onFail) {
+	    _UIManager2.default.measureLayout(_reactDom2.default.findDOMNode(this), relativeToNativeNode, mountSafeCallback(this, onFail), mountSafeCallback(this, onSuccess));
+	  },
+	
+	  /**
+	   * This function sends props straight to native. They will not participate in
+	   * future diff process - this means that if you do not include them in the
+	   * next render, they will remain active (see [Direct
+	   * Manipulation](/react-native/docs/direct-manipulation.html)).
+	   */
+	  setNativeProps: function setNativeProps(nativeProps) {
+	    (0, _setNativeProps3.default)(_reactDom2.default.findDOMNode(this), nativeProps);
+	  },
+	
+	  /**
+	   * Requests focus for the given input or view. The exact behavior triggered
+	   * will depend on the platform and type of view.
+	   */
+	  focus: function focus() {
+	    _reactDom2.default.findDOMNode(this).focus();
+	  },
+	
+	  /**
+	   * Removes focus from an input or view. This is the opposite of `focus()`.
+	   */
+	  blur: function blur() {
+	    _reactDom2.default.findDOMNode(this).blur();
+	  }
+	};
+	
+	/**
+	 * In the future, we should cleanup callbacks by cancelling them instead of
+	 * using this.
+	 */
+	var mountSafeCallback = function mountSafeCallback(context, callback) {
+	  return function () {
+	    if (!callback || context.isMounted && !context.isMounted()) {
+	      return;
+	    }
+	    return callback.apply(context, arguments);
+	  };
+	};
+	
+	module.exports = { Mixin: NativeMethodsMixin };
+
+/***/ },
+/* 176 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var UIManager = {
+	  measure: function measure(ref, callback) {
+	    var rect = ref.getBoundingClientRect();
+	    callback(0, 0, rect.width, rect.height, rect.left, rect.top);
+	  },
+	  measureLayout: function measureLayout(ref, relativeTo, errorCallback, callback) {
+	    var rect = ref.getBoundingClientRect();
+	    var relativeRef = relativeTo.getBoundingClientRect();
+	    callback(rect.left - relativeRef.left, rect.top - relativeRef.top, rect.width, rect.height);
+	  }
+	};
+	
+	module.exports = UIManager;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	'use strict';
+	
+	var CSSPropertyOperations = __webpack_require__(98);
+	
+	function convertTransform(style) {
+	  var result = {};
+	
+	  for (var k in style) {
+	    if (k === 'transformMatrix') {
+	      result.transform = 'matrix3d(' + style[k].join(',') + ') ';
+	    } else {
+	      result[k] = style[k];
+	    }
+	  }
+	
+	  return result;
+	}
+	
+	function setNativeProps(node, props) {
+	
+	  for (var name in props) {
+	    if (name === 'style') {
+	      var style = props[name];
+	      if ('transformMatrix' in style) {
+	        style = convertTransform(style);
+	      }
+	
+	      CSSPropertyOperations.setValueForStyles(node, style);
+	    } else {
+	      node.setAttribute(name, props[name]);
+	    }
+	  }
+	}
+	
+	module.exports = setNativeProps;
+
+/***/ },
+/* 178 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22054,11 +22396,11 @@
 
 
 /***/ },
-/* 174 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var mixin = __webpack_require__(175);
-	var assign = __webpack_require__(176);
+	var mixin = __webpack_require__(180);
+	var assign = __webpack_require__(181);
 	
 	var mixinProto = mixin({
 	  // lifecycle stuff is as you'd expect
@@ -22213,7 +22555,7 @@
 
 
 /***/ },
-/* 175 */
+/* 180 */
 /***/ function(module, exports) {
 
 	function objToStr(x){ return Object.prototype.toString.call(x); };
@@ -22390,7 +22732,7 @@
 
 
 /***/ },
-/* 176 */
+/* 181 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22479,7 +22821,7 @@
 
 
 /***/ },
-/* 177 */
+/* 182 */
 /***/ function(module, exports) {
 
 	/**
@@ -22581,7 +22923,7 @@
 
 
 /***/ },
-/* 178 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22634,7 +22976,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 179 */
+/* 184 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*
@@ -22730,6 +23072,330 @@
 	module.exports = TimerMixin;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.StickyContainer = exports.Sticky = undefined;
+	
+	var _sticky = __webpack_require__(186);
+	
+	var _sticky2 = _interopRequireDefault(_sticky);
+	
+	var _container = __webpack_require__(187);
+	
+	var _container2 = _interopRequireDefault(_container);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.Sticky = _sticky2.default;
+	exports.StickyContainer = _container2.default;
+	exports.default = _sticky2.default;
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(160);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Sticky = function (_React$Component) {
+	  _inherits(Sticky, _React$Component);
+	
+	  function Sticky(props) {
+	    _classCallCheck(this, Sticky);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sticky).call(this, props));
+	
+	    _this.onScroll = function () {
+	      return _this.handleUserEvent(false);
+	    };
+	
+	    _this.onResize = function () {
+	      _this.handleUserEvent(true);
+	
+	      // HACK:
+	      // In order to improve the visuals during resizes, perform
+	      // a second, deferred update after resize events. This
+	      // makes resizing one of the most expensive operations,
+	      // however it is, in most cases, a rare occurrence.
+	      setTimeout(function () {
+	        return _this.handleUserEvent(true);
+	      }, 0);
+	    };
+	
+	    _this.state = {
+	      isSticky: false
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Sticky, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.update();
+	      this.on(['scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.onScroll);
+	      this.on(['resize', 'pageshow', 'load'], this.onResize);
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps() {
+	      this.update();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.off(['scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.onScroll);
+	      this.off(['resize', 'pageshow', 'load'], this.onResize);
+	    }
+	  }, {
+	    key: 'getOrigin',
+	    value: function getOrigin(pageY) {
+	      return this.refs.placeholder.getBoundingClientRect().top + pageY;
+	    }
+	  }, {
+	    key: 'getHeight',
+	    value: function getHeight() {
+	      return _reactDom2.default.findDOMNode(this).getBoundingClientRect().height;
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      var height = this.getHeight();
+	      var pageY = window.pageYOffset;
+	      var origin = this.getOrigin(pageY);
+	      var isSticky = this.isSticky(pageY, origin);
+	
+	      var s = this.state;
+	      if (s.height !== height || s.origin !== origin || s.isSticky !== isSticky) this.setState({ height: height, origin: origin, isSticky: isSticky });
+	    }
+	  }, {
+	    key: 'isSticky',
+	    value: function isSticky(pageY, origin) {
+	      return this.props.isActive && pageY + this.context.offset - this.props.topOffset >= origin && this.context.offset <= (this.context.rect.bottom || 0) - this.props.bottomOffset;
+	    }
+	  }, {
+	    key: 'handleUserEvent',
+	    value: function handleUserEvent(forceUpdate) {
+	      var pageY = window.pageYOffset;
+	      var height = this.getHeight();
+	      var origin = this.getOrigin(pageY);
+	      var isSticky = this.isSticky(pageY, this.state.origin);
+	      var hasChanged = this.state.isSticky !== isSticky;
+	
+	      var s = this.state;
+	      if (forceUpdate || s.height !== height || s.origin !== origin || s.isSticky !== isSticky) {
+	        this.setState({ isSticky: isSticky, origin: origin, height: height });
+	      }
+	
+	      this.context.container.updateOffset(isSticky ? this.state.height : 0);
+	
+	      if (hasChanged) this.props.onStickyStateChange(isSticky);
+	    }
+	  }, {
+	    key: 'on',
+	    value: function on(events, callback) {
+	      events.forEach(function (evt) {
+	        window.addEventListener(evt, callback);
+	      });
+	    }
+	  }, {
+	    key: 'off',
+	    value: function off(events, callback) {
+	      events.forEach(function (evt) {
+	        window.removeEventListener(evt, callback);
+	      });
+	    }
+	
+	    /*
+	     * The special sauce.
+	     */
+	
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var isSticky = this.state.isSticky;
+	
+	      var className = this.props.className;
+	      if (isSticky) className += ' ' + this.props.stickyClassName;
+	
+	      var style = this.props.style;
+	      if (isSticky) {
+	        var placeholderRect = this.refs.placeholder.getBoundingClientRect();
+	        var stickyStyle = {
+	          position: 'fixed',
+	          top: this.context.offset,
+	          left: placeholderRect.left,
+	          width: placeholderRect.width
+	        };
+	
+	        var bottomLimit = (this.context.rect.bottom || 0) - this.state.height - this.props.bottomOffset;
+	        if (this.context.offset > bottomLimit) {
+	          stickyStyle.top = bottomLimit;
+	        }
+	
+	        style = _extends({}, this.props.style, stickyStyle, this.props.stickyStyle);
+	      }
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement('div', { ref: 'placeholder', style: { paddingBottom: isSticky ? this.state.height : 0 } }),
+	        _react2.default.createElement(
+	          'div',
+	          _extends({}, this.props, { className: className, style: style }),
+	          this.props.children
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Sticky;
+	}(_react2.default.Component);
+	
+	Sticky.contextTypes = {
+	  container: _react2.default.PropTypes.any,
+	  offset: _react2.default.PropTypes.number,
+	  rect: _react2.default.PropTypes.object
+	};
+	Sticky.propTypes = {
+	  isActive: _react2.default.PropTypes.bool
+	};
+	Sticky.defaultProps = {
+	  isActive: true,
+	  className: '',
+	  style: {},
+	  stickyClassName: 'sticky',
+	  stickyStyle: {},
+	  topOffset: 0,
+	  bottomOffset: 0,
+	  onStickyStateChange: function onStickyStateChange() {}
+	};
+	exports.default = Sticky;
+	module.exports = exports['default'];
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(160);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Container = function (_React$Component) {
+	  _inherits(Container, _React$Component);
+	
+	  function Container(props) {
+	    _classCallCheck(this, Container);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props));
+	
+	    _this.state = {
+	      offset: 0
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Container, [{
+	    key: 'getChildContext',
+	    value: function getChildContext() {
+	      var container = this;
+	      var totalOffset = (this.context.totalOffset || 0) + this.state.offset;
+	      var offset = totalOffset - this.state.offset;
+	      var rect = this.state.node ? this.state.node.getBoundingClientRect() : {};
+	      return { container: container, totalOffset: totalOffset, offset: offset, rect: rect };
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var node = _reactDom2.default.findDOMNode(this);
+	      this.setState({ node: node });
+	    }
+	  }, {
+	    key: 'updateOffset',
+	    value: function updateOffset(height) {
+	      var childContext = this.getChildContext();
+	      var occupiedSpace = childContext.rect.bottom - childContext.offset;
+	      var offset = Math.min(occupiedSpace, height);
+	      if (this.state.offset !== offset) {
+	        this.setState({ offset: offset });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        this.props,
+	        this.props.children
+	      );
+	    }
+	  }]);
+	
+	  return Container;
+	}(_react2.default.Component);
+	
+	Container.contextTypes = {
+	  container: _react2.default.PropTypes.any,
+	  totalOffset: _react2.default.PropTypes.number
+	};
+	Container.childContextTypes = {
+	  container: _react2.default.PropTypes.any,
+	  totalOffset: _react2.default.PropTypes.number,
+	  offset: _react2.default.PropTypes.number,
+	  rect: _react2.default.PropTypes.any
+	};
+	exports.default = Container;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

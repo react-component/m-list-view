@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(181);
+	module.exports = __webpack_require__(189);
 
 
 /***/ },
 
-/***/ 180:
+/***/ 188:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -238,7 +238,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 181:
+/***/ 189:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -257,7 +257,7 @@ webpackJsonp([1],{
 	
 	var _rmcListview2 = _interopRequireDefault(_rmcListview);
 	
-	var _util = __webpack_require__(180);
+	var _util = __webpack_require__(188);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -380,7 +380,8 @@ webpackJsonp([1],{
 	        renderRow: this.renderRow,
 	        initialListSize: 10,
 	        pageSize: 4,
-	        scrollRenderAheadDistance: 500
+	        scrollRenderAheadDistance: 500,
+	        stickyHeader: true
 	      })
 	    );
 	  },

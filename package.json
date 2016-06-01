@@ -1,20 +1,20 @@
 {
-  "name": "rmc-listview",
-  "version": "0.3.2",
-  "description": "m-listview ui component for react",
+  "name": "rmc-list-view",
+  "version": "0.4.0",
+  "description": "m-list-view ui component for react",
   "keywords": [
     "react",
     "react-component",
-    "react-mobile-listview",
-    "m-listview"
+    "react-mobile-list-view",
+    "m-list-view"
   ],
   "engines": {
     "node": ">=4.0.0"
   },
-  "homepage": "https://github.com/react-component/m-listview",
+  "homepage": "https://github.com/react-component/m-list-view",
   "author": "hualei5280@gmail.com",
-  "repository": "react-component/m-listview",
-  "bugs": "https://github.com/react-component/m-listview/issues",
+  "repository": "react-component/m-list-view",
+  "bugs": "https://github.com/react-component/m-list-view/issues",
   "files": [
     "lib",
     "assets/*.css"

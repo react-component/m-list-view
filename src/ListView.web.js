@@ -260,9 +260,15 @@ class ListView extends React.Component {
   componentDidMount() {
     // do this in animation frame until componentDidMount actually runs after
     // the component is laid out
-    this.requestAnimationFrame(() => {
-      this._measureAndUpdateScrollProps();
-    });
+    // this.requestAnimationFrame(() => {
+    //   this._measureAndUpdateScrollProps();
+    // });
+    if (this._body) {
+      this.container = document.createElement('div');
+      window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
+      window.addEventListener('scroll', this._onScroll);
+    }
+    this.componentDidUpdate();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -287,6 +293,14 @@ class ListView extends React.Component {
     this.requestAnimationFrame(() => {
       this._measureAndUpdateScrollProps();
     });
+    if (this._body) {
+      ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
+    }
+  }
+  componentWillUnmount() {
+    ReactDOM.unmountComponentAtNode(this.container);
+    window.document.body.removeChild(this.container);
+    window.removeEventListener('scroll', this._onScroll);
   }
 
   onRowHighlighted(sectionID, rowID) {
@@ -408,11 +422,21 @@ class ListView extends React.Component {
 
     // TODO(ide): Use function refs so we can compose with the scroll
     // component's original ref instead of clobbering it
-    return React.cloneElement(renderScrollComponent(props), {
+    let _sc = renderScrollComponent(props);
+    this._body = false;
+    if (!_sc) {
+      _sc = <div></div>;
+      this._body = true;
+    }
+    this._sc = React.cloneElement(_sc, {
       ref: SCROLLVIEW_REF,
       onContentSizeChange: this._onContentSizeChange,
       onLayout: this._onLayout,
     }, header, bodyComponents, footer);
+    if (this._body) {
+      return null;
+    }
+    return this._sc;
   }
 
   /**
@@ -583,6 +607,9 @@ class ListView extends React.Component {
     // ];
 
     let target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
+    if (this._body) {
+      target = window.document.body;
+    }
     this.scrollProperties.visibleLength = target[
       isVertical ? 'offsetHeight' : 'offsetWidth'
     ];

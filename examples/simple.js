@@ -1,7 +1,7 @@
 // use jsx to render html, do not modify simple.html
 
-import 'rmc-listview/assets/index.less';
-import ListView from 'rmc-listview';
+import 'rmc-list-view/assets/index.less';
+import ListView from 'rmc-list-view';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

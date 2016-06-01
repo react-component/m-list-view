@@ -1,9 +1,9 @@
 // use jsx to render html, do not modify simple.html
 
-import 'rmc-listview/assets/index.less';
+import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-listview';
+import ListView from 'rmc-list-view';
 import { View, Text, Image, _genRows, hashCode, THUMB_URLS, LOREM_IPSUM, styles,
   RecyclerViewBackedScrollView, TouchableHighlight,  } from './util';
 
@@ -48,7 +48,6 @@ const Demo = React.createClass({
   },
 
   _renderSeperator: function(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    console.log(adjacentRowHighlighted);
     return (
       <View
         key={`${sectionID}-${rowID}`}

@@ -58,7 +58,7 @@ import React from 'react';
 export const RecyclerViewBackedScrollView = React.createClass({
   render() {
     const props = this.props;
-    return <div {...props}>{props.children}</div>;
+    return <div style={{ maxHeight: 300, overflow: 'scroll' }} {...props}>{props.children}</div>;
   },
 });
 

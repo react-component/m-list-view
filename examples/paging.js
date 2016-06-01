@@ -1,9 +1,9 @@
 // use jsx to render html, do not modify simple.html
 
-import 'rmc-listview/assets/index.less';
+import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-listview';
+import ListView from 'rmc-list-view';
 import { View, Text, pagingStyles as styles, TouchableOpacity, Thumb } from './util';
 
 const NUM_SECTIONS = 100;
@@ -98,6 +98,7 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
+        renderScrollComponent={props => null}
         stickyHeader
         stickyProps={{
           stickyStyle: { top: '10px' },

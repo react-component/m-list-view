@@ -19951,36 +19951,49 @@
 	  };
 	
 	  ListView.prototype.componentDidMount = function componentDidMount() {
-	    var _this2 = this;
-	
 	    // do this in animation frame until componentDidMount actually runs after
 	    // the component is laid out
-	    this.requestAnimationFrame(function () {
-	      _this2._measureAndUpdateScrollProps();
-	    });
+	    // this.requestAnimationFrame(() => {
+	    //   this._measureAndUpdateScrollProps();
+	    // });
+	    if (this._body) {
+	      this.container = document.createElement('div');
+	      window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
+	      window.addEventListener('scroll', this._onScroll);
+	    }
+	    this.componentDidUpdate();
 	  };
 	
 	  ListView.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    var _this3 = this;
+	    var _this2 = this;
 	
 	    if (this.props.dataSource !== nextProps.dataSource || this.props.initialListSize !== nextProps.initialListSize) {
 	      this.setState(function (state, props) {
-	        _this3._prevRenderedRowsCount = 0;
+	        _this2._prevRenderedRowsCount = 0;
 	        return {
 	          curRenderedRowsCount: Math.min(Math.max(state.curRenderedRowsCount, props.initialListSize), props.dataSource.getRowCount())
 	        };
 	      }, function () {
-	        return _this3._renderMoreRowsIfNeeded();
+	        return _this2._renderMoreRowsIfNeeded();
 	      });
 	    }
 	  };
 	
 	  ListView.prototype.componentDidUpdate = function componentDidUpdate() {
-	    var _this4 = this;
+	    var _this3 = this;
 	
 	    this.requestAnimationFrame(function () {
-	      _this4._measureAndUpdateScrollProps();
+	      _this3._measureAndUpdateScrollProps();
 	    });
+	    if (this._body) {
+	      _reactDom2.default.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
+	    }
+	  };
+	
+	  ListView.prototype.componentWillUnmount = function componentWillUnmount() {
+	    _reactDom2.default.unmountComponentAtNode(this.container);
+	    window.document.body.removeChild(this.container);
+	    window.removeEventListener('scroll', this._onScroll);
 	  };
 	
 	  ListView.prototype.onRowHighlighted = function onRowHighlighted(sectionID, rowID) {
@@ -20087,11 +20100,21 @@
 	
 	    // TODO(ide): Use function refs so we can compose with the scroll
 	    // component's original ref instead of clobbering it
-	    return _react2.default.cloneElement(renderScrollComponent(props), {
+	    var _sc = renderScrollComponent(props);
+	    this._body = false;
+	    if (!_sc) {
+	      _sc = _react2.default.createElement('div', null);
+	      this._body = true;
+	    }
+	    this._sc = _react2.default.cloneElement(_sc, {
 	      ref: SCROLLVIEW_REF,
 	      onContentSizeChange: this._onContentSizeChange,
 	      onLayout: this._onLayout
 	    }, header, bodyComponents, footer);
+	    if (this._body) {
+	      return null;
+	    }
+	    return this._sc;
 	  };
 	
 	  /**
@@ -20159,17 +20182,17 @@
 	  };
 	
 	  ListView.prototype._pageInNewRows = function _pageInNewRows() {
-	    var _this5 = this;
+	    var _this4 = this;
 	
 	    this.setState(function (state, props) {
 	      var rowsToRender = Math.min(state.curRenderedRowsCount + props.pageSize, props.dataSource.getRowCount());
-	      _this5._prevRenderedRowsCount = state.curRenderedRowsCount;
+	      _this4._prevRenderedRowsCount = state.curRenderedRowsCount;
 	      return {
 	        curRenderedRowsCount: rowsToRender
 	      };
 	    }, function () {
-	      _this5._measureAndUpdateScrollProps();
-	      _this5._prevRenderedRowsCount = _this5.state.curRenderedRowsCount;
+	      _this4._measureAndUpdateScrollProps();
+	      _this4._prevRenderedRowsCount = _this4.state.curRenderedRowsCount;
 	    });
 	  };
 	
@@ -20259,6 +20282,9 @@
 	    // ];
 	
 	    var target = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW_REF]);
+	    if (this._body) {
+	      target = window.document.body;
+	    }
 	    this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
 	    this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
 	    this.scrollProperties.offset = target[isVertical ? 'scrollTop' : 'scrollTop'];
@@ -23208,13 +23234,13 @@
 	    }
 	  }, {
 	    key: 'handleUserEvent',
-	    value: function handleUserEvent(forceUpdate) {console.log('xxx');
+	    value: function handleUserEvent(forceUpdate) {
 	      var pageY = window.pageYOffset;
 	      var height = this.getHeight();
 	      var origin = this.getOrigin(pageY);
 	      var isSticky = this.isSticky(pageY, this.state.origin);
 	      var hasChanged = this.state.isSticky !== isSticky;
-	
+	console.log('sddd', pageY, height);
 	      var s = this.state;
 	      if (forceUpdate || s.height !== height || s.origin !== origin || s.isSticky !== isSticky) {
 	        this.setState({ isSticky: isSticky, origin: origin, height: height });
@@ -23227,7 +23253,7 @@
 	  }, {
 	    key: 'on',
 	    value: function on(events, callback) {
-	      events.forEach(function (evt) {console.log(evt);
+	      events.forEach(function (evt) {
 	        window.addEventListener(evt, callback);
 	      });
 	    }

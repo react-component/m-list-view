@@ -15,9 +15,9 @@ webpackJsonp([2],{
 	
 	__webpack_require__(2);
 	
-	var _rmcListview = __webpack_require__(161);
+	var _rmcListView = __webpack_require__(161);
 	
-	var _rmcListview2 = _interopRequireDefault(_rmcListview);
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
 	var _react = __webpack_require__(3);
 	
@@ -42,7 +42,7 @@ webpackJsonp([2],{
 	  displayName: 'Demo',
 	
 	  getInitialState: function getInitialState() {
-	    var ds = new _rmcListview2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
+	    var ds = new _rmcListView2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
 	        return r1 !== r2;
 	      } });
 	    return {
@@ -54,7 +54,7 @@ webpackJsonp([2],{
 	    return _react2.default.createElement(
 	      'div',
 	      { style: styles },
-	      _react2.default.createElement(_rmcListview2.default, {
+	      _react2.default.createElement(_rmcListView2.default, {
 	        dataSource: this.state.dataSource,
 	        renderRow: function renderRow(rowData) {
 	          return _react2.default.createElement(

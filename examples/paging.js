@@ -89,7 +89,7 @@ webpackJsonp([1],{
 	    var props = this.props;
 	    return _react2.default.createElement(
 	      'div',
-	      props,
+	      _extends({ style: { maxHeight: 300, overflow: 'scroll' } }, props),
 	      props.children
 	    );
 	  }
@@ -249,9 +249,9 @@ webpackJsonp([1],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListview = __webpack_require__(161);
+	var _rmcListView = __webpack_require__(161);
 	
-	var _rmcListview2 = _interopRequireDefault(_rmcListview);
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
 	var _util = __webpack_require__(188);
 	
@@ -271,7 +271,7 @@ webpackJsonp([1],{
 	      return dataBlob[rowID];
 	    };
 	
-	    var dataSource = new _rmcListview2.default.DataSource({
+	    var dataSource = new _rmcListView2.default.DataSource({
 	      getRowData: getRowData,
 	      getSectionHeaderData: getSectionData,
 	      rowHasChanged: function rowHasChanged(row1, row2) {
@@ -358,7 +358,7 @@ webpackJsonp([1],{
 	    return _react2.default.createElement(
 	      'div',
 	      { style: { height: 300 } },
-	      _react2.default.createElement(_rmcListview2.default, {
+	      _react2.default.createElement(_rmcListView2.default, {
 	        style: _util.pagingStyles.listview,
 	        dataSource: this.state.dataSource,
 	        renderHeader: this.renderHeader,
@@ -368,6 +368,9 @@ webpackJsonp([1],{
 	        initialListSize: 10,
 	        pageSize: 4,
 	        scrollRenderAheadDistance: 500,
+	        renderScrollComponent: function renderScrollComponent(props) {
+	          return null;
+	        },
 	        stickyHeader: true,
 	        stickyProps: {
 	          stickyStyle: { top: '10px' },

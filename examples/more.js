@@ -23,9 +23,9 @@ webpackJsonp([0],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListview = __webpack_require__(161);
+	var _rmcListView = __webpack_require__(161);
 	
-	var _rmcListview2 = _interopRequireDefault(_rmcListview);
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
 	var _util = __webpack_require__(188);
 	
@@ -35,7 +35,7 @@ webpackJsonp([0],{
 	  displayName: 'Demo',
 	
 	  getInitialState: function getInitialState() {
-	    var ds = new _rmcListview2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
+	    var ds = new _rmcListView2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
 	        return r1 !== r2;
 	      } });
 	    return {
@@ -82,7 +82,6 @@ webpackJsonp([0],{
 	  },
 	
 	  _renderSeperator: function _renderSeperator(sectionID, rowID, adjacentRowHighlighted) {
-	    console.log(adjacentRowHighlighted);
 	    return _react2.default.createElement(_util.View, {
 	      key: sectionID + '-' + rowID,
 	      style: {
@@ -93,7 +92,7 @@ webpackJsonp([0],{
 	  },
 	
 	  render: function render() {
-	    return _react2.default.createElement(_rmcListview2.default, {
+	    return _react2.default.createElement(_rmcListView2.default, {
 	      dataSource: this.state.dataSource,
 	      renderRow: this._renderRow,
 	      renderScrollComponent: function renderScrollComponent(props) {
@@ -189,7 +188,7 @@ webpackJsonp([0],{
 	    var props = this.props;
 	    return _react2.default.createElement(
 	      'div',
-	      props,
+	      _extends({ style: { maxHeight: 300, overflow: 'scroll' } }, props),
 	      props.children
 	    );
 	  }

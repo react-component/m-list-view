@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(189);
+	module.exports = __webpack_require__(190);
 
 
 /***/ },
 
-/***/ 188:
+/***/ 189:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -148,6 +148,7 @@ webpackJsonp([1],{
 	    color: '#888888'
 	  },
 	  buttonContents: {
+	    display: 'flex',
 	    flexDirection: 'row',
 	    justifyContent: 'center',
 	    alignItems: 'center',
@@ -234,7 +235,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 189:
+/***/ 190:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -253,7 +254,7 @@ webpackJsonp([1],{
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(188);
+	var _util = __webpack_require__(189);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -357,7 +358,7 @@ webpackJsonp([1],{
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { style: { height: 300 } },
+	      null,
 	      _react2.default.createElement(_rmcListView2.default, {
 	        style: _util.pagingStyles.listview,
 	        dataSource: this.state.dataSource,
@@ -368,7 +369,7 @@ webpackJsonp([1],{
 	        initialListSize: 10,
 	        pageSize: 4,
 	        scrollRenderAheadDistance: 500,
-	        renderScrollComponent: function renderScrollComponent(props) {
+	        renderScrollComponent: function renderScrollComponent() {
 	          return null;
 	        },
 	        stickyHeader: true,
@@ -383,8 +384,6 @@ webpackJsonp([1],{
 	    console.log(isSticky);
 	  },
 	  _onPressHeader: function _onPressHeader() {
-	    // var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];
-	    // LayoutAnimation.configureNext(config);
 	    this.setState({ headerPressCount: this.state.headerPressCount + 1 });
 	  }
 	});

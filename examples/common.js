@@ -20072,6 +20072,14 @@
 	
 	    var props = _objectWithoutProperties(_props, ['renderScrollComponent']);
 	
+	    if (props.stickyHeader) {
+	      bodyComponents = _react2.default.createElement(
+	        _reactSticky.StickyContainer,
+	        this.props.stickyContainerProps,
+	        bodyComponents
+	      );
+	    }
+	
 	    if (!props.scrollEventThrottle) {
 	      props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
 	    }
@@ -20090,20 +20098,13 @@
 	      onKeyboardDidHide: undefined
 	    });
 	
-	    if (this.props.stickyHeader) {
-	      bodyComponents = _react2.default.createElement(
-	        _reactSticky.StickyContainer,
-	        this.props.stickyContainerProps,
-	        bodyComponents
-	      );
-	    }
-	
 	    // TODO(ide): Use function refs so we can compose with the scroll
 	    // component's original ref instead of clobbering it
 	    var _sc = renderScrollComponent(props);
 	    this._body = false;
 	    if (!_sc) {
-	      _sc = _react2.default.createElement('div', null);
+	      delete props.onScroll;
+	      _sc = _react2.default.createElement('div', props);
 	      this._body = true;
 	    }
 	    this._sc = _react2.default.cloneElement(_sc, {
@@ -23111,7 +23112,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.StickyContainer = exports.Sticky = undefined;
+	exports.Channel = exports.StickyContainer = exports.Sticky = undefined;
 	
 	var _sticky = __webpack_require__(186);
 	
@@ -23121,10 +23122,15 @@
 	
 	var _container2 = _interopRequireDefault(_container);
 	
+	var _channel = __webpack_require__(188);
+	
+	var _channel2 = _interopRequireDefault(_channel);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.Sticky = _sticky2.default;
 	exports.StickyContainer = _container2.default;
+	exports.Channel = _channel2.default;
 	exports.default = _sticky2.default;
 
 /***/ },
@@ -23165,51 +23171,74 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sticky).call(this, props));
 	
-	    _this.onScroll = function () {
-	      return _this.handleUserEvent(false);
+	    _this.updateContext = function (_ref) {
+	      var inherited = _ref.inherited;
+	      var node = _ref.node;
+	
+	      _this.containerNode = node;
+	      _this.setState({
+	        containerOffset: inherited,
+	        distanceFromBottom: _this.getDistanceFromBottom()
+	      });
 	    };
 	
-	    _this.onResize = function () {
-	      _this.handleUserEvent(true);
+	    _this.recomputeState = function () {
+	      var isSticky = _this.isSticky();
+	      var height = _this.getHeight();
+	      var width = _this.getWidth();
+	      var xOffset = _this.getXOffset();
+	      var distanceFromBottom = _this.getDistanceFromBottom();
+	      var hasChanged = _this.state.isSticky !== isSticky;
 	
-	      // HACK:
-	      // In order to improve the visuals during resizes, perform
-	      // a second, deferred update after resize events. This
-	      // makes resizing one of the most expensive operations,
-	      // however it is, in most cases, a rare occurrence.
-	      setTimeout(function () {
-	        return _this.handleUserEvent(true);
-	      }, 0);
+	      _this.setState({ isSticky: isSticky, height: height, width: width, xOffset: xOffset, distanceFromBottom: distanceFromBottom });
+	
+	      if (hasChanged) {
+	        if (_this.channel) {
+	          _this.channel.update(function (data) {
+	            data.offset = isSticky ? _this.state.height : 0;
+	          });
+	        }
+	
+	        _this.props.onStickyStateChange(isSticky);
+	      }
 	    };
 	
-	    _this.state = {
-	      isSticky: false
-	    };
+	    _this.state = {};
 	    return _this;
 	  }
 	
 	  _createClass(Sticky, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.channel = this.context['sticky-channel'];
+	      this.channel.subscribe(this.updateContext);
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.update();
-	      this.on(['scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.onScroll);
-	      this.on(['resize', 'pageshow', 'load'], this.onResize);
+	      this.on(['resize', 'scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.recomputeState);
+	      this.recomputeState();
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps() {
-	      this.update();
+	      this.recomputeState();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      this.off(['scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.onScroll);
-	      this.off(['resize', 'pageshow', 'load'], this.onResize);
+	      this.off(['resize', 'scroll', 'touchstart', 'touchmove', 'touchend', 'pageshow', 'load'], this.recomputeState);
+	      this.channel.unsubscribe(this.updateContext);
 	    }
 	  }, {
-	    key: 'getOrigin',
-	    value: function getOrigin(pageY) {
-	      return this.refs.placeholder.getBoundingClientRect().top + pageY;
+	    key: 'getXOffset',
+	    value: function getXOffset() {
+	      return this.refs.placeholder.getBoundingClientRect().left;
+	    }
+	  }, {
+	    key: 'getWidth',
+	    value: function getWidth() {
+	      return this.refs.placeholder.getBoundingClientRect().width;
 	    }
 	  }, {
 	    key: 'getHeight',
@@ -23217,38 +23246,28 @@
 	      return _reactDom2.default.findDOMNode(this).getBoundingClientRect().height;
 	    }
 	  }, {
-	    key: 'update',
-	    value: function update() {
-	      var height = this.getHeight();
-	      var pageY = window.pageYOffset;
-	      var origin = this.getOrigin(pageY);
-	      var isSticky = this.isSticky(pageY, origin);
-	
-	      var s = this.state;
-	      if (s.height !== height || s.origin !== origin || s.isSticky !== isSticky) this.setState({ height: height, origin: origin, isSticky: isSticky });
+	    key: 'getDistanceFromTop',
+	    value: function getDistanceFromTop() {
+	      return this.refs.placeholder.getBoundingClientRect().top;
+	    }
+	  }, {
+	    key: 'getDistanceFromBottom',
+	    value: function getDistanceFromBottom() {
+	      if (!this.containerNode) return 0;
+	      return this.containerNode.getBoundingClientRect().bottom;
 	    }
 	  }, {
 	    key: 'isSticky',
-	    value: function isSticky(pageY, origin) {
-	      return this.props.isActive && pageY + this.context.offset - this.props.topOffset >= origin && this.context.offset <= (this.context.rect.bottom || 0) - this.props.bottomOffset;
-	    }
-	  }, {
-	    key: 'handleUserEvent',
-	    value: function handleUserEvent(forceUpdate) {
-	      var pageY = window.pageYOffset;
-	      var height = this.getHeight();
-	      var origin = this.getOrigin(pageY);
-	      var isSticky = this.isSticky(pageY, this.state.origin);
-	      var hasChanged = this.state.isSticky !== isSticky;
-	console.log('sddd', pageY, height);
-	      var s = this.state;
-	      if (forceUpdate || s.height !== height || s.origin !== origin || s.isSticky !== isSticky) {
-	        this.setState({ isSticky: isSticky, origin: origin, height: height });
-	      }
+	    value: function isSticky() {
+	      if (!this.props.isActive) return false;
 	
-	      this.context.container.updateOffset(isSticky ? this.state.height : 0);
+	      var fromTop = this.getDistanceFromTop();
+	      var fromBottom = this.getDistanceFromBottom();
 	
-	      if (hasChanged) this.props.onStickyStateChange(isSticky);
+	      var topBreakpoint = this.state.containerOffset - this.props.topOffset;
+	      var bottomBreakpoint = this.state.containerOffset + this.props.bottomOffset;
+	
+	      return fromTop <= topBreakpoint && fromBottom >= bottomBreakpoint;
 	    }
 	  }, {
 	    key: 'on',
@@ -23264,6 +23283,36 @@
 	        window.removeEventListener(evt, callback);
 	      });
 	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(newProps, newState) {
+	      var _this2 = this;
+	
+	      // Have we changed the number of props?
+	      var propNames = Object.keys(this.props);
+	      if (Object.keys(newProps).length != propNames.length) return true;
+	
+	      // Have we changed any prop values?
+	      var valuesMatch = propNames.every(function (key) {
+	        return newProps.hasOwnProperty(key) && newProps[key] === _this2.props[key];
+	      });
+	      if (!valuesMatch) return true;
+	
+	      // Have we changed any state that will always impact rendering?
+	      var state = this.state;
+	      if (newState.isSticky !== state.isSticky) return true;
+	
+	      // If we are sticky, have we changed any state that will impact rendering?
+	      if (state.isSticky) {
+	        if (newState.height !== state.height) return true;
+	        if (newState.width !== state.width) return true;
+	        if (newState.xOffset !== state.xOffset) return true;
+	        if (newState.containerOffset !== state.containerOffset) return true;
+	        if (newState.distanceFromBottom !== state.distanceFromBottom) return true;
+	      }
+	
+	      return false;
+	    }
 	
 	    /*
 	     * The special sauce.
@@ -23272,33 +23321,33 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var isSticky = this.state.isSticky;
-	
+	      var placeholderStyle = { paddingBottom: 0 };
 	      var className = this.props.className;
-	      if (isSticky) className += ' ' + this.props.stickyClassName;
-	
 	      var style = this.props.style;
-	      if (isSticky) {
-	        var placeholderRect = this.refs.placeholder.getBoundingClientRect();
+	
+	      if (this.state.isSticky) {
 	        var stickyStyle = {
 	          position: 'fixed',
-	          top: this.context.offset,
-	          left: placeholderRect.left,
-	          width: placeholderRect.width
+	          top: this.state.containerOffset,
+	          left: this.state.xOffset,
+	          width: this.state.width
 	        };
 	
-	        var bottomLimit = (this.context.rect.bottom || 0) - this.state.height - this.props.bottomOffset;
-	        if (this.context.offset > bottomLimit) {
+	        var bottomLimit = this.state.distanceFromBottom - this.state.height - this.props.bottomOffset;
+	        if (this.state.containerOffset > bottomLimit) {
 	          stickyStyle.top = bottomLimit;
 	        }
 	
-	        style = _extends({}, this.props.style, stickyStyle, this.props.stickyStyle);
+	        placeholderStyle.paddingBottom = this.state.height;
+	
+	        className += ' ' + this.props.stickyClassName;
+	        style = _extends({}, style, stickyStyle, this.props.stickyStyle);
 	      }
 	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement('div', { ref: 'placeholder', style: { paddingBottom: isSticky ? this.state.height : 0 } }),
+	        _react2.default.createElement('div', { ref: 'placeholder', style: placeholderStyle }),
 	        _react2.default.createElement(
 	          'div',
 	          _extends({}, this.props, { className: className, style: style }),
@@ -23311,13 +23360,15 @@
 	  return Sticky;
 	}(_react2.default.Component);
 	
-	Sticky.contextTypes = {
-	  container: _react2.default.PropTypes.any,
-	  offset: _react2.default.PropTypes.number,
-	  rect: _react2.default.PropTypes.object
-	};
 	Sticky.propTypes = {
-	  isActive: _react2.default.PropTypes.bool
+	  isActive: _react2.default.PropTypes.bool,
+	  className: _react2.default.PropTypes.string,
+	  style: _react2.default.PropTypes.object,
+	  stickyClassName: _react2.default.PropTypes.string,
+	  stickyStyle: _react2.default.PropTypes.object,
+	  topOffset: _react2.default.PropTypes.number,
+	  bottomOffset: _react2.default.PropTypes.number,
+	  onStickyStateChange: _react2.default.PropTypes.func
 	};
 	Sticky.defaultProps = {
 	  isActive: true,
@@ -23329,9 +23380,11 @@
 	  bottomOffset: 0,
 	  onStickyStateChange: function onStickyStateChange() {}
 	};
+	Sticky.contextTypes = {
+	  'sticky-channel': _react2.default.PropTypes.any
+	};
 	exports.default = Sticky;
 	module.exports = exports['default'];
-
 
 /***/ },
 /* 187 */
@@ -23353,6 +23406,10 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
+	var _channel = __webpack_require__(188);
+	
+	var _channel2 = _interopRequireDefault(_channel);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23369,36 +23426,47 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props));
 	
-	    _this.state = {
-	      offset: 0
+	    _this.updateOffset = function (_ref) {
+	      var inherited = _ref.inherited;
+	      var offset = _ref.offset;
+	
+	      _this.channel.update(function (data) {
+	        data.inherited = inherited + offset;
+	      });
 	    };
+	
+	    _this.channel = new _channel2.default({ inherited: 0, offset: 0, node: null });
 	    return _this;
 	  }
 	
 	  _createClass(Container, [{
 	    key: 'getChildContext',
 	    value: function getChildContext() {
-	      var container = this;
-	      var totalOffset = (this.context.totalOffset || 0) + this.state.offset;
-	      var offset = totalOffset - this.state.offset;
-	      var rect = this.state.node ? this.state.node.getBoundingClientRect() : {};
-	      return { container: container, totalOffset: totalOffset, offset: offset, rect: rect };
+	      return { 'sticky-channel': this.channel };
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var parentChannel = this.context['sticky-channel'];
+	      if (parentChannel) parentChannel.subscribe(this.updateOffset);
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var node = _reactDom2.default.findDOMNode(this);
-	      this.setState({ node: node });
+	      this.channel.update(function (data) {
+	        data.node = node;
+	      });
 	    }
 	  }, {
-	    key: 'updateOffset',
-	    value: function updateOffset(height) {
-	      var childContext = this.getChildContext();
-	      var occupiedSpace = childContext.rect.bottom - childContext.offset;
-	      var offset = Math.min(occupiedSpace, height);
-	      if (this.state.offset !== offset) {
-	        this.setState({ offset: offset });
-	      }
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.channel.update(function (data) {
+	        data.node = null;
+	      });
+	
+	      var parentChannel = this.context['sticky-channel'];
+	      if (parentChannel) parentChannel.unsubscribe(this.updateOffset);
 	    }
 	  }, {
 	    key: 'render',
@@ -23415,16 +23483,50 @@
 	}(_react2.default.Component);
 	
 	Container.contextTypes = {
-	  container: _react2.default.PropTypes.any,
-	  totalOffset: _react2.default.PropTypes.number
+	  'sticky-channel': _react2.default.PropTypes.any
 	};
 	Container.childContextTypes = {
-	  container: _react2.default.PropTypes.any,
-	  totalOffset: _react2.default.PropTypes.number,
-	  offset: _react2.default.PropTypes.number,
-	  rect: _react2.default.PropTypes.any
+	  'sticky-channel': _react2.default.PropTypes.any
 	};
 	exports.default = Container;
+	module.exports = exports['default'];
+
+/***/ },
+/* 188 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Channel = function Channel(data) {
+	  _classCallCheck(this, Channel);
+	
+	  var listeners = [];
+	  data = data || {};
+	
+	  this.subscribe = function (fn) {
+	    listeners.push(fn);
+	  };
+	
+	  this.unsubscribe = function (fn) {
+	    var idx = listeners.indexOf(fn);
+	    if (idx !== -1) listeners.splice(idx, 1);
+	  };
+	
+	  this.update = function (fn) {
+	    if (fn) fn(data);
+	    listeners.forEach(function (l) {
+	      return l(data);
+	    });
+	  };
+	};
+	
+	exports.default = Channel;
 	module.exports = exports['default'];
 
 /***/ }

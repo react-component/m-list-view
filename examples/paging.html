@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging.js - example - rmc-list-view@0.4.0</title>
+  <title>paging.js - example - rmc-list-view@0.4.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.4.0</h1>
+      <h1>rmc-list-view@0.4.1</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -353,7 +353,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   },
 
   render() {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">300</span> }}&gt;</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.listview}</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
@@ -364,7 +364,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-attribute">initialListSize</span>=<span class="hljs-value">{10}</span>
         <span class="hljs-attribute">pageSize</span>=<span class="hljs-value">{4}</span>
         <span class="hljs-attribute">scrollRenderAheadDistance</span>=<span class="hljs-value">{500}</span>
-        <span class="hljs-attribute">renderScrollComponent</span>=<span class="hljs-value">{props</span> =&gt;</span> null}
+        <span class="hljs-attribute">renderScrollComponent</span>=<span class="hljs-value">{()</span> =&gt;</span> null}
         stickyHeader
         stickyProps={{
           stickyStyle: { top: '10px' },
@@ -379,8 +379,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   },
 
   _onPressHeader() {
-    <span class="hljs-comment">// var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];</span>
-    <span class="hljs-comment">// LayoutAnimation.configureNext(config);</span>
     <span class="hljs-keyword">this</span>.setState({ headerPressCount: <span class="hljs-keyword">this</span>.state.headerPressCount + <span class="hljs-number">1</span> });
   },
 });

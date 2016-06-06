@@ -27,7 +27,7 @@ webpackJsonp([0],{
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(188);
+	var _util = __webpack_require__(189);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -107,7 +107,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 188:
+/***/ 189:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -247,6 +247,7 @@ webpackJsonp([0],{
 	    color: '#888888'
 	  },
 	  buttonContents: {
+	    display: 'flex',
 	    flexDirection: 'row',
 	    justifyContent: 'center',
 	    alignItems: 'center',

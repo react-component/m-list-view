@@ -398,6 +398,11 @@ class ListView extends React.Component {
       renderScrollComponent,
       ...props,
     } = this.props;
+
+    if (props.stickyHeader) {
+      bodyComponents = <StickyContainer {...this.props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
+    }
+
     if (!props.scrollEventThrottle) {
       props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
     }
@@ -416,16 +421,14 @@ class ListView extends React.Component {
       onKeyboardDidHide: undefined,
     });
 
-    if (this.props.stickyHeader) {
-      bodyComponents = <StickyContainer {...this.props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
-    }
 
     // TODO(ide): Use function refs so we can compose with the scroll
     // component's original ref instead of clobbering it
     let _sc = renderScrollComponent(props);
     this._body = false;
     if (!_sc) {
-      _sc = <div></div>;
+      delete props.onScroll;
+      _sc = <div {...props}></div>;
       this._body = true;
     }
     this._sc = React.cloneElement(_sc, {

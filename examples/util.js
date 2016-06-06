@@ -110,6 +110,7 @@ export const pagingStyles = {
     color: '#888888',
   },
   buttonContents: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

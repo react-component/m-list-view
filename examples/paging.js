@@ -87,7 +87,7 @@ const Demo = React.createClass({
   },
 
   render() {
-    return (<div style={{ height: 300 }}>
+    return (<div>
       <ListView
         style={styles.listview}
         dataSource={this.state.dataSource}
@@ -98,7 +98,7 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
-        renderScrollComponent={props => null}
+        renderScrollComponent={() => null}
         stickyHeader
         stickyProps={{
           stickyStyle: { top: '10px' },
@@ -113,8 +113,6 @@ const Demo = React.createClass({
   },
 
   _onPressHeader() {
-    // var config = layoutAnimationConfigs[Math.floor(this.state.headerPressCount / 2) % layoutAnimationConfigs.length];
-    // LayoutAnimation.configureNext(config);
     this.setState({ headerPressCount: this.state.headerPressCount + 1 });
   },
 });

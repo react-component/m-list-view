@@ -66,6 +66,7 @@ const Demo = React.createClass({
         renderRow={this._renderRow}
         renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
         renderSeparator={this._renderSeperator}
+        renderBodyComponent={() => <div className="for-body-demo" />}
       />
     );
   },

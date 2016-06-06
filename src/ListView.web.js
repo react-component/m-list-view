@@ -134,6 +134,7 @@ class ListView extends React.Component {
      */
     renderFooter: PropTypes.func,
     renderHeader: PropTypes.func,
+    renderBodyComponent: PropTypes.func, // add
     /**
      * (sectionData, sectionID) => renderable
      *
@@ -194,6 +195,7 @@ class ListView extends React.Component {
     initialListSize: DEFAULT_INITIAL_ROWS,
     pageSize: DEFAULT_PAGE_SIZE,
     renderScrollComponent: props => <ScrollView {...props} />,
+    renderBodyComponent: () => <div />,
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     stickyHeaderIndices: [],
@@ -263,7 +265,7 @@ class ListView extends React.Component {
     // this.requestAnimationFrame(() => {
     //   this._measureAndUpdateScrollProps();
     // });
-    if (this._body) {
+    if (this.props.stickyHeader) {
       this.container = document.createElement('div');
       window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
       window.addEventListener('scroll', this._onScroll);
@@ -293,7 +295,7 @@ class ListView extends React.Component {
     this.requestAnimationFrame(() => {
       this._measureAndUpdateScrollProps();
     });
-    if (this._body) {
+    if (this.props.stickyHeader) {
       ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
     }
   }
@@ -399,8 +401,9 @@ class ListView extends React.Component {
       ...props,
     } = this.props;
 
+    bodyComponents = React.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
     if (props.stickyHeader) {
-      bodyComponents = <StickyContainer {...this.props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
+      bodyComponents = <StickyContainer {...props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
     }
 
     if (!props.scrollEventThrottle) {
@@ -424,19 +427,15 @@ class ListView extends React.Component {
 
     // TODO(ide): Use function refs so we can compose with the scroll
     // component's original ref instead of clobbering it
-    let _sc = renderScrollComponent(props);
-    this._body = false;
-    if (!_sc) {
+    if (props.stickyHeader) {
       delete props.onScroll;
-      _sc = <div {...props}></div>;
-      this._body = true;
     }
-    this._sc = React.cloneElement(_sc, {
+    this._sc = React.cloneElement(renderScrollComponent(props), {
       ref: SCROLLVIEW_REF,
       onContentSizeChange: this._onContentSizeChange,
       onLayout: this._onLayout,
     }, header, bodyComponents, footer);
-    if (this._body) {
+    if (props.stickyHeader) {
       return null;
     }
     return this._sc;
@@ -610,7 +609,7 @@ class ListView extends React.Component {
     // ];
 
     let target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
-    if (this._body) {
+    if (this.props.stickyHeader) {
       target = window.document.body;
     }
     this.scrollProperties.visibleLength = target[

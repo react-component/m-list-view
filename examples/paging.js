@@ -98,11 +98,16 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
-        renderScrollComponent={() => null}
+        renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
+        renderBodyComponent={() => <div className="for-body-demo" />}
         stickyHeader
         stickyProps={{
+          className: 'for-sticky-demo',
           stickyStyle: { top: '10px' },
           onStickyStateChange: this._onStickyStateChange,
+        }}
+        stickyContainerProps={{
+          className: 'for-stickyContainer-demo',
         }}
       />
     </div>);

@@ -19956,7 +19956,7 @@
 	    // this.requestAnimationFrame(() => {
 	    //   this._measureAndUpdateScrollProps();
 	    // });
-	    if (this._body) {
+	    if (this.props.stickyHeader) {
 	      this.container = document.createElement('div');
 	      window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
 	      window.addEventListener('scroll', this._onScroll);
@@ -19985,7 +19985,7 @@
 	    this.requestAnimationFrame(function () {
 	      _this3._measureAndUpdateScrollProps();
 	    });
-	    if (this._body) {
+	    if (this.props.stickyHeader) {
 	      _reactDom2.default.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
 	    }
 	  };
@@ -20072,10 +20072,11 @@
 	
 	    var props = _objectWithoutProperties(_props, ['renderScrollComponent']);
 	
+	    bodyComponents = _react2.default.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
 	    if (props.stickyHeader) {
 	      bodyComponents = _react2.default.createElement(
 	        _reactSticky.StickyContainer,
-	        this.props.stickyContainerProps,
+	        props.stickyContainerProps,
 	        bodyComponents
 	      );
 	    }
@@ -20100,19 +20101,15 @@
 	
 	    // TODO(ide): Use function refs so we can compose with the scroll
 	    // component's original ref instead of clobbering it
-	    var _sc = renderScrollComponent(props);
-	    this._body = false;
-	    if (!_sc) {
+	    if (props.stickyHeader) {
 	      delete props.onScroll;
-	      _sc = _react2.default.createElement('div', props);
-	      this._body = true;
 	    }
-	    this._sc = _react2.default.cloneElement(_sc, {
+	    this._sc = _react2.default.cloneElement(renderScrollComponent(props), {
 	      ref: SCROLLVIEW_REF,
 	      onContentSizeChange: this._onContentSizeChange,
 	      onLayout: this._onLayout
 	    }, header, bodyComponents, footer);
-	    if (this._body) {
+	    if (props.stickyHeader) {
 	      return null;
 	    }
 	    return this._sc;
@@ -20283,7 +20280,7 @@
 	    // ];
 	
 	    var target = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW_REF]);
-	    if (this._body) {
+	    if (this.props.stickyHeader) {
 	      target = window.document.body;
 	    }
 	    this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
@@ -20364,6 +20361,7 @@
 	   */
 	  renderFooter: _react.PropTypes.func,
 	  renderHeader: _react.PropTypes.func,
+	  renderBodyComponent: _react.PropTypes.func, // add
 	  /**
 	   * (sectionData, sectionID) => renderable
 	   *
@@ -20420,6 +20418,9 @@
 	  pageSize: DEFAULT_PAGE_SIZE,
 	  renderScrollComponent: function renderScrollComponent(props) {
 	    return _react2.default.createElement(_ScrollView2.default, props);
+	  },
+	  renderBodyComponent: function renderBodyComponent() {
+	    return _react2.default.createElement('div', null);
 	  },
 	  scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
 	  onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,

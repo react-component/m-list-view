@@ -98,7 +98,10 @@ webpackJsonp([0],{
 	      renderScrollComponent: function renderScrollComponent(props) {
 	        return _react2.default.createElement(_util.RecyclerViewBackedScrollView, props);
 	      },
-	      renderSeparator: this._renderSeperator
+	      renderSeparator: this._renderSeperator,
+	      renderBodyComponent: function renderBodyComponent() {
+	        return _react2.default.createElement('div', { className: 'for-body-demo' });
+	      }
 	    });
 	  }
 	}); // use jsx to render html, do not modify simple.html

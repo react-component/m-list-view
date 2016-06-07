@@ -16,7 +16,7 @@ webpackJsonp([1],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Thumb = exports.pagingStyles = exports.styles = exports.TouchableOpacity = exports.TouchableHighlight = exports.RecyclerViewBackedScrollView = exports.LOREM_IPSUM = exports.THUMB_URLS = undefined;
+	exports.Thumb = exports.pagingStyles = exports.styles = exports.TouchableOpacity = exports.TouchableHighlight = exports.LOREM_IPSUM = exports.THUMB_URLS = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -82,18 +82,6 @@ webpackJsonp([1],{
 	    props.children
 	  );
 	}
-	
-	var RecyclerViewBackedScrollView = exports.RecyclerViewBackedScrollView = _react2.default.createClass({
-	  displayName: 'RecyclerViewBackedScrollView',
-	  render: function render() {
-	    var props = this.props;
-	    return _react2.default.createElement(
-	      'div',
-	      _extends({ style: { maxHeight: 300, overflow: 'scroll' } }, props),
-	      props.children
-	    );
-	  }
-	});
 	
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',

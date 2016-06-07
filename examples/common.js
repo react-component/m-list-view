@@ -20384,6 +20384,7 @@
 	   * pixels.
 	   */
 	  scrollRenderAheadDistance: _react2.default.PropTypes.number,
+	  scrollEventThrottle: _react2.default.PropTypes.number,
 	  /**
 	   * (visibleRows, changedRows) => void
 	   *
@@ -21108,12 +21109,23 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = _this.scrollResponderMixinGetInitialState(), _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
+	  ScrollView.prototype.componentDidMount = function componentDidMount() {
+	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
+	    this.__handleScroll = this._handleScroll();
+	    scrollView.addEventListener('scroll', this.__handleScroll);
+	  };
+	
+	  ScrollView.prototype.componentWillUnmount = function componentWillUnmount() {
+	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
+	    scrollView.removeEventListener('scroll', this.__handleScroll);
+	  };
 	  /**
 	   * Returns a reference to the underlying scroll responder, which supports
 	   * operations like `scrollTo`. All ScrollView-like components should
 	   * implement this method so that they can be composed while providing access
 	   * to the underlying scroll responder's methods.
 	   */
+	
 	
 	  ScrollView.prototype.getScrollResponder = function getScrollResponder() {
 	    return this;
@@ -21141,6 +21153,15 @@
 	    scrollView.scrollLeft = destX || 0;
 	  };
 	
+	  ScrollView.prototype._handleScroll = function _handleScroll(e) {
+	    var handleScroll = function handleScroll() {};
+	    // let handleScroll = this.handleScroll;
+	    if (this.props.scrollEventThrottle && this.props.onScroll) {
+	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+	    }
+	    return handleScroll;
+	  };
+	
 	  ScrollView.prototype.handleScroll = function handleScroll(e) {
 	    // if (__DEV__) {
 	    //   if (this.props.onScroll && !this.props.scrollEventThrottle) {
@@ -21162,13 +21183,10 @@
 	    this.props.onScroll && this.props.onScroll(e);
 	  };
 	
-	  ScrollView.prototype._handleContentOnLayout = function _handleContentOnLayout(e) {
-	    var _e$nativeEvent$layout = e.nativeEvent.layout;
-	    var width = _e$nativeEvent$layout.width;
-	    var height = _e$nativeEvent$layout.height;
-	
-	    this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
-	  };
+	  // _handleContentOnLayout(e) {
+	  //   const {width, height} = e.nativeEvent.layout;
+	  //   this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
+	  // }
 	
 	  ScrollView.prototype.render = function render() {
 	    var _props = this.props;
@@ -21198,11 +21216,11 @@
 	    // }
 	
 	    var contentSizeChangeProps = {};
-	    if (this.props.onContentSizeChange) {
-	      contentSizeChangeProps = {
-	        onLayout: this._handleContentOnLayout
-	      };
-	    }
+	    // if (this.props.onContentSizeChange) { // 会多次触发 scroll 事件
+	    //   contentSizeChangeProps = {
+	    //     onLayout: this._handleContentOnLayout,
+	    //   };
+	    // }
 	
 	    var contentContainer = _react2.default.createElement(
 	      _View2.default,
@@ -21218,11 +21236,7 @@
 	
 	    var alwaysBounceVertical = this.props.alwaysBounceVertical !== undefined ? this.props.alwaysBounceVertical : !this.props.horizontal;
 	
-	    // let handleScroll = () => {};
-	    var handleScroll = this.handleScroll;
-	    if (this.props.scrollEventThrottle && this.props.onScroll) {
-	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
-	    }
+	    // const handleScroll = this._handleScroll();
 	
 	    var props = _extends({}, otherProps, {
 	      alwaysBounceHorizontal: alwaysBounceHorizontal,
@@ -21238,8 +21252,8 @@
 	      onStartShouldSetResponder: this.scrollResponderHandleStartShouldSetResponder,
 	      onStartShouldSetResponderCapture: this.scrollResponderHandleStartShouldSetResponderCapture,
 	      // onScrollShouldSetResponder: this.scrollResponderHandleScrollShouldSetResponder,
-	      onScroll: handleScroll,
-	      onScrollShouldSetResponder: handleScroll,
+	      // onScroll: handleScroll,
+	      // onScrollShouldSetResponder: handleScroll,
 	      // replace onScroll in the props
 	      // onScroll: () => {},
 	      onResponderGrant: this.scrollResponderHandleResponderGrant,
@@ -21248,6 +21262,7 @@
 	      onResponderRelease: this.scrollResponderHandleResponderRelease,
 	      onResponderReject: this.scrollResponderHandleResponderReject
 	    });
+	    delete props.onScroll;
 	
 	    var decelerationRate = this.props.decelerationRate;
 	

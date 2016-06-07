@@ -157,6 +157,7 @@ class ListView extends React.Component {
      * pixels.
      */
     scrollRenderAheadDistance: React.PropTypes.number,
+    scrollEventThrottle: React.PropTypes.number,
     /**
      * (visibleRows, changedRows) => void
      *

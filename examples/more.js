@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, Image, _genRows, hashCode, THUMB_URLS, LOREM_IPSUM, styles,
-  RecyclerViewBackedScrollView, TouchableHighlight,  } from './util';
+ TouchableHighlight,  } from './util';
 
 const Demo = React.createClass({
   getInitialState: function() {
@@ -62,9 +62,10 @@ const Demo = React.createClass({
   render: function() {
     return (
       <ListView
+        style={{ height: 300 }}
+        scrollEventThrottle={100}
         dataSource={this.state.dataSource}
         renderRow={this._renderRow}
-        renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
         renderSeparator={this._renderSeperator}
         renderBodyComponent={() => <div className="for-body-demo" />}
       />

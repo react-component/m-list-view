@@ -55,13 +55,6 @@ export function View(props) {
 }
 
 import React from 'react';
-export const RecyclerViewBackedScrollView = React.createClass({
-  render() {
-    const props = this.props;
-    return <div style={{ maxHeight: 300, overflow: 'scroll' }} {...props}>{props.children}</div>;
-  },
-});
-
 export const TouchableHighlight = React.createClass({
   render() {
     const props = this.props;

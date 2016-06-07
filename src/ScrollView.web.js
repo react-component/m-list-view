@@ -265,6 +265,15 @@ class ScrollView extends React.Component {
 
   state = this.scrollResponderMixinGetInitialState();
 
+  componentDidMount() {
+    let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    this.__handleScroll = this._handleScroll();
+    scrollView.addEventListener('scroll', this.__handleScroll);
+  }
+  componentWillUnmount() {
+    let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    scrollView.removeEventListener('scroll', this.__handleScroll);
+  }
   /**
    * Returns a reference to the underlying scroll responder, which supports
    * operations like `scrollTo`. All ScrollView-like components should
@@ -297,6 +306,14 @@ class ScrollView extends React.Component {
     scrollView.scrollLeft = destX || 0;
   }
 
+  _handleScroll(e: Event) {
+    let handleScroll = () => {};
+    // let handleScroll = this.handleScroll;
+    if (this.props.scrollEventThrottle && this.props.onScroll) {
+      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+    }
+    return handleScroll;
+  }
   handleScroll(e: Event) {
     // if (__DEV__) {
     //   if (this.props.onScroll && !this.props.scrollEventThrottle) {
@@ -318,10 +335,10 @@ class ScrollView extends React.Component {
     this.props.onScroll && this.props.onScroll(e);
   }
 
-  _handleContentOnLayout(e) {
-    const {width, height} = e.nativeEvent.layout;
-    this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
-  }
+  // _handleContentOnLayout(e) {
+  //   const {width, height} = e.nativeEvent.layout;
+  //   this.props.onContentSizeChange && this.props.onContentSizeChange(width, height);
+  // }
 
   render() {
     let {
@@ -355,11 +372,11 @@ class ScrollView extends React.Component {
     // }
 
     let contentSizeChangeProps = {};
-    if (this.props.onContentSizeChange) {
-      contentSizeChangeProps = {
-        onLayout: this._handleContentOnLayout,
-      };
-    }
+    // if (this.props.onContentSizeChange) { // 会多次触发 scroll 事件
+    //   contentSizeChangeProps = {
+    //     onLayout: this._handleContentOnLayout,
+    //   };
+    // }
 
     let contentContainer =
       <View
@@ -381,11 +398,7 @@ class ScrollView extends React.Component {
         this.props.alwaysBounceVertical :
         !this.props.horizontal;
 
-    // let handleScroll = () => {};
-    let handleScroll = this.handleScroll;
-    if (this.props.scrollEventThrottle && this.props.onScroll) {
-      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
-    }
+    // const handleScroll = this._handleScroll();
 
     let props = {
       ...otherProps,
@@ -402,8 +415,8 @@ class ScrollView extends React.Component {
       onStartShouldSetResponder: this.scrollResponderHandleStartShouldSetResponder,
       onStartShouldSetResponderCapture: this.scrollResponderHandleStartShouldSetResponderCapture,
       // onScrollShouldSetResponder: this.scrollResponderHandleScrollShouldSetResponder,
-      onScroll: handleScroll,
-      onScrollShouldSetResponder: handleScroll,
+      // onScroll: handleScroll,
+      // onScrollShouldSetResponder: handleScroll,
       // replace onScroll in the props
       // onScroll: () => {},
       onResponderGrant: this.scrollResponderHandleResponderGrant,
@@ -412,6 +425,7 @@ class ScrollView extends React.Component {
       onResponderRelease: this.scrollResponderHandleResponderRelease,
       onResponderReject: this.scrollResponderHandleResponderReject,
     };
+    delete props.onScroll;
 
     const { decelerationRate } = this.props;
     if (decelerationRate) {

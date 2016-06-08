@@ -63,8 +63,11 @@ const Demo = React.createClass({
     return (
       <ListView
         style={{ height: 300 }}
-        scrollEventThrottle={100}
         dataSource={this.state.dataSource}
+        scrollEventThrottle={100}
+        onEndReached={e => console.log(e)}
+        onEndReachedThreshold={500}
+        pageSize={5}
         renderRow={this._renderRow}
         renderSeparator={this._renderSeperator}
         renderBodyComponent={() => <div className="for-body-demo" />}

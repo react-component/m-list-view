@@ -94,8 +94,13 @@ webpackJsonp([0],{
 	  render: function render() {
 	    return _react2.default.createElement(_rmcListView2.default, {
 	      style: { height: 300 },
-	      scrollEventThrottle: 100,
 	      dataSource: this.state.dataSource,
+	      scrollEventThrottle: 100,
+	      onEndReached: function onEndReached(e) {
+	        return console.log(e);
+	      },
+	      onEndReachedThreshold: 500,
+	      pageSize: 5,
 	      renderRow: this._renderRow,
 	      renderSeparator: this._renderSeperator,
 	      renderBodyComponent: function renderBodyComponent() {

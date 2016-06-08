@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rmc-list-view@0.5.0-beta.1 - m-list-view ui component for react</title>
+  <title>rmc-list-view@0.5.0-beta.2 - m-list-view ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rmc-list-view@0.5.0-beta.1</h1>
+  <h1>rmc-list-view@0.5.0-beta.2</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -770,10 +770,26 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <p>online example: <a href="http://react-component.github.io/m-list-view/" title="null">http://react-component.github.io/m-list-view/</a></p>
 <h2>install<a id="user-content-install" name="install" class="anchor" aria-hidden="true" href="#install"><span class="octicon octicon-link"></span></a></h2><p><a href="https://npmjs.org/package/rmc-list-view" title="null"><img src="https://nodei.co/npm/rmc-list-view.png" alt="rmc-list-view"></a></p>
 <h2>Usage<a id="user-content-usage" name="usage" class="anchor" aria-hidden="true" href="#usage"><span class="octicon octicon-link"></span></a></h2><p>see examples</p>
-<h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><p>same as <a href="https://facebook.github.io/react-native/docs/listview.html#content" title="null">React Native ListView</a></p>
-<h4>current not support:<a id="user-content-current-not-support:" name="current-not-support:" class="anchor" aria-hidden="true" href="#current-not-support:"><span class="octicon octicon-link"></span></a></h4><ul>
+<h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><p>same as <a href="https://facebook.github.io/react-native/docs/listview.html#content" title="null">React Native ListView</a>
+(v0.26).</p>
+<h4>current not support:<a id="user-content-current-not-support:" name="current-not-support:" class="anchor" aria-hidden="true" href="#current-not-support:"><span class="octicon octicon-link"></span></a></h4><p>In general, do not support platform-specific feature,
+like: <code>android</code> endFillColor, <code>ios</code> alwaysBounceHorizontal.
+And, use css style instead of react-native&#39;s style.</p>
+<ul>
 <li>onChangeVisibleRows</li>
-<li>stickyHeaderIndices</li>
+<li><p>stickyHeaderIndices</p>
+</li>
+<li><p><a href="https://facebook.github.io/react-native/docs/scrollview.html#props" title="null">ScrollView</a> props:</p>
+</li>
+<li>keyboardDismissMode (not support control keyboard)</li>
+<li>keyboardShouldPersistTaps (not support control keyboard)</li>
+<li>onContentSizeChange (use onLayout instead)</li>
+<li>removeClippedSubviews</li>
+<li>showsHorizontalScrollIndicator (use css style instead)</li>
+<li><p>showsVerticalScrollIndicator (use css style instead)</p>
+</li>
+<li><p><a href="https://facebook.github.io/react-native/docs/view.html#props" title="null">View</a> props: <strong>note: just support <code>onLayout</code> prop</strong></p>
+</li>
 </ul>
 <h4>new<a id="user-content-new" name="new" class="anchor" aria-hidden="true" href="#new"><span class="octicon octicon-link"></span></a></h4><ul>
 <li>stickyHeader<ul>

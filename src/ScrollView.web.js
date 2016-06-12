@@ -266,11 +266,17 @@ class ScrollView extends React.Component {
   state = this.scrollResponderMixinGetInitialState();
 
   componentDidMount() {
+    if (this.props.stickyHeader) {
+      return;
+    }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
     this.__handleScroll = this._handleScroll();
     scrollView.addEventListener('scroll', this.__handleScroll);
   }
   componentWillUnmount() {
+    if (this.props.stickyHeader) {
+      return;
+    }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
     scrollView.removeEventListener('scroll', this.__handleScroll);
   }
@@ -404,7 +410,7 @@ class ScrollView extends React.Component {
       ...otherProps,
       alwaysBounceHorizontal,
       alwaysBounceVertical,
-      style: StyleSheet.flattenStyle([styles.base, this.props.style]),
+      style: StyleSheet.flattenStyle([otherProps.stickyHeader ? null : styles.base, this.props.style]),
       onTouchStart: this.scrollResponderHandleTouchStart,
       onTouchMove: this.scrollResponderHandleTouchMove,
       onTouchEnd: this.scrollResponderHandleTouchEnd,
@@ -425,6 +431,7 @@ class ScrollView extends React.Component {
       onResponderRelease: this.scrollResponderHandleResponderRelease,
       onResponderReject: this.scrollResponderHandleResponderReject,
     };
+    // 这里会绑定多次？放在 componentDidMount 里绑定 onScroll
     delete props.onScroll;
 
     const { decelerationRate } = this.props;
@@ -469,6 +476,14 @@ class ScrollView extends React.Component {
       //     </ScrollViewClass>
       //   );
       // }
+      if (props.stickyHeader) {
+        return (
+          <ScrollViewClass {...props} ref={SCROLLVIEW}>
+            {refreshControl}
+            {this.props.children}
+          </ScrollViewClass>
+        );
+      }
       return (
         <ScrollViewClass {...props} ref={SCROLLVIEW}>
           {refreshControl}
@@ -477,6 +492,13 @@ class ScrollView extends React.Component {
       );
     }
 
+    if (props.stickyHeader) {
+      return (
+        <ScrollViewClass {...props} ref={SCROLLVIEW}>
+          {this.props.children}
+        </ScrollViewClass>
+      );
+    }
     return (
       <ScrollViewClass {...props} ref={SCROLLVIEW}>
         {contentContainer}

@@ -434,7 +434,7 @@ class ListView extends React.Component {
     this._sc = React.cloneElement(renderScrollComponent(props), {
       ref: SCROLLVIEW_REF,
       onContentSizeChange: this._onContentSizeChange,
-      onLayout: this._onLayout,
+      onLayout: props.stickyHeader ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
     }, header, bodyComponents, footer);
     if (props.stickyHeader) {
       return null;

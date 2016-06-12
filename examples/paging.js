@@ -228,8 +228,6 @@ webpackJsonp([1],{
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // use jsx to render html, do not modify simple.html
-	
 	__webpack_require__(2);
 	
 	var _react = __webpack_require__(3);
@@ -248,7 +246,8 @@ webpackJsonp([1],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var NUM_SECTIONS = 100;
+	var NUM_SECTIONS = 100; // use jsx to render html, do not modify simple.html
+	
 	var NUM_ROWS_PER_SECTION = 10;
 	
 	var Demo = _react2.default.createClass({
@@ -357,11 +356,9 @@ webpackJsonp([1],{
 	        renderRow: this.renderRow,
 	        initialListSize: 10,
 	        pageSize: 4,
-	        scrollRenderAheadDistance: 500,
-	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement('div', _extends({ className: 'for-scroll-demo' }, props));
-	        },
-	        renderBodyComponent: function renderBodyComponent() {
+	        scrollRenderAheadDistance: 500
+	        // renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
+	        , renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });
 	        },
 	        stickyHeader: true,

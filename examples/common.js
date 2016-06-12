@@ -20001,6 +20001,8 @@
 	  };
 	
 	  ListView.prototype.render = function render() {
+	    var _this4 = this;
+	
 	    var bodyComponents = [];
 	
 	    var dataSource = this.props.dataSource;
@@ -20107,7 +20109,9 @@
 	    this._sc = _react2.default.cloneElement(renderScrollComponent(props), {
 	      ref: SCROLLVIEW_REF,
 	      onContentSizeChange: this._onContentSizeChange,
-	      onLayout: this._onLayout
+	      onLayout: props.stickyHeader ? function (event) {
+	        _this4.props.onLayout && _this4.props.onLayout(event);
+	      } : this._onLayout
 	    }, header, bodyComponents, footer);
 	    if (props.stickyHeader) {
 	      return null;
@@ -20180,17 +20184,17 @@
 	  };
 	
 	  ListView.prototype._pageInNewRows = function _pageInNewRows() {
-	    var _this4 = this;
+	    var _this5 = this;
 	
 	    this.setState(function (state, props) {
 	      var rowsToRender = Math.min(state.curRenderedRowsCount + props.pageSize, props.dataSource.getRowCount());
-	      _this4._prevRenderedRowsCount = state.curRenderedRowsCount;
+	      _this5._prevRenderedRowsCount = state.curRenderedRowsCount;
 	      return {
 	        curRenderedRowsCount: rowsToRender
 	      };
 	    }, function () {
-	      _this4._measureAndUpdateScrollProps();
-	      _this4._prevRenderedRowsCount = _this4.state.curRenderedRowsCount;
+	      _this5._measureAndUpdateScrollProps();
+	      _this5._prevRenderedRowsCount = _this5.state.curRenderedRowsCount;
 	    });
 	  };
 	
@@ -21110,12 +21114,18 @@
 	  }
 	
 	  ScrollView.prototype.componentDidMount = function componentDidMount() {
+	    if (this.props.stickyHeader) {
+	      return;
+	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
 	    this.__handleScroll = this._handleScroll();
 	    scrollView.addEventListener('scroll', this.__handleScroll);
 	  };
 	
 	  ScrollView.prototype.componentWillUnmount = function componentWillUnmount() {
+	    if (this.props.stickyHeader) {
+	      return;
+	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
 	    scrollView.removeEventListener('scroll', this.__handleScroll);
 	  };
@@ -21241,7 +21251,7 @@
 	    var props = _extends({}, otherProps, {
 	      alwaysBounceHorizontal: alwaysBounceHorizontal,
 	      alwaysBounceVertical: alwaysBounceVertical,
-	      style: _StyleSheet2.default.flattenStyle([styles.base, this.props.style]),
+	      style: _StyleSheet2.default.flattenStyle([otherProps.stickyHeader ? null : styles.base, this.props.style]),
 	      onTouchStart: this.scrollResponderHandleTouchStart,
 	      onTouchMove: this.scrollResponderHandleTouchMove,
 	      onTouchEnd: this.scrollResponderHandleTouchEnd,
@@ -21262,6 +21272,7 @@
 	      onResponderRelease: this.scrollResponderHandleResponderRelease,
 	      onResponderReject: this.scrollResponderHandleResponderReject
 	    });
+	    // 这里会绑定多次？放在 componentDidMount 里绑定 onScroll
 	    delete props.onScroll;
 	
 	    var decelerationRate = this.props.decelerationRate;
@@ -21307,6 +21318,14 @@
 	      //     </ScrollViewClass>
 	      //   );
 	      // }
+	      if (props.stickyHeader) {
+	        return _react2.default.createElement(
+	          ScrollViewClass,
+	          _extends({}, props, { ref: SCROLLVIEW }),
+	          refreshControl,
+	          this.props.children
+	        );
+	      }
 	      return _react2.default.createElement(
 	        ScrollViewClass,
 	        _extends({}, props, { ref: SCROLLVIEW }),
@@ -21315,6 +21334,13 @@
 	      );
 	    }
 	
+	    if (props.stickyHeader) {
+	      return _react2.default.createElement(
+	        ScrollViewClass,
+	        _extends({}, props, { ref: SCROLLVIEW }),
+	        this.props.children
+	      );
+	    }
 	    return _react2.default.createElement(
 	      ScrollViewClass,
 	      _extends({}, props, { ref: SCROLLVIEW }),

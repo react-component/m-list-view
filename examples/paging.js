@@ -246,13 +246,16 @@ webpackJsonp([1],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var NUM_SECTIONS = 100; // use jsx to render html, do not modify simple.html
+	var NUM_SECTIONS = 20; // use jsx to render html, do not modify simple.html
 	
 	var NUM_ROWS_PER_SECTION = 10;
+	var pageIndex = 0;
 	
 	var Demo = _react2.default.createClass({
 	  displayName: 'Demo',
 	  getInitialState: function getInitialState() {
+	    var _this = this;
+	
 	    var getSectionData = function getSectionData(dataBlob, sectionID) {
 	      return dataBlob[sectionID];
 	    };
@@ -271,23 +274,32 @@ webpackJsonp([1],{
 	      }
 	    });
 	
-	    var dataBlob = {};
-	    var sectionIDs = [];
-	    var rowIDs = [];
-	    for (var ii = 0; ii < NUM_SECTIONS; ii++) {
-	      var sectionName = 'Section ' + ii;
-	      sectionIDs.push(sectionName);
-	      dataBlob[sectionName] = sectionName;
-	      rowIDs[ii] = [];
+	    this.dataBlob = {};
+	    this.sectionIDs = [];
+	    this.rowIDs = [];
+	    this._genData = function () {
+	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	
-	      for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-	        var rowName = 'S' + ii + ', R' + jj;
-	        rowIDs[ii].push(rowName);
-	        dataBlob[rowName] = rowName;
+	      for (var i = 0; i < NUM_SECTIONS; i++) {
+	        var ii = pIndex * NUM_SECTIONS + i;
+	        var sectionName = 'Section ' + ii;
+	        _this.sectionIDs.push(sectionName);
+	        _this.dataBlob[sectionName] = sectionName;
+	        _this.rowIDs[ii] = [];
+	
+	        for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+	          var rowName = 'S' + ii + ', R' + jj;
+	          _this.rowIDs[ii].push(rowName);
+	          _this.dataBlob[rowName] = rowName;
+	        }
 	      }
-	    }
+	      // new object ref
+	      _this.sectionIDs = [].concat(_this.sectionIDs);
+	      _this.rowIDs = [].concat(_this.rowIDs);
+	    };
+	    this._genData();
 	    return {
-	      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
 	      headerPressCount: 0
 	    };
 	  },
@@ -369,15 +381,25 @@ webpackJsonp([1],{
 	        },
 	        stickyContainerProps: {
 	          className: 'for-stickyContainer-demo'
-	        }
+	        },
+	        onEndReached: this._onEndReached,
+	        onEndReachedThreshold: 100
 	      })
 	    );
 	  },
 	  _onStickyStateChange: function _onStickyStateChange(isSticky) {
-	    console.log(isSticky);
+	    // console.log(isSticky);
 	  },
 	  _onPressHeader: function _onPressHeader() {
 	    this.setState({ headerPressCount: this.state.headerPressCount + 1 });
+	  },
+	  _onEndReached: function _onEndReached(event) {
+	    // load new data
+	    console.log('reach end', event);
+	    this._genData(++pageIndex);
+	    this.setState({
+	      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs)
+	    });
 	  }
 	});
 	

@@ -272,8 +272,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
 <span class="hljs-keyword">import</span> { View, Text, pagingStyles <span class="hljs-keyword">as</span> styles, TouchableOpacity, Thumb } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
-<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">20</span>;
 <span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
 
 <span class="hljs-keyword">const</span> Demo = React.createClass({
   getInitialState() {
@@ -291,23 +292,30 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
     });
 
-    <span class="hljs-keyword">const</span> dataBlob = {};
-    <span class="hljs-keyword">const</span> sectionIDs = [];
-    <span class="hljs-keyword">const</span> rowIDs = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
-      <span class="hljs-keyword">const</span> sectionName = <span class="hljs-string">`Section <span class="hljs-subst">${ii}</span>`</span>;
-      sectionIDs.push(sectionName);
-      dataBlob[sectionName] = sectionName;
-      rowIDs[ii] = [];
+    <span class="hljs-keyword">this</span>.dataBlob = {};
+    <span class="hljs-keyword">this</span>.sectionIDs = [];
+    <span class="hljs-keyword">this</span>.rowIDs = [];
+    <span class="hljs-keyword">this</span>._genData = (pIndex = <span class="hljs-number">0</span>) =&gt; {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_SECTIONS; i++) {
+        <span class="hljs-keyword">let</span> ii = pIndex * NUM_SECTIONS + i;
+        <span class="hljs-keyword">const</span> sectionName = <span class="hljs-string">`Section <span class="hljs-subst">${ii}</span>`</span>;
+        <span class="hljs-keyword">this</span>.sectionIDs.push(sectionName);
+        <span class="hljs-keyword">this</span>.dataBlob[sectionName] = sectionName;
+        <span class="hljs-keyword">this</span>.rowIDs[ii] = [];
 
-      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
-        <span class="hljs-keyword">const</span> rowName = <span class="hljs-string">`S<span class="hljs-subst">${ii}</span>, R<span class="hljs-subst">${jj}</span>`</span>;
-        rowIDs[ii].push(rowName);
-        dataBlob[rowName] = rowName;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
+          <span class="hljs-keyword">const</span> rowName = <span class="hljs-string">`S<span class="hljs-subst">${ii}</span>, R<span class="hljs-subst">${jj}</span>`</span>;
+          <span class="hljs-keyword">this</span>.rowIDs[ii].push(rowName);
+          <span class="hljs-keyword">this</span>.dataBlob[rowName] = rowName;
+        }
       }
+      <span class="hljs-comment">// new object ref</span>
+      <span class="hljs-keyword">this</span>.sectionIDs = [].concat(<span class="hljs-keyword">this</span>.sectionIDs);
+      <span class="hljs-keyword">this</span>.rowIDs = [].concat(<span class="hljs-keyword">this</span>.rowIDs);
     }
+    <span class="hljs-keyword">this</span>._genData();
     <span class="hljs-keyword">return</span> {
-      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      dataSource: dataSource.cloneWithRowsAndSections(<span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs),
       headerPressCount: <span class="hljs-number">0</span>,
     };
   },
@@ -375,16 +383,27 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         stickyContainerProps={{
           className: 'for-stickyContainer-demo',
         }}
+        onEndReached={this._onEndReached}
+        onEndReachedThreshold={100}
       /&gt;
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
   },
 
   _onStickyStateChange(isSticky) {
-    <span class="hljs-built_in">console</span>.log(isSticky);
+    <span class="hljs-comment">// console.log(isSticky);</span>
   },
 
   _onPressHeader() {
     <span class="hljs-keyword">this</span>.setState({ headerPressCount: <span class="hljs-keyword">this</span>.state.headerPressCount + <span class="hljs-number">1</span> });
+  },
+
+  _onEndReached(event) {
+    <span class="hljs-comment">// load new data</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
+    <span class="hljs-keyword">this</span>._genData(++pageIndex);
+    <span class="hljs-keyword">this</span>.setState({
+      dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRowsAndSections(<span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs),
+    });
   },
 });
 

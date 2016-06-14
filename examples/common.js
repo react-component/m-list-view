@@ -20112,7 +20112,7 @@
 	      onLayout: props.stickyHeader ? function (event) {
 	        _this4.props.onLayout && _this4.props.onLayout(event);
 	      } : this._onLayout
-	    }, header, bodyComponents, footer);
+	    }, header, bodyComponents, footer, props.children);
 	    if (props.stickyHeader) {
 	      return null;
 	    }

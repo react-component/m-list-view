@@ -435,7 +435,7 @@ class ListView extends React.Component {
       ref: SCROLLVIEW_REF,
       onContentSizeChange: this._onContentSizeChange,
       onLayout: props.stickyHeader ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
-    }, header, bodyComponents, footer);
+    }, header, bodyComponents, footer, props.children);
     if (props.stickyHeader) {
       return null;
     }

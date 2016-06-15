@@ -19883,7 +19883,7 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
 	      curRenderedRowsCount: _this.props.initialListSize,
 	      highlightedRow: {}
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    }, _this.stickyRefs = {}, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
 	  /**
@@ -20014,25 +20014,29 @@
 	    var footer = this.props.renderFooter && this.props.renderFooter();
 	    var totalIndex = header ? 1 : 0;
 	
-	    for (var sectionIdx = 0; sectionIdx < allRowIDs.length; sectionIdx++) {
+	    var _loop = function _loop(sectionIdx) {
 	      var sectionID = dataSource.sectionIdentities[sectionIdx];
 	      var rowIDs = allRowIDs[sectionIdx];
 	      if (rowIDs.length === 0) {
-	        continue;
+	        return 'continue';
 	      }
 	
-	      if (this.props.renderSectionHeader) {
-	        var shouldUpdateHeader = rowCount >= this._prevRenderedRowsCount && dataSource.sectionHeaderShouldUpdate(sectionIdx);
+	      if (_this4.props.renderSectionHeader) {
+	        var shouldUpdateHeader = rowCount >= _this4._prevRenderedRowsCount && dataSource.sectionHeaderShouldUpdate(sectionIdx);
 	
 	        var renderSectionHeader = _react2.default.createElement(_StaticRenderer2.default, {
 	          key: 's_' + sectionID,
 	          shouldUpdate: !!shouldUpdateHeader,
-	          render: this.props.renderSectionHeader.bind(null, dataSource.getSectionHeaderData(sectionIdx), sectionID)
+	          render: _this4.props.renderSectionHeader.bind(null, dataSource.getSectionHeaderData(sectionIdx), sectionID)
 	        });
-	        if (this.props.stickyHeader) {
+	        if (_this4.props.stickyHeader) {
 	          renderSectionHeader = _react2.default.createElement(
 	            _reactSticky.Sticky,
-	            _extends({}, this.props.stickyProps, { key: 's_' + sectionID }),
+	            _extends({}, _this4.props.stickyProps, { key: 's_' + sectionID,
+	              ref: function ref(c) {
+	                _this4.stickyRefs[sectionID] = c;
+	              }
+	            }),
 	            renderSectionHeader
 	          );
 	        }
@@ -20043,30 +20047,41 @@
 	      for (var rowIdx = 0; rowIdx < rowIDs.length; rowIdx++) {
 	        var rowID = rowIDs[rowIdx];
 	        var comboID = sectionID + '_' + rowID;
-	        var shouldUpdateRow = rowCount >= this._prevRenderedRowsCount && dataSource.rowShouldUpdate(sectionIdx, rowIdx);
+	        var shouldUpdateRow = rowCount >= _this4._prevRenderedRowsCount && dataSource.rowShouldUpdate(sectionIdx, rowIdx);
 	        var row = _react2.default.createElement(_StaticRenderer2.default, {
 	          key: 'r_' + comboID,
 	          shouldUpdate: !!shouldUpdateRow,
-	          render: this.props.renderRow.bind(null, dataSource.getRowData(sectionIdx, rowIdx), sectionID, rowID, this.onRowHighlighted)
+	          render: _this4.props.renderRow.bind(null, dataSource.getRowData(sectionIdx, rowIdx), sectionID, rowID, _this4.onRowHighlighted)
 	        });
 	        bodyComponents.push(row);
 	        totalIndex++;
 	
-	        if (this.props.renderSeparator && (rowIdx !== rowIDs.length - 1 || sectionIdx === allRowIDs.length - 1)) {
-	          var adjacentRowHighlighted = this.state.highlightedRow.sectionID === sectionID && (this.state.highlightedRow.rowID === rowID || this.state.highlightedRow.rowID === rowIDs[rowIdx + 1]);
-	          var separator = this.props.renderSeparator(sectionID, rowID, adjacentRowHighlighted);
+	        if (_this4.props.renderSeparator && (rowIdx !== rowIDs.length - 1 || sectionIdx === allRowIDs.length - 1)) {
+	          var adjacentRowHighlighted = _this4.state.highlightedRow.sectionID === sectionID && (_this4.state.highlightedRow.rowID === rowID || _this4.state.highlightedRow.rowID === rowIDs[rowIdx + 1]);
+	          var separator = _this4.props.renderSeparator(sectionID, rowID, adjacentRowHighlighted);
 	          if (separator) {
 	            bodyComponents.push(separator);
 	            totalIndex++;
 	          }
 	        }
-	        if (++rowCount === this.state.curRenderedRowsCount) {
+	        if (++rowCount === _this4.state.curRenderedRowsCount) {
 	          break;
 	        }
 	      }
-	      if (rowCount >= this.state.curRenderedRowsCount) {
-	        break;
+	      if (rowCount >= _this4.state.curRenderedRowsCount) {
+	        return 'break';
 	      }
+	    };
+	
+	    _loop2: for (var sectionIdx = 0; sectionIdx < allRowIDs.length; sectionIdx++) {
+	      var _ret2 = _loop(sectionIdx);
+	
+	      switch (_ret2) {
+	        case 'continue':
+	          continue;
+	
+	        case 'break':
+	          break _loop2;}
 	    }
 	
 	    var _props = this.props;

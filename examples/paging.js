@@ -355,11 +355,14 @@ webpackJsonp([1],{
 	      )
 	    );
 	  },
+	  componentDidMount: function componentDidMount() {
+	    console.log(this.refs.lv);
+	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(_rmcListView2.default, {
+	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
 	        style: _util.pagingStyles.listview,
 	        dataSource: this.state.dataSource,
 	        renderHeader: this.renderHeader,

@@ -93,10 +93,12 @@ const Demo = React.createClass({
       </View>
     );
   },
-
+  componentDidMount() {
+    console.log(this.refs.lv);
+  },
   render() {
     return (<div>
-      <ListView
+      <ListView ref="lv"
         style={styles.listview}
         dataSource={this.state.dataSource}
         renderHeader={this.renderHeader}

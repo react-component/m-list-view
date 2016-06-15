@@ -310,6 +310,8 @@ class ListView extends React.Component {
     this.setState({highlightedRow: {sectionID, rowID}});
   }
 
+  stickyRefs = {}
+
   render() {
     let bodyComponents = [];
 
@@ -345,7 +347,9 @@ class ListView extends React.Component {
           />
         );
         if (this.props.stickyHeader) {
-          renderSectionHeader = <Sticky {...this.props.stickyProps} key={'s_' + sectionID}>{renderSectionHeader}</Sticky>;
+          renderSectionHeader = <Sticky {...this.props.stickyProps} key={'s_' + sectionID}
+            ref={c => { this.stickyRefs[sectionID] = c }}
+          >{renderSectionHeader}</Sticky>;
         }
         bodyComponents.push(renderSectionHeader);
         sectionHeaderIndices.push(totalIndex++);

@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"common.css","sourceRoot":""}
+{"version":3,"sources":["webpack:///./assets/index.less","webpack:///index.less"],"names":[],"mappings":"AAAA;EACE;CCCD","file":"common.css","sourcesContent":["body {\n  -webkit-overflow-scrolling: touch;\n}\n\n\n\n/** WEBPACK FOOTER **\n ** ./assets/index.less\n **/","body {\n  -webkit-overflow-scrolling: touch;\n}\n\n\n\n/** WEBPACK FOOTER **\n ** index.less\n **/"],"sourceRoot":""}

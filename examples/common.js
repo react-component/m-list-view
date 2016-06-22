@@ -19991,9 +19991,13 @@
 	  };
 	
 	  ListView.prototype.componentWillUnmount = function componentWillUnmount() {
-	    _reactDom2.default.unmountComponentAtNode(this.container);
-	    window.document.body.removeChild(this.container);
-	    window.removeEventListener('scroll', this._onScroll);
+	    if (this.props.stickyHeader) {
+	      if (this.container) {
+	        _reactDom2.default.unmountComponentAtNode(this.container);
+	        window.document.body.removeChild(this.container);
+	      }
+	      window.removeEventListener('scroll', this._onScroll);
+	    }
 	  };
 	
 	  ListView.prototype.onRowHighlighted = function onRowHighlighted(sectionID, rowID) {

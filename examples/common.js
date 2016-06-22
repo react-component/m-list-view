@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		3:0
+/******/ 		4:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"more","1":"paging","2":"simple"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"more","2":"paging","3":"simple"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -19740,11 +19740,17 @@
 	var _ListView = __webpack_require__(163);
 	
 	var _ListView2 = _interopRequireDefault(_ListView);
-
+	
+	var _Indexed = __webpack_require__(189);
+	
+	var _Indexed2 = _interopRequireDefault(_Indexed);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _ListView2.default; // export this package's api
-
+	
+	// export this package's api
+	
+	_ListView2.default.IndexedList = _Indexed2.default;
+	exports.default = _ListView2.default;
 	module.exports = exports['default'];
 
 /***/ },
@@ -23686,6 +23692,237 @@
 	
 	exports.default = Channel;
 	module.exports = exports['default'];
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(160);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _classnames = __webpack_require__(190);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _ListView = __webpack_require__(163);
+	
+	var _ListView2 = _interopRequireDefault(_ListView);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	function getOffsetTop(elem) {
+	  var offsetTop = 0;
+	  do {
+	    if (!isNaN(elem.offsetTop)) {
+	      offsetTop += elem.offsetTop;
+	    }
+	  } while (elem = elem.offsetParent);
+	  return offsetTop;
+	}
+	
+	var IndexedList = function (_React$Component) {
+	  _inherits(IndexedList, _React$Component);
+	
+	  function IndexedList() {
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, IndexedList);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.sectionComponents = {}, _this.onQuickSearchTop = function (sectionID, topId) {
+	      if (_this.props.stickyHeader) {
+	        window.document.body.scrollTop = 0;
+	      } else {
+	        _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
+	      }
+	      _this.props.onQuickSearch(sectionID, topId);
+	    }, _this.onQuickSearch = function (sectionID) {
+	      var lv = _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll);
+	      var sec = _reactDom2.default.findDOMNode(_this.sectionComponents[sectionID]);
+	      if (_this.props.stickyHeader) {
+	        // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
+	        var stickyComponent = _this.refs.indexedListView.stickyRefs[sectionID];
+	        if (stickyComponent && stickyComponent.refs.placeholder) {
+	          sec = _reactDom2.default.findDOMNode(stickyComponent.refs.placeholder);
+	        }console.log(getOffsetTop(lv));
+	        window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
+	      } else {
+	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
+	      }
+	      _this.props.onQuickSearch(sectionID);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop) {
+	    var _this2 = this;
+	
+	    var _props = this.props;
+	    var dataSource = _props.dataSource;
+	    var prefixCls = _props.prefixCls;
+	
+	    var sectionKvs = dataSource.sectionIdentities.map(function (i) {
+	      return {
+	        value: i,
+	        label: dataSource._getSectionHeaderData(dataSource._dataBlob, i)
+	      };
+	    });
+	    return _react2.default.createElement(
+	      'ul',
+	      { className: prefixCls + '-quick-search-bar' },
+	      _react2.default.createElement(
+	        'li',
+	        { onClick: function onClick() {
+	            return _this2.onQuickSearchTop(undefined, quickSearchBarTop.value);
+	          } },
+	        quickSearchBarTop.label
+	      ),
+	      sectionKvs.map(function (i) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: i.value, onClick: function onClick() {
+	              return _this2.onQuickSearch(i.value);
+	            } },
+	          i.label
+	        );
+	      })
+	    );
+	  };
+	
+	  IndexedList.prototype.render = function render() {
+	    var _classNames,
+	        _this3 = this;
+	
+	    var _props2 = this.props;
+	    var className = _props2.className;
+	    var prefixCls = _props2.prefixCls;
+	    var children = _props2.children;
+	    var quickSearchBarTop = _props2.quickSearchBarTop;
+	    var _renderSectionHeader = _props2.renderSectionHeader;
+	
+	    var other = _objectWithoutProperties(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'renderSectionHeader']);
+	
+	    var wrapCls = (0, _classnames2.default)((_classNames = {}, _defineProperty(_classNames, className, className), _defineProperty(_classNames, prefixCls, true), _classNames));
+	    return _react2.default.createElement(
+	      _ListView2.default,
+	      _extends({}, other, {
+	        ref: 'indexedListView',
+	        className: wrapCls,
+	        initialListSize: this.props.dataSource.getRowCount(),
+	        renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
+	          return _react2.default.createElement(
+	            'div',
+	            {
+	              className: prefixCls + '-section-header',
+	              ref: function ref(c) {
+	                _this3.sectionComponents[sectionID] = c;
+	              }
+	            },
+	            _renderSectionHeader(sectionData, sectionID)
+	          );
+	        }
+	      }),
+	      this.renderQuickSearchBar(quickSearchBarTop),
+	      children
+	    );
+	  };
+	
+	  return IndexedList;
+	}(_react2.default.Component);
+	
+	IndexedList.propTypes = {
+	  prefixCls: _react.PropTypes.string,
+	  quickSearchBarTop: _react.PropTypes.object,
+	  onQuickSearch: _react.PropTypes.func
+	};
+	IndexedList.defaultProps = {
+	  prefixCls: 'am-indexed-list',
+	  quickSearchBarTop: { value: '#', label: '#' },
+	  onQuickSearch: function onQuickSearch() {}
+	};
+	exports.default = IndexedList;
+	module.exports = exports['default'];
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

@@ -121,7 +121,7 @@ const Demo = React.createClass({
           className: 'for-stickyContainer-demo',
         }}
         onEndReached={this._onEndReached}
-        onEndReachedThreshold={100}
+        onEndReachedThreshold={500}
       />
     </div>);
   },

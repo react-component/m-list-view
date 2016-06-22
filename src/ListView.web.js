@@ -8,6 +8,7 @@ import TimerMixin from 'react-timer-mixin';
 import assign from 'object-assign';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
+const throttle = require('domkit/throttle');
 import { StickyContainer, Sticky } from 'react-sticky';
 
 const DEFAULT_PAGE_SIZE = 1;
@@ -199,6 +200,7 @@ class ListView extends React.Component {
     renderBodyComponent: () => <div />,
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
+    scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
     stickyHeaderIndices: [],
     stickyProps: {},
     stickyContainerProps: {},
@@ -267,9 +269,10 @@ class ListView extends React.Component {
     //   this._measureAndUpdateScrollProps();
     // });
     if (this.props.stickyHeader) {
-      this.container = document.createElement('div');
-      window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
-      window.addEventListener('scroll', this._onScroll);
+      // this.container = document.createElement('div');
+      // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
+      this.__onScroll = throttle(this._onScroll, this.props.scrollEventThrottle);
+      window.addEventListener('scroll', this.__onScroll);
     }
     this.componentDidUpdate();
   }
@@ -296,17 +299,17 @@ class ListView extends React.Component {
     this.requestAnimationFrame(() => {
       this._measureAndUpdateScrollProps();
     });
-    if (this.props.stickyHeader) {
-      ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
-    }
+    // if (this.props.stickyHeader) {
+    //   ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
+    // }
   }
   componentWillUnmount() {
     if (this.props.stickyHeader) {
-      if (this.container) {
-        ReactDOM.unmountComponentAtNode(this.container);
-        window.document.body.removeChild(this.container);
-      }
-      window.removeEventListener('scroll', this._onScroll);
+      // if (this.container) {
+      //   ReactDOM.unmountComponentAtNode(this.container);
+      //   window.document.body.removeChild(this.container);
+      // }
+      window.removeEventListener('scroll', this.__onScroll);
     }
   }
 
@@ -415,9 +418,9 @@ class ListView extends React.Component {
       bodyComponents = <StickyContainer {...props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
     }
 
-    if (!props.scrollEventThrottle) {
-      props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
-    }
+    // if (!props.scrollEventThrottle) {
+    //   props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
+    // }
     if (props.removeClippedSubviews === undefined) {
       props.removeClippedSubviews = true;
     }
@@ -444,9 +447,9 @@ class ListView extends React.Component {
       onContentSizeChange: this._onContentSizeChange,
       onLayout: props.stickyHeader ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
     }, header, bodyComponents, footer, props.children);
-    if (props.stickyHeader) {
-      return null;
-    }
+    // if (props.stickyHeader) {
+    //   return null;
+    // }
     return this._sc;
   }
 

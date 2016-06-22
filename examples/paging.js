@@ -108,6 +108,7 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
+        scrollEventThrottle={100}
         // renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
         renderBodyComponent={() => <div className="for-body-demo" />}
         stickyHeader

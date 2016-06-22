@@ -67,6 +67,7 @@ const Demo = React.createClass({
         scrollEventThrottle={100}
         onEndReached={e => console.log(e)}
         onEndReachedThreshold={500}
+        scrollEventThrottle={100}
         pageSize={5}
         renderRow={this._renderRow}
         renderSeparator={this._renderSeperator}

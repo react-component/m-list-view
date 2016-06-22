@@ -68,6 +68,9 @@ const Demo = React.createClass({
         stickyProps={{
           stickyStyle: { zIndex: 999 },
         }}
+        quickSearchBarStyle={{
+          top: 20,
+        }}
       />
     </div>);
   },

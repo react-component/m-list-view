@@ -76,6 +76,7 @@ And, use css style instead of react-native's style.
 
 ### ListView.IndexedList (beta)
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button
+- quickSearchBarStyle (object) - quickSearchBar's style
 - onQuickSearch (function())
 
 

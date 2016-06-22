@@ -44,7 +44,7 @@ export default class IndexedList extends React.Component {
       const stickyComponent = this.refs.indexedListView.stickyRefs[sectionID];
       if (stickyComponent && stickyComponent.refs.placeholder) {
         sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
-      }console.log(getOffsetTop(lv));
+      }
       window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
     } else {
       lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
@@ -52,7 +52,7 @@ export default class IndexedList extends React.Component {
     this.props.onQuickSearch(sectionID);
   }
 
-  renderQuickSearchBar(quickSearchBarTop) {
+  renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
     const { dataSource, prefixCls } = this.props;
     const sectionKvs = dataSource.sectionIdentities.map(i => {
       return {
@@ -60,7 +60,7 @@ export default class IndexedList extends React.Component {
         label: dataSource._getSectionHeaderData(dataSource._dataBlob, i),
       };
     });
-    return (<ul className={`${prefixCls}-quick-search-bar`}>
+    return (<ul className={`${prefixCls}-quick-search-bar`} style={quickSearchBarStyle}>
       <li onClick={() => this.onQuickSearchTop(undefined, quickSearchBarTop.value)}>{quickSearchBarTop.label}</li>
       {sectionKvs.map(i => {
         return (
@@ -71,7 +71,7 @@ export default class IndexedList extends React.Component {
   }
 
   render() {
-    const { className, prefixCls, children, quickSearchBarTop,
+    const { className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
       renderSectionHeader, ...other } = this.props;
     const wrapCls = classNames({
       [className]: className,
@@ -89,7 +89,7 @@ export default class IndexedList extends React.Component {
           >
           {renderSectionHeader(sectionData, sectionID)}
         </div>)}
-      >{this.renderQuickSearchBar(quickSearchBarTop)}{children}</ListView>
+      >{this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle)}{children}</ListView>
     );
   }
 }

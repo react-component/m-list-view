@@ -67,6 +67,8 @@ const Demo = React.createClass({
         stickyHeader
         stickyProps={{
           stickyStyle: { zIndex: 999 },
+          topOffset: -83,
+          // isActive: false,
         }}
         quickSearchBarStyle={{
           top: 20,

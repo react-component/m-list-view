@@ -301,9 +301,13 @@ class ListView extends React.Component {
     }
   }
   componentWillUnmount() {
-    ReactDOM.unmountComponentAtNode(this.container);
-    window.document.body.removeChild(this.container);
-    window.removeEventListener('scroll', this._onScroll);
+    if (this.props.stickyHeader) {
+      if (this.container) {
+        ReactDOM.unmountComponentAtNode(this.container);
+        window.document.body.removeChild(this.container);
+      }
+      window.removeEventListener('scroll', this._onScroll);
+    }
   }
 
   onRowHighlighted(sectionID, rowID) {

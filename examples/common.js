@@ -19957,8 +19957,8 @@
 	    //   this._measureAndUpdateScrollProps();
 	    // });
 	    if (this.props.stickyHeader) {
-	      this.container = document.createElement('div');
-	      window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
+	      // this.container = document.createElement('div');
+	      // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
 	      window.addEventListener('scroll', this._onScroll);
 	    }
 	    this.componentDidUpdate();
@@ -19985,17 +19985,17 @@
 	    this.requestAnimationFrame(function () {
 	      _this3._measureAndUpdateScrollProps();
 	    });
-	    if (this.props.stickyHeader) {
-	      _reactDom2.default.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
-	    }
+	    // if (this.props.stickyHeader) {
+	    //   ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
+	    // }
 	  };
 	
 	  ListView.prototype.componentWillUnmount = function componentWillUnmount() {
 	    if (this.props.stickyHeader) {
-	      if (this.container) {
-	        _reactDom2.default.unmountComponentAtNode(this.container);
-	        window.document.body.removeChild(this.container);
-	      }
+	      // if (this.container) {
+	      //   ReactDOM.unmountComponentAtNode(this.container);
+	      //   window.document.body.removeChild(this.container);
+	      // }
 	      window.removeEventListener('scroll', this._onScroll);
 	    }
 	  };
@@ -20132,9 +20132,9 @@
 	        _this4.props.onLayout && _this4.props.onLayout(event);
 	      } : this._onLayout
 	    }, header, bodyComponents, footer, props.children);
-	    if (props.stickyHeader) {
-	      return null;
-	    }
+	    // if (props.stickyHeader) {
+	    //   return null;
+	    // }
 	    return this._sc;
 	  };
 	

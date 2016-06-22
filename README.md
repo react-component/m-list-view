@@ -74,6 +74,10 @@ And, use css style instead of react-native's style.
     - stickyProps / stickyContainerProps
 - renderBodyComponent
 
+### ListView.IndexedList (beta)
+- quickSearchBarTop (object{value:string, label:string}, default '#') - top button
+- onQuickSearch (function())
+
 
 ## Test Case
 

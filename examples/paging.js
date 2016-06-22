@@ -109,6 +109,9 @@ const Demo = React.createClass({
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={100}
+        onScroll={() => { console.log('scroll'); } }
+        onEndReached={this._onEndReached}
+        onEndReachedThreshold={500}
         // renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
         renderBodyComponent={() => <div className="for-body-demo" />}
         stickyHeader
@@ -120,8 +123,6 @@ const Demo = React.createClass({
         stickyContainerProps={{
           className: 'for-stickyContainer-demo',
         }}
-        onEndReached={this._onEndReached}
-        onEndReachedThreshold={500}
       />
     </div>);
   },

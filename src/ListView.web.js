@@ -493,7 +493,7 @@ class ListView extends React.Component {
     this.props.onLayout && this.props.onLayout(event);
   }
 
-  _maybeCallOnEndReached(event) {
+  _maybeCallOnEndReached(event) {// console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties) , this.props.onEndReachedThreshold);
     if (this.props.onEndReached &&
         this.scrollProperties.contentLength !== this._sentEndForContentLength &&
         this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold &&
@@ -513,7 +513,7 @@ class ListView extends React.Component {
       return;
     }
 
-    let distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);
+    let distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);// console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
     if (distanceFromEnd < this.props.scrollRenderAheadDistance) {
       this._pageInNewRows();
     }
@@ -622,17 +622,27 @@ class ListView extends React.Component {
 
     let target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
     if (this.props.stickyHeader) {
-      target = window.document.body;
+      this.scrollProperties.visibleLength = window[
+        isVertical ? 'innerHeight' : 'innerWidth'
+      ];
+      this.scrollProperties.contentLength = target[
+        isVertical ? 'scrollHeight' : 'scrollWidth'
+      ];
+      this.scrollProperties.offset = window.document.body[
+        isVertical ? 'scrollTop' : 'scrollTop'
+      ];
+    } else {
+      this.scrollProperties.visibleLength = target[
+        isVertical ? 'offsetHeight' : 'offsetWidth'
+      ];
+      this.scrollProperties.contentLength = target[
+        isVertical ? 'scrollHeight' : 'scrollWidth'
+      ];
+      this.scrollProperties.offset = target[
+        isVertical ? 'scrollTop' : 'scrollTop'
+      ];
     }
-    this.scrollProperties.visibleLength = target[
-      isVertical ? 'offsetHeight' : 'offsetWidth'
-    ];
-    this.scrollProperties.contentLength = target[
-      isVertical ? 'scrollHeight' : 'scrollWidth'
-    ];
-    this.scrollProperties.offset = target[
-      isVertical ? 'scrollTop' : 'scrollTop'
-    ];
+
     // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
     if (!this._maybeCallOnEndReached(e)) {
       this._renderMoreRowsIfNeeded();

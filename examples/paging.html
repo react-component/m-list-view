@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging.js - example - rmc-list-view@0.5.0</title>
+  <title>paging.js - example - rmc-list-view@0.5.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.5.0</h1>
+      <h1>rmc-list-view@0.5.1</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -375,7 +375,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-attribute">pageSize</span>=<span class="hljs-value">{4}</span>
         <span class="hljs-attribute">scrollRenderAheadDistance</span>=<span class="hljs-value">{500}</span>
         <span class="hljs-attribute">scrollEventThrottle</span>=<span class="hljs-value">{100}</span>
-        // <span class="hljs-attribute">renderScrollComponent</span>=<span class="hljs-value">{props</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-scroll-demo"</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
+        <span class="hljs-attribute">onScroll</span>=<span class="hljs-value">{()</span> =&gt;</span> { console.log('scroll'); } }
+        onEndReached={this._onEndReached}
+        onEndReachedThreshold={500}
+        // renderScrollComponent={props =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-scroll-demo"</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
         renderBodyComponent={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-body-demo"</span> /&gt;</span>}
         stickyHeader
         stickyProps={{
@@ -386,8 +389,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         stickyContainerProps={{
           className: 'for-stickyContainer-demo',
         }}
-        onEndReached={this._onEndReached}
-        onEndReachedThreshold={500}
       /&gt;
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
   },

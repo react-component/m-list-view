@@ -20192,6 +20192,7 @@
 	  };
 	
 	  ListView.prototype._maybeCallOnEndReached = function _maybeCallOnEndReached(event) {
+	    // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties) , this.props.onEndReachedThreshold);
 	    if (this.props.onEndReached && this.scrollProperties.contentLength !== this._sentEndForContentLength && this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold && this.state.curRenderedRowsCount === this.props.dataSource.getRowCount()) {
 	      this._sentEndForContentLength = this.scrollProperties.contentLength;
 	      this.props.onEndReached(event);
@@ -20206,7 +20207,7 @@
 	      return;
 	    }
 	
-	    var distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);
+	    var distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties); // console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
 	    if (distanceFromEnd < this.props.scrollRenderAheadDistance) {
 	      this._pageInNewRows();
 	    }
@@ -20314,11 +20315,15 @@
 	
 	    var target = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW_REF]);
 	    if (this.props.stickyHeader) {
-	      target = window.document.body;
+	      this.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
+	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
+	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollTop'];
+	    } else {
+	      this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
+	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
+	      this.scrollProperties.offset = target[isVertical ? 'scrollTop' : 'scrollTop'];
 	    }
-	    this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
-	    this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
-	    this.scrollProperties.offset = target[isVertical ? 'scrollTop' : 'scrollTop'];
+	
 	    // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
 	    if (!this._maybeCallOnEndReached(e)) {
 	      this._renderMoreRowsIfNeeded();

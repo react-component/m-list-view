@@ -19813,6 +19813,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
+	var throttle = __webpack_require__(182);
+	
+	
 	var DEFAULT_PAGE_SIZE = 1;
 	var DEFAULT_INITIAL_ROWS = 10;
 	var DEFAULT_SCROLL_RENDER_AHEAD = 1000;
@@ -19959,7 +19962,8 @@
 	    if (this.props.stickyHeader) {
 	      // this.container = document.createElement('div');
 	      // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
-	      window.addEventListener('scroll', this._onScroll);
+	      this.__onScroll = throttle(this._onScroll, this.props.scrollEventThrottle);
+	      window.addEventListener('scroll', this.__onScroll);
 	    }
 	    this.componentDidUpdate();
 	  };
@@ -19996,7 +20000,7 @@
 	      //   ReactDOM.unmountComponentAtNode(this.container);
 	      //   window.document.body.removeChild(this.container);
 	      // }
-	      window.removeEventListener('scroll', this._onScroll);
+	      window.removeEventListener('scroll', this.__onScroll);
 	    }
 	  };
 	
@@ -20102,9 +20106,9 @@
 	      );
 	    }
 	
-	    if (!props.scrollEventThrottle) {
-	      props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
-	    }
+	    // if (!props.scrollEventThrottle) {
+	    //   props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
+	    // }
 	    if (props.removeClippedSubviews === undefined) {
 	      props.removeClippedSubviews = true;
 	    }
@@ -20448,6 +20452,7 @@
 	  },
 	  scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
 	  onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
+	  scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
 	  stickyHeaderIndices: [],
 	  stickyProps: {},
 	  stickyContainerProps: {}

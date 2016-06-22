@@ -31,6 +31,8 @@ webpackJsonp([0],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } // use jsx to render html, do not modify simple.html
+	
 	var Demo = _react2.default.createClass({
 	  displayName: 'Demo',
 	
@@ -92,23 +94,21 @@ webpackJsonp([0],{
 	  },
 	
 	  render: function render() {
-	    return _react2.default.createElement(_rmcListView2.default, {
+	    var _React$createElement;
+	
+	    return _react2.default.createElement(_rmcListView2.default, (_React$createElement = {
 	      style: { height: 300 },
 	      dataSource: this.state.dataSource,
 	      scrollEventThrottle: 100,
 	      onEndReached: function onEndReached(e) {
 	        return console.log(e);
 	      },
-	      onEndReachedThreshold: 500,
-	      pageSize: 5,
-	      renderRow: this._renderRow,
-	      renderSeparator: this._renderSeperator,
-	      renderBodyComponent: function renderBodyComponent() {
-	        return _react2.default.createElement('div', { className: 'for-body-demo' });
-	      }
-	    });
+	      onEndReachedThreshold: 500
+	    }, _defineProperty(_React$createElement, 'scrollEventThrottle', 100), _defineProperty(_React$createElement, 'pageSize', 5), _defineProperty(_React$createElement, 'renderRow', this._renderRow), _defineProperty(_React$createElement, 'renderSeparator', this._renderSeperator), _defineProperty(_React$createElement, 'renderBodyComponent', function renderBodyComponent() {
+	      return _react2.default.createElement('div', { className: 'for-body-demo' });
+	    }), _React$createElement));
 	  }
-	}); // use jsx to render html, do not modify simple.html
+	});
 	
 	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 

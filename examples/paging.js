@@ -371,7 +371,8 @@ webpackJsonp([1],{
 	        renderRow: this.renderRow,
 	        initialListSize: 10,
 	        pageSize: 4,
-	        scrollRenderAheadDistance: 500
+	        scrollRenderAheadDistance: 500,
+	        scrollEventThrottle: 100
 	        // renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
 	        , renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });

@@ -23777,7 +23777,7 @@
 	        var stickyComponent = _this.refs.indexedListView.stickyRefs[sectionID];
 	        if (stickyComponent && stickyComponent.refs.placeholder) {
 	          sec = _reactDom2.default.findDOMNode(stickyComponent.refs.placeholder);
-	        }console.log(getOffsetTop(lv));
+	        }
 	        window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
 	      } else {
 	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
@@ -23786,7 +23786,7 @@
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
-	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop) {
+	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
 	    var _this2 = this;
 	
 	    var _props = this.props;
@@ -23801,7 +23801,7 @@
 	    });
 	    return _react2.default.createElement(
 	      'ul',
-	      { className: prefixCls + '-quick-search-bar' },
+	      { className: prefixCls + '-quick-search-bar', style: quickSearchBarStyle },
 	      _react2.default.createElement(
 	        'li',
 	        { onClick: function onClick() {
@@ -23830,9 +23830,10 @@
 	    var prefixCls = _props2.prefixCls;
 	    var children = _props2.children;
 	    var quickSearchBarTop = _props2.quickSearchBarTop;
+	    var quickSearchBarStyle = _props2.quickSearchBarStyle;
 	    var _renderSectionHeader = _props2.renderSectionHeader;
 	
-	    var other = _objectWithoutProperties(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'renderSectionHeader']);
+	    var other = _objectWithoutProperties(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'renderSectionHeader']);
 	
 	    var wrapCls = (0, _classnames2.default)((_classNames = {}, _defineProperty(_classNames, className, className), _defineProperty(_classNames, prefixCls, true), _classNames));
 	    return _react2.default.createElement(
@@ -23854,7 +23855,7 @@
 	          );
 	        }
 	      }),
-	      this.renderQuickSearchBar(quickSearchBarTop),
+	      this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
 	      children
 	    );
 	  };

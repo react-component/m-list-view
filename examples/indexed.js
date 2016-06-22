@@ -111,6 +111,9 @@ webpackJsonp([0],[
 	        stickyHeader: true,
 	        stickyProps: {
 	          stickyStyle: { zIndex: 999 }
+	        },
+	        quickSearchBarStyle: {
+	          top: 20
 	        }
 	      })
 	    );

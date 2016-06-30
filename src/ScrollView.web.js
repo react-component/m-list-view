@@ -510,7 +510,7 @@ class ScrollView extends React.Component {
 let styles = StyleSheet.create({
   base: {
     position: 'relative',
-    overflow: 'scroll',
+    overflow: 'auto',
     WebkitOverflowScrolling: 'touch',
     flex: 1,
   },

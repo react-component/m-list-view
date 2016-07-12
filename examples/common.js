@@ -20058,6 +20058,7 @@
 	        sectionHeaderIndices.push(totalIndex++);
 	      }
 	
+	      var sectionBody = [];
 	      for (var rowIdx = 0; rowIdx < rowIDs.length; rowIdx++) {
 	        var rowID = rowIDs[rowIdx];
 	        var comboID = sectionID + '_' + rowID;
@@ -20067,14 +20068,16 @@
 	          shouldUpdate: !!shouldUpdateRow,
 	          render: _this4.props.renderRow.bind(null, dataSource.getRowData(sectionIdx, rowIdx), sectionID, rowID, _this4.onRowHighlighted)
 	        });
-	        bodyComponents.push(row);
+	        // bodyComponents.push(row);
+	        sectionBody.push(row);
 	        totalIndex++;
 	
 	        if (_this4.props.renderSeparator && (rowIdx !== rowIDs.length - 1 || sectionIdx === allRowIDs.length - 1)) {
 	          var adjacentRowHighlighted = _this4.state.highlightedRow.sectionID === sectionID && (_this4.state.highlightedRow.rowID === rowID || _this4.state.highlightedRow.rowID === rowIDs[rowIdx + 1]);
 	          var separator = _this4.props.renderSeparator(sectionID, rowID, adjacentRowHighlighted);
 	          if (separator) {
-	            bodyComponents.push(separator);
+	            // bodyComponents.push(separator);
+	            sectionBody.push(separator);
 	            totalIndex++;
 	          }
 	        }
@@ -20082,6 +20085,11 @@
 	          break;
 	        }
 	      }
+	      bodyComponents.push(_react2.default.createElement(
+	        'div',
+	        { className: 'list-view-section-body' },
+	        sectionBody
+	      ));
 	      if (rowCount >= _this4.state.curRenderedRowsCount) {
 	        return 'break';
 	      }
@@ -21619,7 +21627,7 @@
 	var styles = _StyleSheet2.default.create({
 	  base: {
 	    position: 'relative',
-	    overflow: 'scroll',
+	    overflow: 'auto',
 	    WebkitOverflowScrolling: 'touch',
 	    flex: 1
 	  },

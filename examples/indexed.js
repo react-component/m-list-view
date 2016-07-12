@@ -110,8 +110,10 @@ webpackJsonp([0],[
 	        renderRow: this.renderRow,
 	        stickyHeader: true,
 	        stickyProps: {
-	          stickyStyle: { zIndex: 999 }
+	          stickyStyle: { zIndex: 999 },
+	          topOffset: -83
 	        },
+	        // isActive: false,
 	        quickSearchBarStyle: {
 	          top: 20
 	        }

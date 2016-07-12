@@ -362,6 +362,7 @@ class ListView extends React.Component {
         sectionHeaderIndices.push(totalIndex++);
       }
 
+      const sectionBody = [];
       for (let rowIdx = 0; rowIdx < rowIDs.length; rowIdx++) {
         let rowID = rowIDs[rowIdx];
         let comboID = sectionID + '_' + rowID;
@@ -379,7 +380,8 @@ class ListView extends React.Component {
               this.onRowHighlighted
             )}
           />;
-        bodyComponents.push(row);
+        // bodyComponents.push(row);
+        sectionBody.push(row);
         totalIndex++;
 
         if (this.props.renderSeparator &&
@@ -395,7 +397,8 @@ class ListView extends React.Component {
             adjacentRowHighlighted
           );
           if (separator) {
-            bodyComponents.push(separator);
+            // bodyComponents.push(separator);
+            sectionBody.push(separator);
             totalIndex++;
           }
         }
@@ -403,6 +406,7 @@ class ListView extends React.Component {
           break;
         }
       }
+      bodyComponents.push(<div className="list-view-section-body">{sectionBody}</div>);
       if (rowCount >= this.state.curRenderedRowsCount) {
         break;
       }

@@ -406,7 +406,7 @@ class ListView extends React.Component {
           break;
         }
       }
-      bodyComponents.push(<div className="list-view-section-body">{sectionBody}</div>);
+      bodyComponents.push(<div key={sectionID} className="list-view-section-body">{sectionBody}</div>);
       if (rowCount >= this.state.curRenderedRowsCount) {
         break;
       }

@@ -20087,7 +20087,7 @@
 	      }
 	      bodyComponents.push(_react2.default.createElement(
 	        'div',
-	        { className: 'list-view-section-body' },
+	        { key: sectionID, className: 'list-view-section-body' },
 	        sectionBody
 	      ));
 	      if (rowCount >= _this4.state.curRenderedRowsCount) {

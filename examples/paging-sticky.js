@@ -1,120 +1,14 @@
-webpackJsonp([1],{
+webpackJsonp([2],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(191);
+	module.exports = __webpack_require__(202);
 
 
 /***/ },
 
-/***/ 191:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	__webpack_require__(2);
-	
-	var _react = __webpack_require__(3);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(160);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _rmcListView = __webpack_require__(161);
-	
-	var _rmcListView2 = _interopRequireDefault(_rmcListView);
-	
-	var _util = __webpack_require__(192);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } // use jsx to render html, do not modify simple.html
-	
-	var Demo = _react2.default.createClass({
-	  displayName: 'Demo',
-	
-	  getInitialState: function getInitialState() {
-	    var ds = new _rmcListView2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
-	        return r1 !== r2;
-	      } });
-	    return {
-	      dataSource: ds.cloneWithRows((0, _util._genRows)({}))
-	    };
-	  },
-	
-	  _pressData: {},
-	
-	  componentWillMount: function componentWillMount() {
-	    this._pressData = {};
-	  },
-	
-	  _renderRow: function _renderRow(rowData, sectionID, rowID, highlightRow) {
-	    var _this = this;
-	
-	    var rowHash = Math.abs((0, _util.hashCode)(rowData));
-	    var imgSource = _util.THUMB_URLS[rowHash % _util.THUMB_URLS.length];
-	    return _react2.default.createElement(
-	      _util.TouchableHighlight,
-	      { onPress: function onPress() {
-	          _this._pressRow(rowID);
-	          highlightRow(sectionID, rowID);
-	        } },
-	      _react2.default.createElement(
-	        _util.View,
-	        null,
-	        _react2.default.createElement(
-	          _util.View,
-	          { style: _util.styles.row },
-	          _react2.default.createElement(_util.Image, { style: _util.styles.thumb, source: imgSource }),
-	          _react2.default.createElement(
-	            _util.Text,
-	            { style: _util.styles.text },
-	            rowData + ' - ' + _util.LOREM_IPSUM.substr(0, rowHash % 301 + 10)
-	          )
-	        )
-	      )
-	    );
-	  },
-	  _pressRow: function _pressRow(rowID) {
-	    this._pressData[rowID] = !this._pressData[rowID];
-	    this.setState({ dataSource: this.state.dataSource.cloneWithRows((0, _util._genRows)(this._pressData)) });
-	  },
-	
-	  _renderSeperator: function _renderSeperator(sectionID, rowID, adjacentRowHighlighted) {
-	    return _react2.default.createElement(_util.View, {
-	      key: sectionID + '-' + rowID,
-	      style: {
-	        height: adjacentRowHighlighted ? 4 : 1,
-	        backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
-	      }
-	    });
-	  },
-	
-	  render: function render() {
-	    var _React$createElement;
-	
-	    return _react2.default.createElement(_rmcListView2.default, (_React$createElement = {
-	      style: { height: 300 },
-	      dataSource: this.state.dataSource,
-	      scrollEventThrottle: 100,
-	      onEndReached: function onEndReached(e) {
-	        return console.log(e);
-	      },
-	      onEndReachedThreshold: 500
-	    }, _defineProperty(_React$createElement, 'scrollEventThrottle', 100), _defineProperty(_React$createElement, 'pageSize', 5), _defineProperty(_React$createElement, 'renderRow', this._renderRow), _defineProperty(_React$createElement, 'renderSeparator', this._renderSeperator), _defineProperty(_React$createElement, 'renderBodyComponent', function renderBodyComponent() {
-	      return _react2.default.createElement('div', { className: 'for-body-demo' });
-	    }), _React$createElement));
-	  }
-	});
-	
-	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
-
-/***/ },
-
-/***/ 192:
+/***/ 201:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -137,6 +31,8 @@ webpackJsonp([1],{
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	var victory = 'https://os.alipayobjects.com/rmsportal/kwihkdUVljwUURM.png';
 	var superlike = 'https://os.alipayobjects.com/rmsportal/pmXtSKUFLsIEJLh.png';
@@ -179,7 +75,7 @@ webpackJsonp([1],{
 	  );
 	}
 	function Image(props) {
-	  return _react2.default.createElement('img', _extends({ src: props.source }, props));
+	  return _react2.default.createElement('img', { src: props.source });
 	}
 	function View(props) {
 	  return _react2.default.createElement(
@@ -192,11 +88,16 @@ webpackJsonp([1],{
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',
 	  render: function render() {
-	    var props = this.props;
+	    var _props = this.props;
+	    var onPress = _props.onPress;
+	    var children = _props.children;
+	
+	    var restProps = _objectWithoutProperties(_props, ['onPress', 'children']);
+	
 	    return _react2.default.createElement(
 	      'div',
-	      _extends({}, props, { onClick: props.onPress }),
-	      props.children
+	      _extends({}, restProps, { onClick: onPress }),
+	      children
 	    );
 	  }
 	});
@@ -219,9 +120,11 @@ webpackJsonp([1],{
 	};
 	
 	var pagingStyles = exports.pagingStyles = {
-	  listview: {
-	    height: '100%',
-	    backgroundColor: '#B0C4DE'
+	  customScroller: {
+	    margin: '0 auto',
+	    width: '80%',
+	    height: 300,
+	    overflow: 'auto'
 	  },
 	  header: {
 	    height: 140,
@@ -327,7 +230,194 @@ webpackJsonp([1],{
 	  }
 	});
 
+/***/ },
+
+/***/ 202:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	__webpack_require__(2);
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(35);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _rmcListView = __webpack_require__(174);
+	
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
+	
+	var _util = __webpack_require__(201);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NUM_SECTIONS = 20; // use jsx to render html, do not modify simple.html
+	
+	var NUM_ROWS_PER_SECTION = 10;
+	var pageIndex = 0;
+	
+	var Demo = _react2.default.createClass({
+	  displayName: 'Demo',
+	  getInitialState: function getInitialState() {
+	    var _this = this;
+	
+	    var getSectionData = function getSectionData(dataBlob, sectionID) {
+	      return dataBlob[sectionID];
+	    };
+	    var getRowData = function getRowData(dataBlob, sectionID, rowID) {
+	      return dataBlob[rowID];
+	    };
+	
+	    var dataSource = new _rmcListView2.default.DataSource({
+	      getRowData: getRowData,
+	      getSectionHeaderData: getSectionData,
+	      rowHasChanged: function rowHasChanged(row1, row2) {
+	        return row1 !== row2;
+	      },
+	      sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
+	        return s1 !== s2;
+	      }
+	    });
+	
+	    this.dataBlob = {};
+	    this.sectionIDs = [];
+	    this.rowIDs = [];
+	    this._genData = function () {
+	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	
+	      for (var i = 0; i < NUM_SECTIONS; i++) {
+	        var ii = pIndex * NUM_SECTIONS + i;
+	        var sectionName = 'Section ' + ii;
+	        _this.sectionIDs.push(sectionName);
+	        _this.dataBlob[sectionName] = sectionName;
+	        _this.rowIDs[ii] = [];
+	
+	        for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+	          var rowName = 'S' + ii + ', R' + jj;
+	          _this.rowIDs[ii].push(rowName);
+	          _this.dataBlob[rowName] = rowName;
+	        }
+	      }
+	      // new object ref
+	      _this.sectionIDs = [].concat(_this.sectionIDs);
+	      _this.rowIDs = [].concat(_this.rowIDs);
+	    };
+	    this._genData();
+	    return {
+	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+	      headerPressCount: 0
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    console.log(this.refs.lv);
+	  },
+	  renderHeader: function renderHeader() {
+	    var _this2 = this;
+	
+	    var headerLikeText = this.state.headerPressCount % 2 ? _react2.default.createElement(
+	      _util.View,
+	      null,
+	      _react2.default.createElement(
+	        _util.Text,
+	        { style: _util.pagingStyles.text },
+	        '1 Like'
+	      )
+	    ) : null;
+	    return _react2.default.createElement(
+	      _util.TouchableOpacity,
+	      {
+	        onPress: function onPress() {
+	          _this2.setState({ headerPressCount: _this2.state.headerPressCount + 1 });
+	        },
+	        style: _util.pagingStyles.header },
+	      headerLikeText,
+	      _react2.default.createElement(
+	        _util.View,
+	        null,
+	        _react2.default.createElement(
+	          _util.Text,
+	          { style: _util.pagingStyles.text },
+	          'Table Header (click me)'
+	        )
+	      )
+	    );
+	  },
+	  _onEndReached: function _onEndReached(event) {
+	    // load new data
+	    console.log('reach end', event);
+	    this._genData(++pageIndex);
+	    this.setState({
+	      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs)
+	    });
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
+	        dataSource: this.state.dataSource,
+	        renderHeader: this.renderHeader,
+	        renderFooter: function renderFooter() {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: _util.pagingStyles.header },
+	            _react2.default.createElement(
+	              _util.Text,
+	              { style: _util.pagingStyles.text },
+	              'Table Footer'
+	            )
+	          );
+	        },
+	        renderSectionHeader: function renderSectionHeader(sectionData) {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: _util.pagingStyles.section },
+	            _react2.default.createElement(
+	              _util.Text,
+	              { style: _util.pagingStyles.text },
+	              sectionData
+	            )
+	          );
+	        },
+	        renderRow: function renderRow(rowData) {
+	          return _react2.default.createElement(_util.Thumb, { text: rowData });
+	        },
+	        initialListSize: 10,
+	        pageSize: 4,
+	        scrollRenderAheadDistance: 500,
+	        scrollEventThrottle: 100,
+	        onScroll: function onScroll() {
+	          console.log('scroll');
+	        },
+	        onEndReached: this._onEndReached,
+	        onEndReachedThreshold: 500,
+	        renderBodyComponent: function renderBodyComponent() {
+	          return _react2.default.createElement('div', { className: 'for-body-demo' });
+	        }
+	        // style={{ height: 300 }}
+	        , stickyHeader: true,
+	        stickyProps: {
+	          className: 'for-sticky-demo',
+	          stickyStyle: { top: '10px' },
+	          onStickyStateChange: function onStickyStateChange(isSticky) {
+	            // console.log(isSticky);
+	          }
+	        },
+	        stickyContainerProps: {
+	          className: 'for-stickyContainer-demo'
+	        }
+	      })
+	    );
+	  }
+	});
+	
+	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
+
 /***/ }
 
 });
-//# sourceMappingURL=more.js.map
+//# sourceMappingURL=paging-sticky.js.map

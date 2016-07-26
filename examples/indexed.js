@@ -17,11 +17,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(160);
+	var _reactDom = __webpack_require__(35);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(161);
+	var _rmcListView = __webpack_require__(174);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
@@ -113,7 +113,6 @@ webpackJsonp([0],[
 	          stickyStyle: { zIndex: 999 },
 	          topOffset: -83
 	        },
-	        // isActive: false,
 	        quickSearchBarStyle: {
 	          top: 20
 	        }

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>util.js - example - rmc-list-view@0.5.4</title>
+  <title>util.js - example - rmc-list-view@0.5.5</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.5.4</h1>
+      <h1>rmc-list-view@0.5.5</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -314,7 +314,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>;</span>
 }
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Image</span>(<span class="hljs-params">props</span>) </span>{
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{props.source}</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>;</span>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{props.source}</span> /&gt;</span>;</span>
 }
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">View</span>(<span class="hljs-params">props</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
@@ -323,8 +323,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableHighlight = React.createClass({
   render() {
-    <span class="hljs-keyword">const</span> props = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{props.onPress}</span>&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+    <span class="hljs-keyword">const</span> { onPress, children, ...restProps } = <span class="hljs-keyword">this</span>.props;
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...restProps</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{onPress}</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   },
 });
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableOpacity = TouchableHighlight;
@@ -346,9 +346,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 };
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> pagingStyles = {
-  listview: {
-    height: <span class="hljs-string">'100%'</span>,
-    backgroundColor: <span class="hljs-string">'#B0C4DE'</span>,
+  customScroller: {
+    margin: <span class="hljs-string">'0 auto'</span>,
+    width: <span class="hljs-string">'80%'</span>,
+    height: <span class="hljs-number">300</span>,
+    overflow: <span class="hljs-string">'auto'</span>,
   },
   header: {
     height: <span class="hljs-number">140</span>,

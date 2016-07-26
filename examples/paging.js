@@ -1,14 +1,211 @@
-webpackJsonp([2],{
+webpackJsonp([1],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(193);
+	module.exports = __webpack_require__(200);
 
 
 /***/ },
 
-/***/ 192:
+/***/ 200:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // use jsx to render html, do not modify simple.html
+	
+	__webpack_require__(2);
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(35);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _rmcListView = __webpack_require__(174);
+	
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
+	
+	var _util = __webpack_require__(201);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NUM_SECTIONS = 20;
+	var NUM_ROWS_PER_SECTION = 10;
+	var pageIndex = 0;
+	
+	var Demo = _react2.default.createClass({
+	  displayName: 'Demo',
+	  getInitialState: function getInitialState() {
+	    var _this = this;
+	
+	    var getSectionData = function getSectionData(dataBlob, sectionID) {
+	      return dataBlob[sectionID];
+	    };
+	    var getRowData = function getRowData(dataBlob, sectionID, rowID) {
+	      return dataBlob[rowID];
+	    };
+	
+	    var dataSource = new _rmcListView2.default.DataSource({
+	      getRowData: getRowData,
+	      getSectionHeaderData: getSectionData,
+	      rowHasChanged: function rowHasChanged(row1, row2) {
+	        return row1 !== row2;
+	      },
+	      sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
+	        return s1 !== s2;
+	      }
+	    });
+	
+	    this.dataBlob = {};
+	    this.sectionIDs = [];
+	    this.rowIDs = [];
+	    this._genData = function () {
+	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	
+	      for (var i = 0; i < NUM_SECTIONS; i++) {
+	        var ii = pIndex * NUM_SECTIONS + i;
+	        var sectionName = 'Section ' + ii;
+	        _this.sectionIDs.push(sectionName);
+	        _this.dataBlob[sectionName] = sectionName;
+	        _this.rowIDs[ii] = [];
+	
+	        for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+	          var rowName = 'S' + ii + ', R' + jj;
+	          _this.rowIDs[ii].push(rowName);
+	          _this.dataBlob[rowName] = rowName;
+	        }
+	      }
+	      // new object ref
+	      _this.sectionIDs = [].concat(_this.sectionIDs);
+	      _this.rowIDs = [].concat(_this.rowIDs);
+	    };
+	    this._genData();
+	    return {
+	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+	      headerPressCount: 0
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    console.log(this.refs.lv);
+	  },
+	  renderHeader: function renderHeader() {
+	    var _this2 = this;
+	
+	    var headerLikeText = this.state.headerPressCount % 2 ? _react2.default.createElement(
+	      _util.View,
+	      null,
+	      _react2.default.createElement(
+	        _util.Text,
+	        { style: _util.pagingStyles.text },
+	        '1 Like'
+	      )
+	    ) : null;
+	    return _react2.default.createElement(
+	      _util.TouchableOpacity,
+	      {
+	        onPress: function onPress() {
+	          _this2.setState({ headerPressCount: _this2.state.headerPressCount + 1 });
+	        },
+	        style: _util.pagingStyles.header },
+	      headerLikeText,
+	      _react2.default.createElement(
+	        _util.View,
+	        null,
+	        _react2.default.createElement(
+	          _util.Text,
+	          { style: _util.pagingStyles.text },
+	          'Table Header (click me)'
+	        )
+	      )
+	    );
+	  },
+	  _onEndReached: function _onEndReached(event) {
+	    // load new data
+	    console.log('reach end', event);
+	    this._genData(++pageIndex);
+	    this.setState({
+	      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs)
+	    });
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
+	        dataSource: this.state.dataSource,
+	        renderHeader: this.renderHeader,
+	        renderFooter: function renderFooter() {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: _util.pagingStyles.header },
+	            _react2.default.createElement(
+	              _util.Text,
+	              { style: _util.pagingStyles.text },
+	              'Table Footer'
+	            )
+	          );
+	        },
+	        renderSectionHeader: function renderSectionHeader(sectionData) {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: _util.pagingStyles.section },
+	            _react2.default.createElement(
+	              _util.Text,
+	              { style: _util.pagingStyles.text },
+	              sectionData
+	            )
+	          );
+	        },
+	        renderRow: function renderRow(rowData) {
+	          return _react2.default.createElement(_util.Thumb, { text: rowData });
+	        },
+	        initialListSize: 10,
+	        pageSize: 4,
+	        scrollRenderAheadDistance: 500,
+	        scrollEventThrottle: 100,
+	        onScroll: function onScroll() {
+	          console.log('scroll');
+	        },
+	        onEndReached: this._onEndReached,
+	        onEndReachedThreshold: 500,
+	        renderScrollComponent: function renderScrollComponent(props) {
+	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: _util.pagingStyles.customScroller }));
+	        },
+	        renderBodyComponent: function renderBodyComponent() {
+	          return _react2.default.createElement('div', { className: 'for-body-demo' });
+	        }
+	
+	      })
+	    );
+	  }
+	});
+	
+	var MyScroller = _react2.default.createClass({
+	  displayName: 'MyScroller',
+	  render: function render() {
+	    var _props = this.props;
+	    var children = _props.children;
+	    var style = _props.style;
+	    var onScroll = _props.onScroll;
+	
+	    var divProps = { style: style, onScroll: onScroll };
+	    return _react2.default.createElement(
+	      'div',
+	      _extends({ className: 'c-s' }, divProps),
+	      children
+	    );
+	  }
+	});
+	
+	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
+
+/***/ },
+
+/***/ 201:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31,6 +228,8 @@ webpackJsonp([2],{
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	var victory = 'https://os.alipayobjects.com/rmsportal/kwihkdUVljwUURM.png';
 	var superlike = 'https://os.alipayobjects.com/rmsportal/pmXtSKUFLsIEJLh.png';
@@ -73,7 +272,7 @@ webpackJsonp([2],{
 	  );
 	}
 	function Image(props) {
-	  return _react2.default.createElement('img', _extends({ src: props.source }, props));
+	  return _react2.default.createElement('img', { src: props.source });
 	}
 	function View(props) {
 	  return _react2.default.createElement(
@@ -86,11 +285,16 @@ webpackJsonp([2],{
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',
 	  render: function render() {
-	    var props = this.props;
+	    var _props = this.props;
+	    var onPress = _props.onPress;
+	    var children = _props.children;
+	
+	    var restProps = _objectWithoutProperties(_props, ['onPress', 'children']);
+	
 	    return _react2.default.createElement(
 	      'div',
-	      _extends({}, props, { onClick: props.onPress }),
-	      props.children
+	      _extends({}, restProps, { onClick: onPress }),
+	      children
 	    );
 	  }
 	});
@@ -113,9 +317,11 @@ webpackJsonp([2],{
 	};
 	
 	var pagingStyles = exports.pagingStyles = {
-	  listview: {
-	    height: '100%',
-	    backgroundColor: '#B0C4DE'
+	  customScroller: {
+	    margin: '0 auto',
+	    width: '80%',
+	    height: 300,
+	    overflow: 'auto'
 	  },
 	  header: {
 	    height: 140,
@@ -220,197 +426,6 @@ webpackJsonp([2],{
 	    );
 	  }
 	});
-
-/***/ },
-
-/***/ 193:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	__webpack_require__(2);
-	
-	var _react = __webpack_require__(3);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(160);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _rmcListView = __webpack_require__(161);
-	
-	var _rmcListView2 = _interopRequireDefault(_rmcListView);
-	
-	var _util = __webpack_require__(192);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var NUM_SECTIONS = 20; // use jsx to render html, do not modify simple.html
-	
-	var NUM_ROWS_PER_SECTION = 10;
-	var pageIndex = 0;
-	
-	var Demo = _react2.default.createClass({
-	  displayName: 'Demo',
-	  getInitialState: function getInitialState() {
-	    var _this = this;
-	
-	    var getSectionData = function getSectionData(dataBlob, sectionID) {
-	      return dataBlob[sectionID];
-	    };
-	    var getRowData = function getRowData(dataBlob, sectionID, rowID) {
-	      return dataBlob[rowID];
-	    };
-	
-	    var dataSource = new _rmcListView2.default.DataSource({
-	      getRowData: getRowData,
-	      getSectionHeaderData: getSectionData,
-	      rowHasChanged: function rowHasChanged(row1, row2) {
-	        return row1 !== row2;
-	      },
-	      sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
-	        return s1 !== s2;
-	      }
-	    });
-	
-	    this.dataBlob = {};
-	    this.sectionIDs = [];
-	    this.rowIDs = [];
-	    this._genData = function () {
-	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	
-	      for (var i = 0; i < NUM_SECTIONS; i++) {
-	        var ii = pIndex * NUM_SECTIONS + i;
-	        var sectionName = 'Section ' + ii;
-	        _this.sectionIDs.push(sectionName);
-	        _this.dataBlob[sectionName] = sectionName;
-	        _this.rowIDs[ii] = [];
-	
-	        for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-	          var rowName = 'S' + ii + ', R' + jj;
-	          _this.rowIDs[ii].push(rowName);
-	          _this.dataBlob[rowName] = rowName;
-	        }
-	      }
-	      // new object ref
-	      _this.sectionIDs = [].concat(_this.sectionIDs);
-	      _this.rowIDs = [].concat(_this.rowIDs);
-	    };
-	    this._genData();
-	    return {
-	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
-	      headerPressCount: 0
-	    };
-	  },
-	  renderRow: function renderRow(rowData) {
-	    return _react2.default.createElement(_util.Thumb, { text: rowData });
-	  },
-	  renderSectionHeader: function renderSectionHeader(sectionData) {
-	    return _react2.default.createElement(
-	      _util.View,
-	      { style: _util.pagingStyles.section },
-	      _react2.default.createElement(
-	        _util.Text,
-	        { style: _util.pagingStyles.text },
-	        sectionData
-	      )
-	    );
-	  },
-	  renderHeader: function renderHeader() {
-	    var headerLikeText = this.state.headerPressCount % 2 ? _react2.default.createElement(
-	      _util.View,
-	      null,
-	      _react2.default.createElement(
-	        _util.Text,
-	        { style: _util.pagingStyles.text },
-	        '1 Like'
-	      )
-	    ) : null;
-	    return _react2.default.createElement(
-	      _util.TouchableOpacity,
-	      { onPress: this._onPressHeader, style: _util.pagingStyles.header },
-	      headerLikeText,
-	      _react2.default.createElement(
-	        _util.View,
-	        null,
-	        _react2.default.createElement(
-	          _util.Text,
-	          { style: _util.pagingStyles.text },
-	          'Table Header (click me)'
-	        )
-	      )
-	    );
-	  },
-	  renderFooter: function renderFooter() {
-	    return _react2.default.createElement(
-	      _util.View,
-	      { style: _util.pagingStyles.header },
-	      _react2.default.createElement(
-	        _util.Text,
-	        { onPress: function onPress() {
-	            return console.log('Footer!');
-	          }, style: _util.pagingStyles.text },
-	        'Table Footer'
-	      )
-	    );
-	  },
-	  componentDidMount: function componentDidMount() {
-	    console.log(this.refs.lv);
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
-	        style: _util.pagingStyles.listview,
-	        dataSource: this.state.dataSource,
-	        renderHeader: this.renderHeader,
-	        renderFooter: this.renderFooter,
-	        renderSectionHeader: this.renderSectionHeader,
-	        renderRow: this.renderRow,
-	        initialListSize: 10,
-	        pageSize: 4,
-	        scrollRenderAheadDistance: 500,
-	        scrollEventThrottle: 100,
-	        onScroll: function onScroll() {
-	          console.log('scroll');
-	        },
-	        onEndReached: this._onEndReached,
-	        onEndReachedThreshold: 500
-	        // renderScrollComponent={props => <div className="for-scroll-demo" {...props} />}
-	        , renderBodyComponent: function renderBodyComponent() {
-	          return _react2.default.createElement('div', { className: 'for-body-demo' });
-	        },
-	        stickyHeader: true,
-	        stickyProps: {
-	          className: 'for-sticky-demo',
-	          stickyStyle: { top: '10px' },
-	          onStickyStateChange: this._onStickyStateChange
-	        },
-	        stickyContainerProps: {
-	          className: 'for-stickyContainer-demo'
-	        }
-	      })
-	    );
-	  },
-	  _onStickyStateChange: function _onStickyStateChange(isSticky) {
-	    // console.log(isSticky);
-	  },
-	  _onPressHeader: function _onPressHeader() {
-	    this.setState({ headerPressCount: this.state.headerPressCount + 1 });
-	  },
-	  _onEndReached: function _onEndReached(event) {
-	    // load new data
-	    console.log('reach end', event);
-	    this._genData(++pageIndex);
-	    this.setState({
-	      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs)
-	    });
-	  }
-	});
-	
-	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
 /***/ }
 

@@ -117,9 +117,11 @@ const View = React.createClass({
     removeClippedSubviews: PropTypes.bool,
   },
   render() {
+    const { children, className, style, onScroll, onCick = () => {} } = this.props;
+    const divProps = { className, style, onScroll, onClick: onCick };
     return (
-      <div {...this.props}>
-        {this.props.children}
+      <div {...divProps}>
+        {children}
       </div>
     );
   }

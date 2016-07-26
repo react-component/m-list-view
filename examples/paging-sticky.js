@@ -110,23 +110,21 @@ const Demo = React.createClass({
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={500}
-        renderScrollComponent={props => <MyScroller {...props} style={styles.customScroller} />}
         renderBodyComponent={() => <div className="for-body-demo" />}
-        
+        // style={{ height: 300 }}
+        stickyHeader
+        stickyProps={{
+          className: 'for-sticky-demo',
+          stickyStyle: { top: '10px' },
+          onStickyStateChange: (isSticky) => {
+            // console.log(isSticky);
+          },
+        }}
+        stickyContainerProps={{
+          className: 'for-stickyContainer-demo',
+        }}
       />
     </div>);
-  },
-});
-
-const MyScroller = React.createClass({
-  render() {
-    const { children, style, onScroll } = this.props;
-    const divProps = { style, onScroll };
-    return (
-      <div className="c-s" {...divProps}>
-        {children}
-      </div>
-    )
   },
 });
 

@@ -48,7 +48,7 @@ export function Text(props) {
   return <span {...props}>{props.children}</span>;
 }
 export function Image(props) {
-  return <img src={props.source} {...props} />;
+  return <img src={props.source} />;
 }
 export function View(props) {
   return <div {...props}>{props.children}</div>;
@@ -57,8 +57,8 @@ export function View(props) {
 import React from 'react';
 export const TouchableHighlight = React.createClass({
   render() {
-    const props = this.props;
-    return <div {...props} onClick={props.onPress}>{props.children}</div>;
+    const { onPress, children, ...restProps } = this.props;
+    return <div {...restProps} onClick={onPress}>{children}</div>;
   },
 });
 export const TouchableOpacity = TouchableHighlight;
@@ -80,9 +80,11 @@ export const styles = {
 };
 
 export const pagingStyles = {
-  listview: {
-    height: '100%',
-    backgroundColor: '#B0C4DE',
+  customScroller: {
+    margin: '0 auto',
+    width: '80%',
+    height: 300,
+    overflow: 'auto',
   },
   header: {
     height: 140,

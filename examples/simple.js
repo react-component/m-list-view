@@ -16,12 +16,10 @@ webpackJsonp([3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Thumb = exports.pagingStyles = exports.styles = exports.TouchableOpacity = exports.TouchableHighlight = exports.LOREM_IPSUM = exports.THUMB_URLS = undefined;
+	exports.Thumb = exports.pagingStyles = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	exports._genRows = _genRows;
-	exports.hashCode = hashCode;
 	exports.Text = Text;
 	exports.Image = Image;
 	exports.View = View;
@@ -49,24 +47,6 @@ webpackJsonp([3],{
 	
 	var THUMB_URLS = exports.THUMB_URLS = [like, dislike, call, fist, bandaged, flowers, heart, liking, party, poke, superlike, victory];
 	
-	function _genRows(pressData) {
-	  var dataBlob = [];
-	  for (var ii = 0; ii < 100; ii++) {
-	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
-	  }
-	  return dataBlob;
-	}
-	
-	function hashCode(str) {
-	  var hash = 15;
-	  for (var ii = str.length - 1; ii >= 0; ii--) {
-	    hash = (hash << 5) - hash + str.charCodeAt(ii);
-	  }
-	  return hash;
-	}
-	
-	var LOREM_IPSUM = exports.LOREM_IPSUM = 'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.';
-	
 	function Text(props) {
 	  return _react2.default.createElement(
 	    'span',
@@ -75,7 +55,15 @@ webpackJsonp([3],{
 	  );
 	}
 	function Image(props) {
-	  return _react2.default.createElement('img', { src: props.source });
+	  return _react2.default.createElement('img', {
+	    style: {
+	      width: 64,
+	      height: 64,
+	      marginHorizontal: 10,
+	      backgroundColor: 'transparent'
+	    },
+	    src: props.source
+	  });
 	}
 	function View(props) {
 	  return _react2.default.createElement(
@@ -103,47 +91,7 @@ webpackJsonp([3],{
 	});
 	var TouchableOpacity = exports.TouchableOpacity = TouchableHighlight;
 	
-	var styles = exports.styles = {
-	  row: {
-	    flexDirection: 'row',
-	    justifyContent: 'center',
-	    padding: 10,
-	    backgroundColor: '#F6F6F6'
-	  },
-	  thumb: {
-	    width: 64,
-	    height: 64
-	  },
-	  text: {
-	    flex: 1
-	  }
-	};
-	
 	var pagingStyles = exports.pagingStyles = {
-	  customScroller: {
-	    margin: '0 auto',
-	    width: '80%',
-	    height: 300,
-	    overflow: 'auto'
-	  },
-	  header: {
-	    height: 140,
-	    justifyContent: 'center',
-	    alignItems: 'center',
-	    backgroundColor: '#3B5998',
-	    flexDirection: 'row'
-	  },
-	  text: {
-	    color: 'white',
-	    paddingHorizontal: 8
-	  },
-	  rowText: {
-	    color: '#888888'
-	  },
-	  thumbText: {
-	    fontSize: 20,
-	    color: '#888888'
-	  },
 	  buttonContents: {
 	    display: 'flex',
 	    flexDirection: 'row',
@@ -155,12 +103,6 @@ webpackJsonp([3],{
 	    backgroundColor: '#EAEAEA',
 	    borderRadius: 3,
 	    paddingVertical: 10
-	  },
-	  img: {
-	    width: 64,
-	    height: 64,
-	    marginHorizontal: 10,
-	    backgroundColor: 'transparent'
 	  },
 	  section: {
 	    flexDirection: 'column',
@@ -218,13 +160,13 @@ webpackJsonp([3],{
 	      {
 	        onPress: this._onPressThumb,
 	        style: flattenStyle([pagingStyles.buttonContents, { flexDirection: this.state.dir }]) },
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
 	      this.state.dir === 'column' ? _react2.default.createElement(
 	        Text,
 	        null,
-	        'Oooo, look at this new text!  So awesome it may just be crazy. Let me keep typing here so it wraps at least one line.'
+	        'Oooo, Let me keep typing here so it wraps at least one line.'
 	      ) : _react2.default.createElement(Text, null)
 	    );
 	  }
@@ -255,6 +197,38 @@ webpackJsonp([3],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var styles = {
+	  row: {
+	    flexDirection: 'row',
+	    justifyContent: 'center',
+	    padding: 10,
+	    backgroundColor: '#F6F6F6'
+	  },
+	  thumb: {
+	    width: 64,
+	    height: 64
+	  },
+	  text: {
+	    flex: 1
+	  }
+	}; // use jsx to render html, do not modify simple.html
+	
+	function _genRows(pressData) {
+	  var dataBlob = [];
+	  for (var ii = 0; ii < 20; ii++) {
+	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
+	  }
+	  return dataBlob;
+	}
+	
+	function hashCode(str) {
+	  var hash = 15;
+	  for (var ii = str.length - 1; ii >= 0; ii--) {
+	    hash = (hash << 5) - hash + str.charCodeAt(ii);
+	  }
+	  return hash;
+	}
+	
 	var Demo = _react2.default.createClass({
 	  displayName: 'Demo',
 	  getInitialState: function getInitialState() {
@@ -262,7 +236,7 @@ webpackJsonp([3],{
 	        return r1 !== r2;
 	      } });
 	    return {
-	      dataSource: ds.cloneWithRows((0, _util._genRows)({}))
+	      dataSource: ds.cloneWithRows(_genRows({}))
 	    };
 	  },
 	
@@ -275,13 +249,13 @@ webpackJsonp([3],{
 	  _renderRow: function _renderRow(rowData, sectionID, rowID, highlightRow) {
 	    var _this = this;
 	
-	    var rowHash = Math.abs((0, _util.hashCode)(rowData));
+	    var rowHash = Math.abs(hashCode(rowData));
 	    var imgSource = _util.THUMB_URLS[rowHash % _util.THUMB_URLS.length];
 	    return _react2.default.createElement(
 	      _util.TouchableHighlight,
 	      { onPress: function onPress() {
 	          _this._pressData[rowID] = !_this._pressData[rowID];
-	          _this.setState({ dataSource: _this.state.dataSource.cloneWithRows((0, _util._genRows)(_this._pressData)) });
+	          _this.setState({ dataSource: _this.state.dataSource.cloneWithRows(_genRows(_this._pressData)) });
 	          highlightRow(sectionID, rowID);
 	        } },
 	      _react2.default.createElement(
@@ -289,12 +263,12 @@ webpackJsonp([3],{
 	        null,
 	        _react2.default.createElement(
 	          _util.View,
-	          { style: _util.styles.row },
-	          _react2.default.createElement(_util.Image, { style: _util.styles.thumb, source: imgSource }),
+	          { style: styles.row },
+	          _react2.default.createElement(_util.Image, { style: styles.thumb, source: imgSource }),
 	          _react2.default.createElement(
 	            _util.Text,
-	            { style: _util.styles.text },
-	            rowData + ' - ' + _util.LOREM_IPSUM.substr(0, rowHash % 301 + 10)
+	            { style: styles.text },
+	            rowData + ' - Lorem ipsum dolor sit amet'
 	          )
 	        )
 	      )
@@ -314,10 +288,10 @@ webpackJsonp([3],{
 	      style: { height: 300 },
 	      dataSource: this.state.dataSource,
 	      onEndReached: function onEndReached(e) {
-	        return console.log(e);
+	        return alert(e.toString());
 	      },
-	      onEndReachedThreshold: 500,
-	      scrollEventThrottle: 100,
+	      onEndReachedThreshold: 10,
+	      scrollEventThrottle: 20,
 	      pageSize: 5,
 	      renderRow: this._renderRow,
 	      renderSeparator: this._renderSeperator,
@@ -326,7 +300,7 @@ webpackJsonp([3],{
 	      }
 	    });
 	  }
-	}); // use jsx to render html, do not modify simple.html
+	});
 	
 	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 

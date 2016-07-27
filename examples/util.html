@@ -292,29 +292,21 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   victory,
 ];
 
-<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_genRows</span>(<span class="hljs-params">pressData</span>) </span>{
-  <span class="hljs-keyword">const</span> dataBlob = [];
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">100</span>; ii++) {
-    dataBlob.push(<span class="hljs-string">`Row <span class="hljs-subst">${ii + pressData[ii] ? ' (pressed)' : ''}</span>`</span>);
-  }
-  <span class="hljs-keyword">return</span> dataBlob;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hashCode</span>(<span class="hljs-params">str</span>) </span>{
-  <span class="hljs-keyword">let</span> hash = <span class="hljs-number">15</span>;
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = str.length - <span class="hljs-number">1</span>; ii &gt;= <span class="hljs-number">0</span>; ii--) {
-    hash = ((hash &lt;&lt; <span class="hljs-number">5</span>) - hash) + str.charCodeAt(ii);
-  }
-  <span class="hljs-keyword">return</span> hash;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> LOREM_IPSUM = <span class="hljs-string">'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.'</span>;
-
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Text</span>(<span class="hljs-params">props</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>;</span>
 }
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Image</span>(<span class="hljs-params">props</span>) </span>{
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{props.source}</span> /&gt;</span>;</span>
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">img</span>
+      <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
+        <span class="hljs-attribute">width:</span> <span class="hljs-attribute">64</span>,
+        <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>,
+        <span class="hljs-attribute">marginHorizontal:</span> <span class="hljs-attribute">10</span>,
+        <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">transparent</span>',
+      }}
+      <span class="hljs-attribute">src</span>=<span class="hljs-value">{props.source}</span>
+    /&gt;</span>
+  )</span>;
 }
 <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">View</span>(<span class="hljs-params">props</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...props</span>}&gt;</span>{props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
@@ -329,47 +321,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 });
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableOpacity = TouchableHighlight;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> styles = {
-  row: {
-    flexDirection: <span class="hljs-string">'row'</span>,
-    justifyContent: <span class="hljs-string">'center'</span>,
-    padding: <span class="hljs-number">10</span>,
-    backgroundColor: <span class="hljs-string">'#F6F6F6'</span>,
-  },
-  thumb: {
-    width: <span class="hljs-number">64</span>,
-    height: <span class="hljs-number">64</span>,
-  },
-  text: {
-    flex: <span class="hljs-number">1</span>,
-  },
-};
-
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> pagingStyles = {
-  customScroller: {
-    margin: <span class="hljs-string">'0 auto'</span>,
-    width: <span class="hljs-string">'80%'</span>,
-    height: <span class="hljs-number">300</span>,
-    overflow: <span class="hljs-string">'auto'</span>,
-  },
-  header: {
-    height: <span class="hljs-number">140</span>,
-    justifyContent: <span class="hljs-string">'center'</span>,
-    alignItems: <span class="hljs-string">'center'</span>,
-    backgroundColor: <span class="hljs-string">'#3B5998'</span>,
-    flexDirection: <span class="hljs-string">'row'</span>,
-  },
-  text: {
-    color: <span class="hljs-string">'white'</span>,
-    paddingHorizontal: <span class="hljs-number">8</span>,
-  },
-  rowText: {
-    color: <span class="hljs-string">'#888888'</span>,
-  },
-  thumbText: {
-    fontSize: <span class="hljs-number">20</span>,
-    color: <span class="hljs-string">'#888888'</span>,
-  },
   buttonContents: {
     display: <span class="hljs-string">'flex'</span>,
     flexDirection: <span class="hljs-string">'row'</span>,
@@ -381,12 +333,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     backgroundColor: <span class="hljs-string">'#EAEAEA'</span>,
     borderRadius: <span class="hljs-number">3</span>,
     paddingVertical: <span class="hljs-number">10</span>,
-  },
-  img: {
-    width: <span class="hljs-number">64</span>,
-    height: <span class="hljs-number">64</span>,
-    marginHorizontal: <span class="hljs-number">10</span>,
-    backgroundColor: <span class="hljs-string">'transparent'</span>,
   },
   section: {
     flexDirection: <span class="hljs-string">'column'</span>,
@@ -442,13 +388,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableOpacity</span>
         <span class="hljs-attribute">onPress</span>=<span class="hljs-value">{this._onPressThumb}</span>
         <span class="hljs-attribute">style</span>=<span class="hljs-value">{flattenStyle([pagingStyles.buttonContents,</span> { <span class="hljs-attribute">flexDirection:</span> <span class="hljs-attribute">this.state.dir</span> }])}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{pagingStyles.img}</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[this.state.thumbIndex]}</span> /&gt;</span>
         {this.state.dir === 'column' ?
           <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>
-            Oooo, look at this new text!  So awesome it may just be crazy.
-            Let me keep typing here so it wraps at least one line.
+            Oooo, Let me keep typing here so it wraps at least one line.
           <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span> :
           <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> /&gt;</span>
         }

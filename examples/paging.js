@@ -33,8 +33,8 @@ webpackJsonp([1],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var NUM_SECTIONS = 20;
-	var NUM_ROWS_PER_SECTION = 10;
+	var NUM_SECTIONS = 5;
+	var NUM_ROWS_PER_SECTION = 5;
 	var pageIndex = 0;
 	
 	var Demo = _react2.default.createClass({
@@ -86,66 +86,39 @@ webpackJsonp([1],{
 	    this._genData();
 	    return {
 	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
-	      headerPressCount: 0
+	      isLoading: false
 	    };
 	  },
-	  componentDidMount: function componentDidMount() {
-	    console.log(this.refs.lv);
-	  },
-	  renderHeader: function renderHeader() {
+	  _onEndReached: function _onEndReached(event) {
 	    var _this2 = this;
 	
-	    var headerLikeText = this.state.headerPressCount % 2 ? _react2.default.createElement(
-	      _util.View,
-	      null,
-	      _react2.default.createElement(
-	        _util.Text,
-	        { style: _util.pagingStyles.text },
-	        '1 Like'
-	      )
-	    ) : null;
-	    return _react2.default.createElement(
-	      _util.TouchableOpacity,
-	      {
-	        onPress: function onPress() {
-	          _this2.setState({ headerPressCount: _this2.state.headerPressCount + 1 });
-	        },
-	        style: _util.pagingStyles.header },
-	      headerLikeText,
-	      _react2.default.createElement(
-	        _util.View,
-	        null,
-	        _react2.default.createElement(
-	          _util.Text,
-	          { style: _util.pagingStyles.text },
-	          'Table Header (click me)'
-	        )
-	      )
-	    );
-	  },
-	  _onEndReached: function _onEndReached(event) {
 	    // load new data
 	    console.log('reach end', event);
-	    this._genData(++pageIndex);
-	    this.setState({
-	      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs)
-	    });
+	    this.setState({ isLoading: true });
+	    setTimeout(function () {
+	      _this2._genData(++pageIndex);
+	      _this2.setState({
+	        dataSource: _this2.state.dataSource.cloneWithRowsAndSections(_this2.dataBlob, _this2.sectionIDs, _this2.rowIDs),
+	        isLoading: false
+	      });
+	    }, 1000);
 	  },
 	  render: function render() {
+	    var _this3 = this;
+	
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { style: { margin: '10px auto', width: '80%' } },
 	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
 	        dataSource: this.state.dataSource,
-	        renderHeader: this.renderHeader,
-	        renderFooter: function renderFooter() {
+	        renderHeader: function renderHeader() {
 	          return _react2.default.createElement(
 	            _util.View,
-	            { style: _util.pagingStyles.header },
+	            { style: { height: 90, backgroundColor: '#bbb' } },
 	            _react2.default.createElement(
 	              _util.Text,
-	              { style: _util.pagingStyles.text },
-	              'Table Footer'
+	              null,
+	              'Table Header'
 	            )
 	          );
 	        },
@@ -155,7 +128,7 @@ webpackJsonp([1],{
 	            { style: _util.pagingStyles.section },
 	            _react2.default.createElement(
 	              _util.Text,
-	              { style: _util.pagingStyles.text },
+	              { style: { color: 'white' } },
 	              sectionData
 	            )
 	          );
@@ -163,24 +136,60 @@ webpackJsonp([1],{
 	        renderRow: function renderRow(rowData) {
 	          return _react2.default.createElement(_util.Thumb, { text: rowData });
 	        },
+	        renderFooter: function renderFooter() {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: {
+	                backgroundColor: '#bbb', color: 'white',
+	                padding: 30, textAlign: 'center'
+	              } },
+	            _this3.state.isLoading ? 'loading...' : 'loaded'
+	          );
+	        },
 	        initialListSize: 10,
 	        pageSize: 4,
 	        scrollRenderAheadDistance: 500,
-	        scrollEventThrottle: 100,
+	        scrollEventThrottle: 20,
 	        onScroll: function onScroll() {
 	          console.log('scroll');
 	        },
 	        onEndReached: this._onEndReached,
-	        onEndReachedThreshold: 500,
+	        onEndReachedThreshold: 10,
 	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: _util.pagingStyles.customScroller }));
+	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: { height: 300, overflow: 'auto' } }));
 	        },
 	        renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });
 	        }
-	
-	      })
+	      }),
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'note: temporary disable bodyScroll can have a better experience'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              _this3._ctrlBodyScroll(true);
+	            } },
+	          'enableBodyScroll'
+	        ),
+	        ' ',
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              _this3._ctrlBodyScroll(false);
+	            }, style: { color: 'red' } },
+	          'disableBodyScroll'
+	        )
+	      )
 	    );
+	  },
+	  _ctrlBodyScroll: function _ctrlBodyScroll(flag) {
+	    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
 	  }
 	});
 	
@@ -213,12 +222,10 @@ webpackJsonp([1],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Thumb = exports.pagingStyles = exports.styles = exports.TouchableOpacity = exports.TouchableHighlight = exports.LOREM_IPSUM = exports.THUMB_URLS = undefined;
+	exports.Thumb = exports.pagingStyles = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	exports._genRows = _genRows;
-	exports.hashCode = hashCode;
 	exports.Text = Text;
 	exports.Image = Image;
 	exports.View = View;
@@ -246,24 +253,6 @@ webpackJsonp([1],{
 	
 	var THUMB_URLS = exports.THUMB_URLS = [like, dislike, call, fist, bandaged, flowers, heart, liking, party, poke, superlike, victory];
 	
-	function _genRows(pressData) {
-	  var dataBlob = [];
-	  for (var ii = 0; ii < 100; ii++) {
-	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
-	  }
-	  return dataBlob;
-	}
-	
-	function hashCode(str) {
-	  var hash = 15;
-	  for (var ii = str.length - 1; ii >= 0; ii--) {
-	    hash = (hash << 5) - hash + str.charCodeAt(ii);
-	  }
-	  return hash;
-	}
-	
-	var LOREM_IPSUM = exports.LOREM_IPSUM = 'Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.';
-	
 	function Text(props) {
 	  return _react2.default.createElement(
 	    'span',
@@ -272,7 +261,15 @@ webpackJsonp([1],{
 	  );
 	}
 	function Image(props) {
-	  return _react2.default.createElement('img', { src: props.source });
+	  return _react2.default.createElement('img', {
+	    style: {
+	      width: 64,
+	      height: 64,
+	      marginHorizontal: 10,
+	      backgroundColor: 'transparent'
+	    },
+	    src: props.source
+	  });
 	}
 	function View(props) {
 	  return _react2.default.createElement(
@@ -300,47 +297,7 @@ webpackJsonp([1],{
 	});
 	var TouchableOpacity = exports.TouchableOpacity = TouchableHighlight;
 	
-	var styles = exports.styles = {
-	  row: {
-	    flexDirection: 'row',
-	    justifyContent: 'center',
-	    padding: 10,
-	    backgroundColor: '#F6F6F6'
-	  },
-	  thumb: {
-	    width: 64,
-	    height: 64
-	  },
-	  text: {
-	    flex: 1
-	  }
-	};
-	
 	var pagingStyles = exports.pagingStyles = {
-	  customScroller: {
-	    margin: '0 auto',
-	    width: '80%',
-	    height: 300,
-	    overflow: 'auto'
-	  },
-	  header: {
-	    height: 140,
-	    justifyContent: 'center',
-	    alignItems: 'center',
-	    backgroundColor: '#3B5998',
-	    flexDirection: 'row'
-	  },
-	  text: {
-	    color: 'white',
-	    paddingHorizontal: 8
-	  },
-	  rowText: {
-	    color: '#888888'
-	  },
-	  thumbText: {
-	    fontSize: 20,
-	    color: '#888888'
-	  },
 	  buttonContents: {
 	    display: 'flex',
 	    flexDirection: 'row',
@@ -352,12 +309,6 @@ webpackJsonp([1],{
 	    backgroundColor: '#EAEAEA',
 	    borderRadius: 3,
 	    paddingVertical: 10
-	  },
-	  img: {
-	    width: 64,
-	    height: 64,
-	    marginHorizontal: 10,
-	    backgroundColor: 'transparent'
 	  },
 	  section: {
 	    flexDirection: 'column',
@@ -415,13 +366,13 @@ webpackJsonp([1],{
 	      {
 	        onPress: this._onPressThumb,
 	        style: flattenStyle([pagingStyles.buttonContents, { flexDirection: this.state.dir }]) },
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
-	      _react2.default.createElement(Image, { style: pagingStyles.img, source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
+	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
 	      this.state.dir === 'column' ? _react2.default.createElement(
 	        Text,
 	        null,
-	        'Oooo, look at this new text!  So awesome it may just be crazy. Let me keep typing here so it wraps at least one line.'
+	        'Oooo, Let me keep typing here so it wraps at least one line.'
 	      ) : _react2.default.createElement(Text, null)
 	    );
 	  }

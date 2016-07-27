@@ -4,7 +4,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, pagingStyles as styles, TouchableOpacity, Thumb } from './util';
+import { View, Text, pagingStyles as styles, Thumb } from './util';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -56,25 +56,6 @@ const Demo = React.createClass({
   componentDidMount() {
     console.log(this.refs.lv);
   },
-  renderHeader() {
-    let headerLikeText = this.state.headerPressCount % 2 ?
-      <View><Text style={styles.text}>1 Like</Text></View> :
-      null;
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.setState({ headerPressCount: this.state.headerPressCount + 1 });
-        }}
-        style={styles.header}>
-        {headerLikeText}
-        <View>
-          <Text style={styles.text}>
-            Table Header (click me)
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  },
   _onEndReached(event) {
     // load new data
     console.log('reach end', event);
@@ -87,22 +68,24 @@ const Demo = React.createClass({
     return (<div>
       <ListView ref="lv"
         dataSource={this.state.dataSource}
-        renderHeader={this.renderHeader}
-        renderFooter={() => (
-          <View style={styles.header}>
-            <Text style={styles.text}>
-              Table Footer
-            </Text>
+        renderHeader={() => (
+          <View style={{ height: 90, backgroundColor: '#bbb' }}>
+            <Text>Table Header</Text>
           </View>
         )}
         renderSectionHeader={(sectionData) => (
           <View style={styles.section}>
-            <Text style={styles.text}>
+            <Text style={{ color: 'white' }}>
               {sectionData}
             </Text>
           </View>
         )}
-        renderRow={(rowData) => (<Thumb text={rowData} />)}
+        renderRow={(rowData) => (<Thumb text={rowData} />) }
+        renderFooter={() => (
+          <View style={{ height: 90, backgroundColor: '#bbb', textAlign: 'center' }}>
+            Table Footer
+          </View>
+        )}
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}

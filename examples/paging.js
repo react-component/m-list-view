@@ -4,10 +4,10 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, pagingStyles as styles, TouchableOpacity, Thumb } from './util';
+import { View, Text, pagingStyles as styles, Thumb } from './util';
 
-const NUM_SECTIONS = 20;
-const NUM_ROWS_PER_SECTION = 10;
+const NUM_SECTIONS = 5;
+const NUM_ROWS_PER_SECTION = 5;
 let pageIndex = 0;
 
 const Demo = React.createClass({
@@ -50,72 +50,66 @@ const Demo = React.createClass({
     this._genData();
     return {
       dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
-      headerPressCount: 0,
+      isLoading: false,
     };
-  },
-  componentDidMount() {
-    console.log(this.refs.lv);
-  },
-  renderHeader() {
-    let headerLikeText = this.state.headerPressCount % 2 ?
-      <View><Text style={styles.text}>1 Like</Text></View> :
-      null;
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.setState({ headerPressCount: this.state.headerPressCount + 1 });
-        }}
-        style={styles.header}>
-        {headerLikeText}
-        <View>
-          <Text style={styles.text}>
-            Table Header (click me)
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
   },
   _onEndReached(event) {
     // load new data
     console.log('reach end', event);
-    this._genData(++pageIndex);
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
-    });
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      this._genData(++pageIndex);
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+        isLoading: false,
+      });
+    }, 1000);
   },
   render() {
-    return (<div>
+    return (<div style={{ margin: '10px auto', width: '80%' }}>
       <ListView ref="lv"
         dataSource={this.state.dataSource}
-        renderHeader={this.renderHeader}
-        renderFooter={() => (
-          <View style={styles.header}>
-            <Text style={styles.text}>
-              Table Footer
-            </Text>
+        renderHeader={() => (
+          <View style={{ height: 90, backgroundColor: '#bbb' }}>
+            <Text>Table Header</Text>
           </View>
         )}
         renderSectionHeader={(sectionData) => (
           <View style={styles.section}>
-            <Text style={styles.text}>
+            <Text style={{ color: 'white' }}>
               {sectionData}
             </Text>
           </View>
         )}
-        renderRow={(rowData) => (<Thumb text={rowData} />)}
+        renderRow={(rowData) => (<Thumb text={rowData} />) }
+        renderFooter={() => (
+          <View style={{
+            backgroundColor: '#bbb', color: 'white',
+            padding: 30, textAlign: 'center',
+          }}>
+            {this.state.isLoading ? 'loading...' : 'loaded'}
+          </View>
+        )}
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
-        scrollEventThrottle={100}
+        scrollEventThrottle={20}
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
-        onEndReachedThreshold={500}
-        renderScrollComponent={props => <MyScroller {...props} style={styles.customScroller} />}
+        onEndReachedThreshold={10}
+        renderScrollComponent={props => <MyScroller {...props} style={{ height: 300, overflow: 'auto'}} />}
         renderBodyComponent={() => <div className="for-body-demo" />}
-        
       />
+      <div>
+        <p>note: temporary disable bodyScroll can have a better experience</p>
+        <button onClick={() => { this._ctrlBodyScroll(true) }}>enableBodyScroll</button>&nbsp;
+        <button onClick={() => { this._ctrlBodyScroll(false) } } style={{ color: 'red' }}>disableBodyScroll</button>
+      </div>
     </div>);
   },
+  _ctrlBodyScroll(flag) {
+    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
+  }
 });
 
 const MyScroller = React.createClass({

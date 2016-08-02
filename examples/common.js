@@ -26906,38 +26906,30 @@
 	
 	var _ListView2 = _interopRequireDefault(_ListView);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _indexedUtil = __webpack_require__(295);
 	
-	function getOffsetTop(elem) {
-	  var offsetTop = 0;
-	  do {
-	    if (!isNaN(elem.offsetTop)) {
-	      offsetTop += elem.offsetTop;
-	    }
-	  } while (elem = elem.offsetParent);
-	  return offsetTop;
-	}
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var IndexedList = function (_React$Component) {
 	  (0, _inherits3.default)(IndexedList, _React$Component);
 	
-	  function IndexedList() {
-	    var _temp, _this, _ret;
-	
+	  function IndexedList(props) {
 	    (0, _classCallCheck3.default)(this, IndexedList);
 	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
 	
-	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.sectionComponents = {}, _this.onQuickSearchTop = function (sectionID, topId) {
+	    _this.sectionComponents = {};
+	
+	    _this.onQuickSearchTop = function (sectionID, topId) {
 	      if (_this.props.stickyHeader) {
 	        window.document.body.scrollTop = 0;
 	      } else {
 	        _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
 	      }
 	      _this.props.onQuickSearch(sectionID, topId);
-	    }, _this.onQuickSearch = function (sectionID) {
+	    };
+	
+	    _this.onQuickSearch = function (sectionID) {
 	      var lv = _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll);
 	      var sec = _reactDom2.default.findDOMNode(_this.sectionComponents[sectionID]);
 	      if (_this.props.stickyHeader) {
@@ -26946,13 +26938,86 @@
 	        if (stickyComponent && stickyComponent.refs.placeholder) {
 	          sec = _reactDom2.default.findDOMNode(stickyComponent.refs.placeholder);
 	        }
-	        window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
+	        window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + (0, _indexedUtil.getOffsetTop)(lv);
 	      } else {
 	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
 	      }
 	      _this.props.onQuickSearch(sectionID);
-	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    };
+	
+	    _this.onTouchStart = function (e) {
+	      // e.preventDefault();
+	      _this._target = e.target;
+	      _this._basePos = _this.refs.quickSearchBar.getBoundingClientRect();
+	      var overValue = _this._target.getAttribute('data-qf-target');
+	      _this.setState({
+	        qsOver: overValue
+	      });
+	    };
+	
+	    _this.onTouchMove = function (e) {
+	      e.preventDefault();
+	      if (_this._target) {
+	        var ex = (0, _indexedUtil._event)(e);
+	        var basePos = _this._basePos;
+	        var _pos = void 0;
+	        if (ex.clientY >= basePos.top && ex.clientY <= basePos.top + _this._qsHeight) {
+	          _pos = Math.floor((ex.clientY - basePos.top) / _this._avgH);
+	          var target = void 0;
+	          if (_pos in _this._hCache) {
+	            target = _this._hCache[_pos][0];
+	          }
+	          if (target) {
+	            var overValue = target.getAttribute('data-qf-target');
+	            if (_this._target !== target) {
+	              if (_this.props.quickSearchBarTop.value === overValue) {
+	                _this.onQuickSearchTop(undefined, overValue);
+	              } else {
+	                _this.onQuickSearch(overValue);
+	              }
+	            }
+	            _this.setState({
+	              qsOver: overValue
+	            });
+	            _this._target = target;
+	          }
+	        }
+	      }
+	    };
+	
+	    _this.onTouchEnd = function (e) {
+	      if (!_this._target) {
+	        return;
+	      }
+	      _this._target = null;
+	      _this.setState({
+	        qsOver: false
+	      });
+	    };
+	
+	    _this.state = {
+	      qsOver: false
+	    };
+	    return _this;
 	  }
+	
+	  IndexedList.prototype.componentDidMount = function componentDidMount() {
+	    var quickSearchBar = this.refs.quickSearchBar;
+	    var height = quickSearchBar.offsetHeight;
+	    var hCache = [];
+	    [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach(function (d) {
+	      hCache.push([d]);
+	    });
+	    var _avgH = height / hCache.length;
+	    var _top = 0;
+	    for (var i = 0, len = hCache.length; i < len; i++) {
+	      _top = i * _avgH;
+	      hCache[i][1] = [_top, _top + _avgH];
+	    }
+	    this._qsHeight = height;
+	    this._avgH = _avgH;
+	    this._hCache = hCache;
+	  };
 	
 	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
 	    var _this2 = this;
@@ -26969,20 +27034,37 @@
 	    });
 	    return _react2.default.createElement(
 	      'ul',
-	      { className: prefixCls + '-quick-search-bar', style: quickSearchBarStyle },
+	      { ref: 'quickSearchBar',
+	        className: prefixCls + '-quick-search-bar', style: quickSearchBarStyle,
+	        onTouchStart: function onTouchStart(e) {
+	          return _this2.onTouchStart(e);
+	        },
+	        onTouchMove: function onTouchMove(e) {
+	          return _this2.onTouchMove(e);
+	        },
+	        onTouchEnd: function onTouchEnd(e) {
+	          return _this2.onTouchEnd(e);
+	        }
+	      },
 	      _react2.default.createElement(
 	        'li',
-	        { onClick: function onClick() {
+	        { 'data-qf-target': quickSearchBarTop.value,
+	          className: this.state.qsOver === quickSearchBarTop.value ? prefixCls + '-quick-search-bar-over' : '',
+	          onClick: function onClick() {
 	            return _this2.onQuickSearchTop(undefined, quickSearchBarTop.value);
-	          } },
+	          }
+	        },
 	        quickSearchBarTop.label
 	      ),
 	      sectionKvs.map(function (i) {
 	        return _react2.default.createElement(
 	          'li',
-	          { key: i.value, onClick: function onClick() {
+	          { key: i.value, 'data-qf-target': i.value,
+	            className: _this2.state.qsOver === i.value ? prefixCls + '-quick-search-bar-over' : '',
+	            onClick: function onClick() {
 	              return _this2.onQuickSearch(i.value);
-	            } },
+	            }
+	          },
 	          i.label
 	        );
 	      })
@@ -27149,6 +27231,46 @@
 		}
 	}());
 
+
+/***/ },
+/* 295 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getOffsetTop = getOffsetTop;
+	exports._event = _event;
+	function getOffsetTop(elem) {
+	  var offsetTop = 0;
+	  do {
+	    if (!isNaN(elem.offsetTop)) {
+	      offsetTop += elem.offsetTop;
+	    }
+	  } while (elem = elem.offsetParent);
+	  return offsetTop;
+	}
+	
+	var isTouchable = exports.isTouchable = 'ontouchstart' in window;
+	var START = exports.START = isTouchable ? 'touchstart' : 'mousedown';
+	var MOVE = exports.MOVE = isTouchable ? 'touchmove' : 'mousemove';
+	var END = exports.END = isTouchable ? 'touchend' : 'mouseup';
+	var CANCEL = exports.CANCEL = isTouchable ? 'touchcancel' : 'mousecancel';
+	var CLICK = exports.CLICK = isTouchable ? 'touchstart' : 'click';
+	
+	var isBadMobile = /Android[^\d]*(1|2|3|4\.0)/.test(window.navigator.appVersion) || /iPhone[^\d]*(5)/.test(window.navigator.appVersion);
+	
+	function _event(e) {
+	  if (e.touches && e.touches.length) {
+	    return e.touches[0];
+	  }
+	  if (e.changedTouches && e.changedTouches.length) {
+	    return e.changedTouches[0];
+	  }
+	  return e;
+	}
 
 /***/ }
 /******/ ]);

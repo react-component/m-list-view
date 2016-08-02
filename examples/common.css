@@ -19,5 +19,8 @@ li {
 .am-indexed-list-quick-search-bar li {
   padding: 5px 10px;
 }
+.am-indexed-list-quick-search-bar-over {
+  background-color: rgba(128, 128, 128, 0.2);
+}
 
 /*# sourceMappingURL=common.css.map*/

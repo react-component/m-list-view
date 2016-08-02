@@ -115,6 +115,9 @@ webpackJsonp([0],[
 	        },
 	        quickSearchBarStyle: {
 	          top: 20
+	        },
+	        onQuickSearch: function onQuickSearch(sectionID) {
+	          return console.log(sectionID);
 	        }
 	      })
 	    );

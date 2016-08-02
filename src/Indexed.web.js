@@ -95,7 +95,7 @@ export default class IndexedList extends React.Component {
             } else {
               this.onQuickSearch(overValue);
             }
-            this.updateCls(target, true);
+            this.updateCls(target);
           }
           this._target = target;
         }

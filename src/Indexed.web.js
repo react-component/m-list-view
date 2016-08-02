@@ -17,12 +17,12 @@ export default class IndexedList extends React.Component {
     onQuickSearch: () => { },
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      qsOver: false,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     qsOver: false,
+  //   };
+  // }
 
   componentDidMount() {
     const quickSearchBar = this.refs.quickSearchBar;
@@ -69,13 +69,11 @@ export default class IndexedList extends React.Component {
   }
 
   onTouchStart = (e) => {
-    // e.preventDefault();
     this._target = e.target;
     this._basePos = this.refs.quickSearchBar.getBoundingClientRect();
-    const overValue = this._target.getAttribute('data-qf-target');
-    this.setState({
-      qsOver: overValue,
-    });
+    document.addEventListener('touchmove', this._disableParent, false);
+    document.body.className = `${document.body.className} ${this.props.prefixCls}-qsb-moving`;
+    this.updateCls(this._target);
   }
   onTouchMove = (e) => {
     e.preventDefault();
@@ -97,10 +95,8 @@ export default class IndexedList extends React.Component {
             } else {
               this.onQuickSearch(overValue);
             }
+            this.updateCls(target, true);
           }
-          this.setState({
-            qsOver: overValue,
-          });
           this._target = target;
         }
       }
@@ -110,10 +106,27 @@ export default class IndexedList extends React.Component {
     if (!this._target) {
       return;
     }
+    document.removeEventListener('touchmove', this._disableParent, false);
+    document.body.className = document.body.className.replace(
+      new RegExp(`${this.props.prefixCls}-qsb-moving`, 'g'), '');
+    this.updateCls(this._target, true);
     this._target = null;
-    this.setState({
-      qsOver: false,
+  }
+
+  updateCls = (el, end) => {
+    const cls = `${this.props.prefixCls}-quick-search-bar-over`;
+    // can not use setState to change className, it has a big performance issue! 
+    this._hCache.forEach((d) => {
+      d[0].className = d[0].className.replace(cls, '');
     });
+    if (!end) {
+      el.className = `${el.className} ${cls}`;
+    }
+  }
+
+  _disableParent = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
@@ -130,10 +143,9 @@ export default class IndexedList extends React.Component {
         onTouchStart={e => this.onTouchStart(e)}
         onTouchMove={e => this.onTouchMove(e)}
         onTouchEnd={e => this.onTouchEnd(e)}
+        onTouchCancel={e => this.onTouchEnd(e)}
       >
         <li data-qf-target={quickSearchBarTop.value}
-          className={
-            this.state.qsOver === quickSearchBarTop.value ? `${prefixCls}-quick-search-bar-over` : ''}
           onClick={() => this.onQuickSearchTop(undefined, quickSearchBarTop.value) }
         >
           {quickSearchBarTop.label}
@@ -141,8 +153,6 @@ export default class IndexedList extends React.Component {
         {sectionKvs.map(i => {
           return (
             <li key={i.value} data-qf-target={i.value}
-              className={
-                this.state.qsOver === i.value ? `${prefixCls}-quick-search-bar-over` : ''}
               onClick={() => this.onQuickSearch(i.value) }
             >
               {i.label}

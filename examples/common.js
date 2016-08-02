@@ -26913,23 +26913,23 @@
 	var IndexedList = function (_React$Component) {
 	  (0, _inherits3.default)(IndexedList, _React$Component);
 	
-	  function IndexedList(props) {
+	  function IndexedList() {
+	    var _temp, _this, _ret;
+	
 	    (0, _classCallCheck3.default)(this, IndexedList);
 	
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
 	
-	    _this.sectionComponents = {};
-	
-	    _this.onQuickSearchTop = function (sectionID, topId) {
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.sectionComponents = {}, _this.onQuickSearchTop = function (sectionID, topId) {
 	      if (_this.props.stickyHeader) {
 	        window.document.body.scrollTop = 0;
 	      } else {
 	        _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
 	      }
 	      _this.props.onQuickSearch(sectionID, topId);
-	    };
-	
-	    _this.onQuickSearch = function (sectionID) {
+	    }, _this.onQuickSearch = function (sectionID) {
 	      var lv = _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll);
 	      var sec = _reactDom2.default.findDOMNode(_this.sectionComponents[sectionID]);
 	      if (_this.props.stickyHeader) {
@@ -26943,19 +26943,13 @@
 	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
 	      }
 	      _this.props.onQuickSearch(sectionID);
-	    };
-	
-	    _this.onTouchStart = function (e) {
-	      // e.preventDefault();
+	    }, _this.onTouchStart = function (e) {
 	      _this._target = e.target;
 	      _this._basePos = _this.refs.quickSearchBar.getBoundingClientRect();
-	      var overValue = _this._target.getAttribute('data-qf-target');
-	      _this.setState({
-	        qsOver: overValue
-	      });
-	    };
-	
-	    _this.onTouchMove = function (e) {
+	      document.addEventListener('touchmove', _this._disableParent, false);
+	      document.body.className = document.body.className + ' ' + _this.props.prefixCls + '-qsb-moving';
+	      _this.updateCls(_this._target);
+	    }, _this.onTouchMove = function (e) {
 	      e.preventDefault();
 	      if (_this._target) {
 	        var ex = (0, _indexedUtil._event)(e);
@@ -26975,31 +26969,41 @@
 	              } else {
 	                _this.onQuickSearch(overValue);
 	              }
+	              _this.updateCls(target, true);
 	            }
-	            _this.setState({
-	              qsOver: overValue
-	            });
 	            _this._target = target;
 	          }
 	        }
 	      }
-	    };
-	
-	    _this.onTouchEnd = function (e) {
+	    }, _this.onTouchEnd = function (e) {
 	      if (!_this._target) {
 	        return;
 	      }
+	      document.removeEventListener('touchmove', _this._disableParent, false);
+	      document.body.className = document.body.className.replace(new RegExp(_this.props.prefixCls + '-qsb-moving', 'g'), '');
+	      _this.updateCls(_this._target, true);
 	      _this._target = null;
-	      _this.setState({
-	        qsOver: false
+	    }, _this.updateCls = function (el, end) {
+	      var cls = _this.props.prefixCls + '-quick-search-bar-over';
+	      // can not use setState to change className, it has a big performance issue! 
+	      _this._hCache.forEach(function (d) {
+	        d[0].className = d[0].className.replace(cls, '');
 	      });
-	    };
-	
-	    _this.state = {
-	      qsOver: false
-	    };
-	    return _this;
+	      if (!end) {
+	        el.className = el.className + ' ' + cls;
+	      }
+	    }, _this._disableParent = function (e) {
+	      e.preventDefault();
+	      e.stopPropagation();
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
 	  }
+	
+	  // constructor(props) {
+	  //   super(props);
+	  //   this.state = {
+	  //     qsOver: false,
+	  //   };
+	  // }
 	
 	  IndexedList.prototype.componentDidMount = function componentDidMount() {
 	    var quickSearchBar = this.refs.quickSearchBar;
@@ -27044,12 +27048,14 @@
 	        },
 	        onTouchEnd: function onTouchEnd(e) {
 	          return _this2.onTouchEnd(e);
+	        },
+	        onTouchCancel: function onTouchCancel(e) {
+	          return _this2.onTouchEnd(e);
 	        }
 	      },
 	      _react2.default.createElement(
 	        'li',
 	        { 'data-qf-target': quickSearchBarTop.value,
-	          className: this.state.qsOver === quickSearchBarTop.value ? prefixCls + '-quick-search-bar-over' : '',
 	          onClick: function onClick() {
 	            return _this2.onQuickSearchTop(undefined, quickSearchBarTop.value);
 	          }
@@ -27060,7 +27066,6 @@
 	        return _react2.default.createElement(
 	          'li',
 	          { key: i.value, 'data-qf-target': i.value,
-	            className: _this2.state.qsOver === i.value ? prefixCls + '-quick-search-bar-over' : '',
 	            onClick: function onClick() {
 	              return _this2.onQuickSearch(i.value);
 	            }

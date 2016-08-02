@@ -22,5 +22,8 @@ li {
 .am-indexed-list-quick-search-bar-over {
   background-color: rgba(128, 128, 128, 0.2);
 }
+.am-indexed-list-qsb-moving {
+  overflow: hidden;
+}
 
 /*# sourceMappingURL=common.css.map*/

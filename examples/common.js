@@ -26969,7 +26969,7 @@
 	              } else {
 	                _this.onQuickSearch(overValue);
 	              }
-	              _this.updateCls(target, true);
+	              _this.updateCls(target);
 	            }
 	            _this._target = target;
 	          }

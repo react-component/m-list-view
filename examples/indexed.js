@@ -73,6 +73,7 @@ const Demo = React.createClass({
         quickSearchBarStyle={{
           top: 20,
         }}
+        onQuickSearch={(sectionID) => console.log(sectionID)}
       />
     </div>);
   },

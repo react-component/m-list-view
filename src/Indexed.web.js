@@ -140,10 +140,10 @@ export default class IndexedList extends React.Component {
     return (
       <ul ref="quickSearchBar"
         className={`${prefixCls}-quick-search-bar`} style={quickSearchBarStyle}
-        onTouchStart={e => this.onTouchStart(e)}
-        onTouchMove={e => this.onTouchMove(e)}
-        onTouchEnd={e => this.onTouchEnd(e)}
-        onTouchCancel={e => this.onTouchEnd(e)}
+        onTouchStart={this.onTouchStart}
+        onTouchMove={this.onTouchMove}
+        onTouchEnd={this.onTouchEnd}
+        onTouchCancel={this.onTouchEnd}
       >
         <li data-qf-target={quickSearchBarTop.value}
           onClick={() => this.onQuickSearchTop(undefined, quickSearchBarTop.value) }

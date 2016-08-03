@@ -27040,18 +27040,10 @@
 	      'ul',
 	      { ref: 'quickSearchBar',
 	        className: prefixCls + '-quick-search-bar', style: quickSearchBarStyle,
-	        onTouchStart: function onTouchStart(e) {
-	          return _this2.onTouchStart(e);
-	        },
-	        onTouchMove: function onTouchMove(e) {
-	          return _this2.onTouchMove(e);
-	        },
-	        onTouchEnd: function onTouchEnd(e) {
-	          return _this2.onTouchEnd(e);
-	        },
-	        onTouchCancel: function onTouchCancel(e) {
-	          return _this2.onTouchEnd(e);
-	        }
+	        onTouchStart: this.onTouchStart,
+	        onTouchMove: this.onTouchMove,
+	        onTouchEnd: this.onTouchEnd,
+	        onTouchCancel: this.onTouchEnd
 	      },
 	      _react2.default.createElement(
 	        'li',

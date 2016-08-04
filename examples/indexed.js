@@ -55,7 +55,7 @@ webpackJsonp([0],[
 	    var sectionIDs = [];
 	    var rowIDs = [];
 	    for (var ii = 0; ii < NUM_SECTIONS; ii++) {
-	      var sectionName = 'Section ' + ii;
+	      var sectionName = String.fromCharCode(65 + ii);
 	      sectionIDs.push(sectionName);
 	      dataBlob[sectionName] = sectionName;
 	      rowIDs[ii] = [];
@@ -70,21 +70,6 @@ webpackJsonp([0],[
 	      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
 	      headerPressCount: 0
 	    };
-	  },
-	  renderRow: function renderRow(rowData) {
-	    return _react2.default.createElement(
-	      'div',
-	      { style: { padding: 10 } },
-	      'Hello: ',
-	      rowData
-	    );
-	  },
-	  renderSectionHeader: function renderSectionHeader(sectionData) {
-	    return _react2.default.createElement(
-	      'div',
-	      { style: { color: 'blue', padding: 10, backgroundColor: '#ddd' } },
-	      sectionData
-	    );
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -106,8 +91,21 @@ webpackJsonp([0],[
 	            'footer'
 	          );
 	        },
-	        renderSectionHeader: this.renderSectionHeader,
-	        renderRow: this.renderRow,
+	        renderSectionHeader: function renderSectionHeader(sectionData) {
+	          return _react2.default.createElement(
+	            'div',
+	            { style: { color: 'blue', padding: 10, backgroundColor: '#ddd' } },
+	            sectionData
+	          );
+	        },
+	        renderRow: function renderRow(rowData) {
+	          return _react2.default.createElement(
+	            'div',
+	            { style: { padding: 10 } },
+	            'Hello: ',
+	            rowData
+	          );
+	        },
 	        stickyHeader: true,
 	        stickyProps: {
 	          stickyStyle: { zIndex: 999 },

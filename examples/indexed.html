@@ -293,7 +293,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">const</span> sectionIDs = [];
     <span class="hljs-keyword">const</span> rowIDs = [];
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
-      <span class="hljs-keyword">const</span> sectionName = <span class="hljs-string">`Section <span class="hljs-subst">${ii}</span>`</span>;
+      <span class="hljs-keyword">const</span> sectionName = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">65</span> + ii);
       sectionIDs.push(sectionName);
       dataBlob[sectionName] = sectionName;
       rowIDs[ii] = [];
@@ -310,39 +310,31 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     };
   },
 
-  renderRow(rowData) {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  },
-
-  renderSectionHeader(sectionData) {
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">ddd</span>' }}&gt;</span>
-        {sectionData}
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    )</span>;
-  },
-
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView.IndexedList</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
         renderFooter={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>footer<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
-        renderSectionHeader={this.renderSectionHeader}
-        renderRow={this.renderRow}
+        renderSectionHeader={(sectionData) =&gt; (
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">ddd</span>' }}&gt;</span>
+            {sectionData}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>}
+        renderRow={(rowData) =&gt; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
         stickyHeader
         stickyProps={{
-          stickyStyle: { zIndex: 999 },
-          topOffset: -83,
-          // isActive: false,
+          stickyStyle: { zIndex: <span class="hljs-number">999</span> },
+          topOffset: -<span class="hljs-number">83</span>,
+          <span class="hljs-comment">// isActive: false,</span>
         }}
         quickSearchBarStyle={{
-          top: 20,
+          top: <span class="hljs-number">20</span>,
         }}
-        onQuickSearch={(sectionID) =&gt; console.log(sectionID) }
-        delayTime={1000}
+        onQuickSearch={(sectionID) =&gt; <span class="hljs-built_in">console</span>.log(sectionID) }
+        delayTime={<span class="hljs-number">1000</span>}
         delayActivityIndicator={
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         }
 
       /&gt;

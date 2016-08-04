@@ -15,16 +15,34 @@ export default class IndexedList extends React.Component {
     prefixCls: 'am-indexed-list',
     quickSearchBarTop: { value: '#', label: '#' },
     onQuickSearch: () => { },
+    delayTime: 100,
+    // delayActivityIndicator: <div style={{padding: 5, textAlign: 'center'}}>rendering more</div>,
+    delayActivityIndicator: '',
   }
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     qsOver: false,
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      pageSize: props.pageSize,
+      _delay: false,
+    };
+  }
 
   componentDidMount() {
+    // delay render more
+    this.setState({
+      _delay: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        pageSize: this.props.dataSource.getRowCount(),
+        _delay: false,
+      }, () => {
+        this.refs.indexedListView._pageInNewRows();
+      });
+    }, this.props.delayTime);
+
+    // handle quickSearchBar
     const quickSearchBar = this.refs.quickSearchBar;
     const height = quickSearchBar.offsetHeight;
     const hCache = [];
@@ -164,25 +182,34 @@ export default class IndexedList extends React.Component {
   }
 
   render() {
-    const { className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
-      renderSectionHeader, ...other } = this.props;
+    const { _delay, pageSize } = this.state;
+    const {
+      className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
+      initialListSize = Math.min(20, this.props.dataSource.getRowCount()),
+      renderSectionHeader, ...other
+    } = this.props;
     const wrapCls = classNames({
       [className]: className,
       [prefixCls]: true,
     });
-    return (
+    // initialListSize={this.props.dataSource.getRowCount()}
+    return (<div className={`${prefixCls}-container`}>
+      {_delay && this.props.delayActivityIndicator}
       <ListView
         {...other}
         ref="indexedListView"
         className={wrapCls}
-        initialListSize={this.props.dataSource.getRowCount()}
+        initialListSize={initialListSize}
+        pageSize={pageSize}
         renderSectionHeader={(sectionData, sectionID) => (<div
           className={`${prefixCls}-section-header`}
           ref={c => {this.sectionComponents[sectionID] = c;}}
           >
           {renderSectionHeader(sectionData, sectionID)}
         </div>)}
-      >{this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle)}{children}</ListView>
-    );
+      >
+        {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) }{children}
+      </ListView>
+    </div>);
   }
 }

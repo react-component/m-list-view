@@ -73,7 +73,12 @@ const Demo = React.createClass({
         quickSearchBarStyle={{
           top: 20,
         }}
-        onQuickSearch={(sectionID) => console.log(sectionID)}
+        onQuickSearch={(sectionID) => console.log(sectionID) }
+        delayTime={1000}
+        delayActivityIndicator={
+          <div style={{padding: 25, textAlign: 'center' }}>delay rendering...</div>
+        }
+
       />
     </div>);
   },

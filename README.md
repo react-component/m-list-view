@@ -78,6 +78,8 @@ And, use css style instead of react-native's style.
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button
 - quickSearchBarStyle (object) - quickSearchBar's style
 - onQuickSearch (function())
+- delayTime (number) - default 100ms, delay render time
+- delayActivityIndicator (react node) - delay render activity indicator
 
 
 ## Test Case

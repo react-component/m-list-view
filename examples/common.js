@@ -27014,6 +27014,13 @@
 	    return _this;
 	  }
 	
+	  IndexedList.prototype.componentWillUnmount = function componentWillUnmount() {
+	    if (this._timer) {
+	      clearTimeout(this._timer);
+	    }
+	    this._hCache = null;
+	  };
+	
 	  IndexedList.prototype.componentDidMount = function componentDidMount() {
 	    var _this2 = this;
 	
@@ -27021,7 +27028,7 @@
 	    this.setState({
 	      _delay: true
 	    });
-	    setTimeout(function () {
+	    this._timer = setTimeout(function () {
 	      _this2.setState({
 	        pageSize: _this2.props.dataSource.getRowCount(),
 	        _delay: false

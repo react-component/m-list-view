@@ -28,12 +28,19 @@ export default class IndexedList extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+    this._hCache = null;
+  }
+
   componentDidMount() {
     // delay render more
     this.setState({
       _delay: true,
     });
-    setTimeout(() => {
+    this._timer = setTimeout(() => {
       this.setState({
         pageSize: this.props.dataSource.getRowCount(),
         _delay: false,

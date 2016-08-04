@@ -118,7 +118,14 @@ webpackJsonp([0],[
 	        },
 	        onQuickSearch: function onQuickSearch(sectionID) {
 	          return console.log(sectionID);
-	        }
+	        },
+	        delayTime: 1000,
+	        delayActivityIndicator: _react2.default.createElement(
+	          'div',
+	          { style: { padding: 25, textAlign: 'center' } },
+	          'delay rendering...'
+	        )
+	
 	      })
 	    );
 	  }

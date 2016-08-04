@@ -26913,23 +26913,23 @@
 	var IndexedList = function (_React$Component) {
 	  (0, _inherits3.default)(IndexedList, _React$Component);
 	
-	  function IndexedList() {
-	    var _temp, _this, _ret;
-	
+	  function IndexedList(props) {
 	    (0, _classCallCheck3.default)(this, IndexedList);
 	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
 	
-	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.sectionComponents = {}, _this.onQuickSearchTop = function (sectionID, topId) {
+	    _this.sectionComponents = {};
+	
+	    _this.onQuickSearchTop = function (sectionID, topId) {
 	      if (_this.props.stickyHeader) {
 	        window.document.body.scrollTop = 0;
 	      } else {
 	        _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
 	      }
 	      _this.props.onQuickSearch(sectionID, topId);
-	    }, _this.onQuickSearch = function (sectionID) {
+	    };
+	
+	    _this.onQuickSearch = function (sectionID) {
 	      var lv = _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll);
 	      var sec = _reactDom2.default.findDOMNode(_this.sectionComponents[sectionID]);
 	      if (_this.props.stickyHeader) {
@@ -26943,13 +26943,17 @@
 	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
 	      }
 	      _this.props.onQuickSearch(sectionID);
-	    }, _this.onTouchStart = function (e) {
+	    };
+	
+	    _this.onTouchStart = function (e) {
 	      _this._target = e.target;
 	      _this._basePos = _this.refs.quickSearchBar.getBoundingClientRect();
 	      document.addEventListener('touchmove', _this._disableParent, false);
 	      document.body.className = document.body.className + ' ' + _this.props.prefixCls + '-qsb-moving';
 	      _this.updateCls(_this._target);
-	    }, _this.onTouchMove = function (e) {
+	    };
+	
+	    _this.onTouchMove = function (e) {
 	      e.preventDefault();
 	      if (_this._target) {
 	        var ex = (0, _indexedUtil._event)(e);
@@ -26975,7 +26979,9 @@
 	          }
 	        }
 	      }
-	    }, _this.onTouchEnd = function (e) {
+	    };
+	
+	    _this.onTouchEnd = function (e) {
 	      if (!_this._target) {
 	        return;
 	      }
@@ -26983,7 +26989,9 @@
 	      document.body.className = document.body.className.replace(new RegExp(_this.props.prefixCls + '-qsb-moving', 'g'), '');
 	      _this.updateCls(_this._target, true);
 	      _this._target = null;
-	    }, _this.updateCls = function (el, end) {
+	    };
+	
+	    _this.updateCls = function (el, end) {
 	      var cls = _this.props.prefixCls + '-quick-search-bar-over';
 	      // can not use setState to change className, it has a big performance issue! 
 	      _this._hCache.forEach(function (d) {
@@ -26992,20 +27000,37 @@
 	      if (!end) {
 	        el.className = el.className + ' ' + cls;
 	      }
-	    }, _this._disableParent = function (e) {
+	    };
+	
+	    _this._disableParent = function (e) {
 	      e.preventDefault();
 	      e.stopPropagation();
-	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    };
+	
+	    _this.state = {
+	      pageSize: props.pageSize,
+	      _delay: false
+	    };
+	    return _this;
 	  }
 	
-	  // constructor(props) {
-	  //   super(props);
-	  //   this.state = {
-	  //     qsOver: false,
-	  //   };
-	  // }
-	
 	  IndexedList.prototype.componentDidMount = function componentDidMount() {
+	    var _this2 = this;
+	
+	    // delay render more
+	    this.setState({
+	      _delay: true
+	    });
+	    setTimeout(function () {
+	      _this2.setState({
+	        pageSize: _this2.props.dataSource.getRowCount(),
+	        _delay: false
+	      }, function () {
+	        _this2.refs.indexedListView._pageInNewRows();
+	      });
+	    }, this.props.delayTime);
+	
+	    // handle quickSearchBar
 	    var quickSearchBar = this.refs.quickSearchBar;
 	    var height = quickSearchBar.offsetHeight;
 	    var hCache = [];
@@ -27024,7 +27049,7 @@
 	  };
 	
 	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
-	    var _this2 = this;
+	    var _this3 = this;
 	
 	    var _props = this.props;
 	    var dataSource = _props.dataSource;
@@ -27049,7 +27074,7 @@
 	        'li',
 	        { 'data-qf-target': quickSearchBarTop.value,
 	          onClick: function onClick() {
-	            return _this2.onQuickSearchTop(undefined, quickSearchBarTop.value);
+	            return _this3.onQuickSearchTop(undefined, quickSearchBarTop.value);
 	          }
 	        },
 	        quickSearchBarTop.label
@@ -27059,7 +27084,7 @@
 	          'li',
 	          { key: i.value, 'data-qf-target': i.value,
 	            onClick: function onClick() {
-	              return _this2.onQuickSearch(i.value);
+	              return _this3.onQuickSearch(i.value);
 	            }
 	          },
 	          i.label
@@ -27070,39 +27095,51 @@
 	
 	  IndexedList.prototype.render = function render() {
 	    var _classNames,
-	        _this3 = this;
+	        _this4 = this;
 	
+	    var _state = this.state;
+	    var _delay = _state._delay;
+	    var pageSize = _state.pageSize;
 	    var _props2 = this.props;
 	    var className = _props2.className;
 	    var prefixCls = _props2.prefixCls;
 	    var children = _props2.children;
 	    var quickSearchBarTop = _props2.quickSearchBarTop;
 	    var quickSearchBarStyle = _props2.quickSearchBarStyle;
+	    var _props2$initialListSi = _props2.initialListSize;
+	    var initialListSize = _props2$initialListSi === undefined ? Math.min(20, this.props.dataSource.getRowCount()) : _props2$initialListSi;
 	    var _renderSectionHeader = _props2.renderSectionHeader;
-	    var other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'renderSectionHeader']);
+	    var other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'initialListSize', 'renderSectionHeader']);
 	
 	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls, true), _classNames));
+	    // initialListSize={this.props.dataSource.getRowCount()}
 	    return _react2.default.createElement(
-	      _ListView2.default,
-	      (0, _extends3.default)({}, other, {
-	        ref: 'indexedListView',
-	        className: wrapCls,
-	        initialListSize: this.props.dataSource.getRowCount(),
-	        renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
-	          return _react2.default.createElement(
-	            'div',
-	            {
-	              className: prefixCls + '-section-header',
-	              ref: function ref(c) {
-	                _this3.sectionComponents[sectionID] = c;
-	              }
-	            },
-	            _renderSectionHeader(sectionData, sectionID)
-	          );
-	        }
-	      }),
-	      this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
-	      children
+	      'div',
+	      { className: prefixCls + '-container' },
+	      _delay && this.props.delayActivityIndicator,
+	      _react2.default.createElement(
+	        _ListView2.default,
+	        (0, _extends3.default)({}, other, {
+	          ref: 'indexedListView',
+	          className: wrapCls,
+	          initialListSize: initialListSize,
+	          pageSize: pageSize,
+	          renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
+	            return _react2.default.createElement(
+	              'div',
+	              {
+	                className: prefixCls + '-section-header',
+	                ref: function ref(c) {
+	                  _this4.sectionComponents[sectionID] = c;
+	                }
+	              },
+	              _renderSectionHeader(sectionData, sectionID)
+	            );
+	          }
+	        }),
+	        this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
+	        children
+	      )
 	    );
 	  };
 	
@@ -27117,7 +27154,10 @@
 	IndexedList.defaultProps = {
 	  prefixCls: 'am-indexed-list',
 	  quickSearchBarTop: { value: '#', label: '#' },
-	  onQuickSearch: function onQuickSearch() {}
+	  onQuickSearch: function onQuickSearch() {},
+	  delayTime: 100,
+	  // delayActivityIndicator: <div style={{padding: 5, textAlign: 'center'}}>rendering more</div>,
+	  delayActivityIndicator: ''
 	};
 	exports.default = IndexedList;
 	module.exports = exports['default'];

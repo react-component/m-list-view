@@ -27,7 +27,7 @@ const Demo = React.createClass({
     const sectionIDs = [];
     const rowIDs = [];
     for (let ii = 0; ii < NUM_SECTIONS; ii++) {
-      const sectionName = `Section ${ii}`;
+      const sectionName = String.fromCharCode(65 + ii);
       sectionIDs.push(sectionName);
       dataBlob[sectionName] = sectionName;
       rowIDs[ii] = [];
@@ -44,26 +44,18 @@ const Demo = React.createClass({
     };
   },
 
-  renderRow(rowData) {
-    return (<div style={{ padding: 10 }}>Hello: {rowData}</div>);
-  },
-
-  renderSectionHeader(sectionData) {
-    return (
-      <div style={{ color: 'blue', padding: 10, backgroundColor: '#ddd' }}>
-        {sectionData}
-      </div>
-    );
-  },
-
   render() {
     return (<div>
       <ListView.IndexedList
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}
-        renderSectionHeader={this.renderSectionHeader}
-        renderRow={this.renderRow}
+        renderSectionHeader={(sectionData) => (
+          <div style={{ color: 'blue', padding: 10, backgroundColor: '#ddd' }}>
+            {sectionData}
+          </div>
+        )}
+        renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>)}
         stickyHeader
         stickyProps={{
           stickyStyle: { zIndex: 999 },

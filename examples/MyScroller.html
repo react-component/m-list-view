@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>indexed-sticky.js - example - rmc-list-view@0.5.13</title>
+  <title>MyScroller.js - example - rmc-list-view@0.5.13</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -264,85 +264,48 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js">
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
-<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
 
-<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">20</span>;
-<span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
-
-<span class="hljs-keyword">const</span> Demo = React.createClass({
-  getInitialState() {
-    <span class="hljs-keyword">const</span> getSectionData = (dataBlob, sectionID) =&gt; {
-      <span class="hljs-keyword">return</span> dataBlob[sectionID];
-    };
-    <span class="hljs-keyword">const</span> getRowData = (dataBlob, sectionID, rowID) =&gt; {
-      <span class="hljs-keyword">return</span> dataBlob[rowID];
-    };
-
-    <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
-      getRowData: getRowData,
-      getSectionHeaderData: getSectionData,
-      rowHasChanged: (row1, row2) =&gt; row1 !== row2,
-      sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
-    });
-
-    <span class="hljs-keyword">const</span> dataBlob = {};
-    <span class="hljs-keyword">const</span> sectionIDs = [];
-    <span class="hljs-keyword">const</span> rowIDs = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; NUM_SECTIONS; ii++) {
-      <span class="hljs-keyword">const</span> sectionName = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">65</span> + ii);
-      sectionIDs.push(sectionName);
-      dataBlob[sectionName] = sectionName;
-      rowIDs[ii] = [];
-
-      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> jj = <span class="hljs-number">0</span>; jj &lt; NUM_ROWS_PER_SECTION; jj++) {
-        <span class="hljs-keyword">const</span> rowName = <span class="hljs-string">`S<span class="hljs-subst">${ii}</span>, R<span class="hljs-subst">${jj}</span>`</span>;
-        rowIDs[ii].push(rowName);
-        dataBlob[rowName] = rowName;
-      }
+<span class="hljs-keyword">const</span> throttle = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">fn, delay</span>) </span>{
+  <span class="hljs-keyword">let</span> allowSample = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+    <span class="hljs-keyword">if</span> (allowSample) {
+      allowSample = <span class="hljs-literal">false</span>;
+      setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ allowSample = <span class="hljs-literal">true</span>; }, delay);
+      fn(e);
     }
-    <span class="hljs-keyword">return</span> {
-      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
-      headerPressCount: <span class="hljs-number">0</span>,
-    };
+  };
+};
+
+<span class="hljs-keyword">const</span> SCROLLVIEW = <span class="hljs-string">'ScrollView'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> React.createClass({
+  componentDidMount() {
+    <span class="hljs-keyword">this</span>.__handleScroll = <span class="hljs-keyword">this</span>._handleScroll();
+    ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).addEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.__handleScroll);
   },
-
+  componentWillUnmount() {
+    ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).removeEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.__handleScroll);
+  },
+  handleScroll(e) {
+    <span class="hljs-keyword">const</span> { onScroll = (ev) =&gt; { } } = <span class="hljs-keyword">this</span>.props;
+    onScroll(e);
+  },
+  _handleScroll(e) {
+    <span class="hljs-keyword">let</span> handleScroll = (ev) =&gt; {};
+    <span class="hljs-comment">// let handleScroll = this.handleScroll;</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.scrollEventThrottle &amp;&amp; <span class="hljs-keyword">this</span>.props.onScroll) {
+      handleScroll = throttle(<span class="hljs-keyword">this</span>.handleScroll, <span class="hljs-keyword">this</span>.props.scrollEventThrottle);
+    }
+    <span class="hljs-keyword">return</span> handleScroll;
+  },
   render() {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">ListView.IndexedList</span>
-        <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
-        <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
-        renderFooter={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>footer<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
-        renderSectionHeader={(sectionData) =&gt; (
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">ddd</span>' }}&gt;</span>
-            {sectionData}
-          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-        )</span>}
-        renderRow={(rowData) =&gt; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
-        stickyHeader
-        stickyProps={{
-          stickyStyle: { zIndex: <span class="hljs-number">999</span> },
-          topOffset: -<span class="hljs-number">83</span>,
-          <span class="hljs-comment">// isActive: false,</span>
-        }}
-        quickSearchBarStyle={{
-          top: <span class="hljs-number">20</span>,
-        }}
-        onQuickSearch={(sectionID) =&gt; <span class="hljs-built_in">console</span>.log(sectionID) }
-        delayTime={<span class="hljs-number">1000</span>}
-        delayActivityIndicator={
-          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-        }
-
-      /&gt;
-    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+    <span class="hljs-keyword">const</span> { children, className, style } = <span class="hljs-keyword">this</span>.props;
+    <span class="hljs-keyword">const</span> divProps = { className, style };
+    <span class="hljs-keyword">return</span> React.cloneElement(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">{SCROLLVIEW}</span> /&gt;</span>, divProps, children);
   },
 });
-
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">
@@ -353,7 +316,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   
   <script src="common.js?nowrap"></script>
-  <script src="indexed-sticky.js?nowrap"></script>
+  <script src="MyScroller.js?nowrap"></script>
 </body>
 
 </html>

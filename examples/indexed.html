@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>indexed.js - example - rmc-list-view@0.5.12</title>
+  <title>indexed.js - example - rmc-list-view@0.5.13</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.5.12</h1>
+      <h1>rmc-list-view@0.5.13</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -269,6 +269,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
+<span class="hljs-keyword">import</span> MyScroller <span class="hljs-keyword">from</span> <span class="hljs-string">'./MyScroller'</span>;
 
 <span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">20</span>;
 <span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
@@ -334,18 +335,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         }
       /&gt;
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  },
-});
-
-<span class="hljs-keyword">const</span> MyScroller = React.createClass({
-  render() {
-    <span class="hljs-keyword">const</span> { children, style, onScroll } = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">const</span> divProps = { style, onScroll };
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"c-s"</span> {<span class="hljs-attribute">...divProps</span>}&gt;</span>
-        {children}
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    )</span>
   },
 });
 

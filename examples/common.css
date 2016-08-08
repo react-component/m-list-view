@@ -5,9 +5,6 @@ ul,
 li {
   list-style: none;
 }
-.am-indexed-list {
-  position: relative;
-}
 .am-indexed-list-quick-search-bar {
   position: fixed;
   top: 0;

@@ -3,35 +3,116 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(205);
+	module.exports = __webpack_require__(298);
 
 
 /***/ },
 
-/***/ 205:
+/***/ 296:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // use jsx to render html, do not modify simple.html
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	__webpack_require__(2);
+	var _react = __webpack_require__(41);
 	
-	var _react = __webpack_require__(3);
+	var React = _interopRequireWildcard(_react);
 	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(37);
+	var _reactDom = __webpack_require__(75);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(177);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var throttle = function throttle(fn, delay) {
+	  var allowSample = true;
+	  return function (e) {
+	    if (allowSample) {
+	      allowSample = false;
+	      setTimeout(function () {
+	        allowSample = true;
+	      }, delay);
+	      fn(e);
+	    }
+	  };
+	};
+	
+	var SCROLLVIEW = 'ScrollView';
+	
+	exports.default = React.createClass({
+	  displayName: 'MyScroller',
+	  componentDidMount: function componentDidMount() {
+	    this.__handleScroll = this._handleScroll();
+	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.__handleScroll);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.__handleScroll);
+	  },
+	  handleScroll: function handleScroll(e) {
+	    var _props$onScroll = this.props.onScroll;
+	    var onScroll = _props$onScroll === undefined ? function (ev) {} : _props$onScroll;
+	
+	    onScroll(e);
+	  },
+	  _handleScroll: function _handleScroll(e) {
+	    var handleScroll = function handleScroll(ev) {};
+	    // let handleScroll = this.handleScroll;
+	    if (this.props.scrollEventThrottle && this.props.onScroll) {
+	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+	    }
+	    return handleScroll;
+	  },
+	  render: function render() {
+	    var _props = this.props;
+	    var children = _props.children;
+	    var className = _props.className;
+	    var style = _props.style;
+	
+	    var divProps = { className: className, style: style };
+	    return React.cloneElement(React.createElement('div', { ref: SCROLLVIEW }), divProps, children);
+	  }
+	});
+	module.exports = exports['default'];
+
+/***/ },
+
+/***/ 298:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends2 = __webpack_require__(2);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	__webpack_require__(40);
+	
+	var _react = __webpack_require__(41);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(75);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _rmcListView = __webpack_require__(215);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(206);
+	var _util = __webpack_require__(299);
+	
+	var _MyScroller = __webpack_require__(296);
+	
+	var _MyScroller2 = _interopRequireDefault(_MyScroller);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// use jsx to render html, do not modify simple.html
 	
 	var NUM_SECTIONS = 5;
 	var NUM_ROWS_PER_SECTION = 5;
@@ -162,7 +243,7 @@ webpackJsonp([2],{
 	        onEndReached: this._onEndReached,
 	        onEndReachedThreshold: 10,
 	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: { height: 300, overflow: 'auto' } }));
+	          return _react2.default.createElement(_MyScroller2.default, (0, _extends3.default)({}, props, { style: { height: 300, overflow: 'auto' } }));
 	        },
 	        renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });
@@ -199,28 +280,11 @@ webpackJsonp([2],{
 	  }
 	});
 	
-	var MyScroller = _react2.default.createClass({
-	  displayName: 'MyScroller',
-	  render: function render() {
-	    var _props = this.props;
-	    var children = _props.children;
-	    var style = _props.style;
-	    var onScroll = _props.onScroll;
-	
-	    var divProps = { style: style, onScroll: onScroll };
-	    return _react2.default.createElement(
-	      'div',
-	      _extends({ className: 'c-s' }, divProps),
-	      children
-	    );
-	  }
-	});
-	
 	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
 /***/ },
 
-/***/ 206:
+/***/ 299:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -230,19 +294,23 @@ webpackJsonp([2],{
 	});
 	exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _extends2 = __webpack_require__(2);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(218);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 	
 	exports.Text = Text;
 	exports.Image = Image;
 	exports.View = View;
 	
-	var _react = __webpack_require__(3);
+	var _react = __webpack_require__(41);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	var victory = 'https://os.alipayobjects.com/rmsportal/kwihkdUVljwUURM.png';
 	var superlike = 'https://os.alipayobjects.com/rmsportal/pmXtSKUFLsIEJLh.png';
@@ -291,12 +359,11 @@ webpackJsonp([2],{
 	    var _props = this.props;
 	    var onPress = _props.onPress;
 	    var children = _props.children;
-	
-	    var restProps = _objectWithoutProperties(_props, ['onPress', 'children']);
+	    var restProps = (0, _objectWithoutProperties3.default)(_props, ['onPress', 'children']);
 	
 	    return _react2.default.createElement(
 	      'div',
-	      _extends({}, restProps, { onClick: onPress }),
+	      (0, _extends3.default)({}, restProps, { onClick: onPress }),
 	      children
 	    );
 	  }

@@ -3,12 +3,12 @@ webpackJsonp([4],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(208);
+	module.exports = __webpack_require__(301);
 
 
 /***/ },
 
-/***/ 206:
+/***/ 299:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18,19 +18,23 @@ webpackJsonp([4],{
 	});
 	exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _extends2 = __webpack_require__(2);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(218);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 	
 	exports.Text = Text;
 	exports.Image = Image;
 	exports.View = View;
 	
-	var _react = __webpack_require__(3);
+	var _react = __webpack_require__(41);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	var victory = 'https://os.alipayobjects.com/rmsportal/kwihkdUVljwUURM.png';
 	var superlike = 'https://os.alipayobjects.com/rmsportal/pmXtSKUFLsIEJLh.png';
@@ -79,12 +83,11 @@ webpackJsonp([4],{
 	    var _props = this.props;
 	    var onPress = _props.onPress;
 	    var children = _props.children;
-	
-	    var restProps = _objectWithoutProperties(_props, ['onPress', 'children']);
+	    var restProps = (0, _objectWithoutProperties3.default)(_props, ['onPress', 'children']);
 	
 	    return _react2.default.createElement(
 	      'div',
-	      _extends({}, restProps, { onClick: onPress }),
+	      (0, _extends3.default)({}, restProps, { onClick: onPress }),
 	      children
 	    );
 	  }
@@ -164,26 +167,26 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 208:
+/***/ 301:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(2);
+	__webpack_require__(40);
 	
-	var _react = __webpack_require__(3);
+	var _react = __webpack_require__(41);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(37);
+	var _reactDom = __webpack_require__(75);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(177);
+	var _rmcListView = __webpack_require__(215);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(206);
+	var _util = __webpack_require__(299);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	

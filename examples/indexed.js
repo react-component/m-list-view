@@ -1,31 +1,39 @@
-webpackJsonp([0],[
-/* 0 */
+webpackJsonp([0],{
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
 /***/ },
-/* 1 */
+
+/***/ 1:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _extends2 = __webpack_require__(2);
 	
-	__webpack_require__(2);
+	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _react = __webpack_require__(3);
+	__webpack_require__(40);
+	
+	var _react = __webpack_require__(41);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(37);
+	var _reactDom = __webpack_require__(75);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(177);
+	var _rmcListView = __webpack_require__(215);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
+	
+	var _MyScroller = __webpack_require__(296);
+	
+	var _MyScroller2 = _interopRequireDefault(_MyScroller);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -109,7 +117,7 @@ webpackJsonp([0],[
 	          );
 	        },
 	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: { height: 600, overflow: 'auto' } }));
+	          return _react2.default.createElement(_MyScroller2.default, (0, _extends3.default)({}, props, { style: { height: 600, overflow: 'auto' } }));
 	        },
 	        quickSearchBarStyle: {
 	          position: 'absolute',
@@ -129,25 +137,82 @@ webpackJsonp([0],[
 	  }
 	});
 	
-	var MyScroller = _react2.default.createClass({
+	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
+
+/***/ },
+
+/***/ 296:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(41);
+	
+	var React = _interopRequireWildcard(_react);
+	
+	var _reactDom = __webpack_require__(75);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var throttle = function throttle(fn, delay) {
+	  var allowSample = true;
+	  return function (e) {
+	    if (allowSample) {
+	      allowSample = false;
+	      setTimeout(function () {
+	        allowSample = true;
+	      }, delay);
+	      fn(e);
+	    }
+	  };
+	};
+	
+	var SCROLLVIEW = 'ScrollView';
+	
+	exports.default = React.createClass({
 	  displayName: 'MyScroller',
+	  componentDidMount: function componentDidMount() {
+	    this.__handleScroll = this._handleScroll();
+	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.__handleScroll);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.__handleScroll);
+	  },
+	  handleScroll: function handleScroll(e) {
+	    var _props$onScroll = this.props.onScroll;
+	    var onScroll = _props$onScroll === undefined ? function (ev) {} : _props$onScroll;
+	
+	    onScroll(e);
+	  },
+	  _handleScroll: function _handleScroll(e) {
+	    var handleScroll = function handleScroll(ev) {};
+	    // let handleScroll = this.handleScroll;
+	    if (this.props.scrollEventThrottle && this.props.onScroll) {
+	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+	    }
+	    return handleScroll;
+	  },
 	  render: function render() {
 	    var _props = this.props;
 	    var children = _props.children;
+	    var className = _props.className;
 	    var style = _props.style;
-	    var onScroll = _props.onScroll;
 	
-	    var divProps = { style: style, onScroll: onScroll };
-	    return _react2.default.createElement(
-	      'div',
-	      _extends({ className: 'c-s' }, divProps),
-	      children
-	    );
+	    var divProps = { className: className, style: style };
+	    return React.cloneElement(React.createElement('div', { ref: SCROLLVIEW }), divProps, children);
 	  }
 	});
-	
-	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
+	module.exports = exports['default'];
 
 /***/ }
-]);
+
+});
 //# sourceMappingURL=indexed.js.map

@@ -3,6 +3,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
+import MyScroller from './MyScroller';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -68,18 +69,6 @@ const Demo = React.createClass({
         }
       />
     </div>);
-  },
-});
-
-const MyScroller = React.createClass({
-  render() {
-    const { children, style, onScroll } = this.props;
-    const divProps = { style, onScroll };
-    return (
-      <div className="c-s" {...divProps}>
-        {children}
-      </div>
-    )
   },
 });
 

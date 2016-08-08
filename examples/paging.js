@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, Thumb } from './util';
+import MyScroller from './MyScroller';
 
 const NUM_SECTIONS = 5;
 const NUM_ROWS_PER_SECTION = 5;
@@ -116,18 +117,6 @@ const Demo = React.createClass({
   _ctrlBodyScroll(flag) {
     document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
   }
-});
-
-const MyScroller = React.createClass({
-  render() {
-    const { children, style, onScroll } = this.props;
-    const divProps = { style, onScroll };
-    return (
-      <div className="c-s" {...divProps}>
-        {children}
-      </div>
-    )
-  },
 });
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

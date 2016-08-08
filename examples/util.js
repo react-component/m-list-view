@@ -55,27 +55,6 @@ export const TouchableHighlight = React.createClass({
 });
 export const TouchableOpacity = TouchableHighlight;
 
-export const pagingStyles = {
-  buttonContents: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 5,
-    marginVertical: 3,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 3,
-    paddingVertical: 10,
-  },
-  section: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    padding: 6,
-    backgroundColor: '#5890ff',
-  },
-};
 
 function flattenStyle(style, processor) {
   if (!style) {
@@ -118,10 +97,22 @@ export const Thumb = React.createClass({
     });
   },
   render() {
+    const buttonContents = {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 5,
+      marginVertical: 3,
+      padding: 5,
+      backgroundColor: '#EAEAEA',
+      borderRadius: 3,
+      paddingVertical: 10,
+    };
     return (
       <TouchableOpacity
         onPress={this._onPressThumb}
-        style={flattenStyle([pagingStyles.buttonContents, { flexDirection: this.state.dir }])}>
+        style={flattenStyle([buttonContents, { flexDirection: this.state.dir }])}>
         <Image source={THUMB_URLS[this.state.thumbIndex]} />
         <Image source={THUMB_URLS[this.state.thumbIndex]} />
         <Image source={THUMB_URLS[this.state.thumbIndex]} />

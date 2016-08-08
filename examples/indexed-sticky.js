@@ -45,7 +45,7 @@ const Demo = React.createClass({
   },
 
   render() {
-    return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
+    return (<div>
       <ListView.IndexedList
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
@@ -55,31 +55,24 @@ const Demo = React.createClass({
             {sectionData}
           </div>
         )}
-        renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>) }
-        renderScrollComponent={props => <MyScroller {...props} style={{ height: 600, overflow: 'auto' }} />}
+        renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>)}
+        stickyHeader
+        stickyProps={{
+          stickyStyle: { zIndex: 999 },
+          topOffset: -83,
+          // isActive: false,
+        }}
         quickSearchBarStyle={{
-          position: 'absolute',
-          top: 20, right: 30
+          top: 20,
         }}
         onQuickSearch={(sectionID) => console.log(sectionID) }
         delayTime={1000}
         delayActivityIndicator={
           <div style={{padding: 25, textAlign: 'center' }}>delay rendering...</div>
         }
+
       />
     </div>);
-  },
-});
-
-const MyScroller = React.createClass({
-  render() {
-    const { children, style, onScroll } = this.props;
-    const divProps = { style, onScroll };
-    return (
-      <div className="c-s" {...divProps}>
-        {children}
-      </div>
-    )
   },
 });
 

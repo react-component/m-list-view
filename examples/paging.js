@@ -4,7 +4,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, pagingStyles as styles, Thumb } from './util';
+import { View, Text, Thumb } from './util';
 
 const NUM_SECTIONS = 5;
 const NUM_ROWS_PER_SECTION = 5;
@@ -75,7 +75,13 @@ const Demo = React.createClass({
           </View>
         )}
         renderSectionHeader={(sectionData) => (
-          <View style={styles.section}>
+          <View style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            padding: 6,
+            backgroundColor: '#5890ff',
+          }}>
             <Text style={{ color: 'white' }}>
               {sectionData}
             </Text>

@@ -270,7 +270,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
-<span class="hljs-keyword">import</span> { View, Text, pagingStyles <span class="hljs-keyword">as</span> styles, Thumb } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-keyword">import</span> { View, Text, Thumb } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
 <span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">5</span>;
 <span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">5</span>;
@@ -341,7 +341,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
         )</span>}
         renderSectionHeader={(sectionData) =&gt; (
-          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{styles.section}</span>&gt;</span>
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
+            <span class="hljs-attribute">flexDirection:</span> '<span class="hljs-attribute">column</span>',
+            <span class="hljs-attribute">justifyContent:</span> '<span class="hljs-attribute">center</span>',
+            <span class="hljs-attribute">alignItems:</span> '<span class="hljs-attribute">flex-start</span>',
+            <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">6</span>,
+            <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">5890ff</span>',
+          }}&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">white</span>' }}&gt;</span>
               {sectionData}
             <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>

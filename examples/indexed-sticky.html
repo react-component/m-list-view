@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>indexed.js - example - rmc-list-view@0.5.12</title>
+  <title>indexed-sticky.js - example - rmc-list-view@0.5.12</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -311,7 +311,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   },
 
   render() {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> '<span class="hljs-attribute">10px</span> <span class="hljs-attribute">auto</span>', <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">80</span>%', <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">relative</span>' }}&gt;</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView.IndexedList</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
@@ -321,31 +321,24 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             {sectionData}
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         )</span>}
-        renderRow={(rowData) =&gt; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span> }
-        renderScrollComponent={props =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyScroller</span> {<span class="hljs-attribute">...props</span>} <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">600</span>, <span class="hljs-attribute">overflow:</span> '<span class="hljs-attribute">auto</span>' }} /&gt;</span>}
-        quickSearchBarStyle={{
-          position: 'absolute',
-          top: 20, right: 30
+        renderRow={(rowData) =&gt; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
+        stickyHeader
+        stickyProps={{
+          stickyStyle: { zIndex: <span class="hljs-number">999</span> },
+          topOffset: -<span class="hljs-number">83</span>,
+          <span class="hljs-comment">// isActive: false,</span>
         }}
-        onQuickSearch={(sectionID) =&gt; console.log(sectionID) }
-        delayTime={1000}
+        quickSearchBarStyle={{
+          top: <span class="hljs-number">20</span>,
+        }}
+        onQuickSearch={(sectionID) =&gt; <span class="hljs-built_in">console</span>.log(sectionID) }
+        delayTime={<span class="hljs-number">1000</span>}
         delayActivityIndicator={
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         }
+
       /&gt;
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  },
-});
-
-<span class="hljs-keyword">const</span> MyScroller = React.createClass({
-  render() {
-    <span class="hljs-keyword">const</span> { children, style, onScroll } = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">const</span> divProps = { style, onScroll };
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"c-s"</span> {<span class="hljs-attribute">...divProps</span>}&gt;</span>
-        {children}
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    )</span>
   },
 });
 
@@ -360,7 +353,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   
   <script src="common.js?nowrap"></script>
-  <script src="indexed.js?nowrap"></script>
+  <script src="indexed-sticky.js?nowrap"></script>
 </body>
 
 </html>

@@ -1,17 +1,17 @@
-webpackJsonp([0],[
-/* 0 */
+webpackJsonp([1],{
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(1);
+	module.exports = __webpack_require__(204);
 
 
 /***/ },
-/* 1 */
+
+/***/ 204:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	__webpack_require__(2);
 	
@@ -76,7 +76,7 @@ webpackJsonp([0],[
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { style: { margin: '10px auto', width: '80%', position: 'relative' } },
+	      null,
 	      _react2.default.createElement(_rmcListView2.default.IndexedList, {
 	        dataSource: this.state.dataSource,
 	        renderHeader: function renderHeader() {
@@ -108,12 +108,13 @@ webpackJsonp([0],[
 	            rowData
 	          );
 	        },
-	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement(MyScroller, _extends({}, props, { style: { height: 600, overflow: 'auto' } }));
+	        stickyHeader: true,
+	        stickyProps: {
+	          stickyStyle: { zIndex: 999 },
+	          topOffset: -83
 	        },
 	        quickSearchBarStyle: {
-	          position: 'absolute',
-	          top: 20, right: 30
+	          top: 20
 	        },
 	        onQuickSearch: function onQuickSearch(sectionID) {
 	          return console.log(sectionID);
@@ -124,24 +125,8 @@ webpackJsonp([0],[
 	          { style: { padding: 25, textAlign: 'center' } },
 	          'delay rendering...'
 	        )
+	
 	      })
-	    );
-	  }
-	});
-	
-	var MyScroller = _react2.default.createClass({
-	  displayName: 'MyScroller',
-	  render: function render() {
-	    var _props = this.props;
-	    var children = _props.children;
-	    var style = _props.style;
-	    var onScroll = _props.onScroll;
-	
-	    var divProps = { style: style, onScroll: onScroll };
-	    return _react2.default.createElement(
-	      'div',
-	      _extends({ className: 'c-s' }, divProps),
-	      children
 	    );
 	  }
 	});
@@ -149,5 +134,6 @@ webpackJsonp([0],[
 	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
 /***/ }
-]);
-//# sourceMappingURL=indexed.js.map
+
+});
+//# sourceMappingURL=indexed-sticky.js.map

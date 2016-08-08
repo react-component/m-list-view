@@ -1,14 +1,14 @@
-webpackJsonp([3],{
+webpackJsonp([4],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(207);
+	module.exports = __webpack_require__(208);
 
 
 /***/ },
 
-/***/ 205:
+/***/ 206:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16,7 +16,7 @@ webpackJsonp([3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Thumb = exports.pagingStyles = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
+	exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -91,28 +91,6 @@ webpackJsonp([3],{
 	});
 	var TouchableOpacity = exports.TouchableOpacity = TouchableHighlight;
 	
-	var pagingStyles = exports.pagingStyles = {
-	  buttonContents: {
-	    display: 'flex',
-	    flexDirection: 'row',
-	    justifyContent: 'center',
-	    alignItems: 'center',
-	    marginHorizontal: 5,
-	    marginVertical: 3,
-	    padding: 5,
-	    backgroundColor: '#EAEAEA',
-	    borderRadius: 3,
-	    paddingVertical: 10
-	  },
-	  section: {
-	    flexDirection: 'column',
-	    justifyContent: 'center',
-	    alignItems: 'flex-start',
-	    padding: 6,
-	    backgroundColor: '#5890ff'
-	  }
-	};
-	
 	function flattenStyle(style, processor) {
 	  if (!style) {
 	    return undefined;
@@ -155,11 +133,23 @@ webpackJsonp([3],{
 	    });
 	  },
 	  render: function render() {
+	    var buttonContents = {
+	      display: 'flex',
+	      flexDirection: 'row',
+	      justifyContent: 'center',
+	      alignItems: 'center',
+	      marginHorizontal: 5,
+	      marginVertical: 3,
+	      padding: 5,
+	      backgroundColor: '#EAEAEA',
+	      borderRadius: 3,
+	      paddingVertical: 10
+	    };
 	    return _react2.default.createElement(
 	      TouchableOpacity,
 	      {
 	        onPress: this._onPressThumb,
-	        style: flattenStyle([pagingStyles.buttonContents, { flexDirection: this.state.dir }]) },
+	        style: flattenStyle([buttonContents, { flexDirection: this.state.dir }]) },
 	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
 	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
 	      _react2.default.createElement(Image, { source: THUMB_URLS[this.state.thumbIndex] }),
@@ -174,7 +164,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 207:
+/***/ 208:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -193,7 +183,7 @@ webpackJsonp([3],{
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(205);
+	var _util = __webpack_require__(206);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	

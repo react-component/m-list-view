@@ -28,6 +28,12 @@ export default class IndexedList extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.dataSource !== nextProps.dataSource) {
+      this.dataChange(nextProps);
+    }
+  }
+
   componentWillUnmount() {
     if (this._timer) {
       clearTimeout(this._timer);
@@ -36,19 +42,7 @@ export default class IndexedList extends React.Component {
   }
 
   componentDidMount() {
-    // delay render more
-    this.setState({
-      _delay: true,
-    });
-    this._timer = setTimeout(() => {
-      this.setState({
-        pageSize: this.props.dataSource.getRowCount(),
-        _delay: false,
-      }, () => {
-        this.refs.indexedListView._pageInNewRows();
-      });
-    }, this.props.delayTime);
-
+    this.dataChange(this.props);
     // handle quickSearchBar
     const quickSearchBar = this.refs.quickSearchBar;
     const height = quickSearchBar.offsetHeight;
@@ -65,6 +59,26 @@ export default class IndexedList extends React.Component {
     this._qsHeight = height;
     this._avgH = _avgH;
     this._hCache = hCache;
+  }
+
+  dataChange = (props) => {
+    // delay render more
+    const rowCount = props.dataSource.getRowCount();
+    if (!rowCount) {
+      return;
+    }
+    this.setState({
+      _delay: true,
+    });
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+    this._timer = setTimeout(() => {
+      this.setState({
+        pageSize: rowCount,
+        _delay: false,
+      }, () => this.refs.indexedListView._pageInNewRows());
+    }, props.delayTime);
   }
 
   sectionComponents = {}
@@ -215,8 +229,9 @@ export default class IndexedList extends React.Component {
           {renderSectionHeader(sectionData, sectionID)}
         </div>)}
       >
-        {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) }{children}
+        {children}
       </ListView>
+      {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) }
     </div>);
   }
 }

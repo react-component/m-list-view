@@ -24,27 +24,34 @@ const Demo = React.createClass({
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     });
 
-    const dataBlob = {};
-    const sectionIDs = [];
-    const rowIDs = [];
-    for (let ii = 0; ii < NUM_SECTIONS; ii++) {
-      const sectionName = String.fromCharCode(65 + ii);
-      sectionIDs.push(sectionName);
-      dataBlob[sectionName] = sectionName;
-      rowIDs[ii] = [];
-
-      for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-        const rowName = `S${ii}, R${jj}`;
-        rowIDs[ii].push(rowName);
-        dataBlob[rowName] = rowName;
-      }
-    }
     return {
-      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      dataSource: dataSource.cloneWithRowsAndSections({}, [], []),
       headerPressCount: 0,
     };
   },
+  componentDidMount() {
+    // simulate ajax
+    setTimeout(() => {
+      const dataBlob = {};
+      const sectionIDs = [];
+      const rowIDs = [];
+      for (let ii = 0; ii < NUM_SECTIONS; ii++) {
+        const sectionName = String.fromCharCode(65 + ii);
+        sectionIDs.push(sectionName);
+        dataBlob[sectionName] = sectionName;
+        rowIDs[ii] = [];
 
+        for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+          const rowName = `S${ii}, R${jj}`;
+          rowIDs[ii].push(rowName);
+          dataBlob[rowName] = rowName;
+        }
+      }
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      });
+    }, 1000);
+  },
   render() {
     return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
       <ListView.IndexedList

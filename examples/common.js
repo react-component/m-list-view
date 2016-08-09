@@ -26918,94 +26918,7 @@
 	
 	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
 	
-	    _this.sectionComponents = {};
-	
-	    _this.onQuickSearchTop = function (sectionID, topId) {
-	      if (_this.props.stickyHeader) {
-	        window.document.body.scrollTop = 0;
-	      } else {
-	        _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
-	      }
-	      _this.props.onQuickSearch(sectionID, topId);
-	    };
-	
-	    _this.onQuickSearch = function (sectionID) {
-	      var lv = _reactDom2.default.findDOMNode(_this.refs.indexedListView.refs.listviewscroll);
-	      var sec = _reactDom2.default.findDOMNode(_this.sectionComponents[sectionID]);
-	      if (_this.props.stickyHeader) {
-	        // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
-	        var stickyComponent = _this.refs.indexedListView.stickyRefs[sectionID];
-	        if (stickyComponent && stickyComponent.refs.placeholder) {
-	          sec = _reactDom2.default.findDOMNode(stickyComponent.refs.placeholder);
-	        }
-	        window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + (0, _indexedUtil.getOffsetTop)(lv);
-	      } else {
-	        lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
-	      }
-	      _this.props.onQuickSearch(sectionID);
-	    };
-	
-	    _this.onTouchStart = function (e) {
-	      _this._target = e.target;
-	      _this._basePos = _this.refs.quickSearchBar.getBoundingClientRect();
-	      document.addEventListener('touchmove', _this._disableParent, false);
-	      document.body.className = document.body.className + ' ' + _this.props.prefixCls + '-qsb-moving';
-	      _this.updateCls(_this._target);
-	    };
-	
-	    _this.onTouchMove = function (e) {
-	      e.preventDefault();
-	      if (_this._target) {
-	        var ex = (0, _indexedUtil._event)(e);
-	        var basePos = _this._basePos;
-	        var _pos = void 0;
-	        if (ex.clientY >= basePos.top && ex.clientY <= basePos.top + _this._qsHeight) {
-	          _pos = Math.floor((ex.clientY - basePos.top) / _this._avgH);
-	          var target = void 0;
-	          if (_pos in _this._hCache) {
-	            target = _this._hCache[_pos][0];
-	          }
-	          if (target) {
-	            var overValue = target.getAttribute('data-qf-target');
-	            if (_this._target !== target) {
-	              if (_this.props.quickSearchBarTop.value === overValue) {
-	                _this.onQuickSearchTop(undefined, overValue);
-	              } else {
-	                _this.onQuickSearch(overValue);
-	              }
-	              _this.updateCls(target);
-	            }
-	            _this._target = target;
-	          }
-	        }
-	      }
-	    };
-	
-	    _this.onTouchEnd = function (e) {
-	      if (!_this._target) {
-	        return;
-	      }
-	      document.removeEventListener('touchmove', _this._disableParent, false);
-	      document.body.className = document.body.className.replace(new RegExp(_this.props.prefixCls + '-qsb-moving', 'g'), '');
-	      _this.updateCls(_this._target, true);
-	      _this._target = null;
-	    };
-	
-	    _this.updateCls = function (el, end) {
-	      var cls = _this.props.prefixCls + '-quick-search-bar-over';
-	      // can not use setState to change className, it has a big performance issue! 
-	      _this._hCache.forEach(function (d) {
-	        d[0].className = d[0].className.replace(cls, '');
-	      });
-	      if (!end) {
-	        el.className = el.className + ' ' + cls;
-	      }
-	    };
-	
-	    _this._disableParent = function (e) {
-	      e.preventDefault();
-	      e.stopPropagation();
-	    };
+	    _initialiseProps.call(_this);
 	
 	    _this.state = {
 	      pageSize: props.pageSize,
@@ -27013,6 +26926,12 @@
 	    };
 	    return _this;
 	  }
+	
+	  IndexedList.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (this.props.dataSource !== nextProps.dataSource) {
+	      this.dataChange(nextProps);
+	    }
+	  };
 	
 	  IndexedList.prototype.componentWillUnmount = function componentWillUnmount() {
 	    if (this._timer) {
@@ -27022,21 +26941,7 @@
 	  };
 	
 	  IndexedList.prototype.componentDidMount = function componentDidMount() {
-	    var _this2 = this;
-	
-	    // delay render more
-	    this.setState({
-	      _delay: true
-	    });
-	    this._timer = setTimeout(function () {
-	      _this2.setState({
-	        pageSize: _this2.props.dataSource.getRowCount(),
-	        _delay: false
-	      }, function () {
-	        _this2.refs.indexedListView._pageInNewRows();
-	      });
-	    }, this.props.delayTime);
-	
+	    this.dataChange(this.props);
 	    // handle quickSearchBar
 	    var quickSearchBar = this.refs.quickSearchBar;
 	    var height = quickSearchBar.offsetHeight;
@@ -27056,7 +26961,7 @@
 	  };
 	
 	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
-	    var _this3 = this;
+	    var _this2 = this;
 	
 	    var _props = this.props;
 	    var dataSource = _props.dataSource;
@@ -27081,7 +26986,7 @@
 	        'li',
 	        { 'data-qf-target': quickSearchBarTop.value,
 	          onClick: function onClick() {
-	            return _this3.onQuickSearchTop(undefined, quickSearchBarTop.value);
+	            return _this2.onQuickSearchTop(undefined, quickSearchBarTop.value);
 	          }
 	        },
 	        quickSearchBarTop.label
@@ -27091,7 +26996,7 @@
 	          'li',
 	          { key: i.value, 'data-qf-target': i.value,
 	            onClick: function onClick() {
-	              return _this3.onQuickSearch(i.value);
+	              return _this2.onQuickSearch(i.value);
 	            }
 	          },
 	          i.label
@@ -27102,7 +27007,7 @@
 	
 	  IndexedList.prototype.render = function render() {
 	    var _classNames,
-	        _this4 = this;
+	        _this3 = this;
 	
 	    var _state = this.state;
 	    var _delay = _state._delay;
@@ -27137,16 +27042,16 @@
 	              {
 	                className: prefixCls + '-section-header',
 	                ref: function ref(c) {
-	                  _this4.sectionComponents[sectionID] = c;
+	                  _this3.sectionComponents[sectionID] = c;
 	                }
 	              },
 	              _renderSectionHeader(sectionData, sectionID)
 	            );
 	          }
 	        }),
-	        this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
 	        children
-	      )
+	      ),
+	      this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle)
 	    );
 	  };
 	
@@ -27166,6 +27071,122 @@
 	  // delayActivityIndicator: <div style={{padding: 5, textAlign: 'center'}}>rendering more</div>,
 	  delayActivityIndicator: ''
 	};
+	
+	var _initialiseProps = function _initialiseProps() {
+	  var _this4 = this;
+	
+	  this.dataChange = function (props) {
+	    // delay render more
+	    var rowCount = props.dataSource.getRowCount();
+	    if (!rowCount) {
+	      return;
+	    }
+	    _this4.setState({
+	      _delay: true
+	    });
+	    if (_this4._timer) {
+	      clearTimeout(_this4._timer);
+	    }
+	    _this4._timer = setTimeout(function () {
+	      _this4.setState({
+	        pageSize: rowCount,
+	        _delay: false
+	      }, function () {
+	        return _this4.refs.indexedListView._pageInNewRows();
+	      });
+	    }, props.delayTime);
+	  };
+	
+	  this.sectionComponents = {};
+	
+	  this.onQuickSearchTop = function (sectionID, topId) {
+	    if (_this4.props.stickyHeader) {
+	      window.document.body.scrollTop = 0;
+	    } else {
+	      _reactDom2.default.findDOMNode(_this4.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
+	    }
+	    _this4.props.onQuickSearch(sectionID, topId);
+	  };
+	
+	  this.onQuickSearch = function (sectionID) {
+	    var lv = _reactDom2.default.findDOMNode(_this4.refs.indexedListView.refs.listviewscroll);
+	    var sec = _reactDom2.default.findDOMNode(_this4.sectionComponents[sectionID]);
+	    if (_this4.props.stickyHeader) {
+	      // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
+	      var stickyComponent = _this4.refs.indexedListView.stickyRefs[sectionID];
+	      if (stickyComponent && stickyComponent.refs.placeholder) {
+	        sec = _reactDom2.default.findDOMNode(stickyComponent.refs.placeholder);
+	      }
+	      window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + (0, _indexedUtil.getOffsetTop)(lv);
+	    } else {
+	      lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
+	    }
+	    _this4.props.onQuickSearch(sectionID);
+	  };
+	
+	  this.onTouchStart = function (e) {
+	    _this4._target = e.target;
+	    _this4._basePos = _this4.refs.quickSearchBar.getBoundingClientRect();
+	    document.addEventListener('touchmove', _this4._disableParent, false);
+	    document.body.className = document.body.className + ' ' + _this4.props.prefixCls + '-qsb-moving';
+	    _this4.updateCls(_this4._target);
+	  };
+	
+	  this.onTouchMove = function (e) {
+	    e.preventDefault();
+	    if (_this4._target) {
+	      var ex = (0, _indexedUtil._event)(e);
+	      var basePos = _this4._basePos;
+	      var _pos = void 0;
+	      if (ex.clientY >= basePos.top && ex.clientY <= basePos.top + _this4._qsHeight) {
+	        _pos = Math.floor((ex.clientY - basePos.top) / _this4._avgH);
+	        var target = void 0;
+	        if (_pos in _this4._hCache) {
+	          target = _this4._hCache[_pos][0];
+	        }
+	        if (target) {
+	          var overValue = target.getAttribute('data-qf-target');
+	          if (_this4._target !== target) {
+	            if (_this4.props.quickSearchBarTop.value === overValue) {
+	              _this4.onQuickSearchTop(undefined, overValue);
+	            } else {
+	              _this4.onQuickSearch(overValue);
+	            }
+	            _this4.updateCls(target);
+	          }
+	          _this4._target = target;
+	        }
+	      }
+	    }
+	  };
+	
+	  this.onTouchEnd = function (e) {
+	    if (!_this4._target) {
+	      return;
+	    }
+	    document.removeEventListener('touchmove', _this4._disableParent, false);
+	    document.body.className = document.body.className.replace(new RegExp(_this4.props.prefixCls + '-qsb-moving', 'g'), '');
+	    _this4.updateCls(_this4._target, true);
+	    _this4._target = null;
+	  };
+	
+	  this.updateCls = function (el, end) {
+	    var cls = _this4.props.prefixCls + '-quick-search-bar-over';
+	    // can not use setState to change className, it has a big performance issue! 
+	    _this4._hCache.forEach(function (d) {
+	      d[0].className = d[0].className.replace(cls, '');
+	    });
+	    if (!end) {
+	      el.className = el.className + ' ' + cls;
+	    }
+	  };
+	
+	  this._disableParent = function (e) {
+	    e.preventDefault();
+	    e.stopPropagation();
+	  };
+	};
+	
 	exports.default = IndexedList;
 	module.exports = exports['default'];
 

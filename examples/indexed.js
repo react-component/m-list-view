@@ -61,25 +61,35 @@ webpackJsonp([0],{
 	      }
 	    });
 	
-	    var dataBlob = {};
-	    var sectionIDs = [];
-	    var rowIDs = [];
-	    for (var ii = 0; ii < NUM_SECTIONS; ii++) {
-	      var sectionName = String.fromCharCode(65 + ii);
-	      sectionIDs.push(sectionName);
-	      dataBlob[sectionName] = sectionName;
-	      rowIDs[ii] = [];
-	
-	      for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-	        var rowName = 'S' + ii + ', R' + jj;
-	        rowIDs[ii].push(rowName);
-	        dataBlob[rowName] = rowName;
-	      }
-	    }
 	    return {
-	      dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+	      dataSource: dataSource.cloneWithRowsAndSections({}, [], []),
 	      headerPressCount: 0
 	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+	
+	    // simulate ajax
+	    setTimeout(function () {
+	      var dataBlob = {};
+	      var sectionIDs = [];
+	      var rowIDs = [];
+	      for (var ii = 0; ii < NUM_SECTIONS; ii++) {
+	        var sectionName = String.fromCharCode(65 + ii);
+	        sectionIDs.push(sectionName);
+	        dataBlob[sectionName] = sectionName;
+	        rowIDs[ii] = [];
+	
+	        for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+	          var rowName = 'S' + ii + ', R' + jj;
+	          rowIDs[ii].push(rowName);
+	          dataBlob[rowName] = rowName;
+	        }
+	      }
+	      _this.setState({
+	        dataSource: _this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)
+	      });
+	    }, 1000);
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(

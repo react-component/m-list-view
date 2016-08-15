@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		5:0
+/******/ 		6:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"simple"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"simple","5":"simple-paging"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -22278,7 +22278,7 @@
 	    // this.requestAnimationFrame(() => {
 	    //   this._measureAndUpdateScrollProps();
 	    // });
-	    if (this.props.stickyHeader) {
+	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      // this.container = document.createElement('div');
 	      // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
 	      this.__onScroll = throttle(this._onScroll, this.props.scrollEventThrottle);
@@ -22314,7 +22314,7 @@
 	  };
 	
 	  ListView.prototype.componentWillUnmount = function componentWillUnmount() {
-	    if (this.props.stickyHeader) {
+	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      // if (this.container) {
 	      //   ReactDOM.unmountComponentAtNode(this.container);
 	      //   window.document.body.removeChild(this.container);
@@ -22453,13 +22453,13 @@
 	
 	    // TODO(ide): Use function refs so we can compose with the scroll
 	    // component's original ref instead of clobbering it
-	    if (props.stickyHeader) {
+	    if (props.stickyHeader || props.useBodyScroll) {
 	      delete props.onScroll;
 	    }
 	    this._sc = _react2.default.cloneElement(renderScrollComponent(props), {
 	      ref: SCROLLVIEW_REF,
 	      onContentSizeChange: this._onContentSizeChange,
-	      onLayout: props.stickyHeader ? function (event) {
+	      onLayout: props.stickyHeader || props.useBodyScroll ? function (event) {
 	        _this4.props.onLayout && _this4.props.onLayout(event);
 	      } : this._onLayout
 	    }, header, bodyComponents, footer, props.children);
@@ -22635,7 +22635,7 @@
 	    // ];
 	
 	    var target = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW_REF]);
-	    if (this.props.stickyHeader) {
+	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      this.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
 	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
 	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollTop'];
@@ -22769,6 +22769,7 @@
 	   * @platform ios
 	   */
 	  stickyHeaderIndices: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	  useBodyScroll: _react.PropTypes.bool, // for web
 	  stickyHeader: _react.PropTypes.bool, // for web
 	  stickyProps: _react.PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
 	  stickyContainerProps: _react.PropTypes.object
@@ -24372,7 +24373,7 @@
 	  }
 	
 	  ScrollView.prototype.componentDidMount = function componentDidMount() {
-	    if (this.props.stickyHeader) {
+	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      return;
 	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
@@ -24381,7 +24382,7 @@
 	  };
 	
 	  ScrollView.prototype.componentWillUnmount = function componentWillUnmount() {
-	    if (this.props.stickyHeader) {
+	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      return;
 	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
@@ -24509,7 +24510,7 @@
 	    var props = (0, _extends3.default)({}, otherProps, {
 	      alwaysBounceHorizontal: alwaysBounceHorizontal,
 	      alwaysBounceVertical: alwaysBounceVertical,
-	      style: _StyleSheet2.default.flattenStyle([otherProps.stickyHeader ? null : styles.base, this.props.style]),
+	      style: _StyleSheet2.default.flattenStyle([otherProps.stickyHeader || otherProps.useBodyScroll ? null : styles.base, this.props.style]),
 	      onTouchStart: this.scrollResponderHandleTouchStart,
 	      onTouchMove: this.scrollResponderHandleTouchMove,
 	      onTouchEnd: this.scrollResponderHandleTouchEnd,
@@ -24576,7 +24577,7 @@
 	      //     </ScrollViewClass>
 	      //   );
 	      // }
-	      if (props.stickyHeader) {
+	      if (props.stickyHeader || props.useBodyScroll) {
 	        return _react2.default.createElement(
 	          ScrollViewClass,
 	          (0, _extends3.default)({}, props, { ref: SCROLLVIEW }),
@@ -24592,7 +24593,7 @@
 	      );
 	    }
 	
-	    if (props.stickyHeader) {
+	    if (props.stickyHeader || props.useBodyScroll) {
 	      return _react2.default.createElement(
 	        ScrollViewClass,
 	        (0, _extends3.default)({}, props, { ref: SCROLLVIEW }),

@@ -1,9 +1,9 @@
-webpackJsonp([4],{
+webpackJsonp([5],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(301);
+	module.exports = __webpack_require__(302);
 
 
 /***/ },
@@ -167,10 +167,14 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 301:
+/***/ 302:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	var _extends2 = __webpack_require__(2);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
 	
 	__webpack_require__(40);
 	
@@ -190,58 +194,101 @@ webpackJsonp([4],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _genRows(pressData) {
-	  var dataBlob = [];
-	  for (var ii = 0; ii < 20; ii++) {
-	    dataBlob.push('Row ' + (ii + pressData[ii] ? ' (pressed)' : ''));
-	  }
-	  return dataBlob;
-	} // use jsx to render html, do not modify simple.html
+	var NUM_ROWS = 20; // use jsx to render html, do not modify simple.html
+	
+	var pageIndex = 0;
 	
 	var Demo = _react2.default.createClass({
 	  displayName: 'Demo',
 	  getInitialState: function getInitialState() {
-	    var ds = new _rmcListView2.default.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
-	        return r1 !== r2;
-	      } });
-	    return {
-	      dataSource: ds.cloneWithRows(_genRows({}))
-	    };
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(_rmcListView2.default, {
-	      style: { height: 300 },
-	      dataSource: this.state.dataSource,
-	      onEndReached: function onEndReached(e) {
-	        return alert(e.toString());
-	      },
-	      onEndReachedThreshold: 10,
-	      scrollEventThrottle: 20,
-	      pageSize: 5,
-	      renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
-	        return _react2.default.createElement(
-	          _util.View,
-	          { style: { display: 'flex', alignItems: 'center' } },
-	          _react2.default.createElement(_util.Image, { style: { width: 64, height: 64 }, source: _util.THUMB_URLS[0] }),
-	          _react2.default.createElement(
-	            _util.Text,
-	            null,
-	            rowData + ' - Lorem ipsum dolor sit amet'
-	          )
-	        );
-	      },
-	      renderSeparator: function renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
-	        return _react2.default.createElement(_util.View, { key: sectionID + '-' + rowID,
-	          style: {
-	            height: adjacentRowHighlighted ? 4 : 1,
-	            backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
-	          }
-	        });
-	      },
-	      renderBodyComponent: function renderBodyComponent() {
-	        return _react2.default.createElement('div', { className: 'for-body-demo' });
+	    var dataSource = new _rmcListView2.default.DataSource({
+	      rowHasChanged: function rowHasChanged(row1, row2) {
+	        return row1 !== row2;
 	      }
 	    });
+	
+	    this._genData = function () {
+	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	
+	      var dataBlob = {};
+	      for (var i = 0; i < NUM_ROWS; i++) {
+	        var ii = pIndex * NUM_ROWS + i;
+	        dataBlob['' + ii] = 'row - ' + ii;
+	      }
+	      return dataBlob;
+	    };
+	    this._data = {};
+	    return {
+	      dataSource: dataSource.cloneWithRows(this._genData()),
+	      isLoading: false
+	    };
+	  },
+	  _onEndReached: function _onEndReached(event) {
+	    var _this = this;
+	
+	    // load new data
+	    console.log('reach end', event);
+	    this.setState({ isLoading: true });
+	    setTimeout(function () {
+	      _this._data = (0, _extends3.default)({}, _this._data, _this._genData(++pageIndex));
+	      _this.setState({
+	        dataSource: _this.state.dataSource.cloneWithRows(_this._data),
+	        isLoading: false
+	      });
+	    }, 1000);
+	  },
+	  render: function render() {
+	    var _this2 = this;
+	
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
+	        dataSource: this.state.dataSource,
+	        renderHeader: function renderHeader() {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: { height: 90, backgroundColor: '#bbb' } },
+	            _react2.default.createElement(
+	              _util.Text,
+	              null,
+	              'Table Header'
+	            )
+	          );
+	        },
+	        renderRow: function renderRow(rowData) {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: { height: 50 } },
+	            rowData,
+	            ' Let me keep typing here so it wraps at least one line.'
+	          );
+	        },
+	        renderFooter: function renderFooter() {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: {
+	                backgroundColor: '#bbb', color: 'white',
+	                padding: 30, textAlign: 'center'
+	              } },
+	            _this2.state.isLoading ? 'loading...' : 'loaded'
+	          );
+	        },
+	        initialListSize: 10,
+	        pageSize: 4,
+	        scrollRenderAheadDistance: 500,
+	        scrollEventThrottle: 20,
+	        onScroll: function onScroll() {
+	          console.log('scroll');
+	        },
+	        useBodyScroll: true,
+	        onEndReached: this._onEndReached,
+	        onEndReachedThreshold: 10
+	      }),
+	      _react2.default.createElement('div', { dangerouslySetInnerHTML: {
+	          __html: '<style>\n        #qrcode{ display: none }\n        .highlight{ display: none }\n        </style>'
+	        } })
+	    );
 	  }
 	});
 	
@@ -250,4 +297,4 @@ webpackJsonp([4],{
 /***/ }
 
 });
-//# sourceMappingURL=simple.js.map
+//# sourceMappingURL=simple-paging.js.map

@@ -184,6 +184,7 @@ class ListView extends React.Component {
      * @platform ios
      */
     stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
+    useBodyScroll: PropTypes.bool, // for web
     stickyHeader: PropTypes.bool, // for web
     stickyProps: PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
     stickyContainerProps: PropTypes.object,
@@ -268,7 +269,7 @@ class ListView extends React.Component {
     // this.requestAnimationFrame(() => {
     //   this._measureAndUpdateScrollProps();
     // });
-    if (this.props.stickyHeader) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
       // this.container = document.createElement('div');
       // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
       this.__onScroll = throttle(this._onScroll, this.props.scrollEventThrottle);
@@ -304,7 +305,7 @@ class ListView extends React.Component {
     // }
   }
   componentWillUnmount() {
-    if (this.props.stickyHeader) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
       // if (this.container) {
       //   ReactDOM.unmountComponentAtNode(this.container);
       //   window.document.body.removeChild(this.container);
@@ -443,13 +444,13 @@ class ListView extends React.Component {
 
     // TODO(ide): Use function refs so we can compose with the scroll
     // component's original ref instead of clobbering it
-    if (props.stickyHeader) {
+    if (props.stickyHeader || props.useBodyScroll) {
       delete props.onScroll;
     }
     this._sc = React.cloneElement(renderScrollComponent(props), {
       ref: SCROLLVIEW_REF,
       onContentSizeChange: this._onContentSizeChange,
-      onLayout: props.stickyHeader ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
+      onLayout: props.stickyHeader || props.useBodyScroll ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
     }, header, bodyComponents, footer, props.children);
     // if (props.stickyHeader) {
     //   return null;
@@ -625,7 +626,7 @@ class ListView extends React.Component {
     // ];
 
     let target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
-    if (this.props.stickyHeader) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
       this.scrollProperties.visibleLength = window[
         isVertical ? 'innerHeight' : 'innerWidth'
       ];

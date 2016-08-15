@@ -266,7 +266,7 @@ class ScrollView extends React.Component {
   state = this.scrollResponderMixinGetInitialState();
 
   componentDidMount() {
-    if (this.props.stickyHeader) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
       return;
     }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
@@ -274,7 +274,7 @@ class ScrollView extends React.Component {
     scrollView.addEventListener('scroll', this.__handleScroll);
   }
   componentWillUnmount() {
-    if (this.props.stickyHeader) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
       return;
     }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
@@ -410,7 +410,7 @@ class ScrollView extends React.Component {
       ...otherProps,
       alwaysBounceHorizontal,
       alwaysBounceVertical,
-      style: StyleSheet.flattenStyle([otherProps.stickyHeader ? null : styles.base, this.props.style]),
+      style: StyleSheet.flattenStyle([otherProps.stickyHeader || otherProps.useBodyScroll ? null : styles.base, this.props.style]),
       onTouchStart: this.scrollResponderHandleTouchStart,
       onTouchMove: this.scrollResponderHandleTouchMove,
       onTouchEnd: this.scrollResponderHandleTouchEnd,
@@ -476,7 +476,7 @@ class ScrollView extends React.Component {
       //     </ScrollViewClass>
       //   );
       // }
-      if (props.stickyHeader) {
+      if (props.stickyHeader || props.useBodyScroll) {
         return (
           <ScrollViewClass {...props} ref={SCROLLVIEW}>
             {refreshControl}
@@ -492,7 +492,7 @@ class ScrollView extends React.Component {
       );
     }
 
-    if (props.stickyHeader) {
+    if (props.stickyHeader || props.useBodyScroll) {
       return (
         <ScrollViewClass {...props} ref={SCROLLVIEW}>
           {this.props.children}

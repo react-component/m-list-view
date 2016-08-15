@@ -70,7 +70,8 @@ And, use css style instead of react-native's style.
 - [View](https://facebook.github.io/react-native/docs/view.html#props) props: **note: just support `onLayout` prop**
 
 #### new
-- stickyHeader (note: if set it, ScrollComponent will be render into the head of body element)
+- useBodyScroll (boolean, false) - use body scroll
+- stickyHeader (note: if set it, ScrollComponent will be render into the head of body element, auto enable `useBodyScroll`)
     - stickyProps / stickyContainerProps (see [react-sticky](https://github.com/captivationsoftware/react-sticky))
 - renderBodyComponent
 

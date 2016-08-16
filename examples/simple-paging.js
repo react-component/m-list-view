@@ -283,7 +283,7 @@ webpackJsonp([5],{
 	        },
 	        useBodyScroll: true,
 	        onEndReached: this._onEndReached,
-	        onEndReachedThreshold: 10
+	        onEndReachedThreshold: 100
 	      }),
 	      _react2.default.createElement('div', { dangerouslySetInnerHTML: {
 	          __html: '<style>\n        #qrcode{ display: none }\n        .highlight{ display: none }\n        </style>'

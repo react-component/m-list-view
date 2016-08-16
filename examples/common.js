@@ -22513,8 +22513,10 @@
 	  };
 	
 	  ListView.prototype._maybeCallOnEndReached = function _maybeCallOnEndReached(event) {
-	    // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties) , this.props.onEndReachedThreshold);
-	    if (this.props.onEndReached && this.scrollProperties.contentLength !== this._sentEndForContentLength && this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold && this.state.curRenderedRowsCount === this.props.dataSource.getRowCount()) {
+	    // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties));
+	    if (this.props.onEndReached &&
+	    // this.scrollProperties.contentLength !== this._sentEndForContentLength &&
+	    this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold && this.state.curRenderedRowsCount === this.props.dataSource.getRowCount()) {
 	      this._sentEndForContentLength = this.scrollProperties.contentLength;
 	      this.props.onEndReached(event);
 	      return true;
@@ -22528,7 +22530,8 @@
 	      return;
 	    }
 	
-	    var distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties); // console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
+	    var distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);
+	    // console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
 	    if (distanceFromEnd < this.props.scrollRenderAheadDistance) {
 	      this._pageInNewRows();
 	    }
@@ -22638,15 +22641,16 @@
 	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      this.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
 	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
-	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollTop'];
+	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollLeft'];
 	    } else {
 	      this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
 	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
-	      this.scrollProperties.offset = target[isVertical ? 'scrollTop' : 'scrollTop'];
+	      this.scrollProperties.offset = target[isVertical ? 'scrollTop' : 'scrollLeft'];
 	    }
 	
 	    // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
 	    if (!this._maybeCallOnEndReached(e)) {
+	      // console.log('enter')
 	      this._renderMoreRowsIfNeeded();
 	    }
 	

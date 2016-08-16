@@ -305,7 +305,7 @@ webpackJsonp([3],{
 	        initialListSize: 10,
 	        pageSize: 4,
 	        scrollRenderAheadDistance: 500,
-	        scrollEventThrottle: 100,
+	        scrollEventThrottle: 20,
 	        onScroll: function onScroll() {
 	          console.log('scroll');
 	        },

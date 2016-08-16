@@ -68,7 +68,7 @@ const Demo = React.createClass({
         onScroll={() => { console.log('scroll'); } }
         useBodyScroll
         onEndReached={this._onEndReached}
-        onEndReachedThreshold={10}
+        onEndReachedThreshold={100}
         />
       <div dangerouslySetInnerHTML={{
         __html: `<style>

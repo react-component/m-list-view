@@ -498,9 +498,10 @@ class ListView extends React.Component {
     this.props.onLayout && this.props.onLayout(event);
   }
 
-  _maybeCallOnEndReached(event) {// console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties) , this.props.onEndReachedThreshold);
+  _maybeCallOnEndReached(event) {
+    // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties));
     if (this.props.onEndReached &&
-        this.scrollProperties.contentLength !== this._sentEndForContentLength &&
+        // this.scrollProperties.contentLength !== this._sentEndForContentLength &&
         this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold &&
         this.state.curRenderedRowsCount === this.props.dataSource.getRowCount()) {
       this._sentEndForContentLength = this.scrollProperties.contentLength;
@@ -518,7 +519,8 @@ class ListView extends React.Component {
       return;
     }
 
-    let distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);// console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
+    let distanceFromEnd = this._getDistanceFromEnd(this.scrollProperties);
+    // console.log(distanceFromEnd, this.props.scrollRenderAheadDistance);
     if (distanceFromEnd < this.props.scrollRenderAheadDistance) {
       this._pageInNewRows();
     }
@@ -634,7 +636,7 @@ class ListView extends React.Component {
         isVertical ? 'scrollHeight' : 'scrollWidth'
       ];
       this.scrollProperties.offset = window.document.body[
-        isVertical ? 'scrollTop' : 'scrollTop'
+        isVertical ? 'scrollTop' : 'scrollLeft'
       ];
     } else {
       this.scrollProperties.visibleLength = target[
@@ -644,12 +646,13 @@ class ListView extends React.Component {
         isVertical ? 'scrollHeight' : 'scrollWidth'
       ];
       this.scrollProperties.offset = target[
-        isVertical ? 'scrollTop' : 'scrollTop'
+        isVertical ? 'scrollTop' : 'scrollLeft'
       ];
     }
 
     // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
     if (!this._maybeCallOnEndReached(e)) {
+      // console.log('enter')
       this._renderMoreRowsIfNeeded();
     }
 

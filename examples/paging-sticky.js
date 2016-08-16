@@ -95,7 +95,7 @@ const Demo = React.createClass({
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
-        scrollEventThrottle={100}
+        scrollEventThrottle={20}
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={500}

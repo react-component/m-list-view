@@ -49,7 +49,7 @@
   ],
   "dependencies": {
     "autobind-decorator": "^1.3.3",
-    "babel-runtime": "~6.11.6",
+    "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "domkit": "~0.0.1",
     "fbjs": "^0.8.3",

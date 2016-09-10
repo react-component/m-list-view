@@ -3,12 +3,12 @@ webpackJsonp([5],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(302);
+	module.exports = __webpack_require__(295);
 
 
 /***/ },
 
-/***/ 299:
+/***/ 292:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22,7 +22,7 @@ webpackJsonp([5],{
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _objectWithoutProperties2 = __webpack_require__(218);
+	var _objectWithoutProperties2 = __webpack_require__(215);
 	
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 	
@@ -167,7 +167,7 @@ webpackJsonp([5],{
 
 /***/ },
 
-/***/ 302:
+/***/ 295:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -182,15 +182,15 @@ webpackJsonp([5],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(75);
+	var _reactDom = __webpack_require__(74);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(215);
+	var _rmcListView = __webpack_require__(212);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(299);
+	var _util = __webpack_require__(292);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -256,14 +256,6 @@ webpackJsonp([5],{
 	            )
 	          );
 	        },
-	        renderRow: function renderRow(rowData) {
-	          return _react2.default.createElement(
-	            _util.View,
-	            { style: { height: 50 } },
-	            rowData,
-	            ' Let me keep typing here so it wraps at least one line.'
-	          );
-	        },
 	        renderFooter: function renderFooter() {
 	          return _react2.default.createElement(
 	            _util.View,
@@ -272,6 +264,21 @@ webpackJsonp([5],{
 	                padding: 30, textAlign: 'center'
 	              } },
 	            _this2.state.isLoading ? 'loading...' : 'loaded'
+	          );
+	        },
+	        renderSectionBodyWrapper: function renderSectionBodyWrapper(sectionID) {
+	          return _react2.default.createElement(MySectionBodyWrapper, { key: sectionID });
+	        },
+	        renderRow: function renderRow(rowData) {
+	          return _react2.default.createElement(
+	            'tr',
+	            { style: { height: 50 } },
+	            _react2.default.createElement(
+	              'td',
+	              null,
+	              rowData,
+	              ' Let me keep typing here so it wraps at least one line.'
+	            )
 	          );
 	        },
 	        initialListSize: 10,
@@ -288,6 +295,33 @@ webpackJsonp([5],{
 	      _react2.default.createElement('div', { dangerouslySetInnerHTML: {
 	          __html: '<style>\n        #qrcode{ display: none }\n        .highlight{ display: none }\n        </style>'
 	        } })
+	    );
+	  }
+	});
+	var MySectionBodyWrapper = _react2.default.createClass({
+	  displayName: 'MySectionBodyWrapper',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'table',
+	      { className: 'my-section-body' },
+	      _react2.default.createElement(
+	        'thead',
+	        null,
+	        _react2.default.createElement(
+	          'tr',
+	          null,
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            'table title'
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'tbody',
+	        null,
+	        this.props.children
+	      )
 	    );
 	  }
 	});

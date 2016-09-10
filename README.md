@@ -74,6 +74,7 @@ And, use css style instead of react-native's style.
 - stickyHeader (note: if set it, ScrollComponent will be render into the head of body element, auto enable `useBodyScroll`)
     - stickyProps / stickyContainerProps (see [react-sticky](https://github.com/captivationsoftware/react-sticky))
 - renderBodyComponent
+- renderSectionBodyWrapper
 
 ### ListView.IndexedList (beta)
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button

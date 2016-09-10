@@ -50,9 +50,6 @@ const Demo = React.createClass({
             <Text>Table Header</Text>
           </View>
         )}
-        renderRow={(rowData) => (<View style={{ height: 50 }}>
-          {rowData} Let me keep typing here so it wraps at least one line.
-          </View>) }
         renderFooter={() => (
           <View style={{
             backgroundColor: '#bbb', color: 'white',
@@ -61,6 +58,10 @@ const Demo = React.createClass({
             {this.state.isLoading ? 'loading...' : 'loaded'}
           </View>
         )}
+        renderSectionBodyWrapper={(sectionID) => <MySectionBodyWrapper key={sectionID} />}
+        renderRow={(rowData) => (<tr style={{ height: 50 }}>
+          <td>{rowData} Let me keep typing here so it wraps at least one line.</td>
+        </tr>)}
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
@@ -77,6 +78,14 @@ const Demo = React.createClass({
         </style>`
       }}></div>
     </div>);
+  }
+});
+const MySectionBodyWrapper = React.createClass({
+  render() {
+    return <table className="my-section-body">
+      <thead><tr><td>table title</td></tr></thead>
+      <tbody>{this.props.children}</tbody>
+    </table>
   }
 });
 

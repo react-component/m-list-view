@@ -185,6 +185,7 @@ class ListView extends React.Component {
      * @platform ios
      */
     stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
+    useZscroller: PropTypes.bool, // for web
     useBodyScroll: PropTypes.bool, // for web
     stickyHeader: PropTypes.bool, // for web
     stickyProps: PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
@@ -640,6 +641,18 @@ class ListView extends React.Component {
       this.scrollProperties.offset = window.document.body[
         isVertical ? 'scrollTop' : 'scrollLeft'
       ];
+    } else if (this.props.useZscroller) {
+      const domScroller = this.refs[SCROLLVIEW_REF].domScroller;
+      this.scrollProperties.visibleLength = domScroller.container[
+        isVertical ? 'clientHeight' : 'clientWidth'
+      ];
+      this.scrollProperties.contentLength = domScroller.content[
+        isVertical ? 'offsetHeight' : 'offsetWidth'
+      ];
+      this.scrollProperties.offset = domScroller.scroller.getValues()[
+        isVertical ? 'top' : 'left'
+      ];
+      // console.log(this.scrollProperties, domScroller.scroller.getScrollMax())
     } else {
       this.scrollProperties.visibleLength = target[
         isVertical ? 'offsetHeight' : 'offsetWidth'
@@ -653,7 +666,7 @@ class ListView extends React.Component {
     }
 
     // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
-    if (!this._maybeCallOnEndReached(e)) {
+    if (!this._maybeCallOnEndReached(this.props.useZscroller ? {} : e)) {
       // console.log('enter')
       this._renderMoreRowsIfNeeded();
     }

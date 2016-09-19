@@ -30,7 +30,7 @@ const Demo = React.createClass({
         onEndReached={e => alert(e.toString())}
         onEndReachedThreshold={10}
         scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
+        scrollRenderAheadDistance={30}
         initialListSize={5}
         pageSize={5}
         renderRow={(rowData, sectionID, rowID, highlightRow) => (
@@ -48,6 +48,10 @@ const Demo = React.createClass({
           />
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
+        useZscroller
+        scrollerOptions={{
+          scrollbars: true,
+        }}
       />
     );
   },

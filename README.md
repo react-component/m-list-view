@@ -75,6 +75,7 @@ And, use css style instead of react-native's style.
     - stickyProps / stickyContainerProps (see [react-sticky](https://github.com/captivationsoftware/react-sticky))
 - renderBodyComponent
 - renderSectionBodyWrapper
+- useZscroller (boolean, false) - use zscroller to well support RefreshControl and pull up refresh.
 
 ### ListView.IndexedList (beta)
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button

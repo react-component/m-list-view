@@ -5,6 +5,7 @@ import StyleSheet from './StyleSheet';
 import View from './View.web';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
+import DOMScroller from 'zscroller';
 const throttle = require('domkit/throttle');
 const invariant = require('fbjs/lib/invariant');
 
@@ -269,12 +270,24 @@ class ScrollView extends React.Component {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       return;
     }
-    let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
     this.__handleScroll = this._handleScroll();
+    if (this.props.useZscroller) {
+      this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.getInnerViewNode()), {
+        scrollingX: false,
+        onScroll: this.__handleScroll,
+        ...this.props.scrollerOptions,
+      });
+      return;
+    }
+    let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
     scrollView.addEventListener('scroll', this.__handleScroll);
   }
   componentWillUnmount() {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
+      return;
+    }
+    if (this.props.useZscroller) {
+      this.domScroller.destroy();
       return;
     }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
@@ -405,12 +418,21 @@ class ScrollView extends React.Component {
         !this.props.horizontal;
 
     // const handleScroll = this._handleScroll();
-
+    let styleBase = styles.base;
+    if (otherProps.stickyHeader || otherProps.useBodyScroll) {
+      styleBase = null;
+    } else if (otherProps.useZscroller) {
+      styleBase = {
+        position: 'relative',
+        overflow: 'hidden',
+        flex: 1,
+      };
+    }
     let props = {
       ...otherProps,
       alwaysBounceHorizontal,
       alwaysBounceVertical,
-      style: StyleSheet.flattenStyle([otherProps.stickyHeader || otherProps.useBodyScroll ? null : styles.base, this.props.style]),
+      style: StyleSheet.flattenStyle([styleBase, this.props.style]),
       onTouchStart: this.scrollResponderHandleTouchStart,
       onTouchMove: this.scrollResponderHandleTouchMove,
       onTouchEnd: this.scrollResponderHandleTouchEnd,

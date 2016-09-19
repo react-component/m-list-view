@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		6:0
+/******/ 		7:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"simple","5":"simple-paging"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"simple","5":"simple-paging","6":"simple-zscroller"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -22037,7 +22037,7 @@
 	
 	var _ListView2 = _interopRequireDefault(_ListView);
 	
-	var _Indexed = __webpack_require__(282);
+	var _Indexed = __webpack_require__(285);
 	
 	var _Indexed2 = _interopRequireDefault(_Indexed);
 	
@@ -22098,11 +22098,11 @@
 	
 	var _ScrollResponder2 = _interopRequireDefault(_ScrollResponder);
 	
-	var _StaticRenderer = __webpack_require__(276);
+	var _StaticRenderer = __webpack_require__(279);
 	
 	var _StaticRenderer2 = _interopRequireDefault(_StaticRenderer);
 	
-	var _reactTimerMixin = __webpack_require__(277);
+	var _reactTimerMixin = __webpack_require__(280);
 	
 	var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 	
@@ -22118,11 +22118,11 @@
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 	
-	var _reactSticky = __webpack_require__(278);
+	var _reactSticky = __webpack_require__(281);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var throttle = __webpack_require__(275);
+	var throttle = __webpack_require__(278);
 	
 	
 	var DEFAULT_PAGE_SIZE = 1;
@@ -22627,6 +22627,12 @@
 	      this.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
 	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
 	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollLeft'];
+	    } else if (this.props.useZscroller) {
+	      var domScroller = this.refs[SCROLLVIEW_REF].domScroller;
+	      this.scrollProperties.visibleLength = domScroller.container[isVertical ? 'clientHeight' : 'clientWidth'];
+	      this.scrollProperties.contentLength = domScroller.content[isVertical ? 'offsetHeight' : 'offsetWidth'];
+	      this.scrollProperties.offset = domScroller.scroller.getValues()[isVertical ? 'top' : 'left'];
+	      // console.log(this.scrollProperties, domScroller.scroller.getScrollMax())
 	    } else {
 	      this.scrollProperties.visibleLength = target[isVertical ? 'offsetHeight' : 'offsetWidth'];
 	      this.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
@@ -22634,7 +22640,7 @@
 	    }
 	
 	    // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
-	    if (!this._maybeCallOnEndReached(e)) {
+	    if (!this._maybeCallOnEndReached(this.props.useZscroller ? {} : e)) {
 	      // console.log('enter')
 	      this._renderMoreRowsIfNeeded();
 	    }
@@ -22759,6 +22765,7 @@
 	   * @platform ios
 	   */
 	  stickyHeaderIndices: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	  useZscroller: _react.PropTypes.bool, // for web
 	  useBodyScroll: _react.PropTypes.bool, // for web
 	  stickyHeader: _react.PropTypes.bool, // for web
 	  stickyProps: _react.PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
@@ -24231,13 +24238,13 @@
 	  value: true
 	});
 	
-	var _extends2 = __webpack_require__(2);
-	
-	var _extends3 = _interopRequireDefault(_extends2);
-	
 	var _objectWithoutProperties2 = __webpack_require__(215);
 	
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _extends2 = __webpack_require__(2);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
 	
 	var _classCallCheck2 = __webpack_require__(216);
 	
@@ -24279,9 +24286,13 @@
 	
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 	
+	var _zscroller = __webpack_require__(275);
+	
+	var _zscroller2 = _interopRequireDefault(_zscroller);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var throttle = __webpack_require__(275);
+	var throttle = __webpack_require__(278);
 	var invariant = __webpack_require__(48);
 	
 	var SCROLLVIEW = 'ScrollView';
@@ -24323,13 +24334,24 @@
 	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      return;
 	    }
-	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
 	    this.__handleScroll = this._handleScroll();
+	    if (this.props.useZscroller) {
+	      this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.getInnerViewNode()), (0, _extends3.default)({
+	        scrollingX: false,
+	        onScroll: this.__handleScroll
+	      }, this.props.scrollerOptions));
+	      return;
+	    }
+	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
 	    scrollView.addEventListener('scroll', this.__handleScroll);
 	  };
 	
 	  ScrollView.prototype.componentWillUnmount = function componentWillUnmount() {
 	    if (this.props.stickyHeader || this.props.useBodyScroll) {
+	      return;
+	    }
+	    if (this.props.useZscroller) {
+	      this.domScroller.destroy();
 	      return;
 	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
@@ -24453,11 +24475,20 @@
 	    var alwaysBounceVertical = this.props.alwaysBounceVertical !== undefined ? this.props.alwaysBounceVertical : !this.props.horizontal;
 	
 	    // const handleScroll = this._handleScroll();
-	
+	    var styleBase = styles.base;
+	    if (otherProps.stickyHeader || otherProps.useBodyScroll) {
+	      styleBase = null;
+	    } else if (otherProps.useZscroller) {
+	      styleBase = {
+	        position: 'relative',
+	        overflow: 'hidden',
+	        flex: 1
+	      };
+	    }
 	    var props = (0, _extends3.default)({}, otherProps, {
 	      alwaysBounceHorizontal: alwaysBounceHorizontal,
 	      alwaysBounceVertical: alwaysBounceVertical,
-	      style: _StyleSheet2.default.flattenStyle([otherProps.stickyHeader || otherProps.useBodyScroll ? null : styles.base, this.props.style]),
+	      style: _StyleSheet2.default.flattenStyle([styleBase, this.props.style]),
 	      onTouchStart: this.scrollResponderHandleTouchStart,
 	      onTouchMove: this.scrollResponderHandleTouchMove,
 	      onTouchEnd: this.scrollResponderHandleTouchEnd,
@@ -26198,6 +26229,1894 @@
 
 /***/ },
 /* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var Scroller = __webpack_require__(276);
+	var MIN_INDICATOR_SIZE = 8;
+	
+	function setTransform(nodeStyle, value) {
+	  nodeStyle.transform = value;
+	  nodeStyle.webkitTransform = value;
+	  nodeStyle.MozTransform = value;
+	}
+	
+	function setTransformOrigin(nodeStyle, value) {
+	  nodeStyle.transformOrigin = value;
+	  nodeStyle.webkitTransformOrigin = value;
+	  nodeStyle.MozTransformOrigin = value;
+	}
+	
+	function DOMScroller(content) {
+	  var _this = this;
+	
+	  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	  var scrollbars = void 0;
+	  var indicators = void 0;
+	  var indicatorsSize = void 0;
+	  var scrollbarsSize = void 0;
+	  var indicatorsPos = void 0;
+	  var scrollbarsOpacity = void 0;
+	  var contentSize = void 0;
+	  var clientSize = void 0;
+	
+	  this.content = content;
+	  this.container = content.parentNode;
+	  this.options = _extends({}, options, {
+	    scrollingComplete: function scrollingComplete() {
+	      _this.clearScrollbarTimer();
+	      _this.timer = setTimeout(function () {
+	        if (options.scrollingComplete) {
+	          options.scrollingComplete();
+	        }
+	        if (scrollbars) {
+	          ['x', 'y'].forEach(function (k) {
+	            if (scrollbars[k]) {
+	              _this.setScrollbarOpacity(k, 0);
+	            }
+	          });
+	        }
+	      }, 0);
+	    }
+	  });
+	
+	  if (this.options.scrollbars) {
+	    scrollbars = this.scrollbars = {};
+	    indicators = this.indicators = {};
+	    indicatorsSize = this.indicatorsSize = {};
+	    scrollbarsSize = this.scrollbarsSize = {};
+	    indicatorsPos = this.indicatorsPos = {};
+	    scrollbarsOpacity = this.scrollbarsOpacity = {};
+	    contentSize = this.contentSize = {};
+	    clientSize = this.clientSize = {};
+	
+	    ['x', 'y'].forEach(function (k) {
+	      var optionName = k === 'x' ? 'scrollingX' : 'scrollingY';
+	      if (_this.options[optionName] !== false) {
+	        scrollbars[k] = document.createElement('div');
+	        scrollbars[k].className = 'zscroller-scrollbar-' + k;
+	        indicators[k] = document.createElement('div');
+	        indicators[k].className = 'zscroller-indicator-' + k;
+	        scrollbars[k].appendChild(indicators[k]);
+	        indicatorsSize[k] = -1;
+	        scrollbarsOpacity[k] = 0;
+	        indicatorsPos[k] = 0;
+	        _this.container.appendChild(scrollbars[k]);
+	      }
+	    });
+	  }
+	
+	  var init = true;
+	  var contentStyle = content.style;
+	
+	  // create Scroller instance
+	  this.scroller = new Scroller(function (left, top, zoom) {
+	    if (!init && options.onScroll) {
+	      options.onScroll();
+	    }
+	    setTransform(contentStyle, 'translate3d(' + -left + 'px,' + -top + 'px,0) scale(' + zoom + ')');
+	    if (scrollbars) {
+	      ['x', 'y'].forEach(function (k) {
+	        if (scrollbars[k]) {
+	          var pos = k === 'x' ? left : top;
+	          if (clientSize[k] >= contentSize[k]) {
+	            _this.setScrollbarOpacity(k, 0);
+	          } else {
+	            if (!init) {
+	              _this.setScrollbarOpacity(k, 1);
+	            }
+	            var normalIndicatorSize = clientSize[k] / contentSize[k] * scrollbarsSize[k];
+	            var size = normalIndicatorSize;
+	            var indicatorPos = void 0;
+	            if (pos < 0) {
+	              size = Math.max(normalIndicatorSize + pos, MIN_INDICATOR_SIZE);
+	              indicatorPos = 0;
+	            } else if (pos > contentSize[k] - clientSize[k]) {
+	              size = Math.max(normalIndicatorSize + contentSize[k] - clientSize[k] - pos, MIN_INDICATOR_SIZE);
+	              indicatorPos = scrollbarsSize[k] - size;
+	            } else {
+	              indicatorPos = pos / contentSize[k] * scrollbarsSize[k];
+	            }
+	            _this.setIndicatorSize(k, size);
+	            _this.setIndicatorPos(k, indicatorPos);
+	          }
+	        }
+	      });
+	    }
+	    init = false;
+	  }, this.options);
+	
+	  // bind events
+	  this.bindEvents();
+	
+	  // the content element needs a correct transform origin for zooming
+	  setTransformOrigin(content.style, 'left top');
+	
+	  // reflow for the first time
+	  this.reflow();
+	}
+	
+	DOMScroller.prototype.setDisabled = function setDisabled(disabled) {
+	  this.disabled = disabled;
+	};
+	
+	DOMScroller.prototype.clearScrollbarTimer = function clearScrollbarTimer() {
+	  if (this.timer) {
+	    clearTimeout(this.timer);
+	    this.timer = null;
+	  }
+	};
+	
+	DOMScroller.prototype.setScrollbarOpacity = function setScrollbarOpacity(axis, opacity) {
+	  if (this.scrollbarsOpacity[axis] !== opacity) {
+	    this.scrollbars[axis].style.opacity = opacity;
+	    this.scrollbarsOpacity[axis] = opacity;
+	  }
+	};
+	
+	DOMScroller.prototype.setIndicatorPos = function setIndicatorPos(axis, value) {
+	  if (this.indicatorsPos[axis] !== value) {
+	    if (axis === 'x') {
+	      setTransform(this.indicators[axis].style, 'translate3d(' + value + 'px,0,0)');
+	    } else {
+	      setTransform(this.indicators[axis].style, 'translate3d(0, ' + value + 'px,0)');
+	    }
+	    this.indicatorsPos[axis] = value;
+	  }
+	};
+	
+	DOMScroller.prototype.setIndicatorSize = function setIndicatorSize(axis, value) {
+	  if (this.indicatorsSize[axis] !== value) {
+	    this.indicators[axis].style[axis === 'x' ? 'width' : 'height'] = value + 'px';
+	    this.indicatorsSize[axis] = value;
+	  }
+	};
+	
+	DOMScroller.prototype.reflow = function reflow() {
+	  if (this.scrollbars) {
+	    this.contentSize.x = this.content.offsetWidth;
+	    this.contentSize.y = this.content.offsetHeight;
+	    this.clientSize.x = this.container.clientWidth;
+	    this.clientSize.y = this.container.clientHeight;
+	    if (this.scrollbars.x) {
+	      this.scrollbarsSize.x = this.scrollbars.x.offsetWidth;
+	    }
+	    if (this.scrollbars.y) {
+	      this.scrollbarsSize.y = this.scrollbars.y.offsetHeight;
+	    }
+	  }
+	  // set the right scroller dimensions
+	  this.scroller.setDimensions(this.container.clientWidth, this.container.clientHeight, this.content.offsetWidth, this.content.offsetHeight);
+	
+	  // refresh the position for zooming purposes
+	  var rect = this.container.getBoundingClientRect();
+	  this.scroller.setPosition(rect.x + this.container.clientLeft, rect.y + this.container.clientTop);
+	};
+	
+	DOMScroller.prototype.destroy = function destroy() {
+	  window.removeEventListener('resize', this.onResize, false);
+	  this.container.removeEventListener('touchstart', this.onTouchStart, false);
+	  this.container.removeEventListener('touchmove', this.onTouchMove, false);
+	  this.container.removeEventListener('touchend', this.onTouchEnd, false);
+	  this.container.removeEventListener('touchcancel', this.onTouchCancel, false);
+	  this.container.removeEventListener('mousedown', this.onMouseDown, false);
+	  document.removeEventListener('mousemove', this.onMouseMove, false);
+	  document.removeEventListener('mouseup', this.onMouseUp, false);
+	  this.container.removeEventListener('mousewheel', this.onMouseWheel, false);
+	};
+	
+	DOMScroller.prototype.bindEvents = function bindEvents() {
+	  var _this2 = this;
+	
+	  var that = this;
+	
+	  // reflow handling
+	  window.addEventListener('resize', this.onResize = function () {
+	    that.reflow();
+	  }, false);
+	
+	  // touch devices bind touch events
+	  if ('ontouchstart' in window) {
+	    this.container.addEventListener('touchstart', this.onTouchStart = function (e) {
+	      // Don't react if initial down happens on a form element
+	      if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i) || _this2.disabled) {
+	        return;
+	      }
+	      _this2.clearScrollbarTimer();
+	      // reflow since the container may have changed
+	      that.reflow();
+	      that.scroller.doTouchStart(e.touches, e.timeStamp);
+	    }, false);
+	
+	    this.container.addEventListener('touchmove', this.onTouchMove = function (e) {
+	      e.preventDefault();
+	      that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+	    }, false);
+	
+	    this.container.addEventListener('touchend', this.onTouchEnd = function (e) {
+	      that.scroller.doTouchEnd(e.timeStamp);
+	    }, false);
+	
+	    this.container.addEventListener('touchcancel', this.onTouchCancel = function (e) {
+	      that.scroller.doTouchEnd(e.timeStamp);
+	    }, false);
+	
+	    // non-touch bind mouse events
+	  } else {
+	    (function () {
+	      var mousedown = false;
+	      _this2.container.addEventListener('mousedown', _this2.onMouseDown = function (e) {
+	        if (e.target.tagName.match(/input|textarea|select/i) || _this2.disabled) {
+	          return;
+	        }
+	        _this2.clearScrollbarTimer();
+	        that.scroller.doTouchStart([{
+	          pageX: e.pageX,
+	          pageY: e.pageY
+	        }], e.timeStamp);
+	        mousedown = true;
+	        // reflow since the container may have changed
+	        that.reflow();
+	        e.preventDefault();
+	      }, false);
+	
+	      document.addEventListener('mousemove', _this2.onMouseMove = function (e) {
+	        if (!mousedown) {
+	          return;
+	        }
+	        that.scroller.doTouchMove([{
+	          pageX: e.pageX,
+	          pageY: e.pageY
+	        }], e.timeStamp);
+	        mousedown = true;
+	      }, false);
+	
+	      document.addEventListener('mouseup', _this2.onMouseUp = function (e) {
+	        if (!mousedown) {
+	          return;
+	        }
+	        that.scroller.doTouchEnd(e.timeStamp);
+	        mousedown = false;
+	      }, false);
+	
+	      _this2.container.addEventListener('mousewheel', _this2.onMouseWheel = function (e) {
+	        if (that.options.zooming) {
+	          that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
+	          e.preventDefault();
+	        }
+	      }, false);
+	    })();
+	  }
+	};
+	
+	module.exports = DOMScroller;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Scroller
+	 * http://github.com/zynga/scroller
+	 *
+	 * Copyright 2011, Zynga Inc.
+	 * Licensed under the MIT License.
+	 * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+	 *
+	 * Based on the work of: Unify Project (unify-project.org)
+	 * http://unify-project.org
+	 * Copyright 2011, Deutsche Telekom AG
+	 * License: MIT + Apache (V2)
+	 */
+	
+	var Scroller;
+	var Animate = __webpack_require__(277);
+	
+	var NOOP = function () {
+	};
+	
+	/**
+	 * A pure logic 'component' for 'virtual' scrolling/zooming.
+	 */
+	Scroller = function (callback, options) {
+	
+	  this.__callback = callback;
+	
+	  this.options = {
+	
+	    /** Enable scrolling on x-axis */
+	    scrollingX: true,
+	
+	    /** Enable scrolling on y-axis */
+	    scrollingY: true,
+	
+	    /** Enable animations for deceleration, snap back, zooming and scrolling */
+	    animating: true,
+	
+	    /** duration for animations triggered by scrollTo/zoomTo */
+	    animationDuration: 250,
+	
+	    /** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
+	    bouncing: true,
+	
+	    /** Enable locking to the main axis if user moves only slightly on one of them at start */
+	    locking: true,
+	
+	    /** Enable pagination mode (switching between full page content panes) */
+	    paging: false,
+	
+	    /** Enable snapping of content to a configured pixel grid */
+	    snapping: false,
+	
+	    /** Enable zooming of content via API, fingers and mouse wheel */
+	    zooming: false,
+	
+	    /** Minimum zoom level */
+	    minZoom: 0.5,
+	
+	    /** Maximum zoom level */
+	    maxZoom: 3,
+	
+	    /** Multiply or decrease scrolling speed **/
+	    speedMultiplier: 1,
+	
+	    /** Callback that is fired on the later of touch end or deceleration end,
+	     provided that another scrolling action has not begun. Used to know
+	     when to fade out a scrollbar. */
+	    scrollingComplete: NOOP,
+	
+	    /** This configures the amount of change applied to deceleration when reaching boundaries  **/
+	    penetrationDeceleration: 0.03,
+	
+	    /** This configures the amount of change applied to acceleration when reaching boundaries  **/
+	    penetrationAcceleration: 0.08
+	
+	  };
+	
+	  for (var key in options) {
+	    this.options[key] = options[key];
+	  }
+	
+	};
+	
+	
+	// Easing Equations (c) 2003 Robert Penner, all rights reserved.
+	// Open source under the BSD License.
+	
+	/**
+	 * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+	 **/
+	var easeOutCubic = function (pos) {
+	  return (Math.pow((pos - 1), 3) + 1);
+	};
+	
+	/**
+	 * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+	 **/
+	var easeInOutCubic = function (pos) {
+	  if ((pos /= 0.5) < 1) {
+	    return 0.5 * Math.pow(pos, 3);
+	  }
+	
+	  return 0.5 * (Math.pow((pos - 2), 3) + 2);
+	};
+	
+	
+	var members = {
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   INTERNAL FIELDS :: STATUS
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /** {Boolean} Whether only a single finger is used in touch handling */
+	  __isSingleTouch: false,
+	
+	  /** {Boolean} Whether a touch event sequence is in progress */
+	  __isTracking: false,
+	
+	  /** {Boolean} Whether a deceleration animation went to completion. */
+	  __didDecelerationComplete: false,
+	
+	  /**
+	   * {Boolean} Whether a gesture zoom/rotate event is in progress. Activates when
+	   * a gesturestart event happens. This has higher priority than dragging.
+	   */
+	  __isGesturing: false,
+	
+	  /**
+	   * {Boolean} Whether the user has moved by such a distance that we have enabled
+	   * dragging mode. Hint: It's only enabled after some pixels of movement to
+	   * not interrupt with clicks etc.
+	   */
+	  __isDragging: false,
+	
+	  /**
+	   * {Boolean} Not touching and dragging anymore, and smoothly animating the
+	   * touch sequence using deceleration.
+	   */
+	  __isDecelerating: false,
+	
+	  /**
+	   * {Boolean} Smoothly animating the currently configured change
+	   */
+	  __isAnimating: false,
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   INTERNAL FIELDS :: DIMENSIONS
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /** {Integer} Available outer left position (from document perspective) */
+	  __clientLeft: 0,
+	
+	  /** {Integer} Available outer top position (from document perspective) */
+	  __clientTop: 0,
+	
+	  /** {Integer} Available outer width */
+	  __clientWidth: 0,
+	
+	  /** {Integer} Available outer height */
+	  __clientHeight: 0,
+	
+	  /** {Integer} Outer width of content */
+	  __contentWidth: 0,
+	
+	  /** {Integer} Outer height of content */
+	  __contentHeight: 0,
+	
+	  /** {Integer} Snapping width for content */
+	  __snapWidth: 100,
+	
+	  /** {Integer} Snapping height for content */
+	  __snapHeight: 100,
+	
+	  /** {Integer} Height to assign to refresh area */
+	  __refreshHeight: null,
+	
+	  /** {Boolean} Whether the refresh process is enabled when the event is released now */
+	  __refreshActive: false,
+	
+	  /** {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release */
+	  __refreshActivate: null,
+	
+	  /** {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled */
+	  __refreshDeactivate: null,
+	
+	  /** {Function} Callback to execute to start the actual refresh. Call {@link #refreshFinish} when done */
+	  __refreshStart: null,
+	
+	  /** {Number} Zoom level */
+	  __zoomLevel: 1,
+	
+	  /** {Number} Scroll position on x-axis */
+	  __scrollLeft: 0,
+	
+	  /** {Number} Scroll position on y-axis */
+	  __scrollTop: 0,
+	
+	  /** {Integer} Maximum allowed scroll position on x-axis */
+	  __maxScrollLeft: 0,
+	
+	  /** {Integer} Maximum allowed scroll position on y-axis */
+	  __maxScrollTop: 0,
+	
+	  /* {Number} Scheduled left position (final position when animating) */
+	  __scheduledLeft: 0,
+	
+	  /* {Number} Scheduled top position (final position when animating) */
+	  __scheduledTop: 0,
+	
+	  /* {Number} Scheduled zoom level (final scale when animating) */
+	  __scheduledZoom: 0,
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   INTERNAL FIELDS :: LAST POSITIONS
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /** {Number} Left position of finger at start */
+	  __lastTouchLeft: null,
+	
+	  /** {Number} Top position of finger at start */
+	  __lastTouchTop: null,
+	
+	  /** {Date} Timestamp of last move of finger. Used to limit tracking range for deceleration speed. */
+	  __lastTouchMove: null,
+	
+	  /** {Array} List of positions, uses three indexes for each state: left, top, timestamp */
+	  __positions: null,
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   INTERNAL FIELDS :: DECELERATION SUPPORT
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /** {Integer} Minimum left scroll position during deceleration */
+	  __minDecelerationScrollLeft: null,
+	
+	  /** {Integer} Minimum top scroll position during deceleration */
+	  __minDecelerationScrollTop: null,
+	
+	  /** {Integer} Maximum left scroll position during deceleration */
+	  __maxDecelerationScrollLeft: null,
+	
+	  /** {Integer} Maximum top scroll position during deceleration */
+	  __maxDecelerationScrollTop: null,
+	
+	  /** {Number} Current factor to modify horizontal scroll position with on every step */
+	  __decelerationVelocityX: null,
+	
+	  /** {Number} Current factor to modify vertical scroll position with on every step */
+	  __decelerationVelocityY: null,
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   PUBLIC API
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /**
+	   * Configures the dimensions of the client (outer) and content (inner) elements.
+	   * Requires the available space for the outer element and the outer size of the inner element.
+	   * All values which are falsy (null or zero etc.) are ignored and the old value is kept.
+	   *
+	   * @param clientWidth {Integer ? null} Inner width of outer element
+	   * @param clientHeight {Integer ? null} Inner height of outer element
+	   * @param contentWidth {Integer ? null} Outer width of inner element
+	   * @param contentHeight {Integer ? null} Outer height of inner element
+	   */
+	  setDimensions: function (clientWidth, clientHeight, contentWidth, contentHeight) {
+	
+	    var self = this;
+	
+	    // Only update values which are defined
+	    if (clientWidth === +clientWidth) {
+	      self.__clientWidth = clientWidth;
+	    }
+	
+	    if (clientHeight === +clientHeight) {
+	      self.__clientHeight = clientHeight;
+	    }
+	
+	    if (contentWidth === +contentWidth) {
+	      self.__contentWidth = contentWidth;
+	    }
+	
+	    if (contentHeight === +contentHeight) {
+	      self.__contentHeight = contentHeight;
+	    }
+	
+	    // Refresh maximums
+	    self.__computeScrollMax();
+	
+	    // Refresh scroll position
+	    self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+	
+	  },
+	
+	
+	  /**
+	   * Sets the client coordinates in relation to the document.
+	   *
+	   * @param left {Integer ? 0} Left position of outer element
+	   * @param top {Integer ? 0} Top position of outer element
+	   */
+	  setPosition: function (left, top) {
+	
+	    var self = this;
+	
+	    self.__clientLeft = left || 0;
+	    self.__clientTop = top || 0;
+	
+	  },
+	
+	
+	  /**
+	   * Configures the snapping (when snapping is active)
+	   *
+	   * @param width {Integer} Snapping width
+	   * @param height {Integer} Snapping height
+	   */
+	  setSnapSize: function (width, height) {
+	
+	    var self = this;
+	
+	    self.__snapWidth = width;
+	    self.__snapHeight = height;
+	
+	  },
+	
+	
+	  /**
+	   * Activates pull-to-refresh. A special zone on the top of the list to start a list refresh whenever
+	   * the user event is released during visibility of this zone. This was introduced by some apps on iOS like
+	   * the official Twitter client.
+	   *
+	   * @param height {Integer} Height of pull-to-refresh zone on top of rendered list
+	   * @param activateCallback {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release.
+	   * @param deactivateCallback {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled.
+	   * @param startCallback {Function} Callback to execute to start the real async refresh action. Call {@link #finishPullToRefresh} after finish of refresh.
+	   */
+	  activatePullToRefresh: function (height, activateCallback, deactivateCallback, startCallback) {
+	
+	    var self = this;
+	
+	    self.__refreshHeight = height;
+	    self.__refreshActivate = activateCallback;
+	    self.__refreshDeactivate = deactivateCallback;
+	    self.__refreshStart = startCallback;
+	
+	  },
+	
+	
+	  /**
+	   * Starts pull-to-refresh manually.
+	   */
+	  triggerPullToRefresh: function () {
+	    // Use publish instead of scrollTo to allow scrolling to out of boundary position
+	    // We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
+	    this.__publish(this.__scrollLeft, -this.__refreshHeight, this.__zoomLevel, true);
+	
+	    if (this.__refreshStart) {
+	      this.__refreshStart();
+	    }
+	  },
+	
+	
+	  /**
+	   * Signalizes that pull-to-refresh is finished.
+	   */
+	  finishPullToRefresh: function () {
+	
+	    var self = this;
+	
+	    self.__refreshActive = false;
+	    if (self.__refreshDeactivate) {
+	      self.__refreshDeactivate();
+	    }
+	
+	    self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+	
+	  },
+	
+	
+	  /**
+	   * Returns the scroll position and zooming values
+	   *
+	   * @return {Map} `left` and `top` scroll position and `zoom` level
+	   */
+	  getValues: function () {
+	
+	    var self = this;
+	
+	    return {
+	      left: self.__scrollLeft,
+	      top: self.__scrollTop,
+	      zoom: self.__zoomLevel
+	    };
+	
+	  },
+	
+	
+	  /**
+	   * Returns the maximum scroll values
+	   *
+	   * @return {Map} `left` and `top` maximum scroll values
+	   */
+	  getScrollMax: function () {
+	
+	    var self = this;
+	
+	    return {
+	      left: self.__maxScrollLeft,
+	      top: self.__maxScrollTop
+	    };
+	
+	  },
+	
+	
+	  /**
+	   * Zooms to the given level. Supports optional animation. Zooms
+	   * the center when no coordinates are given.
+	   *
+	   * @param level {Number} Level to zoom to
+	   * @param animate {Boolean ? false} Whether to use animation
+	   * @param originLeft {Number ? null} Zoom in at given left coordinate
+	   * @param originTop {Number ? null} Zoom in at given top coordinate
+	   * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
+	   */
+	  zoomTo: function (level, animate, originLeft, originTop, callback) {
+	
+	    var self = this;
+	
+	    if (!self.options.zooming) {
+	      throw new Error("Zooming is not enabled!");
+	    }
+	
+	    // Add callback if exists
+	    if (callback) {
+	      self.__zoomComplete = callback;
+	    }
+	
+	    // Stop deceleration
+	    if (self.__isDecelerating) {
+	      Animate.stop(self.__isDecelerating);
+	      self.__isDecelerating = false;
+	    }
+	
+	    var oldLevel = self.__zoomLevel;
+	
+	    // Normalize input origin to center of viewport if not defined
+	    if (originLeft == null) {
+	      originLeft = self.__clientWidth / 2;
+	    }
+	
+	    if (originTop == null) {
+	      originTop = self.__clientHeight / 2;
+	    }
+	
+	    // Limit level according to configuration
+	    level = Math.max(Math.min(level, self.options.maxZoom), self.options.minZoom);
+	
+	    // Recompute maximum values while temporary tweaking maximum scroll ranges
+	    self.__computeScrollMax(level);
+	
+	    // Recompute left and top coordinates based on new zoom level
+	    var left = ((originLeft + self.__scrollLeft) * level / oldLevel) - originLeft;
+	    var top = ((originTop + self.__scrollTop) * level / oldLevel) - originTop;
+	
+	    // Limit x-axis
+	    if (left > self.__maxScrollLeft) {
+	      left = self.__maxScrollLeft;
+	    } else if (left < 0) {
+	      left = 0;
+	    }
+	
+	    // Limit y-axis
+	    if (top > self.__maxScrollTop) {
+	      top = self.__maxScrollTop;
+	    } else if (top < 0) {
+	      top = 0;
+	    }
+	
+	    // Push values out
+	    self.__publish(left, top, level, animate);
+	
+	  },
+	
+	
+	  /**
+	   * Zooms the content by the given factor.
+	   *
+	   * @param factor {Number} Zoom by given factor
+	   * @param animate {Boolean ? false} Whether to use animation
+	   * @param originLeft {Number ? 0} Zoom in at given left coordinate
+	   * @param originTop {Number ? 0} Zoom in at given top coordinate
+	   * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
+	   */
+	  zoomBy: function (factor, animate, originLeft, originTop, callback) {
+	
+	    var self = this;
+	
+	    self.zoomTo(self.__zoomLevel * factor, animate, originLeft, originTop, callback);
+	
+	  },
+	
+	
+	  /**
+	   * Scrolls to the given position. Respect limitations and snapping automatically.
+	   *
+	   * @param left {Number?null} Horizontal scroll position, keeps current if value is <code>null</code>
+	   * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
+	   * @param animate {Boolean?false} Whether the scrolling should happen using an animation
+	   * @param zoom {Number?null} Zoom level to go to
+	   */
+	  scrollTo: function (left, top, animate, zoom, callback) {
+	
+	    var self = this;
+	
+	    // Stop deceleration
+	    if (self.__isDecelerating) {
+	      Animate.stop(self.__isDecelerating);
+	      self.__isDecelerating = false;
+	    }
+	
+	    // Correct coordinates based on new zoom level
+	    if (zoom != null && zoom !== self.__zoomLevel) {
+	
+	      if (!self.options.zooming) {
+	        throw new Error("Zooming is not enabled!");
+	      }
+	
+	      left *= zoom;
+	      top *= zoom;
+	
+	      // Recompute maximum values while temporary tweaking maximum scroll ranges
+	      self.__computeScrollMax(zoom);
+	
+	    } else {
+	
+	      // Keep zoom when not defined
+	      zoom = self.__zoomLevel;
+	
+	    }
+	
+	    if (!self.options.scrollingX) {
+	
+	      left = self.__scrollLeft;
+	
+	    } else {
+	
+	      if (self.options.paging) {
+	        left = Math.round(left / self.__clientWidth) * self.__clientWidth;
+	      } else if (self.options.snapping) {
+	        left = Math.round(left / self.__snapWidth) * self.__snapWidth;
+	      }
+	
+	    }
+	
+	    if (!self.options.scrollingY) {
+	
+	      top = self.__scrollTop;
+	
+	    } else {
+	
+	      if (self.options.paging) {
+	        top = Math.round(top / self.__clientHeight) * self.__clientHeight;
+	      } else if (self.options.snapping) {
+	        top = Math.round(top / self.__snapHeight) * self.__snapHeight;
+	      }
+	
+	    }
+	
+	    // Limit for allowed ranges
+	    left = Math.max(Math.min(self.__maxScrollLeft, left), 0);
+	    top = Math.max(Math.min(self.__maxScrollTop, top), 0);
+	
+	    // Don't animate when no change detected, still call publish to make sure
+	    // that rendered position is really in-sync with internal data
+	    if (left === self.__scrollLeft && top === self.__scrollTop) {
+	      animate = false;
+	      if (callback) {
+	        callback();
+	      }
+	    }
+	
+	    // Publish new values
+	    if (!self.__isTracking) {
+	      self.__publish(left, top, zoom, animate);
+	    }
+	
+	  },
+	
+	
+	  /**
+	   * Scroll by the given offset
+	   *
+	   * @param left {Number ? 0} Scroll x-axis by given offset
+	   * @param top {Number ? 0} Scroll x-axis by given offset
+	   * @param animate {Boolean ? false} Whether to animate the given change
+	   */
+	  scrollBy: function (left, top, animate) {
+	
+	    var self = this;
+	
+	    var startLeft = self.__isAnimating ? self.__scheduledLeft : self.__scrollLeft;
+	    var startTop = self.__isAnimating ? self.__scheduledTop : self.__scrollTop;
+	
+	    self.scrollTo(startLeft + (left || 0), startTop + (top || 0), animate);
+	
+	  },
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   EVENT CALLBACKS
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /**
+	   * Mouse wheel handler for zooming support
+	   */
+	  doMouseZoom: function (wheelDelta, timeStamp, pageX, pageY) {
+	
+	    var self = this;
+	    var change = wheelDelta > 0 ? 0.97 : 1.03;
+	
+	    return self.zoomTo(self.__zoomLevel * change, false, pageX - self.__clientLeft, pageY - self.__clientTop);
+	
+	  },
+	
+	
+	  /**
+	   * Touch start handler for scrolling support
+	   */
+	  doTouchStart: function (touches, timeStamp) {
+	
+	    // Array-like check is enough here
+	    if (touches.length == null) {
+	      throw new Error("Invalid touch list: " + touches);
+	    }
+	
+	    if (timeStamp instanceof Date) {
+	      timeStamp = timeStamp.valueOf();
+	    }
+	    if (typeof timeStamp !== "number") {
+	      throw new Error("Invalid timestamp value: " + timeStamp);
+	    }
+	
+	    var self = this;
+	
+	    // Reset interruptedAnimation flag
+	    self.__interruptedAnimation = true;
+	
+	    // Stop deceleration
+	    if (self.__isDecelerating) {
+	      Animate.stop(self.__isDecelerating);
+	      self.__isDecelerating = false;
+	      self.__interruptedAnimation = true;
+	    }
+	
+	    // Stop animation
+	    if (self.__isAnimating) {
+	      Animate.stop(self.__isAnimating);
+	      self.__isAnimating = false;
+	      self.__interruptedAnimation = true;
+	    }
+	
+	    // Use center point when dealing with two fingers
+	    var currentTouchLeft, currentTouchTop;
+	    var isSingleTouch = touches.length === 1;
+	    if (isSingleTouch) {
+	      currentTouchLeft = touches[0].pageX;
+	      currentTouchTop = touches[0].pageY;
+	    } else {
+	      currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+	      currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
+	    }
+	
+	    // Store initial positions
+	    self.__initialTouchLeft = currentTouchLeft;
+	    self.__initialTouchTop = currentTouchTop;
+	
+	    // Store current zoom level
+	    self.__zoomLevelStart = self.__zoomLevel;
+	
+	    // Store initial touch positions
+	    self.__lastTouchLeft = currentTouchLeft;
+	    self.__lastTouchTop = currentTouchTop;
+	
+	    // Store initial move time stamp
+	    self.__lastTouchMove = timeStamp;
+	
+	    // Reset initial scale
+	    self.__lastScale = 1;
+	
+	    // Reset locking flags
+	    self.__enableScrollX = !isSingleTouch && self.options.scrollingX;
+	    self.__enableScrollY = !isSingleTouch && self.options.scrollingY;
+	
+	    // Reset tracking flag
+	    self.__isTracking = true;
+	
+	    // Reset deceleration complete flag
+	    self.__didDecelerationComplete = false;
+	
+	    // Dragging starts directly with two fingers, otherwise lazy with an offset
+	    self.__isDragging = !isSingleTouch;
+	
+	    // Some features are disabled in multi touch scenarios
+	    self.__isSingleTouch = isSingleTouch;
+	
+	    // Clearing data structure
+	    self.__positions = [];
+	
+	  },
+	
+	
+	  /**
+	   * Touch move handler for scrolling support
+	   */
+	  doTouchMove: function (touches, timeStamp, scale) {
+	
+	    // Array-like check is enough here
+	    if (touches.length == null) {
+	      throw new Error("Invalid touch list: " + touches);
+	    }
+	
+	    if (timeStamp instanceof Date) {
+	      timeStamp = timeStamp.valueOf();
+	    }
+	    if (typeof timeStamp !== "number") {
+	      throw new Error("Invalid timestamp value: " + timeStamp);
+	    }
+	
+	    var self = this;
+	
+	    // Ignore event when tracking is not enabled (event might be outside of element)
+	    if (!self.__isTracking) {
+	      return;
+	    }
+	
+	
+	    var currentTouchLeft, currentTouchTop;
+	
+	    // Compute move based around of center of fingers
+	    if (touches.length === 2) {
+	      currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+	      currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
+	    } else {
+	      currentTouchLeft = touches[0].pageX;
+	      currentTouchTop = touches[0].pageY;
+	    }
+	
+	    var positions = self.__positions;
+	
+	    // Are we already is dragging mode?
+	    if (self.__isDragging) {
+	
+	      // Compute move distance
+	      var moveX = currentTouchLeft - self.__lastTouchLeft;
+	      var moveY = currentTouchTop - self.__lastTouchTop;
+	
+	      // Read previous scroll position and zooming
+	      var scrollLeft = self.__scrollLeft;
+	      var scrollTop = self.__scrollTop;
+	      var level = self.__zoomLevel;
+	
+	      // Work with scaling
+	      if (scale != null && self.options.zooming) {
+	
+	        var oldLevel = level;
+	
+	        // Recompute level based on previous scale and new scale
+	        level = level / self.__lastScale * scale;
+	
+	        // Limit level according to configuration
+	        level = Math.max(Math.min(level, self.options.maxZoom), self.options.minZoom);
+	
+	        // Only do further compution when change happened
+	        if (oldLevel !== level) {
+	
+	          // Compute relative event position to container
+	          var currentTouchLeftRel = currentTouchLeft - self.__clientLeft;
+	          var currentTouchTopRel = currentTouchTop - self.__clientTop;
+	
+	          // Recompute left and top coordinates based on new zoom level
+	          scrollLeft = ((currentTouchLeftRel + scrollLeft) * level / oldLevel) - currentTouchLeftRel;
+	          scrollTop = ((currentTouchTopRel + scrollTop) * level / oldLevel) - currentTouchTopRel;
+	
+	          // Recompute max scroll values
+	          self.__computeScrollMax(level);
+	
+	        }
+	      }
+	
+	      if (self.__enableScrollX) {
+	
+	        scrollLeft -= moveX * this.options.speedMultiplier;
+	        var maxScrollLeft = self.__maxScrollLeft;
+	
+	        if (scrollLeft > maxScrollLeft || scrollLeft < 0) {
+	
+	          // Slow down on the edges
+	          if (self.options.bouncing) {
+	
+	            scrollLeft += (moveX / 2 * this.options.speedMultiplier);
+	
+	          } else if (scrollLeft > maxScrollLeft) {
+	
+	            scrollLeft = maxScrollLeft;
+	
+	          } else {
+	
+	            scrollLeft = 0;
+	
+	          }
+	        }
+	      }
+	
+	      // Compute new vertical scroll position
+	      if (self.__enableScrollY) {
+	
+	        scrollTop -= moveY * this.options.speedMultiplier;
+	        var maxScrollTop = self.__maxScrollTop;
+	
+	        if (scrollTop > maxScrollTop || scrollTop < 0) {
+	
+	          // Slow down on the edges
+	          if (self.options.bouncing) {
+	
+	            scrollTop += (moveY / 2 * this.options.speedMultiplier);
+	
+	            // Support pull-to-refresh (only when only y is scrollable)
+	            if (!self.__enableScrollX && self.__refreshHeight != null) {
+	
+	              if (!self.__refreshActive && scrollTop <= -self.__refreshHeight) {
+	
+	                self.__refreshActive = true;
+	                if (self.__refreshActivate) {
+	                  self.__refreshActivate();
+	                }
+	
+	              } else if (self.__refreshActive && scrollTop > -self.__refreshHeight) {
+	
+	                self.__refreshActive = false;
+	                if (self.__refreshDeactivate) {
+	                  self.__refreshDeactivate();
+	                }
+	
+	              }
+	            }
+	
+	          } else if (scrollTop > maxScrollTop) {
+	
+	            scrollTop = maxScrollTop;
+	
+	          } else {
+	
+	            scrollTop = 0;
+	
+	          }
+	        }
+	      }
+	
+	      // Keep list from growing infinitely (holding min 10, max 20 measure points)
+	      if (positions.length > 60) {
+	        positions.splice(0, 30);
+	      }
+	
+	      // Track scroll movement for decleration
+	      positions.push(scrollLeft, scrollTop, timeStamp);
+	
+	      // Sync scroll position
+	      self.__publish(scrollLeft, scrollTop, level);
+	
+	      // Otherwise figure out whether we are switching into dragging mode now.
+	    } else {
+	
+	      var minimumTrackingForScroll = self.options.locking ? 3 : 0;
+	      var minimumTrackingForDrag = 5;
+	
+	      var distanceX = Math.abs(currentTouchLeft - self.__initialTouchLeft);
+	      var distanceY = Math.abs(currentTouchTop - self.__initialTouchTop);
+	
+	      self.__enableScrollX = self.options.scrollingX && distanceX >= minimumTrackingForScroll;
+	      self.__enableScrollY = self.options.scrollingY && distanceY >= minimumTrackingForScroll;
+	
+	      positions.push(self.__scrollLeft, self.__scrollTop, timeStamp);
+	
+	      self.__isDragging = (self.__enableScrollX || self.__enableScrollY) && (distanceX >= minimumTrackingForDrag || distanceY >= minimumTrackingForDrag);
+	      if (self.__isDragging) {
+	        self.__interruptedAnimation = false;
+	      }
+	
+	    }
+	
+	    // Update last touch positions and time stamp for next event
+	    self.__lastTouchLeft = currentTouchLeft;
+	    self.__lastTouchTop = currentTouchTop;
+	    self.__lastTouchMove = timeStamp;
+	    self.__lastScale = scale;
+	
+	  },
+	
+	
+	  /**
+	   * Touch end handler for scrolling support
+	   */
+	  doTouchEnd: function (timeStamp) {
+	
+	    if (timeStamp instanceof Date) {
+	      timeStamp = timeStamp.valueOf();
+	    }
+	    if (typeof timeStamp !== "number") {
+	      throw new Error("Invalid timestamp value: " + timeStamp);
+	    }
+	
+	    var self = this;
+	
+	    // Ignore event when tracking is not enabled (no touchstart event on element)
+	    // This is required as this listener ('touchmove') sits on the document and not on the element itself.
+	    if (!self.__isTracking) {
+	      return;
+	    }
+	
+	    // Not touching anymore (when two finger hit the screen there are two touch end events)
+	    self.__isTracking = false;
+	
+	    // Be sure to reset the dragging flag now. Here we also detect whether
+	    // the finger has moved fast enough to switch into a deceleration animation.
+	    if (self.__isDragging) {
+	
+	      // Reset dragging flag
+	      self.__isDragging = false;
+	
+	      // Start deceleration
+	      // Verify that the last move detected was in some relevant time frame
+	      if (self.__isSingleTouch && self.options.animating && (timeStamp - self.__lastTouchMove) <= 100) {
+	
+	        // Then figure out what the scroll position was about 100ms ago
+	        var positions = self.__positions;
+	        var endPos = positions.length - 1;
+	        var startPos = endPos;
+	
+	        // Move pointer to position measured 100ms ago
+	        for (var i = endPos; i > 0 && positions[i] > (self.__lastTouchMove - 100); i -= 3) {
+	          startPos = i;
+	        }
+	
+	        // If start and stop position is identical in a 100ms timeframe,
+	        // we cannot compute any useful deceleration.
+	        if (startPos !== endPos) {
+	
+	          // Compute relative movement between these two points
+	          var timeOffset = positions[endPos] - positions[startPos];
+	          var movedLeft = self.__scrollLeft - positions[startPos - 2];
+	          var movedTop = self.__scrollTop - positions[startPos - 1];
+	
+	          // Based on 50ms compute the movement to apply for each render step
+	          self.__decelerationVelocityX = movedLeft / timeOffset * (1000 / 60);
+	          self.__decelerationVelocityY = movedTop / timeOffset * (1000 / 60);
+	
+	          // How much velocity is required to start the deceleration
+	          var minVelocityToStartDeceleration = self.options.paging || self.options.snapping ? 4 : 1;
+	
+	          // Verify that we have enough velocity to start deceleration
+	          if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
+	
+	            // Deactivate pull-to-refresh when decelerating
+	            if (!self.__refreshActive) {
+	              self.__startDeceleration(timeStamp);
+	            }
+	          } else {
+	            self.options.scrollingComplete();
+	          }
+	        } else {
+	          self.options.scrollingComplete();
+	        }
+	      } else if ((timeStamp - self.__lastTouchMove) > 100) {
+	        self.options.scrollingComplete();
+	      }
+	    }
+	
+	    // If this was a slower move it is per default non decelerated, but this
+	    // still means that we want snap back to the bounds which is done here.
+	    // This is placed outside the condition above to improve edge case stability
+	    // e.g. touchend fired without enabled dragging. This should normally do not
+	    // have modified the scroll positions or even showed the scrollbars though.
+	    if (!self.__isDecelerating) {
+	
+	      if (self.__refreshActive && self.__refreshStart) {
+	
+	        // Use publish instead of scrollTo to allow scrolling to out of boundary position
+	        // We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
+	        self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
+	
+	        if (self.__refreshStart) {
+	          self.__refreshStart();
+	        }
+	
+	      } else {
+	
+	        if (self.__interruptedAnimation || self.__isDragging) {
+	          self.options.scrollingComplete();
+	        }
+	        self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+	
+	        // Directly signalize deactivation (nothing todo on refresh?)
+	        if (self.__refreshActive) {
+	
+	          self.__refreshActive = false;
+	          if (self.__refreshDeactivate) {
+	            self.__refreshDeactivate();
+	          }
+	
+	        }
+	      }
+	    }
+	
+	    // Fully cleanup list
+	    self.__positions.length = 0;
+	
+	  },
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   PRIVATE API
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /**
+	   * Applies the scroll position to the content element
+	   *
+	   * @param left {Number} Left scroll position
+	   * @param top {Number} Top scroll position
+	   * @param animate {Boolean?false} Whether animation should be used to move to the new coordinates
+	   */
+	  __publish: function (left, top, zoom, animate) {
+	
+	    var self = this;
+	
+	    // Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
+	    var wasAnimating = self.__isAnimating;
+	    if (wasAnimating) {
+	      Animate.stop(wasAnimating);
+	      self.__isAnimating = false;
+	    }
+	
+	    if (animate && self.options.animating) {
+	
+	      // Keep scheduled positions for scrollBy/zoomBy functionality
+	      self.__scheduledLeft = left;
+	      self.__scheduledTop = top;
+	      self.__scheduledZoom = zoom;
+	
+	      var oldLeft = self.__scrollLeft;
+	      var oldTop = self.__scrollTop;
+	      var oldZoom = self.__zoomLevel;
+	
+	      var diffLeft = left - oldLeft;
+	      var diffTop = top - oldTop;
+	      var diffZoom = zoom - oldZoom;
+	
+	      var step = function (percent, now, render) {
+	
+	        if (render) {
+	
+	          self.__scrollLeft = oldLeft + (diffLeft * percent);
+	          self.__scrollTop = oldTop + (diffTop * percent);
+	          self.__zoomLevel = oldZoom + (diffZoom * percent);
+	
+	          // Push values out
+	          if (self.__callback) {
+	            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+	          }
+	
+	        }
+	      };
+	
+	      var verify = function (id) {
+	        return self.__isAnimating === id;
+	      };
+	
+	      var completed = function (renderedFramesPerSecond, animationId, wasFinished) {
+	        if (animationId === self.__isAnimating) {
+	          self.__isAnimating = false;
+	        }
+	
+	        if (self.__didDecelerationComplete || wasFinished) {
+	          self.options.scrollingComplete();
+	        }
+	
+	        if (self.options.zooming) {
+	          self.__computeScrollMax();
+	          if (self.__zoomComplete) {
+	            self.__zoomComplete();
+	            self.__zoomComplete = null;
+	          }
+	        }
+	      };
+	
+	      // When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
+	      self.__isAnimating = Animate.start(step, verify, completed, self.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
+	
+	    } else {
+	
+	      self.__scheduledLeft = self.__scrollLeft = left;
+	      self.__scheduledTop = self.__scrollTop = top;
+	      self.__scheduledZoom = self.__zoomLevel = zoom;
+	
+	      // Push values out
+	      if (self.__callback) {
+	        self.__callback(left, top, zoom);
+	      }
+	
+	      // Fix max scroll ranges
+	      if (self.options.zooming) {
+	        self.__computeScrollMax();
+	        if (self.__zoomComplete) {
+	          self.__zoomComplete();
+	          self.__zoomComplete = null;
+	        }
+	      }
+	    }
+	  },
+	
+	
+	  /**
+	   * Recomputes scroll minimum values based on client dimensions and content dimensions.
+	   */
+	  __computeScrollMax: function (zoomLevel) {
+	
+	    var self = this;
+	
+	    if (zoomLevel == null) {
+	      zoomLevel = self.__zoomLevel;
+	    }
+	
+	    self.__maxScrollLeft = Math.max((self.__contentWidth * zoomLevel) - self.__clientWidth, 0);
+	    self.__maxScrollTop = Math.max((self.__contentHeight * zoomLevel) - self.__clientHeight, 0);
+	
+	  },
+	
+	
+	  /*
+	   ---------------------------------------------------------------------------
+	   ANIMATION (DECELERATION) SUPPORT
+	   ---------------------------------------------------------------------------
+	   */
+	
+	  /**
+	   * Called when a touch sequence end and the speed of the finger was high enough
+	   * to switch into deceleration mode.
+	   */
+	  __startDeceleration: function (timeStamp) {
+	
+	    var self = this;
+	
+	    if (self.options.paging) {
+	
+	      var scrollLeft = Math.max(Math.min(self.__scrollLeft, self.__maxScrollLeft), 0);
+	      var scrollTop = Math.max(Math.min(self.__scrollTop, self.__maxScrollTop), 0);
+	      var clientWidth = self.__clientWidth;
+	      var clientHeight = self.__clientHeight;
+	
+	      // We limit deceleration not to the min/max values of the allowed range, but to the size of the visible client area.
+	      // Each page should have exactly the size of the client area.
+	      self.__minDecelerationScrollLeft = Math.floor(scrollLeft / clientWidth) * clientWidth;
+	      self.__minDecelerationScrollTop = Math.floor(scrollTop / clientHeight) * clientHeight;
+	      self.__maxDecelerationScrollLeft = Math.ceil(scrollLeft / clientWidth) * clientWidth;
+	      self.__maxDecelerationScrollTop = Math.ceil(scrollTop / clientHeight) * clientHeight;
+	
+	    } else {
+	
+	      self.__minDecelerationScrollLeft = 0;
+	      self.__minDecelerationScrollTop = 0;
+	      self.__maxDecelerationScrollLeft = self.__maxScrollLeft;
+	      self.__maxDecelerationScrollTop = self.__maxScrollTop;
+	
+	    }
+	
+	    // Wrap class method
+	    var step = function (percent, now, render) {
+	      self.__stepThroughDeceleration(render);
+	    };
+	
+	    // How much velocity is required to keep the deceleration running
+	    // added by yiminghe
+	    var minVelocityToKeepDecelerating = self.options.minVelocityToKeepDecelerating;
+	
+	    if (!minVelocityToKeepDecelerating) {
+	      minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.001;
+	    }
+	
+	    // Detect whether it's still worth to continue animating steps
+	    // If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
+	    var verify = function () {
+	      var shouldContinue = Math.abs(self.__decelerationVelocityX) >= minVelocityToKeepDecelerating || Math.abs(self.__decelerationVelocityY) >= minVelocityToKeepDecelerating;
+	      if (!shouldContinue) {
+	        self.__didDecelerationComplete = true;
+	      }
+	      return shouldContinue;
+	    };
+	
+	    var completed = function (renderedFramesPerSecond, animationId, wasFinished) {
+	      self.__isDecelerating = false;
+	      // Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
+	      // fixed by yiminghe, in case call scrollingComplete twice
+	      self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping, null, self.__didDecelerationComplete && self.options.scrollingComplete);
+	    };
+	
+	    // Start animation and switch on flag
+	    self.__isDecelerating = Animate.start(step, verify, completed);
+	
+	  },
+	
+	
+	  /**
+	   * Called on every step of the animation
+	   *
+	   * @param inMemory {Boolean?false} Whether to not render the current step, but keep it in memory only. Used internally only!
+	   */
+	  __stepThroughDeceleration: function (render) {
+	
+	    var self = this;
+	
+	
+	    //
+	    // COMPUTE NEXT SCROLL POSITION
+	    //
+	
+	    // Add deceleration to scroll position
+	    var scrollLeft = self.__scrollLeft + self.__decelerationVelocityX;
+	    var scrollTop = self.__scrollTop + self.__decelerationVelocityY;
+	
+	
+	    //
+	    // HARD LIMIT SCROLL POSITION FOR NON BOUNCING MODE
+	    //
+	
+	    if (!self.options.bouncing) {
+	
+	      var scrollLeftFixed = Math.max(Math.min(self.__maxDecelerationScrollLeft, scrollLeft), self.__minDecelerationScrollLeft);
+	      if (scrollLeftFixed !== scrollLeft) {
+	        scrollLeft = scrollLeftFixed;
+	        self.__decelerationVelocityX = 0;
+	      }
+	
+	      var scrollTopFixed = Math.max(Math.min(self.__maxDecelerationScrollTop, scrollTop), self.__minDecelerationScrollTop);
+	      if (scrollTopFixed !== scrollTop) {
+	        scrollTop = scrollTopFixed;
+	        self.__decelerationVelocityY = 0;
+	      }
+	
+	    }
+	
+	    //
+	    // UPDATE SCROLL POSITION
+	    //
+	
+	    if (render) {
+	
+	      self.__publish(scrollLeft, scrollTop, self.__zoomLevel);
+	
+	    } else {
+	
+	      self.__scrollLeft = scrollLeft;
+	      self.__scrollTop = scrollTop;
+	
+	    }
+	
+	
+	    //
+	    // SLOW DOWN
+	    //
+	
+	    // Slow down velocity on every iteration
+	    if (!self.options.paging) {
+	
+	      // This is the factor applied to every iteration of the animation
+	      // to slow down the process. This should emulate natural behavior where
+	      // objects slow down when the initiator of the movement is removed
+	      var frictionFactor = 0.95;
+	
+	      self.__decelerationVelocityX *= frictionFactor;
+	      self.__decelerationVelocityY *= frictionFactor;
+	
+	    }
+	
+	
+	    //
+	    // BOUNCING SUPPORT
+	    //
+	
+	    if (self.options.bouncing) {
+	
+	      var scrollOutsideX = 0;
+	      var scrollOutsideY = 0;
+	
+	      // This configures the amount of change applied to deceleration/acceleration when reaching boundaries
+	      var penetrationDeceleration = self.options.penetrationDeceleration;
+	      var penetrationAcceleration = self.options.penetrationAcceleration;
+	
+	      // Check limits
+	      if (scrollLeft < self.__minDecelerationScrollLeft) {
+	        scrollOutsideX = self.__minDecelerationScrollLeft - scrollLeft;
+	      } else if (scrollLeft > self.__maxDecelerationScrollLeft) {
+	        scrollOutsideX = self.__maxDecelerationScrollLeft - scrollLeft;
+	      }
+	
+	      if (scrollTop < self.__minDecelerationScrollTop) {
+	        scrollOutsideY = self.__minDecelerationScrollTop - scrollTop;
+	      } else if (scrollTop > self.__maxDecelerationScrollTop) {
+	        scrollOutsideY = self.__maxDecelerationScrollTop - scrollTop;
+	      }
+	
+	      // Slow down until slow enough, then flip back to snap position
+	      if (scrollOutsideX !== 0) {
+	        if (scrollOutsideX * self.__decelerationVelocityX <= 0) {
+	          self.__decelerationVelocityX += scrollOutsideX * penetrationDeceleration;
+	        } else {
+	          self.__decelerationVelocityX = scrollOutsideX * penetrationAcceleration;
+	        }
+	      }
+	
+	      if (scrollOutsideY !== 0) {
+	        if (scrollOutsideY * self.__decelerationVelocityY <= 0) {
+	          self.__decelerationVelocityY += scrollOutsideY * penetrationDeceleration;
+	        } else {
+	          self.__decelerationVelocityY = scrollOutsideY * penetrationAcceleration;
+	        }
+	      }
+	    }
+	  }
+	};
+	
+	// Copy over members to prototype
+	for (var key in members) {
+	  Scroller.prototype[key] = members[key];
+	}
+	
+	module.exports = Scroller;
+
+
+/***/ },
+/* 277 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/*
+	 * Scroller
+	 * http://github.com/zynga/scroller
+	 *
+	 * Copyright 2011, Zynga Inc.
+	 * Licensed under the MIT License.
+	 * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+	 *
+	 * Based on the work of: Unify Project (unify-project.org)
+	 * http://unify-project.org
+	 * Copyright 2011, Deutsche Telekom AG
+	 * License: MIT + Apache (V2)
+	 */
+	
+	/**
+	 * Generic animation class with support for dropped frames both optional easing and duration.
+	 *
+	 * Optional duration is useful when the lifetime is defined by another condition than time
+	 * e.g. speed of an animating object, etc.
+	 *
+	 * Dropped frame logic allows to keep using the same updater logic independent from the actual
+	 * rendering. This eases a lot of cases where it might be pretty complex to break down a state
+	 * based on the pure time difference.
+	 */
+	
+	var desiredFrames = 60;
+	var millisecondsPerSecond = 1000;
+	var running = {};
+	var counter = 1;
+	var win = typeof window !== undefined ? window : undefined;
+	
+	if (!win) {
+	  win = typeof global !== undefined ? global : {};
+	}
+	
+	var Animate = {
+	
+	  /**
+	   * A requestAnimationFrame wrapper / polyfill.
+	   *
+	   * @param callback {Function} The callback to be invoked before the next repaint.
+	   * @param root {HTMLElement} The root element for the repaint
+	   */
+	  requestAnimationFrame: (function () {
+	
+	    // Check for request animation Frame support
+	    var requestFrame = win.requestAnimationFrame || win.webkitRequestAnimationFrame || win.mozRequestAnimationFrame || win.oRequestAnimationFrame;
+	    var isNative = !!requestFrame;
+	
+	    if (requestFrame && !/requestAnimationFrame\(\)\s*\{\s*\[native code\]\s*\}/i.test(requestFrame.toString())) {
+	      isNative = false;
+	    }
+	
+	    if (isNative) {
+	      return function (callback, root) {
+	        requestFrame(callback, root)
+	      };
+	    }
+	
+	    var TARGET_FPS = 60;
+	    var requests = {};
+	    var requestCount = 0;
+	    var rafHandle = 1;
+	    var intervalHandle = null;
+	    var lastActive = +new Date();
+	
+	    return function (callback, root) {
+	      var callbackHandle = rafHandle++;
+	
+	      // Store callback
+	      requests[callbackHandle] = callback;
+	      requestCount++;
+	
+	      // Create timeout at first request
+	      if (intervalHandle === null) {
+	
+	        intervalHandle = setInterval(function () {
+	
+	          var time = +new Date();
+	          var currentRequests = requests;
+	
+	          // Reset data structure before executing callbacks
+	          requests = {};
+	          requestCount = 0;
+	
+	          for (var key in currentRequests) {
+	            if (currentRequests.hasOwnProperty(key)) {
+	              currentRequests[key](time);
+	              lastActive = time;
+	            }
+	          }
+	
+	          // Disable the timeout when nothing happens for a certain
+	          // period of time
+	          if (time - lastActive > 2500) {
+	            clearInterval(intervalHandle);
+	            intervalHandle = null;
+	          }
+	
+	        }, 1000 / TARGET_FPS);
+	      }
+	
+	      return callbackHandle;
+	    };
+	
+	  })(),
+	
+	
+	  /**
+	   * Stops the given animation.
+	   *
+	   * @param id {Integer} Unique animation ID
+	   * @return {Boolean} Whether the animation was stopped (aka, was running before)
+	   */
+	  stop: function (id) {
+	    var cleared = running[id] != null;
+	    if (cleared) {
+	      running[id] = null;
+	    }
+	
+	    return cleared;
+	  },
+	
+	
+	  /**
+	   * Whether the given animation is still running.
+	   *
+	   * @param id {Integer} Unique animation ID
+	   * @return {Boolean} Whether the animation is still running
+	   */
+	  isRunning: function (id) {
+	    return running[id] != null;
+	  },
+	
+	
+	  /**
+	   * Start the animation.
+	   *
+	   * @param stepCallback {Function} Pointer to function which is executed on every step.
+	   *   Signature of the method should be `function(percent, now, virtual) { return continueWithAnimation; }`
+	   * @param verifyCallback {Function} Executed before every animation step.
+	   *   Signature of the method should be `function() { return continueWithAnimation; }`
+	   * @param completedCallback {Function}
+	   *   Signature of the method should be `function(droppedFrames, finishedAnimation) {}`
+	   * @param duration {Integer} Milliseconds to run the animation
+	   * @param easingMethod {Function} Pointer to easing function
+	   *   Signature of the method should be `function(percent) { return modifiedValue; }`
+	   * @param root {Element ? document.body} Render root, when available. Used for internal
+	   *   usage of requestAnimationFrame.
+	   * @return {Integer} Identifier of animation. Can be used to stop it any time.
+	   */
+	  start: function (stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) {
+	
+	    var start = +new Date();
+	    var lastFrame = start;
+	    var percent = 0;
+	    var dropCounter = 0;
+	    var id = counter++;
+	
+	    if (!root) {
+	      root = document.body;
+	    }
+	
+	    // Compacting running db automatically every few new animations
+	    if (id % 20 === 0) {
+	      var newRunning = {};
+	      for (var usedId in running) {
+	        newRunning[usedId] = true;
+	      }
+	      running = newRunning;
+	    }
+	
+	    // This is the internal step method which is called every few milliseconds
+	    var step = function (virtual) {
+	
+	      // Normalize virtual value
+	      var render = virtual !== true;
+	
+	      // Get current time
+	      var now = +new Date();
+	
+	      // Verification is executed before next animation step
+	      if (!running[id] || (verifyCallback && !verifyCallback(id))) {
+	
+	        running[id] = null;
+	        completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
+	        return;
+	
+	      }
+	
+	      // For the current rendering to apply let's update omitted steps in memory.
+	      // This is important to bring internal state variables up-to-date with progress in time.
+	      if (render) {
+	
+	        var droppedFrames = Math.round((now - lastFrame) / (millisecondsPerSecond / desiredFrames)) - 1;
+	        for (var j = 0; j < Math.min(droppedFrames, 4); j++) {
+	          step(true);
+	          dropCounter++;
+	        }
+	
+	      }
+	
+	      // Compute percent value
+	      if (duration) {
+	        percent = (now - start) / duration;
+	        if (percent > 1) {
+	          percent = 1;
+	        }
+	      }
+	
+	      // Execute step callback, then...
+	      var value = easingMethod ? easingMethod(percent) : percent;
+	      if ((stepCallback(value, now, render) === false || percent === 1) && render) {
+	        running[id] = null;
+	        completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
+	      } else if (render) {
+	        lastFrame = now;
+	        Animate.requestAnimationFrame(step, root);
+	      }
+	    };
+	
+	    // Mark as running
+	    running[id] = true;
+	
+	    // Init first step
+	    Animate.requestAnimationFrame(step, root);
+	
+	    // Return unique animation ID
+	    return id;
+	  }
+	};
+	
+	module.exports = Animate;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 278 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26215,7 +28134,7 @@
 
 
 /***/ },
-/* 276 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26269,7 +28188,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 277 */
+/* 280 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*
@@ -26367,7 +28286,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 278 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26377,15 +28296,15 @@
 	});
 	exports.Channel = exports.StickyContainer = exports.Sticky = undefined;
 	
-	var _sticky = __webpack_require__(279);
+	var _sticky = __webpack_require__(282);
 	
 	var _sticky2 = _interopRequireDefault(_sticky);
 	
-	var _container = __webpack_require__(280);
+	var _container = __webpack_require__(283);
 	
 	var _container2 = _interopRequireDefault(_container);
 	
-	var _channel = __webpack_require__(281);
+	var _channel = __webpack_require__(284);
 	
 	var _channel2 = _interopRequireDefault(_channel);
 	
@@ -26397,7 +28316,7 @@
 	exports.default = _sticky2.default;
 
 /***/ },
-/* 279 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26667,7 +28586,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 280 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26686,7 +28605,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _channel = __webpack_require__(281);
+	var _channel = __webpack_require__(284);
 	
 	var _channel2 = _interopRequireDefault(_channel);
 	
@@ -26772,7 +28691,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 281 */
+/* 284 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26810,7 +28729,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 282 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26823,7 +28742,7 @@
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _defineProperty2 = __webpack_require__(283);
+	var _defineProperty2 = __webpack_require__(286);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
@@ -26851,7 +28770,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _classnames = __webpack_require__(287);
+	var _classnames = __webpack_require__(290);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -26859,7 +28778,7 @@
 	
 	var _ListView2 = _interopRequireDefault(_ListView);
 	
-	var _indexedUtil = __webpack_require__(288);
+	var _indexedUtil = __webpack_require__(291);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27144,14 +29063,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 283 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(284);
+	var _defineProperty = __webpack_require__(287);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -27173,23 +29092,23 @@
 	};
 
 /***/ },
-/* 284 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(285), __esModule: true };
+	module.exports = { "default": __webpack_require__(288), __esModule: true };
 
 /***/ },
-/* 285 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(286);
+	__webpack_require__(289);
 	var $Object = __webpack_require__(8).Object;
 	module.exports = function defineProperty(it, key, desc){
 	  return $Object.defineProperty(it, key, desc);
 	};
 
 /***/ },
-/* 286 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $export = __webpack_require__(6);
@@ -27197,7 +29116,7 @@
 	$export($export.S + $export.F * !__webpack_require__(16), 'Object', {defineProperty: __webpack_require__(12).f});
 
 /***/ },
-/* 287 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -27251,7 +29170,7 @@
 
 
 /***/ },
-/* 288 */
+/* 291 */
 /***/ function(module, exports) {
 
 	'use strict';

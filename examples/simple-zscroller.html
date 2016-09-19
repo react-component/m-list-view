@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rmc-list-view@0.7.0-beta.0</title>
+  <title>simple-zscroller.js - example - rmc-list-view@0.7.0-beta.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -296,7 +296,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-attribute">onEndReached</span>=<span class="hljs-value">{e</span> =&gt;</span> alert(e.toString())}
         onEndReachedThreshold={10}
         scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
+        scrollRenderAheadDistance={30}
         initialListSize={5}
         pageSize={5}
         renderRow={(rowData, sectionID, rowID, highlightRow) =&gt; (
@@ -314,6 +314,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           /&gt;</span>
         )</span>}
         renderBodyComponent={() =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-body-demo"</span> /&gt;</span>}
+        useZscroller
+        scrollerOptions={{
+          scrollbars: true,
+        }}
       /&gt;
     )</span>;
   },
@@ -330,7 +334,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   
   <script src="common.js?nowrap"></script>
-  <script src="simple.js?nowrap"></script>
+  <script src="simple-zscroller.js?nowrap"></script>
 </body>
 
 </html>

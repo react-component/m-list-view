@@ -1,9 +1,9 @@
-webpackJsonp([4],{
+webpackJsonp([6],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(297);
+	module.exports = __webpack_require__(299);
 
 
 /***/ },
@@ -167,7 +167,7 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 297:
+/***/ 299:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -217,7 +217,7 @@ webpackJsonp([4],{
 	      },
 	      onEndReachedThreshold: 10,
 	      scrollEventThrottle: 20,
-	      scrollRenderAheadDistance: 100,
+	      scrollRenderAheadDistance: 30,
 	      initialListSize: 5,
 	      pageSize: 5,
 	      renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
@@ -242,6 +242,10 @@ webpackJsonp([4],{
 	      },
 	      renderBodyComponent: function renderBodyComponent() {
 	        return _react2.default.createElement('div', { className: 'for-body-demo' });
+	      },
+	      useZscroller: true,
+	      scrollerOptions: {
+	        scrollbars: true
 	      }
 	    });
 	  }
@@ -252,4 +256,4 @@ webpackJsonp([4],{
 /***/ }
 
 });
-//# sourceMappingURL=simple.js.map
+//# sourceMappingURL=simple-zscroller.js.map

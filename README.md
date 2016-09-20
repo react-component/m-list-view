@@ -67,23 +67,28 @@ And, use css style instead of react-native's style.
 - showsHorizontalScrollIndicator (use css style instead)
 - showsVerticalScrollIndicator (use css style instead)
 
-- [View](https://facebook.github.io/react-native/docs/view.html#props) props: **note: just support `onLayout` prop**
+- [View](https://facebook.github.io/react-native/docs/view.html#props) props: **note: just support `onLayout` prop** 
 
 #### new
-- useBodyScroll (boolean, false) - use body scroll
+- useBodyScroll (boolean, false) - use html `body`'s scroll
 - stickyHeader (note: if set it, ScrollComponent will be render into the head of body element, auto enable `useBodyScroll`)
     - stickyProps / stickyContainerProps (see [react-sticky](https://github.com/captivationsoftware/react-sticky))
-- renderBodyComponent
-- renderSectionBodyWrapper
-- useZscroller (boolean, false) - use zscroller to well support RefreshControl and pull up refresh.
+- renderBodyComponent - render listview body wrapper component
+- renderSectionBodyWrapper - render listview section body wrapper component
+- useZscroller (boolean, false) - use zscroller to well support RefreshControl and pull up refresh.(`useBodyScroll` and sticky not work when enable useZscroller)
+- scrollerOptions - [zscroller options](https://github.com/yiminghe/zscroller#options)
 
-### ListView.IndexedList (beta)
+**Note:** if you set `renderScrollComponent`, 
+you need to write your own scroll logic like `ScrollView` component(see `/examples/MyScroller.js`).
+
+### ListView.IndexedList
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button
 - quickSearchBarStyle (object) - quickSearchBar's style
 - onQuickSearch (function())
 - delayTime (number) - default 100ms, delay render time (delay render these items of `totalRowCount - initialListSize`)
 - delayActivityIndicator (react node) - delay render activity indicator
 
+**Note:** should not enable useZscroller on IndexedList.
 
 ## Test Case
 

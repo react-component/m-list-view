@@ -64,13 +64,15 @@ const Demo = React.createClass({
           </div>
         )}
         renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>) }
-        renderScrollComponent={props => <MyScroller {...props} style={{ height: 600, overflow: 'auto' }} />}
+        renderScrollComponent={props => <MyScroller {...props}
+          style={{ height: 500, overflow: 'auto' }} />}
+        contentContainerStyle={{ textAlign: 'left' }}
         quickSearchBarStyle={{
           position: 'absolute',
           top: 20, right: 30
         }}
         onQuickSearch={(sectionID) => console.log(sectionID) }
-        delayTime={1000}
+        delayTime={100}
         delayActivityIndicator={
           <div style={{padding: 25, textAlign: 'center' }}>delay rendering...</div>
         }

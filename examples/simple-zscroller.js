@@ -29,6 +29,7 @@ const Demo = React.createClass({
         dataSource={this.state.dataSource}
         onEndReached={e => alert(e.toString())}
         onEndReachedThreshold={10}
+        onScroll={e => console.log(e.toString())}
         scrollEventThrottle={20}
         scrollRenderAheadDistance={30}
         initialListSize={5}
@@ -49,9 +50,7 @@ const Demo = React.createClass({
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
         useZscroller
-        scrollerOptions={{
-          scrollbars: true,
-        }}
+        scrollerOptions={{ scrollbars: true }}
       />
     );
   },

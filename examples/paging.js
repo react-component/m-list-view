@@ -104,7 +104,10 @@ const Demo = React.createClass({
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={10}
-        renderScrollComponent={props => <MyScroller {...props} style={{ height: 300, overflow: 'auto'}} />}
+        renderScrollComponent={props => <MyScroller {...props}
+          style={{ height: 300 }} />}
+        useZscroller
+        scrollerOptions={{ scrollbars: true }}
         renderBodyComponent={() => <div className="for-body-demo" />}
       />
       <div>

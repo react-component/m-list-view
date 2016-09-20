@@ -100,7 +100,6 @@ const Demo = React.createClass({
         onEndReached={this._onEndReached}
         onEndReachedThreshold={500}
         renderBodyComponent={() => <div className="for-body-demo" />}
-        // style={{ height: 300 }}
         stickyHeader
         stickyProps={{
           className: 'for-sticky-demo',

@@ -629,7 +629,7 @@ class ListView extends React.Component {
     // this.scrollProperties.offset = e.nativeEvent.contentOffset[
     //   isVertical ? 'y' : 'x'
     // ];
-
+    let ev = e;
     let target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       this.scrollProperties.visibleLength = window[
@@ -643,6 +643,7 @@ class ListView extends React.Component {
       ];
     } else if (this.props.useZscroller) {
       const domScroller = this.refs[SCROLLVIEW_REF].domScroller;
+      ev = domScroller;
       this.scrollProperties.visibleLength = domScroller.container[
         isVertical ? 'clientHeight' : 'clientWidth'
       ];
@@ -666,7 +667,7 @@ class ListView extends React.Component {
     }
 
     // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
-    if (!this._maybeCallOnEndReached(this.props.useZscroller ? {} : e)) {
+    if (!this._maybeCallOnEndReached(ev)) {
       // console.log('enter')
       this._renderMoreRowsIfNeeded();
     }
@@ -677,7 +678,7 @@ class ListView extends React.Component {
       this._sentEndForContentLength = null;
     }
 
-    this.props.onScroll && this.props.onScroll(e);
+    this.props.onScroll && this.props.onScroll(ev);
   }
 }
 

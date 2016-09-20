@@ -45,9 +45,10 @@ const Demo = React.createClass({
     return (<div>
       <ListView ref="lv"
         dataSource={this.state.dataSource}
+        useBodyScroll
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
-            <Text>Table Header</Text>
+            <Text>设置了`useBodyScroll`，使用 html body 作为滚动容器</Text>
           </View>
         )}
         renderFooter={() => (
@@ -67,7 +68,6 @@ const Demo = React.createClass({
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
         onScroll={() => { console.log('scroll'); } }
-        useBodyScroll
         onEndReached={this._onEndReached}
         onEndReachedThreshold={100}
         />

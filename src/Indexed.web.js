@@ -41,9 +41,15 @@ export default class IndexedList extends React.Component {
     this._hCache = null;
   }
 
+  componentDidUpdate() {
+    this.getQsInfo();
+  }
   componentDidMount() {
     this.dataChange(this.props);
     // handle quickSearchBar
+    this.getQsInfo();
+  }
+  getQsInfo = () => {
     const quickSearchBar = this.refs.quickSearchBar;
     const height = quickSearchBar.offsetHeight;
     const hCache = [];

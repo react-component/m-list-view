@@ -272,7 +272,7 @@ class ScrollView extends React.Component {
     }
     this.__handleScroll = this._handleScroll();
     if (this.props.useZscroller) {
-      this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.getInnerViewNode()), {
+      this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), {
         scrollingX: false,
         onScroll: this.__handleScroll,
         ...this.props.scrollerOptions,

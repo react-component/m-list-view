@@ -313,9 +313,8 @@ webpackJsonp([3],{
 	        onEndReachedThreshold: 500,
 	        renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });
-	        }
-	        // style={{ height: 300 }}
-	        , stickyHeader: true,
+	        },
+	        stickyHeader: true,
 	        stickyProps: {
 	          className: 'for-sticky-demo',
 	          stickyStyle: { top: '10px' },

@@ -17,6 +17,18 @@ webpackJsonp([2],{
 	  value: true
 	});
 	
+	var _classCallCheck2 = __webpack_require__(216);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(217);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(253);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
 	var _react = __webpack_require__(41);
 	
 	var React = _interopRequireWildcard(_react);
@@ -25,9 +37,17 @@ webpackJsonp([2],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _zscroller = __webpack_require__(275);
+	
+	var _zscroller2 = _interopRequireDefault(_zscroller);
+	
+	var _objectAssign = __webpack_require__(44);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var throttle = function throttle(fn, delay) {
 	  var allowSample = true;
@@ -43,40 +63,78 @@ webpackJsonp([2],{
 	};
 	
 	var SCROLLVIEW = 'ScrollView';
+	var INNERVIEW = 'InnerScrollView';
 	
-	exports.default = React.createClass({
-	  displayName: 'MyScroller',
-	  componentDidMount: function componentDidMount() {
-	    this.__handleScroll = this._handleScroll();
-	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.__handleScroll);
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.__handleScroll);
-	  },
-	  handleScroll: function handleScroll(e) {
-	    var _props$onScroll = this.props.onScroll;
-	    var onScroll = _props$onScroll === undefined ? function (ev) {} : _props$onScroll;
+	var MyScroller = function (_React$Component) {
+	  (0, _inherits3.default)(MyScroller, _React$Component);
 	
-	    onScroll(e);
-	  },
-	  _handleScroll: function _handleScroll(e) {
-	    var handleScroll = function handleScroll(ev) {};
-	    // let handleScroll = this.handleScroll;
-	    if (this.props.scrollEventThrottle && this.props.onScroll) {
-	      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+	  function MyScroller() {
+	    var _temp, _this, _ret;
+	
+	    (0, _classCallCheck3.default)(this, MyScroller);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
 	    }
-	    return handleScroll;
-	  },
-	  render: function render() {
+	
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.handleScroll = function (e) {
+	      var _this$props$onScroll = _this.props.onScroll;
+	      var onScroll = _this$props$onScroll === undefined ? function (ev) {} : _this$props$onScroll;
+	
+	      onScroll(e);
+	    }, _this._handleScroll = function (e) {
+	      var handleScroll = function handleScroll(ev) {};
+	      if (_this.props.scrollEventThrottle && _this.props.onScroll) {
+	        handleScroll = throttle(_this.handleScroll, _this.props.scrollEventThrottle);
+	      }
+	      return handleScroll;
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+	
+	  MyScroller.prototype.componentDidMount = function componentDidMount() {
+	    this.__handleScroll = this._handleScroll();
+	    if (this.props.useZscroller) {
+	      this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.refs[INNERVIEW]), (0, _objectAssign2.default)({}, {
+	        scrollingX: false,
+	        onScroll: this.__handleScroll
+	      }, this.props.scrollerOptions));
+	    } else {
+	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.__handleScroll);
+	    }
+	  };
+	
+	  MyScroller.prototype.componentWillUnmount = function componentWillUnmount() {
+	    if (this.props.useZscroller) {
+	      this.domScroller.destroy();
+	    } else {
+	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.__handleScroll);
+	    }
+	  };
+	
+	  MyScroller.prototype.render = function render() {
 	    var _props = this.props;
 	    var children = _props.children;
 	    var className = _props.className;
-	    var style = _props.style;
+	    var _props$style = _props.style;
+	    var style = _props$style === undefined ? {} : _props$style;
+	    var contentContainerStyle = _props.contentContainerStyle;
+	    var useZscroller = _props.useZscroller;
 	
-	    var divProps = { className: className, style: style };
-	    return React.cloneElement(React.createElement('div', { ref: SCROLLVIEW }), divProps, children);
-	  }
-	});
+	    return React.cloneElement(React.createElement('div', { ref: SCROLLVIEW }), { className: className, style: useZscroller ? (0, _objectAssign2.default)({}, {
+	        position: 'relative',
+	        overflow: 'hidden',
+	        flex: 1
+	      }, style) : style }, React.createElement(
+	      'div',
+	      { ref: INNERVIEW, style: contentContainerStyle },
+	      children
+	    ));
+	  };
+	
+	  return MyScroller;
+	}(React.Component);
+	
+	exports.default = MyScroller;
 	module.exports = exports['default'];
 
 /***/ },
@@ -243,8 +301,11 @@ webpackJsonp([2],{
 	        onEndReached: this._onEndReached,
 	        onEndReachedThreshold: 10,
 	        renderScrollComponent: function renderScrollComponent(props) {
-	          return _react2.default.createElement(_MyScroller2.default, (0, _extends3.default)({}, props, { style: { height: 300, overflow: 'auto' } }));
+	          return _react2.default.createElement(_MyScroller2.default, (0, _extends3.default)({}, props, {
+	            style: { height: 300 } }));
 	        },
+	        useZscroller: true,
+	        scrollerOptions: { scrollbars: true },
 	        renderBodyComponent: function renderBodyComponent() {
 	          return _react2.default.createElement('div', { className: 'for-body-demo' });
 	        }

@@ -245,6 +245,7 @@ webpackJsonp([5],{
 	      null,
 	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
 	        dataSource: this.state.dataSource,
+	        useBodyScroll: true,
 	        renderHeader: function renderHeader() {
 	          return _react2.default.createElement(
 	            _util.View,
@@ -252,7 +253,7 @@ webpackJsonp([5],{
 	            _react2.default.createElement(
 	              _util.Text,
 	              null,
-	              'Table Header'
+	              '设置了`useBodyScroll`，使用 html body 作为滚动容器'
 	            )
 	          );
 	        },
@@ -288,7 +289,6 @@ webpackJsonp([5],{
 	        onScroll: function onScroll() {
 	          console.log('scroll');
 	        },
-	        useBodyScroll: true,
 	        onEndReached: this._onEndReached,
 	        onEndReachedThreshold: 100
 	      }),

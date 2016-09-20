@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple-paging.js - example - rmc-list-view@0.7.0-beta.0</title>
+  <title>simple-paging.js - example - rmc-list-view@0.7.0-beta.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.0-beta.0</h1>
+      <h1>rmc-list-view@0.7.0-beta.1</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -311,9 +311,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
+        <span class="hljs-attribute">useBodyScroll</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> (
           <span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">90</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>Table Header<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>设置了`useBodyScroll`，使用 html body 作为滚动容器<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
         )</span>}
         renderFooter={() =&gt; (
@@ -333,7 +334,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         scrollRenderAheadDistance={<span class="hljs-number">500</span>}
         scrollEventThrottle={<span class="hljs-number">20</span>}
         onScroll={() =&gt; { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scroll'</span>); } }
-        useBodyScroll
         onEndReached={<span class="hljs-keyword">this</span>._onEndReached}
         onEndReachedThreshold={<span class="hljs-number">100</span>}
         /&gt;

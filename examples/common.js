@@ -22621,7 +22621,7 @@
 	    // this.scrollProperties.offset = e.nativeEvent.contentOffset[
 	    //   isVertical ? 'y' : 'x'
 	    // ];
-	
+	    var ev = e;
 	    var target = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW_REF]);
 	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      this.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
@@ -22629,6 +22629,7 @@
 	      this.scrollProperties.offset = window.document.body[isVertical ? 'scrollTop' : 'scrollLeft'];
 	    } else if (this.props.useZscroller) {
 	      var domScroller = this.refs[SCROLLVIEW_REF].domScroller;
+	      ev = domScroller;
 	      this.scrollProperties.visibleLength = domScroller.container[isVertical ? 'clientHeight' : 'clientWidth'];
 	      this.scrollProperties.contentLength = domScroller.content[isVertical ? 'offsetHeight' : 'offsetWidth'];
 	      this.scrollProperties.offset = domScroller.scroller.getValues()[isVertical ? 'top' : 'left'];
@@ -22640,7 +22641,7 @@
 	    }
 	
 	    // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
-	    if (!this._maybeCallOnEndReached(this.props.useZscroller ? {} : e)) {
+	    if (!this._maybeCallOnEndReached(ev)) {
 	      // console.log('enter')
 	      this._renderMoreRowsIfNeeded();
 	    }
@@ -22650,7 +22651,7 @@
 	      this._sentEndForContentLength = null;
 	    }
 	
-	    this.props.onScroll && this.props.onScroll(e);
+	    this.props.onScroll && this.props.onScroll(ev);
 	  };
 	
 	  return ListView;
@@ -24336,7 +24337,7 @@
 	    }
 	    this.__handleScroll = this._handleScroll();
 	    if (this.props.useZscroller) {
-	      this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.getInnerViewNode()), (0, _extends3.default)({
+	      this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.refs[INNERVIEW]), (0, _extends3.default)({
 	        scrollingX: false,
 	        onScroll: this.__handleScroll
 	      }, this.props.scrollerOptions));
@@ -28812,24 +28813,14 @@
 	    this._hCache = null;
 	  };
 	
+	  IndexedList.prototype.componentDidUpdate = function componentDidUpdate() {
+	    this.getQsInfo();
+	  };
+	
 	  IndexedList.prototype.componentDidMount = function componentDidMount() {
 	    this.dataChange(this.props);
 	    // handle quickSearchBar
-	    var quickSearchBar = this.refs.quickSearchBar;
-	    var height = quickSearchBar.offsetHeight;
-	    var hCache = [];
-	    [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach(function (d) {
-	      hCache.push([d]);
-	    });
-	    var _avgH = height / hCache.length;
-	    var _top = 0;
-	    for (var i = 0, len = hCache.length; i < len; i++) {
-	      _top = i * _avgH;
-	      hCache[i][1] = [_top, _top + _avgH];
-	    }
-	    this._qsHeight = height;
-	    this._avgH = _avgH;
-	    this._hCache = hCache;
+	    this.getQsInfo();
 	  };
 	
 	  IndexedList.prototype.renderQuickSearchBar = function renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) {
@@ -28946,6 +28937,24 @@
 	
 	var _initialiseProps = function _initialiseProps() {
 	  var _this4 = this;
+	
+	  this.getQsInfo = function () {
+	    var quickSearchBar = _this4.refs.quickSearchBar;
+	    var height = quickSearchBar.offsetHeight;
+	    var hCache = [];
+	    [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach(function (d) {
+	      hCache.push([d]);
+	    });
+	    var _avgH = height / hCache.length;
+	    var _top = 0;
+	    for (var i = 0, len = hCache.length; i < len; i++) {
+	      _top = i * _avgH;
+	      hCache[i][1] = [_top, _top + _avgH];
+	    }
+	    _this4._qsHeight = height;
+	    _this4._avgH = _avgH;
+	    _this4._hCache = hCache;
+	  };
 	
 	  this.dataChange = function (props) {
 	    // delay render more

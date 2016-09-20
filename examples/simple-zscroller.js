@@ -216,6 +216,9 @@ webpackJsonp([6],{
 	        return alert(e.toString());
 	      },
 	      onEndReachedThreshold: 10,
+	      onScroll: function onScroll(e) {
+	        return console.log(e.toString());
+	      },
 	      scrollEventThrottle: 20,
 	      scrollRenderAheadDistance: 30,
 	      initialListSize: 5,
@@ -244,9 +247,7 @@ webpackJsonp([6],{
 	        return _react2.default.createElement('div', { className: 'for-body-demo' });
 	      },
 	      useZscroller: true,
-	      scrollerOptions: {
-	        scrollbars: true
-	      }
+	      scrollerOptions: { scrollbars: true }
 	    });
 	  }
 	});

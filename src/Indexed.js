@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import ListView from './ListView.web';
-import { getOffsetTop, _event } from './indexed-util';
+import ListView from './ListView';
+import { getOffsetTop, _event } from './util';
 
 export default class IndexedList extends React.Component {
   static propTypes = {

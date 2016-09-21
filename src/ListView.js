@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import ListViewDataSource from './ListViewDataSource.web';
-import ScrollView from './ScrollView.web';
-import ScrollResponder from './ScrollResponder.web';
-import StaticRenderer from './StaticRenderer.web';
+import ListViewDataSource from './ListViewDataSource';
+import ScrollView from './ScrollView';
+import ScrollResponder from './ScrollResponder';
+import StaticRenderer from './StaticRenderer';
 import TimerMixin from 'react-timer-mixin';
 import assign from 'object-assign';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
-const throttle = require('domkit/throttle');
 import { StickyContainer, Sticky } from 'react-sticky';
+import { throttle } from './util';
 
 const DEFAULT_PAGE_SIZE = 1;
 const DEFAULT_INITIAL_ROWS = 10;

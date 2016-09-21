@@ -266,6 +266,17 @@ class ScrollView extends React.Component {
 
   state = this.scrollResponderMixinGetInitialState();
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.refreshControl && this.props.refreshControl) {
+      const preRefreshing = prevProps.refreshControl.props.refreshing;
+      const nowRefreshing = this.props.refreshControl.props.refreshing;
+      if (preRefreshing && !nowRefreshing && this.refreshControlRefresh) { 
+        this.refreshControlRefresh();
+      } else if (!this.manuallyRefresh && !preRefreshing && nowRefreshing) {
+        this.domScroller.scroller.triggerPullToRefresh();
+      }
+    }
+  }
   componentDidMount() {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       return;
@@ -277,6 +288,38 @@ class ScrollView extends React.Component {
         onScroll: this.__handleScroll,
         ...this.props.scrollerOptions,
       });
+      if (this.props.refreshControl) {
+        const scroller = this.domScroller.scroller;
+        const rcProps = this.props.refreshControl.props;
+        const { distanceToRefresh, prefixCls } = rcProps;
+        scroller.activatePullToRefresh(distanceToRefresh,
+          () => {
+            this.manuallyRefresh = true;
+            this.refs.refreshControl.setState({ active: true });
+          },
+          () => {
+            this.manuallyRefresh = false;  
+            this.refs.refreshControl.setState({ active: false, loadingState: false });
+          },
+          () => {
+            this.refs.refreshControl.setState({ loadingState: true });
+            const finishPullToRefresh = () => {
+              scroller.finishPullToRefresh();
+              this.refreshControlRefresh = null;
+            };
+            Promise.all([
+              new Promise(resolve => {
+                rcProps.onRefresh();
+                this.refreshControlRefresh = resolve;
+              }),
+              // at lease 1s for ux
+              new Promise(resolve => setTimeout(resolve, 1000))
+            ]).then(finishPullToRefresh, finishPullToRefresh);
+          });
+        if (this.props.refreshControl.props.refreshing) {
+          scroller.triggerPullToRefresh();
+        }
+      }
       return;
     }
     let scrollView = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
@@ -508,8 +551,15 @@ class ScrollView extends React.Component {
       }
       return (
         <ScrollViewClass {...props} ref={SCROLLVIEW}>
-          {refreshControl}
-          {contentContainer}
+          <View
+            {...contentSizeChangeProps}
+            ref={INNERVIEW}
+            style={StyleSheet.flattenStyle(contentContainerStyle)}
+            removeClippedSubviews={this.props.removeClippedSubviews}
+            collapsable={false}>
+            {React.cloneElement(refreshControl, { ref: 'refreshControl' })}
+            {this.props.children}
+          </View>
         </ScrollViewClass>
       );
     }

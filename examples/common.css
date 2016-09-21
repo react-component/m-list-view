@@ -72,5 +72,50 @@ li {
   display: block;
   background: rgba(0, 0, 0, 0.498039);
 }
+.list-view-refresh-control {
+  position: relative;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.list-view-refresh-control-content {
+  -webkit-transform-origin: left top;
+          transform-origin: left top;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+}
+.list-view-refresh-control-ptr {
+  color: grey;
+  text-align: center;
+  height: 50px;
+  margin-top: -50px;
+  overflow: hidden;
+}
+.list-view-refresh-control-ptr-icon {
+  display: block;
+}
+.list-view-refresh-control-ptr-loading {
+  display: none;
+}
+.list-view-refresh-control-loading .list-view-refresh-control-ptr-icon {
+  display: none;
+}
+.list-view-refresh-control-loading .list-view-refresh-control-ptr-loading {
+  display: block;
+}
+.list-view-refresh-control-pull {
+  display: block;
+}
+.list-view-refresh-control-release {
+  display: none;
+}
+.list-view-refresh-control-active .list-view-refresh-control-pull {
+  display: none;
+}
+.list-view-refresh-control-active .list-view-refresh-control-release {
+  display: block;
+}
 
 /*# sourceMappingURL=common.css.map*/

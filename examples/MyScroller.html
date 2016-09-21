@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>MyScroller.js - example - rmc-list-view@0.7.0-beta.1</title>
+  <title>MyScroller.js - example - rmc-list-view@0.7.0-beta.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.0-beta.1</h1>
+      <h1>rmc-list-view@0.7.0-beta.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -285,28 +285,28 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyScroller</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   componentDidMount() {
-    <span class="hljs-keyword">this</span>.__handleScroll = <span class="hljs-keyword">this</span>._handleScroll();
+    <span class="hljs-keyword">this</span>.throttleScrollExec = <span class="hljs-keyword">this</span>.throttleScroll();
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.useZscroller) {
       <span class="hljs-keyword">this</span>.domScroller = <span class="hljs-keyword">new</span> DOMScroller(ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[INNERVIEW]), assign({}, {
         scrollingX: <span class="hljs-literal">false</span>,
-        onScroll: <span class="hljs-keyword">this</span>.__handleScroll,
+        onScroll: <span class="hljs-keyword">this</span>.throttleScrollExec,
       }, <span class="hljs-keyword">this</span>.props.scrollerOptions));
     } <span class="hljs-keyword">else</span> {
-      ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).addEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.__handleScroll);
+      ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).addEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.throttleScrollExec);
     }
   }
   componentWillUnmount() {
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.useZscroller) {
       <span class="hljs-keyword">this</span>.domScroller.destroy();
     } <span class="hljs-keyword">else</span> {
-      ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).removeEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.__handleScroll);
+      ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs[SCROLLVIEW]).removeEventListener(<span class="hljs-string">'scroll'</span>, <span class="hljs-keyword">this</span>.throttleScrollExec);
     }
   }
   handleScroll = (e) =&gt; {
     <span class="hljs-keyword">const</span> { onScroll = (ev) =&gt; { } } = <span class="hljs-keyword">this</span>.props;
     onScroll(e);
   }
-  _handleScroll = (e) =&gt; {
+  throttleScroll = (e) =&gt; {
     <span class="hljs-keyword">let</span> handleScroll = (ev) =&gt; {};
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.scrollEventThrottle &amp;&amp; <span class="hljs-keyword">this</span>.props.onScroll) {
       handleScroll = throttle(<span class="hljs-keyword">this</span>.handleScroll, <span class="hljs-keyword">this</span>.props.scrollEventThrottle);

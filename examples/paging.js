@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(294);
+	module.exports = __webpack_require__(295);
 
 
 /***/ },
 
-/***/ 292:
+/***/ 293:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82,7 +82,7 @@ webpackJsonp([2],{
 	      var onScroll = _this$props$onScroll === undefined ? function (ev) {} : _this$props$onScroll;
 	
 	      onScroll(e);
-	    }, _this._handleScroll = function (e) {
+	    }, _this.throttleScroll = function (e) {
 	      var handleScroll = function handleScroll(ev) {};
 	      if (_this.props.scrollEventThrottle && _this.props.onScroll) {
 	        handleScroll = throttle(_this.handleScroll, _this.props.scrollEventThrottle);
@@ -92,14 +92,14 @@ webpackJsonp([2],{
 	  }
 	
 	  MyScroller.prototype.componentDidMount = function componentDidMount() {
-	    this.__handleScroll = this._handleScroll();
+	    this.throttleScrollExec = this.throttleScroll();
 	    if (this.props.useZscroller) {
 	      this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.refs[INNERVIEW]), (0, _objectAssign2.default)({}, {
 	        scrollingX: false,
-	        onScroll: this.__handleScroll
+	        onScroll: this.throttleScrollExec
 	      }, this.props.scrollerOptions));
 	    } else {
-	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.__handleScroll);
+	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.throttleScrollExec);
 	    }
 	  };
 	
@@ -107,7 +107,7 @@ webpackJsonp([2],{
 	    if (this.props.useZscroller) {
 	      this.domScroller.destroy();
 	    } else {
-	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.__handleScroll);
+	      _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.throttleScrollExec);
 	    }
 	  };
 	
@@ -139,7 +139,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 294:
+/***/ 295:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -162,9 +162,9 @@ webpackJsonp([2],{
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(295);
+	var _util = __webpack_require__(296);
 	
-	var _MyScroller = __webpack_require__(292);
+	var _MyScroller = __webpack_require__(293);
 	
 	var _MyScroller2 = _interopRequireDefault(_MyScroller);
 	
@@ -345,7 +345,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 295:
+/***/ 296:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

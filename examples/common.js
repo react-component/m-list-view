@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		7:0
+/******/ 		8:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"simple","5":"simple-paging","6":"simple-zscroller"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"refreshControl","5":"simple","6":"simple-paging","7":"simple-zscroller"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -22041,10 +22041,15 @@
 	
 	var _Indexed2 = _interopRequireDefault(_Indexed);
 	
+	var _RefreshControl = __webpack_require__(292);
+	
+	var _RefreshControl2 = _interopRequireDefault(_RefreshControl);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// export this package's api
-	_ListView2.default.IndexedList = _Indexed2.default;
+	_ListView2.default.IndexedList = _Indexed2.default; // export this package's api
+	
+	_ListView2.default.RefreshControl = _RefreshControl2.default;
 	exports.default = _ListView2.default;
 	module.exports = exports['default'];
 
@@ -24331,7 +24336,21 @@
 	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = _this.scrollResponderMixinGetInitialState(), _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
 	  }
 	
+	  ScrollView.prototype.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
+	    if (prevProps.refreshControl && this.props.refreshControl) {
+	      var preRefreshing = prevProps.refreshControl.props.refreshing;
+	      var nowRefreshing = this.props.refreshControl.props.refreshing;
+	      if (preRefreshing && !nowRefreshing && this.refreshControlRefresh) {
+	        this.refreshControlRefresh();
+	      } else if (!this.manuallyRefresh && !preRefreshing && nowRefreshing) {
+	        this.domScroller.scroller.triggerPullToRefresh();
+	      }
+	    }
+	  };
+	
 	  ScrollView.prototype.componentDidMount = function componentDidMount() {
+	    var _this2 = this;
+	
 	    if (this.props.stickyHeader || this.props.useBodyScroll) {
 	      return;
 	    }
@@ -24341,6 +24360,39 @@
 	        scrollingX: false,
 	        onScroll: this.__handleScroll
 	      }, this.props.scrollerOptions));
+	      if (this.props.refreshControl) {
+	        (function () {
+	          var scroller = _this2.domScroller.scroller;
+	          var rcProps = _this2.props.refreshControl.props;
+	          var distanceToRefresh = rcProps.distanceToRefresh;
+	          var prefixCls = rcProps.prefixCls;
+	
+	          scroller.activatePullToRefresh(distanceToRefresh, function () {
+	            _this2.manuallyRefresh = true;
+	            _this2.refs.refreshControl.setState({ active: true });
+	          }, function () {
+	            _this2.manuallyRefresh = false;
+	            _this2.refs.refreshControl.setState({ active: false, loadingState: false });
+	          }, function () {
+	            _this2.refs.refreshControl.setState({ loadingState: true });
+	            var finishPullToRefresh = function finishPullToRefresh() {
+	              scroller.finishPullToRefresh();
+	              _this2.refreshControlRefresh = null;
+	            };
+	            Promise.all([new Promise(function (resolve) {
+	              rcProps.onRefresh();
+	              _this2.refreshControlRefresh = resolve;
+	            }),
+	            // at lease 1s for ux
+	            new Promise(function (resolve) {
+	              return setTimeout(resolve, 1000);
+	            })]).then(finishPullToRefresh, finishPullToRefresh);
+	          });
+	          if (_this2.props.refreshControl.props.refreshing) {
+	            scroller.triggerPullToRefresh();
+	          }
+	        })();
+	      }
 	      return;
 	    }
 	    var scrollView = _reactDom2.default.findDOMNode(this.refs[SCROLLVIEW]);
@@ -24567,8 +24619,16 @@
 	      return _react2.default.createElement(
 	        ScrollViewClass,
 	        (0, _extends3.default)({}, props, { ref: SCROLLVIEW }),
-	        refreshControl,
-	        contentContainer
+	        _react2.default.createElement(
+	          _View2.default,
+	          (0, _extends3.default)({}, contentSizeChangeProps, {
+	            ref: INNERVIEW,
+	            style: _StyleSheet2.default.flattenStyle(contentContainerStyle),
+	            removeClippedSubviews: this.props.removeClippedSubviews,
+	            collapsable: false }),
+	          _react2.default.cloneElement(refreshControl, { ref: 'refreshControl' }),
+	          this.props.children
+	        )
 	      );
 	    }
 	
@@ -29217,6 +29277,114 @@
 	  }
 	  return e;
 	}
+
+/***/ },
+/* 292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _defineProperty2 = __webpack_require__(286);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _react = __webpack_require__(41);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(74);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _classnames = __webpack_require__(290);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _react2.default.createClass({
+	  displayName: 'RefreshControl',
+	
+	  propTypes: {
+	    className: _react.PropTypes.string,
+	    style: _react.PropTypes.object,
+	    icon: _react.PropTypes.element,
+	    prefixCls: _react.PropTypes.string,
+	    loading: _react.PropTypes.element,
+	    distanceToRefresh: _react.PropTypes.number,
+	    refreshing: _react.PropTypes.bool,
+	    onRefresh: _react.PropTypes.func.isRequired
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      active: false,
+	      loadingState: false
+	    };
+	  },
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      prefixCls: 'list-view-refresh-control',
+	      distanceToRefresh: 50,
+	      refreshing: false,
+	      icon: _react2.default.createElement(
+	        'div',
+	        { style: { lineHeight: '50px', textAlign: 'center' } },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'list-view-refresh-control-pull' },
+	          '↓ 下拉'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'list-view-refresh-control-release' },
+	          '↑ 释放'
+	        )
+	      ),
+	      loading: _react2.default.createElement(
+	        'div',
+	        { style: { lineHeight: '50px', textAlign: 'center' } },
+	        'loading...'
+	      )
+	    };
+	  },
+	  render: function render() {
+	    var _classNames;
+	
+	    var _props = this.props;
+	    var prefixCls = _props.prefixCls;
+	    var icon = _props.icon;
+	    var loading = _props.loading;
+	    var _props$className = _props.className;
+	    var className = _props$className === undefined ? '' : _props$className;
+	    var style = _props.style;
+	    var refreshing = _props.refreshing;
+	    var _state = this.state;
+	    var active = _state.active;
+	    var loadingState = _state.loadingState;
+	
+	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls + '-ptr', true), (0, _defineProperty3.default)(_classNames, prefixCls + '-active', active), (0, _defineProperty3.default)(_classNames, prefixCls + '-loading', loadingState || refreshing), _classNames));
+	    return _react2.default.createElement(
+	      'div',
+	      { ref: 'ptr', className: wrapCls, style: style },
+	      _react2.default.createElement(
+	        'div',
+	        { className: prefixCls + '-ptr-icon' },
+	        icon
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: prefixCls + '-ptr-loading' },
+	        loading
+	      )
+	    );
+	  }
+	});
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

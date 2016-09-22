@@ -147,6 +147,7 @@ class ListView extends React.Component {
      */
     renderSectionHeader: PropTypes.func,
     renderSectionBodyWrapper: PropTypes.func,
+    sectionBodyClassName: PropTypes.string,
     /**
      * (props) => renderable
      *
@@ -201,7 +202,8 @@ class ListView extends React.Component {
     pageSize: DEFAULT_PAGE_SIZE,
     renderScrollComponent: props => <ScrollView {...props} />,
     renderBodyComponent: () => <div />,
-    renderSectionBodyWrapper: (sectionID) => <div key={sectionID} className="list-view-section-body" />,
+    renderSectionBodyWrapper: (sectionID) => <div key={sectionID} />,
+    sectionBodyClassName: 'list-view-section-body',
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
@@ -410,7 +412,9 @@ class ListView extends React.Component {
           break;
         }
       }
-      bodyComponents.push(React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {}, sectionBody));
+      bodyComponents.push(React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
+        className: this.props.sectionBodyClassName,
+      }, sectionBody));
       if (rowCount >= this.state.curRenderedRowsCount) {
         break;
       }

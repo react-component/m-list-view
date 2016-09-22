@@ -7,6 +7,7 @@ import { getOffsetTop, _event } from './util';
 export default class IndexedList extends React.Component {
   static propTypes = {
     prefixCls: PropTypes.string,
+    sectionHeaderClassName: PropTypes.string,
     quickSearchBarTop: PropTypes.object,
     onQuickSearch: PropTypes.func,
   }
@@ -213,7 +214,7 @@ export default class IndexedList extends React.Component {
     const {
       className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
       initialListSize = Math.min(20, this.props.dataSource.getRowCount()),
-      renderSectionHeader, ...other
+      renderSectionHeader, sectionHeaderClassName, ...other
     } = this.props;
     const wrapCls = classNames({
       [className]: className,
@@ -228,12 +229,13 @@ export default class IndexedList extends React.Component {
         className={wrapCls}
         initialListSize={initialListSize}
         pageSize={pageSize}
-        renderSectionHeader={(sectionData, sectionID) => (<div
-          className={`${prefixCls}-section-header`}
-          ref={c => {this.sectionComponents[sectionID] = c;}}
-          >
-          {renderSectionHeader(sectionData, sectionID)}
-        </div>)}
+        renderSectionHeader={(sectionData, sectionID) => React.cloneElement(
+          renderSectionHeader(sectionData, sectionID),
+          {
+            ref: c => this.sectionComponents[sectionID] = c,
+            className: sectionHeaderClassName || `${prefixCls}-section-header`
+          }
+        )}
       >
         {children}
       </ListView>

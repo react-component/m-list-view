@@ -22391,7 +22391,9 @@
 	          break;
 	        }
 	      }
-	      bodyComponents.push(_react2.default.cloneElement(_this4.props.renderSectionBodyWrapper(sectionID), {}, sectionBody));
+	      bodyComponents.push(_react2.default.cloneElement(_this4.props.renderSectionBodyWrapper(sectionID), {
+	        className: _this4.props.sectionBodyClassName
+	      }, sectionBody));
 	      if (rowCount >= _this4.state.curRenderedRowsCount) {
 	        return 'break';
 	      }
@@ -22732,6 +22734,7 @@
 	   */
 	  renderSectionHeader: _react.PropTypes.func,
 	  renderSectionBodyWrapper: _react.PropTypes.func,
+	  sectionBodyClassName: _react.PropTypes.string,
 	  /**
 	   * (props) => renderable
 	   *
@@ -22786,8 +22789,9 @@
 	    return _react2.default.createElement('div', null);
 	  },
 	  renderSectionBodyWrapper: function renderSectionBodyWrapper(sectionID) {
-	    return _react2.default.createElement('div', { key: sectionID, className: 'list-view-section-body' });
+	    return _react2.default.createElement('div', { key: sectionID });
 	  },
+	  sectionBodyClassName: 'list-view-section-body',
 	  scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
 	  onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
 	  scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
@@ -28233,7 +28237,8 @@
 	    var _props2$initialListSi = _props2.initialListSize;
 	    var initialListSize = _props2$initialListSi === undefined ? Math.min(20, this.props.dataSource.getRowCount()) : _props2$initialListSi;
 	    var _renderSectionHeader = _props2.renderSectionHeader;
-	    var other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'initialListSize', 'renderSectionHeader']);
+	    var sectionHeaderClassName = _props2.sectionHeaderClassName;
+	    var other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'initialListSize', 'renderSectionHeader', 'sectionHeaderClassName']);
 	
 	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls, true), _classNames));
 	    // initialListSize={this.props.dataSource.getRowCount()}
@@ -28249,16 +28254,12 @@
 	          initialListSize: initialListSize,
 	          pageSize: pageSize,
 	          renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
-	            return _react2.default.createElement(
-	              'div',
-	              {
-	                className: prefixCls + '-section-header',
-	                ref: function ref(c) {
-	                  _this3.sectionComponents[sectionID] = c;
-	                }
+	            return _react2.default.cloneElement(_renderSectionHeader(sectionData, sectionID), {
+	              ref: function ref(c) {
+	                return _this3.sectionComponents[sectionID] = c;
 	              },
-	              _renderSectionHeader(sectionData, sectionID)
-	            );
+	              className: sectionHeaderClassName || prefixCls + '-section-header'
+	            });
 	          }
 	        }),
 	        children
@@ -28272,6 +28273,7 @@
 	
 	IndexedList.propTypes = {
 	  prefixCls: _react.PropTypes.string,
+	  sectionHeaderClassName: _react.PropTypes.string,
 	  quickSearchBarTop: _react.PropTypes.object,
 	  onQuickSearch: _react.PropTypes.func
 	};

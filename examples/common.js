@@ -27953,7 +27953,7 @@
 	
 	    var ele = void 0;
 	    if (stickyHeader || useBodyScroll) {
-	      ele = window;
+	      ele = document.body;
 	    } else {
 	      ele = _reactDom2.default.findDOMNode(this.refs['listviewscroll'].refs['ScrollView']);
 	    }
@@ -27966,17 +27966,15 @@
 	    this.unBindEvt();
 	  },
 	  onPullUpStart: function onPullUpStart(e) {
-	    this._pullUpStartPageY = e.touches[0].pageY;
+	    this._pullUpStartPageY = e.touches[0].screenY;
 	    this._isPullUp = false;
+	    this._pullUpEle = this.getEle();
 	  },
 	  onPullUpMove: function onPullUpMove(e) {
-	    var _this = this;
-	
-	    // console.log(this._getDistanceFromEnd(this.scrollProperties))
-	    if (e.touches[0].pageY < this._pullUpStartPageY && Object.keys(this.scrollProperties).every(function (i) {
-	      return _this.scrollProperties[i] !== null;
-	    }) && this._getDistanceFromEnd(this.scrollProperties) === 0) {
-	      // console.log('pull up');
+	    // console.log(this._getDistanceFromEnd(this.scrollProperties), Object.keys(this.scrollProperties).every(i => this.scrollProperties[i] !== null))
+	    // 使用 pageY 对比有问题
+	    if (e.touches[0].screenY < this._pullUpStartPageY && this._reachBottom()) {
+	      // console.log('滚动条到了底部，pull up');
 	      this._isPullUp = true;
 	    }
 	  },
@@ -27985,6 +27983,13 @@
 	      this.props.onEndReached(e);
 	    }
 	    this._isPullUp = false;
+	  },
+	  _reachBottom: function _reachBottom() {
+	    var element = this._pullUpEle;
+	    if (element === document.body) {
+	      return element.scrollHeight - element.scrollTop === window.innerHeight;
+	    }
+	    return element.scrollHeight - element.scrollTop === element.clientHeight;
 	  }
 	};
 	module.exports = exports['default'];

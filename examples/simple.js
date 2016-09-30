@@ -213,7 +213,7 @@ webpackJsonp([5],{
 	      style: { height: 200 },
 	      dataSource: this.state.dataSource,
 	      onEndReached: function onEndReached(e) {
-	        return alert(e.toString());
+	        return console.log(e.toString());
 	      },
 	      onEndReachedThreshold: 10,
 	      scrollEventThrottle: 20,

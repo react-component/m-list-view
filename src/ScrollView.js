@@ -4,6 +4,8 @@ import DOMScroller from 'zscroller';
 import assign from 'object-assign';
 import classNames from 'classnames';
 import { throttle } from './util';
+// import mixin from 'react-mixin';
+// import PullUpLoadMoreMixin from './PullUpLoadMoreMixin';
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
@@ -177,3 +179,4 @@ export default class ScrollView extends React.Component {
     );
   }
 }
+// mixin(ScrollView.prototype, PullUpLoadMoreMixin);

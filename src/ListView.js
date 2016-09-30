@@ -1,3 +1,5 @@
+// https://github.com/facebook/react-native/blob/master/Libraries/CustomComponents/ListView/ListView.js
+
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import ListViewDataSource from './ListViewDataSource';
@@ -10,6 +12,7 @@ import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { throttle } from './util';
+import PullUpLoadMoreMixin from './PullUpLoadMoreMixin';
 
 const DEFAULT_PAGE_SIZE = 1;
 const DEFAULT_INITIAL_ROWS = 10;
@@ -18,174 +21,30 @@ const DEFAULT_END_REACHED_THRESHOLD = 1000;
 const DEFAULT_SCROLL_CALLBACK_THROTTLE = 50;
 const SCROLLVIEW_REF = 'listviewscroll';
 
-/**
- * ListView - A core component designed for efficient display of vertically
- * scrolling lists of changing data.  The minimal API is to create a
- * `ListView.DataSource`, populate it with a simple array of data blobs, and
- * instantiate a `ListView` component with that data source and a `renderRow`
- * callback which takes a blob from the data array and returns a renderable
- * component.
- *
- * Minimal example:
- *
- * ```
- * getInitialState: function() {
- *   let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
- *   return {
- *     dataSource: ds.cloneWithRows(['row 1', 'row 2']),
- *   };
- * },
- *
- * render: function() {
- *   return (
- *     <ListView
- *       dataSource={this.state.dataSource}
- *       renderRow={(rowData) => <Text>{rowData}</Text>}
- *     />
- *   );
- * },
- * ```
- *
- * ListView also supports more advanced features, including sections with sticky
- * section headers, header and footer support, callbacks on reaching the end of
- * the available data (`onEndReached`) and on the set of rows that are visible
- * in the device viewport change (`onChangeVisibleRows`), and several
- * performance optimizations.
- *
- * There are a few performance operations designed to make ListView scroll
- * smoothly while dynamically loading potentially very large (or conceptually
- * infinite) data sets:
- *
- *  * Only re-render changed rows - the rowHasChanged function provided to the
- *    data source tells the ListView if it needs to re-render a row because the
- *    source data has changed - see ListViewDataSource for more details.
- *
- *  * Rate-limited row rendering - By default, only one row is rendered per
- *    event-loop (customizable with the `pageSize` prop).  This breaks up the
- *    work into smaller chunks to reduce the chance of dropping frames while
- *    rendering rows.
- */
 class ListView extends React.Component {
-
   static DataSource = ListViewDataSource
-
-  /**
-   * You must provide a renderRow function. If you omit any of the other render
-   * functions, ListView will simply skip rendering them.
-   *
-   * - renderRow(rowData, sectionID, rowID, highlightRow);
-   * - renderSectionHeader(sectionData, sectionID);
-   */
   static propTypes = {
     ...ScrollView.propTypes,
-
     dataSource: PropTypes.instanceOf(ListViewDataSource).isRequired,
-    /**
-     * (sectionID, rowID, adjacentRowHighlighted) => renderable
-     *
-     * If provided, a renderable component to be rendered as the separator
-     * below each row but not the last row if there is a section header below.
-     * Take a sectionID and rowID of the row above and whether its adjacent row
-     * is highlighted.
-     */
     renderSeparator: PropTypes.func,
-    /**
-     * (rowData, sectionID, rowID, highlightRow) => renderable
-     *
-     * Takes a data entry from the data source and its ids and should return
-     * a renderable component to be rendered as the row.  By default the data
-     * is exactly what was put into the data source, but it's also possible to
-     * provide custom extractors. ListView can be notified when a row is
-     * being highlighted by calling highlightRow function. The separators above and
-     * below will be hidden when a row is highlighted. The highlighted state of
-     * a row can be reset by calling highlightRow(null).
-     */
     renderRow: PropTypes.func.isRequired,
-    /**
-     * How many rows to render on initial component mount.  Use this to make
-     * it so that the first screen worth of data appears at one time instead of
-     * over the course of multiple frames.
-     */
     initialListSize: PropTypes.number,
-    /**
-     * Called when all rows have been rendered and the list has been scrolled
-     * to within onEndReachedThreshold of the bottom.  The native scroll
-     * event is provided.
-     */
     onEndReached: PropTypes.func,
-    /**
-     * Threshold in pixels (virtual, not physical) for calling onEndReached.
-     */
     onEndReachedThreshold: PropTypes.number,
-    /**
-     * Number of rows to render per event loop. Note: if your 'rows' are actually
-     * cells, i.e. they don't span the full width of your view (as in the
-     * ListViewGridLayoutExample), you should set the pageSize to be a multiple
-     * of the number of cells per row, otherwise you're likely to see gaps at
-     * the edge of the ListView as new pages are loaded.
-     */
     pageSize: PropTypes.number,
-    /**
-     * () => renderable
-     *
-     * The header and footer are always rendered (if these props are provided)
-     * on every render pass.  If they are expensive to re-render, wrap them
-     * in StaticContainer or other mechanism as appropriate.  Footer is always
-     * at the bottom of the list, and header at the top, on every render pass.
-     */
     renderFooter: PropTypes.func,
     renderHeader: PropTypes.func,
-    renderBodyComponent: PropTypes.func, // add
-    /**
-     * (sectionData, sectionID) => renderable
-     *
-     * If provided, a sticky header is rendered for this section.  The sticky
-     * behavior means that it will scroll with the content at the top of the
-     * section until it reaches the top of the screen, at which point it will
-     * stick to the top until it is pushed off the screen by the next section
-     * header.
-     */
     renderSectionHeader: PropTypes.func,
+    renderScrollComponent: React.PropTypes.func.isRequired,
+    scrollRenderAheadDistance: React.PropTypes.number,
+    onChangeVisibleRows: React.PropTypes.func,
+    scrollEventThrottle: React.PropTypes.number,
+    // removeClippedSubviews: React.PropTypes.bool,
+    // stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
+    // another added
+    renderBodyComponent: PropTypes.func,
     renderSectionBodyWrapper: PropTypes.func,
     sectionBodyClassName: PropTypes.string,
-    /**
-     * (props) => renderable
-     *
-     * A function that returns the scrollable component in which the list rows
-     * are rendered. Defaults to returning a ScrollView with the given props.
-     */
-    renderScrollComponent: React.PropTypes.func.isRequired,
-    /**
-     * How early to start rendering rows before they come on screen, in
-     * pixels.
-     */
-    scrollRenderAheadDistance: React.PropTypes.number,
-    scrollEventThrottle: React.PropTypes.number,
-    /**
-     * (visibleRows, changedRows) => void
-     *
-     * Called when the set of visible rows changes.  `visibleRows` maps
-     * { sectionID: { rowID: true }} for all the visible rows, and
-     * `changedRows` maps { sectionID: { rowID: true | false }} for the rows
-     * that have changed their visibility, with true indicating visible, and
-     * false indicating the view has moved out of view.
-     */
-    onChangeVisibleRows: React.PropTypes.func,
-    /**
-     * A performance optimization for improving scroll perf of
-     * large lists, used in conjunction with overflow: 'hidden' on the row
-     * containers.  This is enabled by default.
-     */
-    removeClippedSubviews: React.PropTypes.bool,
-    /**
-     * An array of child indices determining which children get docked to the
-     * top of the screen when scrolling. For example, passing
-     * `stickyHeaderIndices={[0]}` will cause the first child to be fixed to the
-     * top of the scroll view. This property is not supported in conjunction
-     * with `horizontal={true}`.
-     * @platform ios
-     */
-    stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
     useZscroller: PropTypes.bool, // for web
     useBodyScroll: PropTypes.bool, // for web
     stickyHeader: PropTypes.bool, // for web
@@ -207,7 +66,7 @@ class ListView extends React.Component {
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
-    stickyHeaderIndices: [],
+    // stickyHeaderIndices: [],
     stickyProps: {},
     stickyContainerProps: {},
   }
@@ -275,12 +134,9 @@ class ListView extends React.Component {
     //   this._measureAndUpdateScrollProps();
     // });
     if (this.props.stickyHeader || this.props.useBodyScroll) {
-      // this.container = document.createElement('div');
-      // window.document.body.insertBefore(this.container, window.document.body.firstChild || null);
       this.__onScroll = throttle(this._onScroll, this.props.scrollEventThrottle);
       window.addEventListener('scroll', this.__onScroll);
     }
-    this.componentDidUpdate();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -301,20 +157,8 @@ class ListView extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    this.requestAnimationFrame(() => {
-      this._measureAndUpdateScrollProps();
-    });
-    // if (this.props.stickyHeader) {
-    //   ReactDOM.unstable_renderSubtreeIntoContainer(this, this._sc, this.container);
-    // }
-  }
   componentWillUnmount() {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
-      // if (this.container) {
-      //   ReactDOM.unmountComponentAtNode(this.container);
-      //   window.document.body.removeChild(this.container);
-      // }
       window.removeEventListener('scroll', this.__onScroll);
     }
   }
@@ -430,27 +274,10 @@ class ListView extends React.Component {
       bodyComponents = <StickyContainer {...props.stickyContainerProps}>{bodyComponents}</StickyContainer>;
     }
 
-    // if (!props.scrollEventThrottle) {
-    //   props.scrollEventThrottle = DEFAULT_SCROLL_CALLBACK_THROTTLE;
-    // }
-    if (props.removeClippedSubviews === undefined) {
-      props.removeClippedSubviews = true;
-    }
     assign(props, {
       onScroll: this._onScroll,
-      stickyHeaderIndices: this.props.stickyHeaderIndices.concat(sectionHeaderIndices),
-
-      // Do not pass these events downstream to ScrollView since they will be
-      // registered in ListView's own ScrollResponder.Mixin
-      onKeyboardWillShow: undefined,
-      onKeyboardWillHide: undefined,
-      onKeyboardDidShow: undefined,
-      onKeyboardDidHide: undefined,
     });
 
-
-    // TODO(ide): Use function refs so we can compose with the scroll
-    // component's original ref instead of clobbering it
     if (props.stickyHeader || props.useBodyScroll) {
       delete props.onScroll;
     }
@@ -459,9 +286,6 @@ class ListView extends React.Component {
       onContentSizeChange: this._onContentSizeChange,
       onLayout: props.stickyHeader || props.useBodyScroll ? (event) => { this.props.onLayout && this.props.onLayout(event); } : this._onLayout,
     }, header, bodyComponents, footer, props.children);
-    // if (props.stickyHeader) {
-    //   return null;
-    // }
     return this._sc;
   }
 
@@ -672,7 +496,6 @@ class ListView extends React.Component {
 
     // this._updateVisibleRows(e.nativeEvent.updatedChildFrames);
     if (!this._maybeCallOnEndReached(ev)) {
-      // console.log('enter')
       this._renderMoreRowsIfNeeded();
     }
 
@@ -688,6 +511,7 @@ class ListView extends React.Component {
 
 mixin(ListView.prototype, ScrollResponder.Mixin);
 mixin(ListView.prototype, TimerMixin);
+mixin(ListView.prototype, PullUpLoadMoreMixin);
 autobind(ListView);
 
 ListView.isReactNativeComponent = true;

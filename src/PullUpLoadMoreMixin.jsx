@@ -20,7 +20,7 @@ export default {
     const { stickyHeader, useBodyScroll, useZscroller } = this.props;
     let ele;
     if (stickyHeader || useBodyScroll) {
-      ele = window;
+      ele = document.body;
     } else {
       ele = ReactDOM.findDOMNode(this.refs['listviewscroll'].refs['ScrollView']);
     }
@@ -33,15 +33,15 @@ export default {
     this.unBindEvt();
   },
   onPullUpStart(e) {
-    this._pullUpStartPageY = e.touches[0].pageY;
+    this._pullUpStartPageY = e.touches[0].screenY;
     this._isPullUp = false;
+    this._pullUpEle = this.getEle();
   },
   onPullUpMove(e) {
-    // console.log(this._getDistanceFromEnd(this.scrollProperties))
-    if (e.touches[0].pageY < this._pullUpStartPageY &&
-      Object.keys(this.scrollProperties).every(i => this.scrollProperties[i] !== null) &&
-      this._getDistanceFromEnd(this.scrollProperties) === 0) {
-      // console.log('pull up');
+    // console.log(this._getDistanceFromEnd(this.scrollProperties), Object.keys(this.scrollProperties).every(i => this.scrollProperties[i] !== null))
+    // 使用 pageY 对比有问题
+    if (e.touches[0].screenY < this._pullUpStartPageY && this._reachBottom()) {
+      // console.log('滚动条到了底部，pull up');
       this._isPullUp = true;
     }
   },
@@ -51,4 +51,11 @@ export default {
     }
     this._isPullUp = false;
   },
+  _reachBottom() {
+    const element = this._pullUpEle;
+    if (element === document.body) {
+      return element.scrollHeight - element.scrollTop === window.innerHeight;
+    }
+    return element.scrollHeight - element.scrollTop === element.clientHeight;
+  }
 };

@@ -27,7 +27,7 @@ const Demo = React.createClass({
       <ListView
         style={{ height: 200 }}
         dataSource={this.state.dataSource}
-        onEndReached={e => alert(e.toString())}
+        onEndReached={e => console.log(e.toString())}
         onEndReachedThreshold={10}
         scrollEventThrottle={20}
         scrollRenderAheadDistance={100}

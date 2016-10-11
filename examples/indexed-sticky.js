@@ -66,6 +66,7 @@ const Demo = React.createClass({
           top: 20,
         }}
         onQuickSearch={(sectionID) => console.log(sectionID) }
+        sectionBodyClassName="sb"
       />
     </div>);
   },

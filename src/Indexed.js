@@ -13,7 +13,7 @@ export default class IndexedList extends React.Component {
   }
 
   static defaultProps = {
-    prefixCls: 'am-indexed-list',
+    prefixCls: 'rmc-indexed-list',
     quickSearchBarTop: { value: '#', label: '#' },
     onQuickSearch: () => { },
     delayTime: 100,

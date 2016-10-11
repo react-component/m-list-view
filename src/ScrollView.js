@@ -123,7 +123,7 @@ export default class ScrollView extends React.Component {
 
   render() {
     const {
-      children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = '',
+      children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'rmc-list-view',
       style = {}, contentContainerStyle,
       useZscroller, refreshControl, stickyHeader, useBodyScroll,
     } = this.props;

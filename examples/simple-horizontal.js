@@ -4,7 +4,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, Image, THUMB_URLS, TouchableHighlight,  } from './util';
+import { View, Text, THUMB_URLS, TouchableHighlight,  } from './util';
 
 function _genRows(pressData) {
   const dataBlob = [];
@@ -23,37 +23,55 @@ const Demo = React.createClass({
   },
 
   render() {
-    return (
-      <ListView
-        style={{ height: 200 }}
+    return (<div>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .list-view-section-body {
+            display: flex;
+            align-items: center;
+          }
+          .for-body-demo, .list-view-section-body {
+            height: 100%;
+          }
+        `}}
+      />
+      <ListView horizontal
+        style={{
+          height: 120,
+          width: '90%',
+          margin: '10px auto',
+          border: '1px solid #ddd',
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+        contentContainerStyle={{
+          height: '100%',
+        }}
         dataSource={this.state.dataSource}
-        onEndReached={e => alert(e.toString())}
+        onEndReached={e => console.log(e.toString())}
         onEndReachedThreshold={10}
-        onScroll={e => console.log(e.toString())}
         scrollEventThrottle={20}
-        scrollRenderAheadDistance={30}
+        scrollRenderAheadDistance={100}
         initialListSize={5}
         pageSize={5}
         renderRow={(rowData, sectionID, rowID, highlightRow) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
-            <Image style={{ width: 64, height: 64 }} source={THUMB_URLS[0]} />
+            <img src={THUMB_URLS[0]} />
             <Text>{rowData + ' - Lorem ipsum dolor sit amet'}</Text>
           </View>
         )}
-        renderSeparator={(sectionID, rowID, adjacentRowHighlighted) => (
+        renderSeparator={(sectionID, rowID) => (
           <View key={`${sectionID}-${rowID}`}
             style={{
-              height: adjacentRowHighlighted ? 4 : 1,
-              backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
+              width: 4,
+              height: '100%',
+              backgroundColor: '#3B5998',
             }}
           />
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
-        sectionBodyClassName="sb"
-        useZscroller
-        scrollerOptions={{ scrollbars: true }}
       />
-    );
+    </div>);
   },
 });
 

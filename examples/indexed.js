@@ -76,6 +76,8 @@ const Demo = React.createClass({
         delayActivityIndicator={
           <div style={{padding: 25, textAlign: 'center' }}>delay rendering...</div>
         }
+        sectionHeaderClassName="sh"
+        sectionBodyClassName="sb"
       />
     </div>);
   },

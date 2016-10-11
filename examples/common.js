@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		8:0
+/******/ 		9:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"refreshControl","5":"simple","6":"simple-paging","7":"simple-zscroller"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"refreshControl","5":"simple","6":"simple-horizontal","7":"simple-paging","8":"simple-zscroller"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -24259,7 +24259,7 @@
 	    var _props3$listPrefixCls = _props3.listPrefixCls;
 	    var listPrefixCls = _props3$listPrefixCls === undefined ? '' : _props3$listPrefixCls;
 	    var _props3$listViewPrefi = _props3.listViewPrefixCls;
-	    var listViewPrefixCls = _props3$listViewPrefi === undefined ? '' : _props3$listViewPrefi;
+	    var listViewPrefixCls = _props3$listViewPrefi === undefined ? 'rmc-list-view' : _props3$listViewPrefi;
 	    var _props3$style = _props3.style;
 	    var style = _props3$style === undefined ? {} : _props3$style;
 	    var contentContainerStyle = _props3.contentContainerStyle;
@@ -28190,7 +28190,7 @@
 	  onQuickSearch: _react.PropTypes.func
 	};
 	IndexedList.defaultProps = {
-	  prefixCls: 'am-indexed-list',
+	  prefixCls: 'rmc-indexed-list',
 	  quickSearchBarTop: { value: '#', label: '#' },
 	  onQuickSearch: function onQuickSearch() {},
 	  delayTime: 100,

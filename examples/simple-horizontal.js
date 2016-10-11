@@ -1,9 +1,9 @@
-webpackJsonp([8],{
+webpackJsonp([6],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(305);
+	module.exports = __webpack_require__(303);
 
 
 /***/ },
@@ -167,7 +167,7 @@ webpackJsonp([8],{
 
 /***/ },
 
-/***/ 305:
+/***/ 303:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -209,47 +209,59 @@ webpackJsonp([8],{
 	    };
 	  },
 	  render: function render() {
-	    return _react2.default.createElement(_rmcListView2.default, {
-	      style: { height: 200 },
-	      dataSource: this.state.dataSource,
-	      onEndReached: function onEndReached(e) {
-	        return alert(e.toString());
-	      },
-	      onEndReachedThreshold: 10,
-	      onScroll: function onScroll(e) {
-	        return console.log(e.toString());
-	      },
-	      scrollEventThrottle: 20,
-	      scrollRenderAheadDistance: 30,
-	      initialListSize: 5,
-	      pageSize: 5,
-	      renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
-	        return _react2.default.createElement(
-	          _util.View,
-	          { style: { display: 'flex', alignItems: 'center' } },
-	          _react2.default.createElement(_util.Image, { style: { width: 64, height: 64 }, source: _util.THUMB_URLS[0] }),
-	          _react2.default.createElement(
-	            _util.Text,
-	            null,
-	            rowData + ' - Lorem ipsum dolor sit amet'
-	          )
-	        );
-	      },
-	      renderSeparator: function renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
-	        return _react2.default.createElement(_util.View, { key: sectionID + '-' + rowID,
-	          style: {
-	            height: adjacentRowHighlighted ? 4 : 1,
-	            backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
-	          }
-	        });
-	      },
-	      renderBodyComponent: function renderBodyComponent() {
-	        return _react2.default.createElement('div', { className: 'for-body-demo' });
-	      },
-	      sectionBodyClassName: 'sb',
-	      useZscroller: true,
-	      scrollerOptions: { scrollbars: true }
-	    });
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement('style', { dangerouslySetInnerHTML: {
+	          __html: '\n          .list-view-section-body {\n            display: flex;\n            align-items: center;\n          }\n          .for-body-demo, .list-view-section-body {\n            height: 100%;\n          }\n        ' }
+	      }),
+	      _react2.default.createElement(_rmcListView2.default, { horizontal: true,
+	        style: {
+	          height: 120,
+	          width: '90%',
+	          margin: '10px auto',
+	          border: '1px solid #ddd',
+	          overflowX: 'scroll',
+	          overflowY: 'hidden'
+	        },
+	        contentContainerStyle: {
+	          height: '100%'
+	        },
+	        dataSource: this.state.dataSource,
+	        onEndReached: function onEndReached(e) {
+	          return console.log(e.toString());
+	        },
+	        onEndReachedThreshold: 10,
+	        scrollEventThrottle: 20,
+	        scrollRenderAheadDistance: 100,
+	        initialListSize: 5,
+	        pageSize: 5,
+	        renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: { display: 'flex', alignItems: 'center' } },
+	            _react2.default.createElement('img', { src: _util.THUMB_URLS[0] }),
+	            _react2.default.createElement(
+	              _util.Text,
+	              null,
+	              rowData + ' - Lorem ipsum dolor sit amet'
+	            )
+	          );
+	        },
+	        renderSeparator: function renderSeparator(sectionID, rowID) {
+	          return _react2.default.createElement(_util.View, { key: sectionID + '-' + rowID,
+	            style: {
+	              width: 4,
+	              height: '100%',
+	              backgroundColor: '#3B5998'
+	            }
+	          });
+	        },
+	        renderBodyComponent: function renderBodyComponent() {
+	          return _react2.default.createElement('div', { className: 'for-body-demo' });
+	        }
+	      })
+	    );
 	  }
 	});
 	
@@ -258,4 +270,4 @@ webpackJsonp([8],{
 /***/ }
 
 });
-//# sourceMappingURL=simple-zscroller.js.map
+//# sourceMappingURL=simple-horizontal.js.map

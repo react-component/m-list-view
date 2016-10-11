@@ -118,7 +118,8 @@ webpackJsonp([1],{
 	        },
 	        onQuickSearch: function onQuickSearch(sectionID) {
 	          return console.log(sectionID);
-	        }
+	        },
+	        sectionBodyClassName: 'sb'
 	      })
 	    );
 	  }

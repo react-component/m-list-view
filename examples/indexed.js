@@ -143,7 +143,9 @@ webpackJsonp([0],{
 	          'div',
 	          { style: { padding: 25, textAlign: 'center' } },
 	          'delay rendering...'
-	        )
+	        ),
+	        sectionHeaderClassName: 'sh',
+	        sectionBodyClassName: 'sb'
 	      })
 	    );
 	  }

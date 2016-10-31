@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rmc-list-view@0.7.0-beta.7</title>
+  <title>simple.js - example - rmc-list-view@0.7.0-beta.8</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -258,7 +258,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.0-beta.7</h1>
+      <h1>rmc-list-view@0.7.0-beta.8</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -289,8 +289,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   },
 
   render() {
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">200</span> }}
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">onEndReached</span>=<span class="hljs-value">{e</span> =&gt;</span> console.log(e.toString())}
@@ -315,7 +315,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         )</span>}
         renderBodyComponent={() =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-body-demo"</span> /&gt;</span>}
       /&gt;
-    )</span>;
+      <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>note: temporary disable bodyScroll can have a better experience<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this._ctrlBodyScroll(true) }}&gt;enableBodyScroll<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>&amp;nbsp;
+        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this._ctrlBodyScroll(false) } } style={{ color: 'red' }}&gt;disableBodyScroll<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+  },
+  _ctrlBodyScroll(flag) {
+    <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'body'</span>)[<span class="hljs-number">0</span>].style.overflowY = flag ? <span class="hljs-string">'auto'</span> : <span class="hljs-string">'hidden'</span>;
   },
 });
 

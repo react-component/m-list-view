@@ -220,7 +220,8 @@ webpackJsonp([7],{
 	    this._data = {};
 	    return {
 	      dataSource: dataSource.cloneWithRows(this._genData()),
-	      isLoading: false
+	      isLoading: false,
+	      destroy: false
 	    };
 	  },
 	  _onEndReached: function _onEndReached(event) {
@@ -243,7 +244,15 @@ webpackJsonp([7],{
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
+	      _react2.default.createElement(
+	        'button',
+	        { style: { margin: 10 }, onClick: function onClick() {
+	            return _this2.setState({ destroy: !_this2.state.destroy });
+	          } },
+	        this.state.destroy ? 'create' : 'destroy',
+	        ' ListView'
+	      ),
+	      !this.state.destroy ? _react2.default.createElement(_rmcListView2.default, { ref: 'lv',
 	        dataSource: this.state.dataSource,
 	        useBodyScroll: true,
 	        renderHeader: function renderHeader() {
@@ -278,7 +287,7 @@ webpackJsonp([7],{
 	              'td',
 	              null,
 	              rowData,
-	              ' Let me keep typing here so it wraps at least one line.'
+	              'Let me keep typing here so it wraps at least one line.'
 	            )
 	          );
 	        },
@@ -291,7 +300,7 @@ webpackJsonp([7],{
 	        },
 	        onEndReached: this._onEndReached,
 	        onEndReachedThreshold: 100
-	      }),
+	      }) : null,
 	      _react2.default.createElement('div', { dangerouslySetInnerHTML: {
 	          __html: '<style>\n        #qrcode{ display: none }\n        .highlight{ display: none }\n        </style>'
 	        } })

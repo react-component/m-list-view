@@ -209,41 +209,74 @@ webpackJsonp([5],{
 	    };
 	  },
 	  render: function render() {
-	    return _react2.default.createElement(_rmcListView2.default, {
-	      style: { height: 200 },
-	      dataSource: this.state.dataSource,
-	      onEndReached: function onEndReached(e) {
-	        return console.log(e.toString());
-	      },
-	      onEndReachedThreshold: 10,
-	      scrollEventThrottle: 20,
-	      scrollRenderAheadDistance: 100,
-	      initialListSize: 5,
-	      pageSize: 5,
-	      renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
-	        return _react2.default.createElement(
-	          _util.View,
-	          { style: { display: 'flex', alignItems: 'center' } },
-	          _react2.default.createElement(_util.Image, { style: { width: 64, height: 64 }, source: _util.THUMB_URLS[0] }),
-	          _react2.default.createElement(
-	            _util.Text,
-	            null,
-	            rowData + ' - Lorem ipsum dolor sit amet'
-	          )
-	        );
-	      },
-	      renderSeparator: function renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
-	        return _react2.default.createElement(_util.View, { key: sectionID + '-' + rowID,
-	          style: {
-	            height: adjacentRowHighlighted ? 4 : 1,
-	            backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
-	          }
-	        });
-	      },
-	      renderBodyComponent: function renderBodyComponent() {
-	        return _react2.default.createElement('div', { className: 'for-body-demo' });
-	      }
-	    });
+	    var _this = this;
+	
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_rmcListView2.default, {
+	        style: { height: 200 },
+	        dataSource: this.state.dataSource,
+	        onEndReached: function onEndReached(e) {
+	          return console.log(e.toString());
+	        },
+	        onEndReachedThreshold: 10,
+	        scrollEventThrottle: 20,
+	        scrollRenderAheadDistance: 100,
+	        initialListSize: 5,
+	        pageSize: 5,
+	        renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
+	          return _react2.default.createElement(
+	            _util.View,
+	            { style: { display: 'flex', alignItems: 'center' } },
+	            _react2.default.createElement(_util.Image, { style: { width: 64, height: 64 }, source: _util.THUMB_URLS[0] }),
+	            _react2.default.createElement(
+	              _util.Text,
+	              null,
+	              rowData + ' - Lorem ipsum dolor sit amet'
+	            )
+	          );
+	        },
+	        renderSeparator: function renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+	          return _react2.default.createElement(_util.View, { key: sectionID + '-' + rowID,
+	            style: {
+	              height: adjacentRowHighlighted ? 4 : 1,
+	              backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
+	            }
+	          });
+	        },
+	        renderBodyComponent: function renderBodyComponent() {
+	          return _react2.default.createElement('div', { className: 'for-body-demo' });
+	        }
+	      }),
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'note: temporary disable bodyScroll can have a better experience'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              _this._ctrlBodyScroll(true);
+	            } },
+	          'enableBodyScroll'
+	        ),
+	        ' ',
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              _this._ctrlBodyScroll(false);
+	            }, style: { color: 'red' } },
+	          'disableBodyScroll'
+	        )
+	      )
+	    );
+	  },
+	  _ctrlBodyScroll: function _ctrlBodyScroll(flag) {
+	    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
 	  }
 	});
 	

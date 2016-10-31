@@ -4,17 +4,17 @@ import ReactDOM from 'react-dom';
 export default {
   bindEvt() {
     const ele = this.getEle();
-    ele.addEventListener('touchstart', this.onPullUpStart.bind(this));
-    ele.addEventListener('touchmove', this.onPullUpMove.bind(this));
-    ele.addEventListener('touchend', this.onPullUpEnd.bind(this));
-    ele.addEventListener('touchcancel', this.onPullUpEnd.bind(this));
+    ele.addEventListener('touchstart', this.onPullUpStart);
+    ele.addEventListener('touchmove', this.onPullUpMove);
+    ele.addEventListener('touchend', this.onPullUpEnd);
+    ele.addEventListener('touchcancel', this.onPullUpEnd);
   },
   unBindEvt() {
     const ele = this.getEle();
-    ele.removeEventListener('touchstart', this.onPullUpStart.bind(this));
-    ele.removeEventListener('touchmove', this.onPullUpMove.bind(this));
-    ele.removeEventListener('touchend', this.onPullUpEnd.bind(this));
-    ele.removeEventListener('touchcancel', this.onPullUpEnd.bind(this));
+    ele.removeEventListener('touchstart', this.onPullUpStart);
+    ele.removeEventListener('touchmove', this.onPullUpMove);
+    ele.removeEventListener('touchend', this.onPullUpEnd);
+    ele.removeEventListener('touchcancel', this.onPullUpEnd);
   },
   getEle() {
     const { stickyHeader, useBodyScroll, useZscroller } = this.props;

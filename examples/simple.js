@@ -23,7 +23,7 @@ const Demo = React.createClass({
   },
 
   render() {
-    return (
+    return (<div>
       <ListView
         style={{ height: 200 }}
         dataSource={this.state.dataSource}
@@ -49,7 +49,15 @@ const Demo = React.createClass({
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
       />
-    );
+      <div>
+        <p>note: temporary disable bodyScroll can have a better experience</p>
+        <button onClick={() => { this._ctrlBodyScroll(true) }}>enableBodyScroll</button>&nbsp;
+        <button onClick={() => { this._ctrlBodyScroll(false) } } style={{ color: 'red' }}>disableBodyScroll</button>
+      </div>
+    </div>);
+  },
+  _ctrlBodyScroll(flag) {
+    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
   },
 });
 

@@ -27,6 +27,7 @@ const Demo = React.createClass({
     return {
       dataSource: dataSource.cloneWithRows(this._genData()),
       isLoading: false,
+      destroy: false,
     };
   },
   _onEndReached(event) {
@@ -43,7 +44,10 @@ const Demo = React.createClass({
   },
   render() {
     return (<div>
-      <ListView ref="lv"
+      <button style={{ margin: 10 }} onClick={() => this.setState({ destroy: !this.state.destroy })}>
+        {this.state.destroy ? 'create' : 'destroy'} ListView
+      </button>
+      {!this.state.destroy ? <ListView ref="lv"
         dataSource={this.state.dataSource}
         useBodyScroll
         renderHeader={() => (
@@ -61,7 +65,7 @@ const Demo = React.createClass({
         )}
         renderSectionBodyWrapper={(sectionID) => <MySectionBodyWrapper key={sectionID} />}
         renderRow={(rowData) => (<tr style={{ height: 50 }}>
-          <td>{rowData} Let me keep typing here so it wraps at least one line.</td>
+          <td>{rowData}Let me keep typing here so it wraps at least one line.</td>
         </tr>)}
         initialListSize={10}
         pageSize={4}
@@ -70,7 +74,7 @@ const Demo = React.createClass({
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={100}
-        />
+      /> : null}
       <div dangerouslySetInnerHTML={{
         __html: `<style>
         #qrcode{ display: none }

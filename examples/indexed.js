@@ -23,15 +23,15 @@ webpackJsonp([0],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(74);
+	var _reactDom = __webpack_require__(72);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(212);
+	var _rmcListView = __webpack_require__(218);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _MyScroller = __webpack_require__(286);
+	var _MyScroller = __webpack_require__(292);
 	
 	var _MyScroller2 = _interopRequireDefault(_MyScroller);
 	
@@ -138,6 +138,7 @@ webpackJsonp([0],{
 	        onQuickSearch: function onQuickSearch(sectionID) {
 	          return console.log(sectionID);
 	        },
+	        showQuickSearchIndicator: true,
 	        delayTime: 100,
 	        delayActivityIndicator: _react2.default.createElement(
 	          'div',
@@ -155,7 +156,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 286:
+/***/ 292:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -164,15 +165,15 @@ webpackJsonp([0],{
 	  value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(216);
+	var _classCallCheck2 = __webpack_require__(222);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(217);
+	var _possibleConstructorReturn2 = __webpack_require__(223);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(253);
+	var _inherits2 = __webpack_require__(259);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
@@ -180,11 +181,11 @@ webpackJsonp([0],{
 	
 	var React = _interopRequireWildcard(_react);
 	
-	var _reactDom = __webpack_require__(74);
+	var _reactDom = __webpack_require__(72);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _zscroller = __webpack_require__(268);
+	var _zscroller = __webpack_require__(274);
 	
 	var _zscroller2 = _interopRequireDefault(_zscroller);
 	
@@ -225,8 +226,8 @@ webpackJsonp([0],{
 	    }
 	
 	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.handleScroll = function (e) {
-	      var _this$props$onScroll = _this.props.onScroll;
-	      var onScroll = _this$props$onScroll === undefined ? function (ev) {} : _this$props$onScroll;
+	      var _this$props$onScroll = _this.props.onScroll,
+	          onScroll = _this$props$onScroll === undefined ? function (ev) {} : _this$props$onScroll;
 	
 	      onScroll(e);
 	    }, _this.throttleScroll = function (e) {
@@ -259,13 +260,13 @@ webpackJsonp([0],{
 	  };
 	
 	  MyScroller.prototype.render = function render() {
-	    var _props = this.props;
-	    var children = _props.children;
-	    var className = _props.className;
-	    var _props$style = _props.style;
-	    var style = _props$style === undefined ? {} : _props$style;
-	    var contentContainerStyle = _props.contentContainerStyle;
-	    var useZscroller = _props.useZscroller;
+	    var _props = this.props,
+	        children = _props.children,
+	        className = _props.className,
+	        _props$style = _props.style,
+	        style = _props$style === undefined ? {} : _props$style,
+	        contentContainerStyle = _props.contentContainerStyle,
+	        useZscroller = _props.useZscroller;
 	
 	    return React.cloneElement(React.createElement('div', { ref: SCROLLVIEW }), { className: className, style: useZscroller ? (0, _objectAssign2.default)({}, {
 	        position: 'relative',

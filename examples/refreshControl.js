@@ -3,21 +3,21 @@ webpackJsonp([4],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(291);
+	module.exports = __webpack_require__(297);
 
 
 /***/ },
 
-/***/ 291:
+/***/ 297:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _defineProperty2 = __webpack_require__(264);
+	var _defineProperty2 = __webpack_require__(270);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
-	var _toConsumableArray2 = __webpack_require__(292);
+	var _toConsumableArray2 = __webpack_require__(298);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
@@ -27,11 +27,11 @@ webpackJsonp([4],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(74);
+	var _reactDom = __webpack_require__(72);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(212);
+	var _rmcListView = __webpack_require__(218);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
@@ -156,7 +156,7 @@ webpackJsonp([4],{
 	                { style: { fontSize: '1.6em', color: '#FF6E27' } },
 	                '35'
 	              ),
-	              '元/任务'
+	              '\u5143/\u4EFB\u52A1'
 	            )
 	          )
 	        )
@@ -171,14 +171,14 @@ webpackJsonp([4],{
 	          _react2.default.createElement(
 	            'button',
 	            { onClick: _this2.onManual },
-	            '点击刷新'
+	            '\u70B9\u51FB\u5237\u65B0'
 	          ),
 	          _react2.default.createElement(
 	            'button',
 	            { onClick: function onClick() {
 	                return _this2.setState({ manual: false });
 	              } },
-	            '手动刷新'
+	            '\u624B\u52A8\u5237\u65B0'
 	          )
 	        );
 	      },
@@ -197,6 +197,7 @@ webpackJsonp([4],{
 	      useZscroller: true,
 	      scrollerOptions: { scrollbars: true },
 	      refreshControl: _react2.default.createElement(_rmcListView2.default.RefreshControl, {
+	        className: 'my-refresh-control',
 	        refreshing: this.state.refreshing,
 	        onRefresh: this.state.manual ? this.onAjax : this.onRefresh,
 	        resistance: 1
@@ -209,14 +210,14 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 292:
+/***/ 298:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(293);
+	var _from = __webpack_require__(299);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
@@ -236,36 +237,36 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 293:
+/***/ 299:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(294), __esModule: true };
+	module.exports = { "default": __webpack_require__(300), __esModule: true };
 
 /***/ },
 
-/***/ 294:
+/***/ 300:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(221);
-	__webpack_require__(295);
+	__webpack_require__(227);
+	__webpack_require__(301);
 	module.exports = __webpack_require__(8).Array.from;
 
 /***/ },
 
-/***/ 295:
+/***/ 301:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	var ctx            = __webpack_require__(9)
 	  , $export        = __webpack_require__(6)
 	  , toObject       = __webpack_require__(39)
-	  , call           = __webpack_require__(296)
-	  , isArrayIter    = __webpack_require__(297)
+	  , call           = __webpack_require__(302)
+	  , isArrayIter    = __webpack_require__(303)
 	  , toLength       = __webpack_require__(30)
-	  , createProperty = __webpack_require__(298)
-	  , getIterFn      = __webpack_require__(299);
+	  , createProperty = __webpack_require__(304)
+	  , getIterFn      = __webpack_require__(305);
 	
-	$export($export.S + $export.F * !__webpack_require__(301)(function(iter){ Array.from(iter); }), 'Array', {
+	$export($export.S + $export.F * !__webpack_require__(307)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -296,7 +297,7 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 296:
+/***/ 302:
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
@@ -314,12 +315,12 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 297:
+/***/ 303:
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(226)
-	  , ITERATOR   = __webpack_require__(232)('iterator')
+	var Iterators  = __webpack_require__(232)
+	  , ITERATOR   = __webpack_require__(238)('iterator')
 	  , ArrayProto = Array.prototype;
 	
 	module.exports = function(it){
@@ -328,7 +329,7 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 298:
+/***/ 304:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -342,12 +343,12 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 299:
+/***/ 305:
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(300)
-	  , ITERATOR  = __webpack_require__(232)('iterator')
-	  , Iterators = __webpack_require__(226);
+	var classof   = __webpack_require__(306)
+	  , ITERATOR  = __webpack_require__(238)('iterator')
+	  , Iterators = __webpack_require__(232);
 	module.exports = __webpack_require__(8).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
@@ -356,12 +357,12 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 300:
+/***/ 306:
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
 	var cof = __webpack_require__(27)
-	  , TAG = __webpack_require__(232)('toStringTag')
+	  , TAG = __webpack_require__(238)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 	
@@ -385,10 +386,10 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 301:
+/***/ 307:
 /***/ function(module, exports, __webpack_require__) {
 
-	var ITERATOR     = __webpack_require__(232)('iterator')
+	var ITERATOR     = __webpack_require__(238)('iterator')
 	  , SAFE_CLOSING = false;
 	
 	try {

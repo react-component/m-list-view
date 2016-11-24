@@ -22,6 +22,25 @@ li {
 .rmc-indexed-list-qsb-moving {
   overflow: hidden;
 }
+.rmc-indexed-list-qsindicator {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -30px auto auto -60px;
+  width: 120px;
+  height: 60px;
+  background: transparent;
+  opacity: .7;
+  color: #0af;
+  font-size: 40px;
+  border-radius: 60px;
+  z-index: 1999;
+  text-align: center;
+  line-height: 60px;
+}
+.rmc-indexed-list-qsindicator-hide {
+  display: none;
+}
 .zscroller-scrollbar-y {
   position: absolute;
   z-index: 9999;

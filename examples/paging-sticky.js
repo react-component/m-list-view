@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(290);
+	module.exports = __webpack_require__(296);
 
 
 /***/ },
 
-/***/ 289:
+/***/ 295:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22,7 +22,7 @@ webpackJsonp([3],{
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _objectWithoutProperties2 = __webpack_require__(215);
+	var _objectWithoutProperties2 = __webpack_require__(221);
 	
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 	
@@ -80,10 +80,10 @@ webpackJsonp([3],{
 	var TouchableHighlight = exports.TouchableHighlight = _react2.default.createClass({
 	  displayName: 'TouchableHighlight',
 	  render: function render() {
-	    var _props = this.props;
-	    var onPress = _props.onPress;
-	    var children = _props.children;
-	    var restProps = (0, _objectWithoutProperties3.default)(_props, ['onPress', 'children']);
+	    var _props = this.props,
+	        onPress = _props.onPress,
+	        children = _props.children,
+	        restProps = (0, _objectWithoutProperties3.default)(_props, ['onPress', 'children']);
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -167,7 +167,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 290:
+/***/ 296:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -178,15 +178,15 @@ webpackJsonp([3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(74);
+	var _reactDom = __webpack_require__(72);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(212);
+	var _rmcListView = __webpack_require__(218);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(289);
+	var _util = __webpack_require__(295);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -222,7 +222,7 @@ webpackJsonp([3],{
 	    this.sectionIDs = [];
 	    this.rowIDs = [];
 	    this._genData = function () {
-	      var pIndex = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	      var pIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 	
 	      for (var i = 0; i < NUM_SECTIONS; i++) {
 	        var ii = pIndex * NUM_SECTIONS + i;

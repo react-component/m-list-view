@@ -10,12 +10,14 @@ export default class IndexedList extends React.Component {
     sectionHeaderClassName: PropTypes.string,
     quickSearchBarTop: PropTypes.object,
     onQuickSearch: PropTypes.func,
+    showQuickSearchIndicator: PropTypes.bool,
   }
 
   static defaultProps = {
     prefixCls: 'rmc-indexed-list',
     quickSearchBarTop: { value: '#', label: '#' },
     onQuickSearch: () => { },
+    showQuickSearchIndicator: false,
     delayTime: 100,
     // delayActivityIndicator: <div style={{padding: 5, textAlign: 'center'}}>rendering more</div>,
     delayActivityIndicator: '',
@@ -119,7 +121,7 @@ export default class IndexedList extends React.Component {
     this._basePos = this.refs.quickSearchBar.getBoundingClientRect();
     document.addEventListener('touchmove', this._disableParent, false);
     document.body.className = `${document.body.className} ${this.props.prefixCls}-qsb-moving`;
-    this.updateCls(this._target);
+    this.updateIndicator(this._target);
   }
   onTouchMove = (e) => {
     e.preventDefault();
@@ -141,7 +143,7 @@ export default class IndexedList extends React.Component {
             } else {
               this.onQuickSearch(overValue);
             }
-            this.updateCls(target);
+            this.updateIndicator(target);
           }
           this._target = target;
         }
@@ -155,11 +157,28 @@ export default class IndexedList extends React.Component {
     document.removeEventListener('touchmove', this._disableParent, false);
     document.body.className = document.body.className.replace(
       new RegExp(`${this.props.prefixCls}-qsb-moving`, 'g'), '');
-    this.updateCls(this._target, true);
+    this.updateIndicator(this._target, true);
     this._target = null;
   }
 
-  updateCls = (el, end) => {
+  updateIndicator = (ele, end) => {
+    let el = ele;
+    if (!el.getAttribute('data-qf-target')) {
+      el = el.parentNode;
+    }
+    this.refs.qsIndicator.innerText = el.innerText.trim();
+    this.setState({
+      showQuickSearchIndicator: true,
+    });
+    if (this._indicatorTimer) {
+      clearTimeout(this._indicatorTimer);
+    }
+    this._indicatorTimer = setTimeout(() => {
+      this.setState({
+        showQuickSearchIndicator: false,
+      });
+    }, 1000);
+
     const cls = `${this.props.prefixCls}-quick-search-bar-over`;
     // can not use setState to change className, it has a big performance issue! 
     this._hCache.forEach((d) => {
@@ -220,6 +239,10 @@ export default class IndexedList extends React.Component {
       [className]: className,
       [prefixCls]: true,
     });
+    const qsIndicatorCls = classNames({
+      [`${prefixCls}-qsindicator`]: true,
+      [`${prefixCls}-qsindicator-hide`]: !this.props.showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
+    });
     // initialListSize={this.props.dataSource.getRowCount()}
     return (<div className={`${prefixCls}-container`}>
       {_delay && this.props.delayActivityIndicator}
@@ -239,7 +262,8 @@ export default class IndexedList extends React.Component {
       >
         {children}
       </ListView>
-      {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle) }
+      {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle)}
+      <div className={qsIndicatorCls} ref="qsIndicator" />
     </div>);
   }
 }

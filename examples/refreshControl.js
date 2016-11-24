@@ -124,6 +124,7 @@ const App = React.createClass({
         useZscroller
         scrollerOptions={{ scrollbars: true }}
         refreshControl={<ListView.RefreshControl
+          className="my-refresh-control"
           refreshing={this.state.refreshing}
           onRefresh={this.state.manual ? this.onAjax : this.onRefresh}
           resistance={1}

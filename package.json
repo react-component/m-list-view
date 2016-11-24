@@ -1,6 +1,6 @@
 {
   "name": "rmc-list-view",
-  "version": "0.7.0-beta.8",
+  "version": "0.7.0",
   "description": "m-list-view ui component for react",
   "keywords": [
     "react",

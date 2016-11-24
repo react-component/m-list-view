@@ -85,10 +85,19 @@ you need to write your own scroll logic like `ScrollView` component(see `/exampl
 - quickSearchBarTop (object{value:string, label:string}, default '#') - top button
 - quickSearchBarStyle (object) - quickSearchBar's style
 - onQuickSearch (function())
+- showQuickSearchIndicator (boolean, false) - show quick search indicator
 - delayTime (number) - default 100ms, delay render time (delay render these items of `totalRowCount - initialListSize`)
 - delayActivityIndicator (react node) - delay render activity indicator
 
 **Note:** should not enable useZscroller on IndexedList.
+
+### ListView.RefreshControl
+- icon (React.Element) - refresh indicator, include `pull` and `release` state
+- loading (React.Element) - loading indicator
+- distanceToRefresh (number, default 50) - distance to refresh
+- onRefresh (function, required) - onRefresh callback
+- refreshing (boolean, false) - whether to show refreshing state
+
 
 ## Test Case
 

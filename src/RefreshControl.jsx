@@ -40,7 +40,7 @@ export default React.createClass({
 
   render() {
     const {
-      prefixCls, icon, loading, className = '', style, refreshing
+      prefixCls, className = '', style, icon, loading, refreshing
     } = this.props;
     const { active, loadingState } = this.state;
     const wrapCls = classNames({

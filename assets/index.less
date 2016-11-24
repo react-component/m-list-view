@@ -8,7 +8,6 @@ ul, li {
 @indexedList: rmc-indexed-list;
 .@{indexedList} {
   // position: relative;
-
   &-quick-search-bar {
     position: fixed;
     top: 0;
@@ -26,6 +25,25 @@ ul, li {
   // quickSearchBar is moving, maybe need disable body(or parent scroll element)'s overflow
   &-qsb-moving {
     overflow: hidden;
+  }
+  &-qsindicator {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -30px auto auto -60px;
+    width: 120px;
+    height: 60px;
+    background: transparent;
+    opacity: .7;
+    color: #0af;
+    font-size: 40px;
+    border-radius: 60px;
+    z-index: 1999;
+    text-align: center;
+    line-height: 60px;
+    &-hide {
+      display: none;
+    }
   }
 }
 .zscroller {

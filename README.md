@@ -92,8 +92,8 @@ you need to write your own scroll logic like `ScrollView` component(see `/exampl
 **Note:** should not enable useZscroller on IndexedList.
 
 ### ListView.RefreshControl
-- icon (React.Element) - refresh indicator, include `pull` and `release` state
-- loading (React.Element) - loading indicator
+- icon (any) - refresh indicator, include `pull` and `release` state
+- loading (any) - loading indicator
 - distanceToRefresh (number, default 50) - distance to refresh
 - onRefresh (function, required) - onRefresh callback
 - refreshing (boolean, false) - whether to show refreshing state

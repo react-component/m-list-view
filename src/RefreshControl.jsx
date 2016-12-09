@@ -4,11 +4,11 @@ import classNames from 'classnames';
 
 export default React.createClass({
   propTypes: {
+    prefixCls: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    icon: PropTypes.element,
-    prefixCls: PropTypes.string,
-    loading: PropTypes.element,
+    icon: PropTypes.any,
+    loading: PropTypes.any,
     distanceToRefresh: PropTypes.number,
     refreshing: PropTypes.bool,
     onRefresh: PropTypes.func.isRequired,
@@ -26,15 +26,15 @@ export default React.createClass({
       prefixCls: 'list-view-refresh-control',
       distanceToRefresh: 50,
       refreshing: false,
-      icon: <div style={{lineHeight: '50px', textAlign: 'center' }}>
-        <div className="list-view-refresh-control-pull">
+      icon: [
+        <div key="0" className="list-view-refresh-control-pull">
           ↓ 下拉
-        </div>
-        <div className="list-view-refresh-control-release">
+        </div>,
+        <div key="1" className="list-view-refresh-control-release">
           ↑ 释放
         </div>
-      </div>,
-      loading: <div style={{ lineHeight: '50px', textAlign: 'center' }}>loading...</div>,
+      ],
+      loading: <div>loading...</div>,
     };
   },
 

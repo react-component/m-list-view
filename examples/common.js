@@ -27995,11 +27995,11 @@
 	  displayName: 'RefreshControl',
 	
 	  propTypes: {
+	    prefixCls: _react.PropTypes.string,
 	    className: _react.PropTypes.string,
 	    style: _react.PropTypes.object,
-	    icon: _react.PropTypes.element,
-	    prefixCls: _react.PropTypes.string,
-	    loading: _react.PropTypes.element,
+	    icon: _react.PropTypes.any,
+	    loading: _react.PropTypes.any,
 	    distanceToRefresh: _react.PropTypes.number,
 	    refreshing: _react.PropTypes.bool,
 	    onRefresh: _react.PropTypes.func.isRequired
@@ -28016,23 +28016,18 @@
 	      prefixCls: 'list-view-refresh-control',
 	      distanceToRefresh: 50,
 	      refreshing: false,
-	      icon: _react2.default.createElement(
+	      icon: [_react2.default.createElement(
 	        'div',
-	        { style: { lineHeight: '50px', textAlign: 'center' } },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'list-view-refresh-control-pull' },
-	          '\u2193 \u4E0B\u62C9'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'list-view-refresh-control-release' },
-	          '\u2191 \u91CA\u653E'
-	        )
-	      ),
+	        { key: '0', className: 'list-view-refresh-control-pull' },
+	        '\u2193 \u4E0B\u62C9'
+	      ), _react2.default.createElement(
+	        'div',
+	        { key: '1', className: 'list-view-refresh-control-release' },
+	        '\u2191 \u91CA\u653E'
+	      )],
 	      loading: _react2.default.createElement(
 	        'div',
-	        { style: { lineHeight: '50px', textAlign: 'center' } },
+	        null,
 	        'loading...'
 	      )
 	    };

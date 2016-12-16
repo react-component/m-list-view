@@ -174,18 +174,20 @@ export default class IndexedList extends React.Component {
     if (!el.getAttribute('data-qf-target')) {
       el = el.parentNode;
     }
-    this.refs.qsIndicator.innerText = el.innerText.trim();
-    this.setState({
-      showQuickSearchIndicator: true,
-    });
-    if (this._indicatorTimer) {
-      clearTimeout(this._indicatorTimer);
-    }
-    this._indicatorTimer = setTimeout(() => {
+    if (this.props.showQuickSearchIndicator) {
+      this.refs.qsIndicator.innerText = el.innerText.trim();
       this.setState({
-        showQuickSearchIndicator: false,
+        showQuickSearchIndicator: true,
       });
-    }, 1000);
+      if (this._indicatorTimer) {
+        clearTimeout(this._indicatorTimer);
+      }
+      this._indicatorTimer = setTimeout(() => {
+        this.setState({
+          showQuickSearchIndicator: false,
+        });
+      }, 1000);
+    }
 
     const cls = `${this.props.prefixCls}-quick-search-bar-over`;
     // can not use setState to change className, it has a big performance issue!
@@ -241,24 +243,20 @@ export default class IndexedList extends React.Component {
     const {
       className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
       initialListSize = Math.min(20, this.props.dataSource.getRowCount()),
+      showQuickSearchIndicator,
       renderSectionHeader, sectionHeaderClassName, ...other,
     } = this.props;
-    const wrapCls = classNames({
-      [className]: className,
-      [prefixCls]: true,
-    });
-    const qsIndicatorCls = classNames({
-      [`${prefixCls}-qsindicator`]: true,
-      [`${prefixCls}-qsindicator-hide`]:
-        !this.props.showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
-    });
+
     // initialListSize={this.props.dataSource.getRowCount()}
     return (<div className={`${prefixCls}-container`}>
       {_delay && this.props.delayActivityIndicator}
       <ListView
         {...other}
         ref="indexedListView"
-        className={wrapCls}
+        className={classNames({
+          [className]: className,
+          [prefixCls]: true,
+        })}
         initialListSize={initialListSize}
         pageSize={pageSize}
         renderSectionHeader={(sectionData, sectionID) => React.cloneElement(
@@ -272,7 +270,12 @@ export default class IndexedList extends React.Component {
         {children}
       </ListView>
       {this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle)}
-      <div className={qsIndicatorCls} ref="qsIndicator" />
+      {showQuickSearchIndicator ? <div className={classNames({
+        [`${prefixCls}-qsindicator`]: true,
+        [`${prefixCls}-qsindicator-hide`]:
+        !showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
+      })} ref="qsIndicator"
+      /> : null}
     </div>);
   }
 }

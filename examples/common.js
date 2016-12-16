@@ -27431,6 +27431,7 @@
 	exports.default = Sticky;
 	module.exports = exports['default'];
 
+
 /***/ },
 /* 289 */
 /***/ function(module, exports, __webpack_require__) {
@@ -27799,8 +27800,8 @@
 	
 	  IndexedList.prototype.render = function render() {
 	    var _classNames,
-	        _classNames2,
-	        _this3 = this;
+	        _this3 = this,
+	        _classNames2;
 	
 	    var _state = this.state,
 	        _delay = _state._delay,
@@ -27813,13 +27814,13 @@
 	        quickSearchBarStyle = _props2.quickSearchBarStyle,
 	        _props2$initialListSi = _props2.initialListSize,
 	        initialListSize = _props2$initialListSi === undefined ? Math.min(20, this.props.dataSource.getRowCount()) : _props2$initialListSi,
+	        showQuickSearchIndicator = _props2.showQuickSearchIndicator,
 	        _renderSectionHeader = _props2.renderSectionHeader,
 	        sectionHeaderClassName = _props2.sectionHeaderClassName,
-	        other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'initialListSize', 'renderSectionHeader', 'sectionHeaderClassName']);
+	        other = (0, _objectWithoutProperties3.default)(_props2, ['className', 'prefixCls', 'children', 'quickSearchBarTop', 'quickSearchBarStyle', 'initialListSize', 'showQuickSearchIndicator', 'renderSectionHeader', 'sectionHeaderClassName']);
 	
-	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls, true), _classNames));
-	    var qsIndicatorCls = (0, _classnames2.default)((_classNames2 = {}, (0, _defineProperty3.default)(_classNames2, prefixCls + '-qsindicator', true), (0, _defineProperty3.default)(_classNames2, prefixCls + '-qsindicator-hide', !this.props.showQuickSearchIndicator || !this.state.showQuickSearchIndicator), _classNames2));
 	    // initialListSize={this.props.dataSource.getRowCount()}
+	
 	    return _react2.default.createElement(
 	      'div',
 	      { className: prefixCls + '-container' },
@@ -27828,7 +27829,7 @@
 	        _ListView2.default,
 	        (0, _extends3.default)({}, other, {
 	          ref: 'indexedListView',
-	          className: wrapCls,
+	          className: (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls, true), _classNames)),
 	          initialListSize: initialListSize,
 	          pageSize: pageSize,
 	          renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
@@ -27843,7 +27844,8 @@
 	        children
 	      ),
 	      this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
-	      _react2.default.createElement('div', { className: qsIndicatorCls, ref: 'qsIndicator' })
+	      showQuickSearchIndicator ? _react2.default.createElement('div', { className: (0, _classnames2.default)((_classNames2 = {}, (0, _defineProperty3.default)(_classNames2, prefixCls + '-qsindicator', true), (0, _defineProperty3.default)(_classNames2, prefixCls + '-qsindicator-hide', !showQuickSearchIndicator || !this.state.showQuickSearchIndicator), _classNames2)), ref: 'qsIndicator'
+	      }) : null
 	    );
 	  };
 	
@@ -27991,18 +27993,20 @@
 	    if (!el.getAttribute('data-qf-target')) {
 	      el = el.parentNode;
 	    }
-	    _this4.refs.qsIndicator.innerText = el.innerText.trim();
-	    _this4.setState({
-	      showQuickSearchIndicator: true
-	    });
-	    if (_this4._indicatorTimer) {
-	      clearTimeout(_this4._indicatorTimer);
-	    }
-	    _this4._indicatorTimer = setTimeout(function () {
+	    if (_this4.props.showQuickSearchIndicator) {
+	      _this4.refs.qsIndicator.innerText = el.innerText.trim();
 	      _this4.setState({
-	        showQuickSearchIndicator: false
+	        showQuickSearchIndicator: true
 	      });
-	    }, 1000);
+	      if (_this4._indicatorTimer) {
+	        clearTimeout(_this4._indicatorTimer);
+	      }
+	      _this4._indicatorTimer = setTimeout(function () {
+	        _this4.setState({
+	          showQuickSearchIndicator: false
+	        });
+	      }, 1000);
+	    }
 	
 	    var cls = _this4.props.prefixCls + '-quick-search-bar-over';
 	    // can not use setState to change className, it has a big performance issue!

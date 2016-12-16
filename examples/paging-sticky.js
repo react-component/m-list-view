@@ -330,7 +330,7 @@ webpackJsonp([3],{
 	        stickyHeader: true,
 	        stickyProps: {
 	          className: 'for-sticky-demo',
-	          stickyStyle: { top: '10px' },
+	          stickyStyle: { top: '10px', webkitTransform: 'none', transform: 'none' },
 	          onStickyStateChange: function onStickyStateChange(isSticky) {
 	            console.log(isSticky);
 	          }

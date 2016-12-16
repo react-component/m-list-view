@@ -3,12 +3,12 @@ webpackJsonp([4],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(297);
+	module.exports = __webpack_require__(298);
 
 
 /***/ },
 
-/***/ 297:
+/***/ 298:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17,27 +17,27 @@ webpackJsonp([4],{
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
-	var _toConsumableArray2 = __webpack_require__(298);
+	var _toConsumableArray2 = __webpack_require__(299);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
-	__webpack_require__(40);
+	__webpack_require__(2);
 	
-	var _react = __webpack_require__(41);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(72);
+	var _reactDom = __webpack_require__(34);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(218);
+	var _rmcListView = __webpack_require__(180);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// use jsx to render html, do not modify simple.html
+	/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 	
 	var data = [{
 	  img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
@@ -110,7 +110,8 @@ webpackJsonp([4],{
 	          height: 8,
 	          borderTop: '1px solid #ECECED',
 	          borderBottom: '1px solid #ECECED'
-	        } });
+	        }
+	      });
 	    };
 	    var row = function row(rowData, sectionID, rowID) {
 	      if (index < 0) {
@@ -131,13 +132,14 @@ webpackJsonp([4],{
 	              padding: 2,
 	              marginBottom: 8,
 	              borderBottom: '1px solid #F6F6F6'
-	            } },
+	            }
+	          },
 	          obj.title
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { style: (0, _defineProperty3.default)({ display: '-webkit-box' }, 'display', 'flex') },
-	          _react2.default.createElement('img', { style: { height: 64 * (window.viewportScale || 1), marginRight: 8 }, src: obj.img }),
+	          _react2.default.createElement('img', { style: { height: 64, marginRight: 8 }, src: obj.img }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { display: 'inline-block' } },
@@ -210,14 +212,14 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 298:
+/***/ 299:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(299);
+	var _from = __webpack_require__(300);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
@@ -237,36 +239,36 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 299:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(300), __esModule: true };
-
-/***/ },
-
 /***/ 300:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(227);
-	__webpack_require__(301);
-	module.exports = __webpack_require__(8).Array.from;
+	module.exports = { "default": __webpack_require__(301), __esModule: true };
 
 /***/ },
 
 /***/ 301:
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(227);
+	__webpack_require__(302);
+	module.exports = __webpack_require__(189).Array.from;
+
+/***/ },
+
+/***/ 302:
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
-	var ctx            = __webpack_require__(9)
-	  , $export        = __webpack_require__(6)
-	  , toObject       = __webpack_require__(39)
-	  , call           = __webpack_require__(302)
-	  , isArrayIter    = __webpack_require__(303)
-	  , toLength       = __webpack_require__(30)
-	  , createProperty = __webpack_require__(304)
-	  , getIterFn      = __webpack_require__(305);
+	var ctx            = __webpack_require__(190)
+	  , $export        = __webpack_require__(187)
+	  , toObject       = __webpack_require__(220)
+	  , call           = __webpack_require__(303)
+	  , isArrayIter    = __webpack_require__(304)
+	  , toLength       = __webpack_require__(211)
+	  , createProperty = __webpack_require__(305)
+	  , getIterFn      = __webpack_require__(306);
 	
-	$export($export.S + $export.F * !__webpack_require__(307)(function(iter){ Array.from(iter); }), 'Array', {
+	$export($export.S + $export.F * !__webpack_require__(308)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -297,11 +299,11 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 302:
+/***/ 303:
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(13);
+	var anObject = __webpack_require__(194);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -315,7 +317,7 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 303:
+/***/ 304:
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
@@ -329,12 +331,12 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 304:
+/***/ 305:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $defineProperty = __webpack_require__(12)
-	  , createDesc      = __webpack_require__(20);
+	var $defineProperty = __webpack_require__(193)
+	  , createDesc      = __webpack_require__(201);
 	
 	module.exports = function(object, index, value){
 	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
@@ -343,13 +345,13 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 305:
+/***/ 306:
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(306)
+	var classof   = __webpack_require__(307)
 	  , ITERATOR  = __webpack_require__(238)('iterator')
 	  , Iterators = __webpack_require__(232);
-	module.exports = __webpack_require__(8).getIteratorMethod = function(it){
+	module.exports = __webpack_require__(189).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
@@ -357,11 +359,11 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 306:
+/***/ 307:
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(27)
+	var cof = __webpack_require__(208)
 	  , TAG = __webpack_require__(238)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
@@ -386,7 +388,7 @@ webpackJsonp([4],{
 
 /***/ },
 
-/***/ 307:
+/***/ 308:
 /***/ function(module, exports, __webpack_require__) {
 
 	var ITERATOR     = __webpack_require__(238)('iterator')

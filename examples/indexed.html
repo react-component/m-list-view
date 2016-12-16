@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>indexed.js - example - rmc-list-view@0.7.1</title>
+  <title>indexed.js - example - rmc-list-view@0.7.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,18 +263,16 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.1</h1>
+      <h1>rmc-list-view@0.7.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js">
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
-<span class="hljs-keyword">import</span> MyScroller <span class="hljs-keyword">from</span> <span class="hljs-string">'./MyScroller'</span>;
 
 <span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">20</span>;
 <span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
@@ -289,7 +287,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     };
 
     <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
-      getRowData: getRowData,
+      getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) =&gt; row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
@@ -326,6 +324,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> '<span class="hljs-attribute">10px</span> <span class="hljs-attribute">auto</span>', <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">80</span>%', <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">relative</span>' }}&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView.IndexedList</span>
+        <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
+        <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">500</span> }}
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
         renderFooter={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>footer<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
@@ -335,18 +335,16 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         )</span>}
         renderRow={(rowData) =&gt; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>Hello: {rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span> }
-        renderScrollComponent={props =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyScroller</span> {<span class="hljs-attribute">...props</span>}
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">500</span>, <span class="hljs-attribute">overflow:</span> '<span class="hljs-attribute">auto</span>' }} /&gt;</span>}
-        contentContainerStyle={{ textAlign: 'left' }}
+        contentContainerStyle={{ textAlign: <span class="hljs-string">'left'</span> }}
         quickSearchBarStyle={{
-          position: 'absolute',
-          top: 20, right: 30
+          position: <span class="hljs-string">'absolute'</span>,
+          top: <span class="hljs-number">20</span>, right: <span class="hljs-number">30</span>,
         }}
-        onQuickSearch={(sectionID) =&gt; console.log(sectionID)}
-        showQuickSearchIndicator={true}
-        delayTime={100}
+        onQuickSearch={(sectionID) =&gt; <span class="hljs-built_in">console</span>.log(sectionID)}
+        showQuickSearchIndicator
+        delayTime={<span class="hljs-number">100</span>}
         delayActivityIndicator={
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">25</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>delay rendering...<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         }
         sectionHeaderClassName="sh"
         sectionBodyClassName="sb"

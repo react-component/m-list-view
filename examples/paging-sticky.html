@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging-sticky.js - example - rmc-list-view@0.7.1</title>
+  <title>paging-sticky.js - example - rmc-list-view@0.7.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,15 +263,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.1</h1>
+      <h1>rmc-list-view@0.7.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
-
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
@@ -291,7 +289,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     };
 
     <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
-      getRowData: getRowData,
+      getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) =&gt; row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) =&gt; s1 !== s2,
@@ -302,7 +300,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>.rowIDs = [];
     <span class="hljs-keyword">this</span>._genData = (pIndex = <span class="hljs-number">0</span>) =&gt; {
       <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_SECTIONS; i++) {
-        <span class="hljs-keyword">let</span> ii = pIndex * NUM_SECTIONS + i;
+        <span class="hljs-keyword">const</span> ii = pIndex * NUM_SECTIONS + i;
         <span class="hljs-keyword">const</span> sectionName = <span class="hljs-string">`Section <span class="hljs-subst">${ii}</span>`</span>;
         <span class="hljs-keyword">this</span>.sectionIDs.push(sectionName);
         <span class="hljs-keyword">this</span>.dataBlob[sectionName] = sectionName;
@@ -317,7 +315,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="hljs-comment">// new object ref</span>
       <span class="hljs-keyword">this</span>.sectionIDs = [].concat(<span class="hljs-keyword">this</span>.sectionIDs);
       <span class="hljs-keyword">this</span>.rowIDs = [].concat(<span class="hljs-keyword">this</span>.rowIDs);
-    }
+    };
     <span class="hljs-keyword">this</span>._genData();
     <span class="hljs-keyword">return</span> {
       dataSource: dataSource.cloneWithRowsAndSections(<span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs),
@@ -332,16 +330,20 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
     <span class="hljs-keyword">this</span>._genData(++pageIndex);
     <span class="hljs-keyword">this</span>.setState({
-      dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRowsAndSections(<span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs),
+      dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRowsAndSections(
+        <span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs
+      ),
     });
   },
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+        <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> (
           <span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">90</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>Table Header<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this.refs.lv.scrollTo(0, 100); }}&gt;scrollTo(0, 100)<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
         )</span>}
         renderSectionHeader={(sectionData) =&gt; (
@@ -351,7 +353,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             <span class="hljs-attribute">alignItems:</span> '<span class="hljs-attribute">flex-start</span>',
             <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">6</span>,
             <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">5890ff</span>',
-          }}&gt;</span>
+          }}
+          &gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">Text</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">white</span>' }}&gt;</span>
               {sectionData}
             <span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
@@ -376,7 +379,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           className: 'for-sticky-demo',
           stickyStyle: { top: '10px' },
           onStickyStateChange: (isSticky) =&gt; {
-            // console.log(isSticky);
+            console.log(isSticky);
           },
         }}
         stickyContainerProps={{

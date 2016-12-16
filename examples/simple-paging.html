@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple-paging.js - example - rmc-list-view@0.7.1</title>
+  <title>simple-paging.js - example - rmc-list-view@0.7.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,15 +263,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.1</h1>
+      <h1>rmc-list-view@0.7.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
-
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
@@ -279,6 +277,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">/* eslint react/prop-types: 0, react/no-multi-comp: 0 */</span>
 
 <span class="hljs-keyword">const</span> Demo = React.createClass({
   getInitialState() {
@@ -289,11 +289,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>._genData = (pIndex = <span class="hljs-number">0</span>) =&gt; {
       <span class="hljs-keyword">const</span> dataBlob = {};
       <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_ROWS; i++) {
-        <span class="hljs-keyword">let</span> ii = pIndex * NUM_ROWS + i;
+        <span class="hljs-keyword">const</span> ii = pIndex * NUM_ROWS + i;
         dataBlob[<span class="hljs-string">`<span class="hljs-subst">${ii}</span>`</span>] = <span class="hljs-string">`row - <span class="hljs-subst">${ii}</span>`</span>;
       }
       <span class="hljs-keyword">return</span> dataBlob;
-    }
+    };
     <span class="hljs-keyword">this</span>._data = {};
     <span class="hljs-keyword">return</span> {
       dataSource: dataSource.cloneWithRows(<span class="hljs-keyword">this</span>._genData()),
@@ -306,7 +306,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
     <span class="hljs-keyword">this</span>.setState({ isLoading: <span class="hljs-literal">true</span> });
     setTimeout(() =&gt; {
-      <span class="hljs-keyword">this</span>._data = {...this._data, ...this._genData(++pageIndex)};
+      <span class="hljs-keyword">this</span>._data = { ...this._data, ...this._genData(++pageIndex) };
       <span class="hljs-keyword">this</span>.setState({
         dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>._data),
         isLoading: <span class="hljs-literal">false</span>,
@@ -315,7 +315,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   },
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.setState({ destroy: !this.state.destroy })}&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.setState({ destroy: !this.state.destroy })}
+      &gt;
         {this.state.destroy ? 'create' : 'destroy'} ListView
       <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
       {!this.state.destroy ? <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
@@ -330,7 +332,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
             <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>', <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">white</span>',
             <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">30</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>',
-          }}&gt;</span>
+          }}
+          &gt;</span>
             {this.state.isLoading ? 'loading...' : 'loaded'}
           <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
         )</span>}
@@ -350,21 +353,22 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         __html: <span class="hljs-string">`&lt;style&gt;
         #qrcode{ display: none }
         .highlight{ display: none }
-        &lt;/style&gt;`</span>
-      }}&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  }
+        &lt;/style&gt;`</span>,
+      }}
+      /&gt;
+    <span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+  },
 });
 <span class="hljs-keyword">const</span> MySectionBodyWrapper = React.createClass({
   render() {
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">table</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-section-body"</span>&gt;</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">table</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-section-body"</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">thead</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>table title<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">thead</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">tbody</span>&gt;</span>{this.props.children}<span class="hljs-tag">&lt;/<span class="hljs-title">tbody</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>
-  }
+    <span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>)</span>;
+  },
 });
 
-ReactDOM.render(<span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">

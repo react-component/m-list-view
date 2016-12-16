@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple-horizontal.js - example - rmc-list-view@0.7.1</title>
+  <title>simple-horizontal.js - example - rmc-list-view@0.7.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,19 +263,17 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.1</h1>
+      <h1>rmc-list-view@0.7.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
-
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
-<span class="hljs-keyword">import</span> { View, Text, THUMB_URLS, TouchableHighlight,  } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-keyword">import</span> { View, Text, THUMB_URLS } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_genRows</span>(<span class="hljs-params">pressData</span>) </span>{
   <span class="hljs-keyword">const</span> dataBlob = [];
@@ -287,7 +285,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">const</span> Demo = React.createClass({
   getInitialState() {
-    <span class="hljs-keyword">var</span> ds = <span class="hljs-keyword">new</span> ListView.DataSource({rowHasChanged: (r1, r2) =&gt; r1 !== r2});
+    <span class="hljs-keyword">const</span> ds = <span class="hljs-keyword">new</span> ListView.DataSource({ rowHasChanged: (r1, r2) =&gt; r1 !== r2 });
     <span class="hljs-keyword">return</span> {
       dataSource: ds.cloneWithRows(_genRows({})),
     };
@@ -304,7 +302,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           <span class="hljs-attribute">.for-body-demo</span>, <span class="hljs-attribute">.list-view-section-body</span> {
             <span class="hljs-attribute">height:</span> <span class="hljs-attribute">100</span>%;
           }
-        `}}
+        ` }}
       /&gt;</span><span class="css">
       &lt;<span class="hljs-tag">ListView</span> <span class="hljs-tag">horizontal</span>
         <span class="hljs-tag">style</span>=<span class="hljs-rules">{{
@@ -325,10 +323,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-tag">scrollRenderAheadDistance</span>=<span class="hljs-rules">{100}</span>
         <span class="hljs-tag">initialListSize</span>=<span class="hljs-rules">{5}</span>
         <span class="hljs-tag">pageSize</span>=<span class="hljs-rules">{5}</span>
-        <span class="hljs-tag">renderRow</span>=<span class="hljs-rules">{(rowData, sectionID, rowID, highlightRow) =&gt; (
+        <span class="hljs-tag">renderRow</span>=<span class="hljs-rules">{(rowData) =&gt; (
           &lt;View style={{ <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value"> <span class="hljs-string">'flex'</span>, alignItems: <span class="hljs-string">'center'</span> </span></span></span>}}&gt;
             &lt;<span class="hljs-tag">img</span> <span class="hljs-tag">src</span>=<span class="hljs-rules">{THUMB_URLS[0]}</span> /&gt;
-            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{rowData + ' - Lorem ipsum dolor sit amet'}</span>&lt;/<span class="hljs-tag">Text</span>&gt;
+            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{`${rowData}</span> <span class="hljs-tag">-</span> <span class="hljs-tag">Lorem</span> <span class="hljs-tag">ipsum</span> <span class="hljs-tag">dolor</span> <span class="hljs-tag">sit</span> <span class="hljs-tag">amet</span>`}&lt;/<span class="hljs-tag">Text</span>&gt;
           &lt;/<span class="hljs-tag">View</span>&gt;
         )</span></span>}
         renderSeparator={(sectionID, rowID) =&gt; (

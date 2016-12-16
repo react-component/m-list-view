@@ -106,7 +106,7 @@ const Demo = React.createClass({
         stickyHeader
         stickyProps={{
           className: 'for-sticky-demo',
-          stickyStyle: { top: '10px', webkitTransform: 'none', transform: 'none' },
+          stickyStyle: { top: '10px', WebkitTransform: 'none', transform: 'none' },
           onStickyStateChange: (isSticky) => {
             console.log(isSticky);
           },

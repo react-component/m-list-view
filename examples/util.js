@@ -79,6 +79,7 @@ function flattenStyle(style, processor) {
   return (processor && processor(result)) || result;
 }
 
+/* eslint react/prop-types: 0, no-multi-comp: 0 */
 export const Thumb = React.createClass({
   getInitialState() {
     return { thumbIndex: this._getThumbIdx(), dir: 'row' };
@@ -112,7 +113,8 @@ export const Thumb = React.createClass({
     return (
       <TouchableOpacity
         onPress={this._onPressThumb}
-        style={flattenStyle([buttonContents, { flexDirection: this.state.dir }])}>
+        style={flattenStyle([buttonContents, { flexDirection: this.state.dir }])}
+      >
         <Image source={THUMB_URLS[this.state.thumbIndex]} />
         <Image source={THUMB_URLS[this.state.thumbIndex]} />
         <Image source={THUMB_URLS[this.state.thumbIndex]} />

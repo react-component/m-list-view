@@ -4,8 +4,6 @@ import DOMScroller from 'zscroller';
 import assign from 'object-assign';
 import classNames from 'classnames';
 import { throttle } from './util';
-// import mixin from 'react-mixin';
-// import PullUpLoadMoreMixin from './PullUpLoadMoreMixin';
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
@@ -13,7 +11,15 @@ const INNERVIEW = 'InnerScrollView';
 // https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollView/ScrollView.js
 // https://facebook.github.io/react-native/docs/refreshcontrol.html
 
+/* eslint react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
+
 const propTypes = {
+  children: PropTypes.any,
+  className: PropTypes.string,
+  prefixCls: PropTypes.string,
+  listPrefixCls: PropTypes.string,
+  listViewPrefixCls: PropTypes.string,
+  style: PropTypes.object,
   contentContainerStyle: PropTypes.object,
   onScroll: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
@@ -37,11 +43,11 @@ const styles = {
 export default class ScrollView extends React.Component {
   static propTypes = propTypes;
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.refreshControl && this.props.refreshControl) {
       const preRefreshing = prevProps.refreshControl.props.refreshing;
       const nowRefreshing = this.props.refreshControl.props.refreshing;
-      if (preRefreshing && !nowRefreshing && this.refreshControlRefresh) { 
+      if (preRefreshing && !nowRefreshing && this.refreshControlRefresh) {
         this.refreshControlRefresh();
       } else if (!this.manuallyRefresh && !preRefreshing && nowRefreshing) {
         this.domScroller.scroller.triggerPullToRefresh();
@@ -49,78 +55,102 @@ export default class ScrollView extends React.Component {
     }
   }
   componentDidMount() {
-    const {
-      stickyHeader, useBodyScroll, useZscroller, scrollerOptions, refreshControl,
-    } = this.props;
-    if (stickyHeader || useBodyScroll) {
-      return;
-    }
     this.tsExec = this.throttleScroll();
-    if (useZscroller) {
-      this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
-        scrollingX: false,
-        onScroll: this.tsExec,
-      }, scrollerOptions));
-      if (refreshControl) {
-        const scroller = this.domScroller.scroller;
-        const { distanceToRefresh, onRefresh } = refreshControl.props;
-        scroller.activatePullToRefresh(distanceToRefresh,
-          () => {
-            this.manuallyRefresh = true;
-            this.refs.refreshControl.setState({ active: true });
-          },
-          () => {
-            this.manuallyRefresh = false;  
-            this.refs.refreshControl.setState({ active: false, loadingState: false });
-          },
-          () => {
-            this.refs.refreshControl.setState({ loadingState: true });
-            const finishPullToRefresh = () => {
-              scroller.finishPullToRefresh();
-              this.refreshControlRefresh = null;
-            };
-            Promise.all([
-              new Promise(resolve => {
-                onRefresh();
-                this.refreshControlRefresh = resolve;
-              }),
-              // at lease 1s for ux
-              new Promise(resolve => setTimeout(resolve, 1000))
-            ]).then(finishPullToRefresh, finishPullToRefresh);
-          });
-        if (refreshControl.props.refreshing) {
-          scroller.triggerPullToRefresh();
-        }
+    // IE supports onresize on all HTML elements.
+    // In all other Browsers the onresize is only available at the window object
+    this.onLayout = () => this.props.onLayout({
+      nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } },
+    });
+    const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
+      window.addEventListener('scroll', this.tsExec);
+      window.addEventListener('resize', this.onLayout);
+      // todo
+      // ele.addEventListener('resize', this.onContentSizeChange);
+    } else {
+      // todo
+      // ele.addEventListener('resize', this.onLayout);
+      // ReactDOM.findDOMNode(this.refs[INNERVIEW])
+      // .addEventListener('resize', this.onContentSizeChange);
+      if (this.props.useZscroller) {
+        this.renderZscroller();
+      } else {
+        ele.addEventListener('scroll', this.tsExec);
       }
-      return;
     }
-    ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.tsExec);
   }
   componentWillUnmount() {
-    const {
-      stickyHeader, useBodyScroll, useZscroller,
-    } = this.props;
-    if (stickyHeader || useBodyScroll) {
-      return;
-    }
-    if (useZscroller) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
+      window.removeEventListener('scroll', this.tsExec);
+      window.removeEventListener('resize', this.onLayout);
+    } else if (this.props.useZscroller) {
       this.domScroller.destroy();
-      return;
+    } else {
+      ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
     }
-    ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+  }
+  scrollTo(...args) {
+    if (this.props.stickyHeader || this.props.useBodyScroll) {
+      window.scrollTo(...args);
+    } else if (this.props.useZscroller) {
+      this.domScroller.scroller.scrollTo(...args);
+    } else {
+      const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+      ele.scrollLeft = args[0];
+      ele.scrollTop = args[1];
+    }
   }
 
-  handleScroll = (e) => {
-    this.props.onScroll && this.props.onScroll(e);
-  }
   throttleScroll = () => {
     let handleScroll = () => {};
     if (this.props.scrollEventThrottle && this.props.onScroll) {
-      handleScroll = throttle(this.handleScroll, this.props.scrollEventThrottle);
+      handleScroll = throttle(e => {
+        this.props.onScroll && this.props.onScroll(e);
+      }, this.props.scrollEventThrottle);
     }
     return handleScroll;
   }
 
+  renderZscroller() {
+    const { scrollerOptions, refreshControl } = this.props;
+
+    this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
+      scrollingX: false,
+      onScroll: this.tsExec,
+    }, scrollerOptions));
+    if (refreshControl) {
+      const scroller = this.domScroller.scroller;
+      const { distanceToRefresh, onRefresh } = refreshControl.props;
+      scroller.activatePullToRefresh(distanceToRefresh,
+        () => {
+          this.manuallyRefresh = true;
+          this.refs.refreshControl.setState({ active: true });
+        },
+        () => {
+          this.manuallyRefresh = false;
+          this.refs.refreshControl.setState({ active: false, loadingState: false });
+        },
+        () => {
+          this.refs.refreshControl.setState({ loadingState: true });
+          const finishPullToRefresh = () => {
+            scroller.finishPullToRefresh();
+            this.refreshControlRefresh = null;
+          };
+          Promise.all([
+            new Promise(resolve => {
+              onRefresh();
+              this.refreshControlRefresh = resolve;
+            }),
+            // at lease 1s for ux
+            new Promise(resolve => setTimeout(resolve, 1000)),
+          ]).then(finishPullToRefresh, finishPullToRefresh);
+        });
+      if (refreshControl.props.refreshing) {
+        scroller.triggerPullToRefresh();
+      }
+    }
+  }
   render() {
     const {
       children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'rmc-list-view',
@@ -179,4 +209,3 @@ export default class ScrollView extends React.Component {
     );
   }
 }
-// mixin(ScrollView.prototype, PullUpLoadMoreMixin);

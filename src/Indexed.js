@@ -4,11 +4,16 @@ import classNames from 'classnames';
 import ListView from './ListView';
 import { getOffsetTop, _event } from './util';
 
+/* eslint react/prop-types: 0 */
 export default class IndexedList extends React.Component {
   static propTypes = {
+    ...ListView.propTypes,
+    children: PropTypes.any,
     prefixCls: PropTypes.string,
+    className: PropTypes.string,
     sectionHeaderClassName: PropTypes.string,
     quickSearchBarTop: PropTypes.object,
+    quickSearchBarStyle: PropTypes.object,
     onQuickSearch: PropTypes.func,
     showQuickSearchIndicator: PropTypes.bool,
   }
@@ -31,10 +36,20 @@ export default class IndexedList extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.dataChange(this.props);
+    // handle quickSearchBar
+    this.getQsInfo();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.dataSource !== nextProps.dataSource) {
       this.dataChange(nextProps);
     }
+  }
+
+  componentDidUpdate() {
+    this.getQsInfo();
   }
 
   componentWillUnmount() {
@@ -44,54 +59,6 @@ export default class IndexedList extends React.Component {
     this._hCache = null;
   }
 
-  componentDidUpdate() {
-    this.getQsInfo();
-  }
-  componentDidMount() {
-    this.dataChange(this.props);
-    // handle quickSearchBar
-    this.getQsInfo();
-  }
-  getQsInfo = () => {
-    const quickSearchBar = this.refs.quickSearchBar;
-    const height = quickSearchBar.offsetHeight;
-    const hCache = [];
-    [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach((d) => {
-      hCache.push([d]);
-    });
-    const _avgH = height / hCache.length;
-    let _top = 0;
-    for (let i = 0, len = hCache.length; i < len; i++) {
-      _top = i * _avgH;
-      hCache[i][1] = [_top, _top + _avgH];
-    }
-    this._qsHeight = height;
-    this._avgH = _avgH;
-    this._hCache = hCache;
-  }
-
-  dataChange = (props) => {
-    // delay render more
-    const rowCount = props.dataSource.getRowCount();
-    if (!rowCount) {
-      return;
-    }
-    this.setState({
-      _delay: true,
-    });
-    if (this._timer) {
-      clearTimeout(this._timer);
-    }
-    this._timer = setTimeout(() => {
-      this.setState({
-        pageSize: rowCount,
-        _delay: false,
-      }, () => this.refs.indexedListView._pageInNewRows());
-    }, props.delayTime);
-  }
-
-  sectionComponents = {}
-
   onQuickSearchTop = (sectionID, topId) => {
     if (this.props.stickyHeader) {
       window.document.body.scrollTop = 0;
@@ -100,6 +67,7 @@ export default class IndexedList extends React.Component {
     }
     this.props.onQuickSearch(sectionID, topId);
   }
+
   onQuickSearch = (sectionID) => {
     const lv = ReactDOM.findDOMNode(this.refs.indexedListView.refs.listviewscroll);
     let sec = ReactDOM.findDOMNode(this.sectionComponents[sectionID]);
@@ -109,7 +77,8 @@ export default class IndexedList extends React.Component {
       if (stickyComponent && stickyComponent.refs.placeholder) {
         sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
       }
-      window.document.body.scrollTop = sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
+      window.document.body.scrollTop =
+        sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
     } else {
       lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
     }
@@ -150,7 +119,7 @@ export default class IndexedList extends React.Component {
       }
     }
   }
-  onTouchEnd = (e) => {
+  onTouchEnd = () => {
     if (!this._target) {
       return;
     }
@@ -159,6 +128,45 @@ export default class IndexedList extends React.Component {
       new RegExp(`${this.props.prefixCls}-qsb-moving`, 'g'), '');
     this.updateIndicator(this._target, true);
     this._target = null;
+  }
+
+  getQsInfo = () => {
+    const quickSearchBar = this.refs.quickSearchBar;
+    const height = quickSearchBar.offsetHeight;
+    const hCache = [];
+    [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach((d) => {
+      hCache.push([d]);
+    });
+    const _avgH = height / hCache.length;
+    let _top = 0;
+    for (let i = 0, len = hCache.length; i < len; i++) {
+      _top = i * _avgH;
+      hCache[i][1] = [_top, _top + _avgH];
+    }
+    this._qsHeight = height;
+    this._avgH = _avgH;
+    this._hCache = hCache;
+  }
+  sectionComponents = {}
+
+  dataChange = (props) => {
+    // delay render more
+    const rowCount = props.dataSource.getRowCount();
+    if (!rowCount) {
+      return;
+    }
+    this.setState({
+      _delay: true,
+    });
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+    this._timer = setTimeout(() => {
+      this.setState({
+        pageSize: rowCount,
+        _delay: false,
+      }, () => this.refs.indexedListView._pageInNewRows());
+    }, props.delayTime);
   }
 
   updateIndicator = (ele, end) => {
@@ -180,7 +188,7 @@ export default class IndexedList extends React.Component {
     }, 1000);
 
     const cls = `${this.props.prefixCls}-quick-search-bar-over`;
-    // can not use setState to change className, it has a big performance issue! 
+    // can not use setState to change className, it has a big performance issue!
     this._hCache.forEach((d) => {
       d[0].className = d[0].className.replace(cls, '');
     });
@@ -233,7 +241,7 @@ export default class IndexedList extends React.Component {
     const {
       className, prefixCls, children, quickSearchBarTop, quickSearchBarStyle,
       initialListSize = Math.min(20, this.props.dataSource.getRowCount()),
-      renderSectionHeader, sectionHeaderClassName, ...other
+      renderSectionHeader, sectionHeaderClassName, ...other,
     } = this.props;
     const wrapCls = classNames({
       [className]: className,
@@ -241,7 +249,8 @@ export default class IndexedList extends React.Component {
     });
     const qsIndicatorCls = classNames({
       [`${prefixCls}-qsindicator`]: true,
-      [`${prefixCls}-qsindicator-hide`]: !this.props.showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
+      [`${prefixCls}-qsindicator-hide`]:
+        !this.props.showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
     });
     // initialListSize={this.props.dataSource.getRowCount()}
     return (<div className={`${prefixCls}-container`}>
@@ -256,7 +265,7 @@ export default class IndexedList extends React.Component {
           renderSectionHeader(sectionData, sectionID),
           {
             ref: c => this.sectionComponents[sectionID] = c,
-            className: sectionHeaderClassName || `${prefixCls}-section-header`
+            className: sectionHeaderClassName || `${prefixCls}-section-header`,
           }
         )}
       >

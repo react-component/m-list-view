@@ -58,16 +58,14 @@ And, use css style instead of react-native's style.
 
 - onChangeVisibleRows
 - stickyHeaderIndices
-
 - [ScrollView](https://facebook.github.io/react-native/docs/scrollview.html#props) props:
-- keyboardDismissMode (not support control keyboard)
-- keyboardShouldPersistTaps (not support control keyboard)
-- onContentSizeChange (use onLayout instead)
-- removeClippedSubviews
-- showsHorizontalScrollIndicator (use css style instead)
-- showsVerticalScrollIndicator (use css style instead)
-
-- [View](https://facebook.github.io/react-native/docs/view.html#props) props: **note: just support `onLayout` prop** 
+    - keyboardDismissMode (not support control keyboard)
+    - keyboardShouldPersistTaps (not support control keyboard)
+    - onContentSizeChange (use onLayout instead)
+    - removeClippedSubviews
+    - showsHorizontalScrollIndicator (use css style instead)
+    - showsVerticalScrollIndicator (use css style instead)
+- [View](https://facebook.github.io/react-native/docs/view.html#props) props
 
 #### new
 - useBodyScroll (boolean, false) - use html `body`'s scroll

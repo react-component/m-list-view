@@ -1,10 +1,11 @@
 export function getOffsetTop(elem) {
   let offsetTop = 0;
+  /* eslint no-cond-assign: 0 */
   do {
     if (!isNaN(elem.offsetTop)) {
-        offsetTop += elem.offsetTop;
+      offsetTop += elem.offsetTop;
     }
-  } while(elem = elem.offsetParent);
+  } while (elem = elem.offsetParent);
   return offsetTop;
 }
 
@@ -23,7 +24,7 @@ export function throttle(fn, delay) {
   return function (e) {
     if (allowSample) {
       allowSample = false;
-      setTimeout(function () { allowSample = true; }, delay);
+      setTimeout(() => { allowSample = true; }, delay);
       fn(e);
     }
   };

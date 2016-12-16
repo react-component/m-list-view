@@ -1,9 +1,8 @@
-// use jsx to render html, do not modify simple.html
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
+/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 
 const data = [
   {
@@ -73,7 +72,8 @@ const App = React.createClass({
         height: 8,
         borderTop: '1px solid #ECECED',
         borderBottom: '1px solid #ECECED',
-      }} />
+      }}
+      />
     );
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
@@ -91,9 +91,10 @@ const App = React.createClass({
             padding: 2,
             marginBottom: 8,
             borderBottom: '1px solid #F6F6F6',
-          }}>{obj.title}</h3>
+          }}
+          >{obj.title}</h3>
           <div style={{ display: '-webkit-box', display: 'flex' }}>
-            <img style={{ height: 64 * (window.viewportScale || 1), marginRight: 8 }} src={obj.img} />
+            <img style={{ height: 64, marginRight: 8 }} src={obj.img} />
             <div style={{ display: 'inline-block' }}>
               <p>{obj.des}-{rowData}</p>
               <p><span style={{ fontSize: '1.6em', color: '#FF6E27' }}>35</span>元/任务</p>

@@ -1,10 +1,8 @@
-// use jsx to render html, do not modify simple.html
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, Image, THUMB_URLS, TouchableHighlight,  } from './util';
+import { View, Text, Image, THUMB_URLS } from './util';
 
 function _genRows(pressData) {
   const dataBlob = [];
@@ -16,7 +14,7 @@ function _genRows(pressData) {
 
 const Demo = React.createClass({
   getInitialState() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
       dataSource: ds.cloneWithRows(_genRows({})),
     };
@@ -34,10 +32,10 @@ const Demo = React.createClass({
         scrollRenderAheadDistance={30}
         initialListSize={5}
         pageSize={5}
-        renderRow={(rowData, sectionID, rowID, highlightRow) => (
+        renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <Image style={{ width: 64, height: 64 }} source={THUMB_URLS[0]} />
-            <Text>{rowData + ' - Lorem ipsum dolor sit amet'}</Text>
+            <Text>{`${rowData} - Lorem ipsum dolor sit amet`}</Text>
           </View>
         )}
         renderSeparator={(sectionID, rowID, adjacentRowHighlighted) => (

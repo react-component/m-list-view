@@ -1,9 +1,7 @@
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import MyScroller from './MyScroller';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -18,7 +16,7 @@ const Demo = React.createClass({
     };
 
     const dataSource = new ListView.DataSource({
-      getRowData: getRowData,
+      getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) => row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
@@ -55,6 +53,8 @@ const Demo = React.createClass({
   render() {
     return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
       <ListView.IndexedList
+        ref="lv"
+        style={{ height: 500 }}
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}
@@ -64,18 +64,16 @@ const Demo = React.createClass({
           </div>
         )}
         renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>) }
-        renderScrollComponent={props => <MyScroller {...props}
-          style={{ height: 500, overflow: 'auto' }} />}
         contentContainerStyle={{ textAlign: 'left' }}
         quickSearchBarStyle={{
           position: 'absolute',
-          top: 20, right: 30
+          top: 20, right: 30,
         }}
         onQuickSearch={(sectionID) => console.log(sectionID)}
-        showQuickSearchIndicator={true}
+        showQuickSearchIndicator
         delayTime={100}
         delayActivityIndicator={
-          <div style={{padding: 25, textAlign: 'center' }}>delay rendering...</div>
+          <div style={{ padding: 25, textAlign: 'center' }}>delay rendering...</div>
         }
         sectionHeaderClassName="sh"
         sectionBodyClassName="sb"

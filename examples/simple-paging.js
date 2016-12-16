@@ -1,5 +1,3 @@
-// use jsx to render html, do not modify simple.html
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,6 +6,8 @@ import { View, Text } from './util';
 
 const NUM_ROWS = 20;
 let pageIndex = 0;
+
+/* eslint react/prop-types: 0, react/no-multi-comp: 0 */
 
 const Demo = React.createClass({
   getInitialState() {
@@ -18,11 +18,11 @@ const Demo = React.createClass({
     this._genData = (pIndex = 0) => {
       const dataBlob = {};
       for (let i = 0; i < NUM_ROWS; i++) {
-        let ii = pIndex * NUM_ROWS + i;
+        const ii = pIndex * NUM_ROWS + i;
         dataBlob[`${ii}`] = `row - ${ii}`;
       }
       return dataBlob;
-    }
+    };
     this._data = {};
     return {
       dataSource: dataSource.cloneWithRows(this._genData()),
@@ -35,7 +35,7 @@ const Demo = React.createClass({
     console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this._data = {...this._data, ...this._genData(++pageIndex)};
+      this._data = { ...this._data, ...this._genData(++pageIndex) };
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this._data),
         isLoading: false,
@@ -44,7 +44,9 @@ const Demo = React.createClass({
   },
   render() {
     return (<div>
-      <button style={{ margin: 10 }} onClick={() => this.setState({ destroy: !this.state.destroy })}>
+      <button style={{ margin: 10 }}
+        onClick={() => this.setState({ destroy: !this.state.destroy })}
+      >
         {this.state.destroy ? 'create' : 'destroy'} ListView
       </button>
       {!this.state.destroy ? <ListView ref="lv"
@@ -59,7 +61,8 @@ const Demo = React.createClass({
           <View style={{
             backgroundColor: '#bbb', color: 'white',
             padding: 30, textAlign: 'center',
-          }}>
+          }}
+          >
             {this.state.isLoading ? 'loading...' : 'loaded'}
           </View>
         )}
@@ -79,18 +82,19 @@ const Demo = React.createClass({
         __html: `<style>
         #qrcode{ display: none }
         .highlight{ display: none }
-        </style>`
-      }}></div>
+        </style>`,
+      }}
+      />
     </div>);
-  }
+  },
 });
 const MySectionBodyWrapper = React.createClass({
   render() {
-    return <table className="my-section-body">
+    return (<table className="my-section-body">
       <thead><tr><td>table title</td></tr></thead>
       <tbody>{this.props.children}</tbody>
-    </table>
-  }
+    </table>);
+  },
 });
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

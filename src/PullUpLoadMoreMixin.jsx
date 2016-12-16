@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -17,12 +18,12 @@ export default {
     ele.removeEventListener('touchcancel', this.onPullUpEnd);
   },
   getEle() {
-    const { stickyHeader, useBodyScroll, useZscroller } = this.props;
+    const { stickyHeader, useBodyScroll } = this.props;
     let ele;
     if (stickyHeader || useBodyScroll) {
       ele = document.body;
     } else {
-      ele = ReactDOM.findDOMNode(this.refs['listviewscroll'].refs['ScrollView']);
+      ele = ReactDOM.findDOMNode(this.refs.listviewscroll.refs.ScrollView);
     }
     return ele;
   },
@@ -38,7 +39,6 @@ export default {
     this._pullUpEle = this.getEle();
   },
   onPullUpMove(e) {
-    // console.log(this._getDistanceFromEnd(this.scrollProperties), Object.keys(this.scrollProperties).every(i => this.scrollProperties[i] !== null))
     // 使用 pageY 对比有问题
     if (e.touches[0].screenY < this._pullUpStartPageY && this._reachBottom()) {
       // console.log('滚动条到了底部，pull up');
@@ -57,5 +57,5 @@ export default {
       return element.scrollHeight - element.scrollTop === window.innerHeight;
     }
     return element.scrollHeight - element.scrollTop === element.clientHeight;
-  }
+  },
 };

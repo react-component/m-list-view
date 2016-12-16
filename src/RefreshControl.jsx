@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 export default React.createClass({
@@ -13,14 +12,6 @@ export default React.createClass({
     refreshing: PropTypes.bool,
     onRefresh: PropTypes.func.isRequired,
   },
-
-  getInitialState() {
-    return {
-      active: false,
-      loadingState: false,
-    };
-  },
-
   getDefaultProps() {
     return {
       prefixCls: 'list-view-refresh-control',
@@ -32,15 +23,22 @@ export default React.createClass({
         </div>,
         <div key="1" className="list-view-refresh-control-release">
           ↑ 释放
-        </div>
+        </div>,
       ],
       loading: <div>loading...</div>,
     };
   },
 
+  getInitialState() {
+    return {
+      active: false,
+      loadingState: false,
+    };
+  },
+
   render() {
     const {
-      prefixCls, className = '', style, icon, loading, refreshing
+      prefixCls, className = '', style, icon, loading, refreshing,
     } = this.props;
     const { active, loadingState } = this.state;
     const wrapCls = classNames({

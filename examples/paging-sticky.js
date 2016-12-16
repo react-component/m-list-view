@@ -1,5 +1,3 @@
-// use jsx to render html, do not modify simple.html
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -20,7 +18,7 @@ const Demo = React.createClass({
     };
 
     const dataSource = new ListView.DataSource({
-      getRowData: getRowData,
+      getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) => row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
@@ -31,7 +29,7 @@ const Demo = React.createClass({
     this.rowIDs = [];
     this._genData = (pIndex = 0) => {
       for (let i = 0; i < NUM_SECTIONS; i++) {
-        let ii = pIndex * NUM_SECTIONS + i;
+        const ii = pIndex * NUM_SECTIONS + i;
         const sectionName = `Section ${ii}`;
         this.sectionIDs.push(sectionName);
         this.dataBlob[sectionName] = sectionName;
@@ -46,7 +44,7 @@ const Demo = React.createClass({
       // new object ref
       this.sectionIDs = [].concat(this.sectionIDs);
       this.rowIDs = [].concat(this.rowIDs);
-    }
+    };
     this._genData();
     return {
       dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
@@ -61,16 +59,20 @@ const Demo = React.createClass({
     console.log('reach end', event);
     this._genData(++pageIndex);
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+      dataSource: this.state.dataSource.cloneWithRowsAndSections(
+        this.dataBlob, this.sectionIDs, this.rowIDs
+      ),
     });
   },
   render() {
     return (<div>
-      <ListView ref="lv"
+      <ListView
+        ref="lv"
         dataSource={this.state.dataSource}
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
             <Text>Table Header</Text>
+            <button onClick={() => { this.refs.lv.scrollTo(0, 100); }}>scrollTo(0, 100)</button>
           </View>
         )}
         renderSectionHeader={(sectionData) => (
@@ -80,7 +82,8 @@ const Demo = React.createClass({
             alignItems: 'flex-start',
             padding: 6,
             backgroundColor: '#5890ff',
-          }}>
+          }}
+          >
             <Text style={{ color: 'white' }}>
               {sectionData}
             </Text>
@@ -105,7 +108,7 @@ const Demo = React.createClass({
           className: 'for-sticky-demo',
           stickyStyle: { top: '10px' },
           onStickyStateChange: (isSticky) => {
-            // console.log(isSticky);
+            console.log(isSticky);
           },
         }}
         stickyContainerProps={{

@@ -1,15 +1,14 @@
-// use jsx to render html, do not modify simple.html
-
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, Thumb } from './util';
-import MyScroller from './MyScroller';
 
 const NUM_SECTIONS = 5;
 const NUM_ROWS_PER_SECTION = 5;
 let pageIndex = 0;
+
+/* eslint react/sort-comp: 0 */
 
 const Demo = React.createClass({
   getInitialState() {
@@ -21,7 +20,7 @@ const Demo = React.createClass({
     };
 
     const dataSource = new ListView.DataSource({
-      getRowData: getRowData,
+      getRowData,
       getSectionHeaderData: getSectionData,
       rowHasChanged: (row1, row2) => row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
@@ -32,7 +31,7 @@ const Demo = React.createClass({
     this.rowIDs = [];
     this._genData = (pIndex = 0) => {
       for (let i = 0; i < NUM_SECTIONS; i++) {
-        let ii = pIndex * NUM_SECTIONS + i;
+        const ii = pIndex * NUM_SECTIONS + i;
         const sectionName = `Section ${ii}`;
         this.sectionIDs.push(sectionName);
         this.dataBlob[sectionName] = sectionName;
@@ -47,7 +46,7 @@ const Demo = React.createClass({
       // new object ref
       this.sectionIDs = [].concat(this.sectionIDs);
       this.rowIDs = [].concat(this.rowIDs);
-    }
+    };
     this._genData();
     return {
       dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
@@ -61,18 +60,23 @@ const Demo = React.createClass({
     setTimeout(() => {
       this._genData(++pageIndex);
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(
+          this.dataBlob, this.sectionIDs, this.rowIDs
+        ),
         isLoading: false,
       });
     }, 1000);
   },
   render() {
     return (<div style={{ margin: '10px auto', width: '80%' }}>
-      <ListView ref="lv"
+      <ListView
+        ref="lv"
+        style={{ height: 200 }}
         dataSource={this.state.dataSource}
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
             <Text>Table Header</Text>
+            <button onClick={() => { this.refs.lv.scrollTo(0, 200); }}>scrollTo(0, 200)</button>
           </View>
         )}
         renderSectionHeader={(sectionData) => (
@@ -82,7 +86,8 @@ const Demo = React.createClass({
             alignItems: 'flex-start',
             padding: 6,
             backgroundColor: '#5890ff',
-          }}>
+          }}
+          >
             <Text style={{ color: 'white' }}>
               {sectionData}
             </Text>
@@ -93,7 +98,8 @@ const Demo = React.createClass({
           <View style={{
             backgroundColor: '#bbb', color: 'white',
             padding: 30, textAlign: 'center',
-          }}>
+          }}
+          >
             {this.state.isLoading ? 'loading...' : 'loaded'}
           </View>
         )}
@@ -104,22 +110,23 @@ const Demo = React.createClass({
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={10}
-        renderScrollComponent={props => <MyScroller {...props}
-          style={{ height: 300 }} />}
         useZscroller
         scrollerOptions={{ scrollbars: true }}
         renderBodyComponent={() => <div className="for-body-demo" />}
+        onLayout={() => console.log('onLayout')}
       />
       <div>
         <p>note: temporary disable bodyScroll can have a better experience</p>
-        <button onClick={() => { this._ctrlBodyScroll(true) }}>enableBodyScroll</button>&nbsp;
-        <button onClick={() => { this._ctrlBodyScroll(false) } } style={{ color: 'red' }}>disableBodyScroll</button>
+        <button onClick={() => { this._ctrlBodyScroll(true); }}>enableBodyScroll</button>&nbsp;
+        <button onClick={() => { this._ctrlBodyScroll(false); } } style={{ color: 'red' }}>
+          disableBodyScroll
+        </button>
       </div>
     </div>);
   },
   _ctrlBodyScroll(flag) {
     document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
-  }
+  },
 });
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

@@ -21190,7 +21190,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import assign from 'object-assign';
 	var DEFAULT_PAGE_SIZE = 1;
 	var DEFAULT_INITIAL_ROWS = 10;
 	var DEFAULT_SCROLL_RENDER_AHEAD = 1000;
@@ -23740,6 +23739,10 @@
 	        }, _this.props.scrollEventThrottle);
 	      }
 	      return handleScroll;
+	    }, _this.scrollingComplete = function () {
+	      if (_this.props.refreshControl && _this.refs.refreshControl.state.deactive) {
+	        _this.refs.refreshControl.setState({ deactive: false });
+	      }
 	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
 	  }
 	
@@ -23823,7 +23826,8 @@
 	
 	    this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.refs[INNERVIEW]), (0, _objectAssign2.default)({}, {
 	      scrollingX: false,
-	      onScroll: this.tsExec
+	      onScroll: this.tsExec,
+	      scrollingComplete: this.scrollingComplete
 	    }, scrollerOptions));
 	    if (refreshControl) {
 	      (function () {
@@ -23837,9 +23841,9 @@
 	          _this3.refs.refreshControl.setState({ active: true });
 	        }, function () {
 	          _this3.manuallyRefresh = false;
-	          _this3.refs.refreshControl.setState({ active: false, loadingState: false });
+	          _this3.refs.refreshControl.setState({ deactive: true, active: false, loadingState: false });
 	        }, function () {
-	          _this3.refs.refreshControl.setState({ loadingState: true });
+	          _this3.refs.refreshControl.setState({ deactive: false, loadingState: true });
 	          var finishPullToRefresh = function finishPullToRefresh() {
 	            scroller.finishPullToRefresh();
 	            _this3.refreshControlRefresh = null;
@@ -28088,6 +28092,7 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      active: false,
+	      deactive: false,
 	      loadingState: false
 	    };
 	  },
@@ -28104,9 +28109,10 @@
 	        refreshing = _props.refreshing;
 	    var _state = this.state,
 	        active = _state.active,
+	        deactive = _state.deactive,
 	        loadingState = _state.loadingState;
 	
-	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls + '-ptr', true), (0, _defineProperty3.default)(_classNames, prefixCls + '-active', active), (0, _defineProperty3.default)(_classNames, prefixCls + '-loading', loadingState || refreshing), _classNames));
+	    var wrapCls = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, className, className), (0, _defineProperty3.default)(_classNames, prefixCls + '-ptr', true), (0, _defineProperty3.default)(_classNames, prefixCls + '-active', active), (0, _defineProperty3.default)(_classNames, prefixCls + '-deactive', deactive), (0, _defineProperty3.default)(_classNames, prefixCls + '-loading', loadingState || refreshing), _classNames));
 	    return _react2.default.createElement(
 	      'div',
 	      { ref: 'ptr', className: wrapCls, style: style },

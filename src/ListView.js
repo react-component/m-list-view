@@ -5,7 +5,6 @@ import ScrollView from './ScrollView';
 import ScrollResponder from './ScrollResponder';
 import StaticRenderer from './StaticRenderer';
 import TimerMixin from 'react-timer-mixin';
-// import assign from 'object-assign';
 import mixin from 'react-mixin';
 import autobind from 'autobind-decorator';
 import { StickyContainer, Sticky } from 'react-sticky';

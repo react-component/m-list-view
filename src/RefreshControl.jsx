@@ -32,6 +32,7 @@ export default React.createClass({
   getInitialState() {
     return {
       active: false,
+      deactive: false,
       loadingState: false,
     };
   },
@@ -40,11 +41,12 @@ export default React.createClass({
     const {
       prefixCls, className = '', style, icon, loading, refreshing,
     } = this.props;
-    const { active, loadingState } = this.state;
+    const { active, deactive, loadingState } = this.state;
     const wrapCls = classNames({
       [className]: className,
       [`${prefixCls}-ptr`]: true,
       [`${prefixCls}-active`]: active,
+      [`${prefixCls}-deactive`]: deactive,
       [`${prefixCls}-loading`]: loadingState || refreshing,
     });
     return (

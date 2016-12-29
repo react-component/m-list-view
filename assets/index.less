@@ -46,6 +46,65 @@ ul, li {
     }
   }
 }
+
+@pull-to-refresh: list-view-refresh-control;
+.@{pull-to-refresh} {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+
+  &-content {
+    transform-origin: left top;
+    transform: translateZ(0);
+  }
+
+  &-ptr {
+    color: grey;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    margin-top: -50px;
+    overflow: hidden;
+    &-icon {
+      display: block;
+    }
+    &-loading {
+      display: none;
+    }
+  }
+  &-loading {
+    .@{pull-to-refresh}-ptr {
+      &-icon {
+        display: none;
+      }
+      &-loading {
+        display: block;
+      }
+    }
+  }
+  
+  &-pull {
+    display: block;
+  }
+  &-release {
+    display: none;
+  }
+  &-active &-pull {
+    display: none;
+  }
+  &-active &-release {
+    display: block;
+  }
+  &-deactive {
+    .@{pull-to-refresh}-ptr {
+      &-icon,
+      &-loading {
+        display: none;
+      }
+    }
+  }
+}
+
 .zscroller {
   &-scrollbar-y {
     position: absolute;
@@ -93,56 +152,5 @@ ul, li {
     height: 100%;
     display: block;
     background: rgba(0, 0, 0, 0.498039);
-  }
-}
-
-@pull-to-refresh: list-view-refresh-control;
-.@{pull-to-refresh} {
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-
-  &-content {
-    transform-origin: left top;
-    transform: translateZ(0);
-  }
-
-  &-ptr {
-    color: grey;
-    text-align: center;
-    height: 50px;
-    line-height: 50px;
-    margin-top: -50px;
-    overflow: hidden;
-    &-icon {
-      display: block;
-    }
-    &-loading {
-      display: none;
-    }
-  }
-  &-loading {
-    .@{pull-to-refresh}-ptr {
-      &-icon {
-        display: none;
-      }
-      &-loading {
-        display: block;
-      }
-    }
-  }
-  
-  // custom
-  &-pull {
-    display: block;
-  }
-  &-release {
-    display: none;
-  }
-  &-active &-pull {
-    display: none;
-  }
-  &-active &-release {
-    display: block;
   }
 }

@@ -112,12 +112,19 @@ export default class ScrollView extends React.Component {
     return handleScroll;
   }
 
+  scrollingComplete = () => {
+    if (this.props.refreshControl && this.refs.refreshControl.state.deactive) {
+      this.refs.refreshControl.setState({ deactive: false });
+    }
+  }
+
   renderZscroller() {
     const { scrollerOptions, refreshControl } = this.props;
 
     this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
       scrollingX: false,
       onScroll: this.tsExec,
+      scrollingComplete: this.scrollingComplete,
     }, scrollerOptions));
     if (refreshControl) {
       const scroller = this.domScroller.scroller;
@@ -129,10 +136,10 @@ export default class ScrollView extends React.Component {
         },
         () => {
           this.manuallyRefresh = false;
-          this.refs.refreshControl.setState({ active: false, loadingState: false });
+          this.refs.refreshControl.setState({ deactive: true, active: false, loadingState: false });
         },
         () => {
-          this.refs.refreshControl.setState({ loadingState: true });
+          this.refs.refreshControl.setState({ deactive: false, loadingState: true });
           const finishPullToRefresh = () => {
             scroller.finishPullToRefresh();
             this.refreshControlRefresh = null;

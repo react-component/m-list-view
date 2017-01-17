@@ -66,6 +66,7 @@ const Demo = React.createClass({
             {this.state.isLoading ? 'loading...' : 'loaded'}
           </View>
         )}
+        renderBodyComponent={() => <div className="for-body-demo" />}
         renderSectionBodyWrapper={(sectionID) => <MySectionBodyWrapper key={sectionID} />}
         renderRow={(rowData) => (<tr style={{ height: 50 }}>
           <td>{rowData}Let me keep typing here so it wraps at least one line.</td>

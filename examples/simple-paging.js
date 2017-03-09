@@ -283,6 +283,9 @@ webpackJsonp([7],{
 	            _this2.state.isLoading ? 'loading...' : 'loaded'
 	          );
 	        },
+	        renderBodyComponent: function renderBodyComponent() {
+	          return _react2.default.createElement('div', { className: 'for-body-demo' });
+	        },
 	        renderSectionBodyWrapper: function renderSectionBodyWrapper(sectionID) {
 	          return _react2.default.createElement(MySectionBodyWrapper, { key: sectionID });
 	        },

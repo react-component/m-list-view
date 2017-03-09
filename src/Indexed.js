@@ -125,7 +125,7 @@ export default class IndexedList extends React.Component {
     }
     document.removeEventListener('touchmove', this._disableParent, false);
     document.body.className = document.body.className.replace(
-      new RegExp(`${this.props.prefixCls}-qsb-moving`, 'g'), '');
+      new RegExp(`\\s*${this.props.prefixCls}-qsb-moving`, 'g'), '');
     this.updateIndicator(this._target, true);
     this._target = null;
   }

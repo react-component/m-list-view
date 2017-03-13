@@ -29,7 +29,6 @@ const propTypes = {
 const styles = {
   base: {
     position: 'relative',
-    overflow: 'auto',
     WebkitOverflowScrolling: 'touch',
     flex: 1,
   },

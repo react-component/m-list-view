@@ -53,6 +53,7 @@
     "classnames": "^2.2.5",
     "fbjs": "^0.8.3",
     "object-assign": "^4.1.0",
+    "prop-types": "^15.5.8",
     "react-mixin": "^3.0.5",
     "react-sticky": "^5.0.2",
     "react-timer-mixin": "^0.13.3",

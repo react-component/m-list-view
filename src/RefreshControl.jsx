@@ -1,41 +1,44 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default React.createClass({
-  propTypes: {
-    prefixCls: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    icon: PropTypes.any,
-    loading: PropTypes.any,
-    distanceToRefresh: PropTypes.number,
-    refreshing: PropTypes.bool,
-    onRefresh: PropTypes.func.isRequired,
-  },
-  getDefaultProps() {
-    return {
-      prefixCls: 'list-view-refresh-control',
-      distanceToRefresh: 50,
-      refreshing: false,
-      icon: [
-        <div key="0" className="list-view-refresh-control-pull">
-          ↓ 下拉
-        </div>,
-        <div key="1" className="list-view-refresh-control-release">
-          ↑ 释放
-        </div>,
-      ],
-      loading: <div>loading...</div>,
-    };
-  },
+const propTypes = {
+  prefixCls: PropTypes.string,
+  className: PropTypes.string,
+  style: PropTypes.object,
+  icon: PropTypes.any,
+  loading: PropTypes.any,
+  distanceToRefresh: PropTypes.number,
+  refreshing: PropTypes.bool,
+  onRefresh: PropTypes.func.isRequired,
+};
 
-  getInitialState() {
-    return {
+export default class RefreshControl extends React.Component {
+  static propTypes = propTypes;
+
+  static defaultProps = {
+    prefixCls: 'list-view-refresh-control',
+    distanceToRefresh: 50,
+    refreshing: false,
+    icon: [
+      <div key="0" className="list-view-refresh-control-pull">
+        ↓ 下拉
+      </div>,
+      <div key="1" className="list-view-refresh-control-release">
+        ↑ 释放
+      </div>,
+    ],
+    loading: <div>loading...</div>,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
       active: false,
       deactive: false,
       loadingState: false,
     };
-  },
+  }
 
   render() {
     const {
@@ -55,5 +58,5 @@ export default React.createClass({
         <div className={`${prefixCls}-ptr-loading`}>{loading}</div>
       </div>
     );
-  },
-});
+  }
+}

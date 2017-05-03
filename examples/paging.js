@@ -10,8 +10,9 @@ let pageIndex = 0;
 
 /* eslint react/sort-comp: 0 */
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const getSectionData = (dataBlob, sectionID) => {
       return dataBlob[sectionID];
     };
@@ -48,12 +49,12 @@ const Demo = React.createClass({
       this.rowIDs = [].concat(this.rowIDs);
     };
     this._genData();
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
       isLoading: false,
     };
-  },
-  _onEndReached(event) {
+  }
+  _onEndReached = (event) => {
     // load new data
     console.log('reach end', event);
     this.setState({ isLoading: true });
@@ -66,7 +67,7 @@ const Demo = React.createClass({
         isLoading: false,
       });
     }, 1000);
-  },
+  }
   render() {
     return (<div style={{ margin: '10px auto', width: '80%' }}>
       <ListView
@@ -123,10 +124,10 @@ const Demo = React.createClass({
         </button>
       </div>
     </div>);
-  },
-  _ctrlBodyScroll(flag) {
+  }
+  _ctrlBodyScroll = (flag) => {
     document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
-  },
-});
+  }
+}
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

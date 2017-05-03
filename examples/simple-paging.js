@@ -9,8 +9,9 @@ let pageIndex = 0;
 
 /* eslint react/prop-types: 0, react/no-multi-comp: 0 */
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
@@ -24,13 +25,13 @@ const Demo = React.createClass({
       return dataBlob;
     };
     this._data = {};
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRows(this._genData()),
       isLoading: false,
       destroy: false,
     };
-  },
-  _onEndReached(event) {
+  }
+  _onEndReached = (event) => {
     // load new data
     console.log('reach end', event);
     this.setState({ isLoading: true });
@@ -41,7 +42,7 @@ const Demo = React.createClass({
         isLoading: false,
       });
     }, 1000);
-  },
+  }
   render() {
     return (<div>
       <button style={{ margin: 10 }}
@@ -87,15 +88,14 @@ const Demo = React.createClass({
       }}
       />
     </div>);
-  },
-});
-const MySectionBodyWrapper = React.createClass({
-  render() {
-    return (<table className="my-section-body">
-      <thead><tr><td>table title</td></tr></thead>
-      <tbody>{this.props.children}</tbody>
-    </table>);
-  },
-});
+  }
+}
+
+const MySectionBodyWrapper = (props) => {
+  return (<table className="my-section-body">
+    <thead><tr><td>table title</td></tr></thead>
+    <tbody>{props.children}</tbody>
+  </table>);
+};
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

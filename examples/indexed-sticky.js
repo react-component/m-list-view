@@ -6,8 +6,9 @@ import ListView from 'rmc-list-view';
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const getSectionData = (dataBlob, sectionID) => {
       return dataBlob[sectionID];
     };
@@ -37,11 +38,11 @@ const Demo = React.createClass({
         dataBlob[rowName] = rowName;
       }
     }
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
       headerPressCount: 0,
     };
-  },
+  }
 
   render() {
     return (<div>
@@ -68,7 +69,7 @@ const Demo = React.createClass({
         sectionBodyClassName="sb"
       />
     </div>);
-  },
-});
+  }
+}
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

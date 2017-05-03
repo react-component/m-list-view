@@ -14,13 +14,14 @@ function _genRows(pressData) {
 
 /* eslint react/sort-comp: 0 */
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    return {
+    this.state = {
       dataSource: ds.cloneWithRows(_genRows({})),
     };
-  },
+  }
 
   render() {
     return (<div>
@@ -59,10 +60,10 @@ const Demo = React.createClass({
         </button>
       </div>
     </div>);
-  },
-  _ctrlBodyScroll(flag) {
+  }
+  _ctrlBodyScroll = (flag) => {
     document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
-  },
-});
+  }
+}
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

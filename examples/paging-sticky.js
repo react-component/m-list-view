@@ -8,8 +8,9 @@ const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
 let pageIndex = 0;
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const getSectionData = (dataBlob, sectionID) => {
       return dataBlob[sectionID];
     };
@@ -46,15 +47,15 @@ const Demo = React.createClass({
       this.rowIDs = [].concat(this.rowIDs);
     };
     this._genData();
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
       headerPressCount: 0,
     };
-  },
+  }
   componentDidMount() {
     console.log(this.refs.lv);
-  },
-  _onEndReached(event) {
+  }
+  _onEndReached = (event) => {
     // load new data
     console.log('reach end', event);
     this._genData(++pageIndex);
@@ -63,7 +64,7 @@ const Demo = React.createClass({
         this.dataBlob, this.sectionIDs, this.rowIDs
       ),
     });
-  },
+  }
   render() {
     return (<div>
       <ListView
@@ -116,7 +117,7 @@ const Demo = React.createClass({
         }}
       />
     </div>);
-  },
-});
+  }
+}
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

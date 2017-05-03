@@ -25,8 +25,9 @@ let index = data.length - 1;
 
 let pageIndex = 0;
 
-const App = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
@@ -35,18 +36,18 @@ const App = React.createClass({
     for (let i = 0; i < 20; i++) {
       this.initData.push(`r${i}`);
     }
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRows(this.initData),
       refreshing: false,
       manual: false,
     };
-  },
-  onRefresh() {
+  }
+  onRefresh = () => {
     console.log('onRefresh');
     this.setState({ refreshing: true });
     this.onAjax();
-  },
-  onAjax() {
+  }
+  onAjax = () => {
     setTimeout(() => {
       this.initData = [`ref${pageIndex++}`, ...this.initData];
       this.setState({
@@ -54,17 +55,17 @@ const App = React.createClass({
         refreshing: false,
       });
     }, 1000);
-  },
-  onManual() {
+  }
+  onManual = () => {
     this.setState({
       manual: true,
     });
     console.log('onManual');
     this.setState({ refreshing: true });
-  },
-  onScroll() {
+  }
+  onScroll = () => {
     console.log('sss');
-  },
+  }
   render() {
     const separator = (sectionID, rowID) => (
       <div key={`${sectionID}-${rowID}`} style={{
@@ -132,7 +133,7 @@ const App = React.createClass({
         />}
       />
     );
-  },
-});
+  }
+}
 
-ReactDOM.render(<App />, document.getElementById('__react-content'));
+ReactDOM.render(<Demo />, document.getElementById('__react-content'));

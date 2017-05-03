@@ -6,8 +6,9 @@ import ListView from 'rmc-list-view';
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
 
-const Demo = React.createClass({
-  getInitialState() {
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
     const getSectionData = (dataBlob, sectionID) => {
       return dataBlob[sectionID];
     };
@@ -22,11 +23,11 @@ const Demo = React.createClass({
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     });
 
-    return {
+    this.state = {
       dataSource: dataSource.cloneWithRowsAndSections({}, [], []),
       headerPressCount: 0,
     };
-  },
+  }
   componentDidMount() {
     // simulate ajax
     setTimeout(() => {
@@ -49,7 +50,7 @@ const Demo = React.createClass({
         dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
       });
     }, 1000);
-  },
+  }
   render() {
     return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
       <ListView.IndexedList
@@ -79,7 +80,7 @@ const Demo = React.createClass({
         sectionBodyClassName="sb"
       />
     </div>);
-  },
-});
+  }
+}
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

@@ -47,12 +47,10 @@ export function View(props) {
 }
 
 import React from 'react';
-export const TouchableHighlight = React.createClass({
-  render() {
-    const { onPress, children, ...restProps } = this.props;
-    return <div {...restProps} onClick={onPress}>{children}</div>;
-  },
-});
+export const TouchableHighlight = (props) => {
+  const { onPress, children, ...restProps } = props;
+  return <div {...restProps} onClick={onPress}>{children}</div>;
+};
 export const TouchableOpacity = TouchableHighlight;
 
 
@@ -80,23 +78,24 @@ function flattenStyle(style, processor) {
 }
 
 /* eslint react/prop-types: 0, no-multi-comp: 0 */
-export const Thumb = React.createClass({
-  getInitialState() {
-    return { thumbIndex: this._getThumbIdx(), dir: 'row' };
-  },
+export class Thumb extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { thumbIndex: this._getThumbIdx(), dir: 'row' };
+  }
   componentWillMount() {
     // UIManager.setLayoutAnimationEnabledExperimental &&
     //   UIManager.setLayoutAnimationEnabledExperimental(true);
-  },
-  _getThumbIdx() {
+  }
+  _getThumbIdx = () => {
     return Math.floor(Math.random() * THUMB_URLS.length);
-  },
-  _onPressThumb() {
+  }
+  _onPressThumb = () => {
     this.setState({
       thumbIndex: this._getThumbIdx(),
       dir: this.state.dir === 'row' ? 'column' : 'row',
     });
-  },
+  }
   render() {
     const buttonContents = {
       display: 'flex',
@@ -126,5 +125,5 @@ export const Thumb = React.createClass({
         }
       </TouchableOpacity>
     );
-  },
-});
+  }
+}

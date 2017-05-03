@@ -113,7 +113,8 @@ export default class ScrollView extends React.Component {
   }
 
   scrollingComplete = () => {
-    if (this.props.refreshControl && this.refs.refreshControl.state.deactive) {
+    if (this.props.refreshControl &&
+    this.refs.refreshControl && this.refs.refreshControl.state.deactive) {
       this.refs.refreshControl.setState({ deactive: false });
     }
   }
@@ -132,14 +133,21 @@ export default class ScrollView extends React.Component {
       scroller.activatePullToRefresh(distanceToRefresh,
         () => {
           this.manuallyRefresh = true;
-          this.refs.refreshControl.setState({ active: true });
+          this.refs.refreshControl && this.refs.refreshControl.setState({ active: true });
         },
         () => {
           this.manuallyRefresh = false;
-          this.refs.refreshControl.setState({ deactive: true, active: false, loadingState: false });
+          this.refs.refreshControl && this.refs.refreshControl.setState({
+            deactive: true,
+            active: false,
+            loadingState: false,
+          });
         },
         () => {
-          this.refs.refreshControl.setState({ deactive: false, loadingState: true });
+          this.refs.refreshControl && this.refs.refreshControl.setState({
+            deactive: false,
+            loadingState: true,
+          });
           const finishPullToRefresh = () => {
             scroller.finishPullToRefresh();
             this.refreshControlRefresh = null;

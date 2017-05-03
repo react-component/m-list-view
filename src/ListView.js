@@ -443,6 +443,11 @@ class ListView extends React.Component {
     //   isVertical ? 'y' : 'x'
     // ];
     let ev = e;
+    // when the ListView is destroyed,
+    // but also will trigger scroll event after `scrollEventThrottle`
+    if (!this.refs[SCROLLVIEW_REF]) {
+      return;
+    }
     const target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       this.scrollProperties.visibleLength = window[

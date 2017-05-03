@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>refreshControl.js - example - rmc-list-view@0.7.5</title>
+  <title>refreshControl.js - example - rmc-list-view@0.7.6</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.5</h1>
+      <h1>rmc-list-view@0.7.6</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -296,8 +296,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
 
-<span class="hljs-keyword">const</span> App = React.createClass({
-  getInitialState() {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
     <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
       rowHasChanged: (row1, row2) =&gt; row1 !== row2,
     });
@@ -306,18 +307,18 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20</span>; i++) {
       <span class="hljs-keyword">this</span>.initData.push(<span class="hljs-string">`r<span class="hljs-subst">${i}</span>`</span>);
     }
-    <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">this</span>.state = {
       dataSource: dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.initData),
       refreshing: <span class="hljs-literal">false</span>,
       manual: <span class="hljs-literal">false</span>,
     };
-  },
-  onRefresh() {
+  }
+  onRefresh = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
     <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
     <span class="hljs-keyword">this</span>.onAjax();
-  },
-  onAjax() {
+  }
+  onAjax = () =&gt; {
     setTimeout(() =&gt; {
       <span class="hljs-keyword">this</span>.initData = [<span class="hljs-string">`ref<span class="hljs-subst">${pageIndex++}</span>`</span>, ...this.initData];
       <span class="hljs-keyword">this</span>.setState({
@@ -325,17 +326,17 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         refreshing: <span class="hljs-literal">false</span>,
       });
     }, <span class="hljs-number">1000</span>);
-  },
-  onManual() {
+  }
+  onManual = () =&gt; {
     <span class="hljs-keyword">this</span>.setState({
       manual: <span class="hljs-literal">true</span>,
     });
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onManual'</span>);
     <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
-  },
-  onScroll() {
+  }
+  onScroll = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'sss'</span>);
-  },
+  }
   render() {
     <span class="hljs-keyword">const</span> separator = (sectionID, rowID) =&gt; (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
@@ -403,10 +404,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         /&gt;</span>}
       /&gt;
     )</span>;
-  },
-});
+  }
+}
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">App</span> /&gt;</span>, document.getElementById('__react-content'));
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">

@@ -1,37 +1,49 @@
 webpackJsonp([4],{
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(298);
+	module.exports = __webpack_require__(304);
 
 
-/***/ },
+/***/ }),
 
-/***/ 298:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 304:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _defineProperty2 = __webpack_require__(270);
+	var _defineProperty2 = __webpack_require__(276);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
-	var _toConsumableArray2 = __webpack_require__(299);
+	var _toConsumableArray2 = __webpack_require__(305);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
-	__webpack_require__(2);
+	var _classCallCheck2 = __webpack_require__(2);
 	
-	var _react = __webpack_require__(3);
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	__webpack_require__(80);
+	
+	var _react = __webpack_require__(81);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(34);
+	var _reactDom = __webpack_require__(116);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(180);
+	var _rmcListView = __webpack_require__(262);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
@@ -56,52 +68,61 @@ webpackJsonp([4],{
 	
 	var pageIndex = 0;
 	
-	var App = _react2.default.createClass({
-	  displayName: 'App',
-	  getInitialState: function getInitialState() {
+	var Demo = function (_React$Component) {
+	  (0, _inherits3.default)(Demo, _React$Component);
+	
+	  function Demo(props) {
+	    (0, _classCallCheck3.default)(this, Demo);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this.onRefresh = function () {
+	      console.log('onRefresh');
+	      _this.setState({ refreshing: true });
+	      _this.onAjax();
+	    };
+	
+	    _this.onAjax = function () {
+	      setTimeout(function () {
+	        _this.initData = ['ref' + pageIndex++].concat((0, _toConsumableArray3.default)(_this.initData));
+	        _this.setState({
+	          dataSource: _this.state.dataSource.cloneWithRows(_this.initData),
+	          refreshing: false
+	        });
+	      }, 1000);
+	    };
+	
+	    _this.onManual = function () {
+	      _this.setState({
+	        manual: true
+	      });
+	      console.log('onManual');
+	      _this.setState({ refreshing: true });
+	    };
+	
+	    _this.onScroll = function () {
+	      console.log('sss');
+	    };
+	
 	    var dataSource = new _rmcListView2.default.DataSource({
 	      rowHasChanged: function rowHasChanged(row1, row2) {
 	        return row1 !== row2;
 	      }
 	    });
 	
-	    this.initData = [];
+	    _this.initData = [];
 	    for (var i = 0; i < 20; i++) {
-	      this.initData.push('r' + i);
+	      _this.initData.push('r' + i);
 	    }
-	    return {
-	      dataSource: dataSource.cloneWithRows(this.initData),
+	    _this.state = {
+	      dataSource: dataSource.cloneWithRows(_this.initData),
 	      refreshing: false,
 	      manual: false
 	    };
-	  },
-	  onRefresh: function onRefresh() {
-	    console.log('onRefresh');
-	    this.setState({ refreshing: true });
-	    this.onAjax();
-	  },
-	  onAjax: function onAjax() {
-	    var _this = this;
+	    return _this;
+	  }
 	
-	    setTimeout(function () {
-	      _this.initData = ['ref' + pageIndex++].concat((0, _toConsumableArray3.default)(_this.initData));
-	      _this.setState({
-	        dataSource: _this.state.dataSource.cloneWithRows(_this.initData),
-	        refreshing: false
-	      });
-	    }, 1000);
-	  },
-	  onManual: function onManual() {
-	    this.setState({
-	      manual: true
-	    });
-	    console.log('onManual');
-	    this.setState({ refreshing: true });
-	  },
-	  onScroll: function onScroll() {
-	    console.log('sss');
-	  },
-	  render: function render() {
+	  Demo.prototype.render = function render() {
 	    var _this2 = this;
 	
 	    var separator = function separator(sectionID, rowID) {
@@ -205,21 +226,23 @@ webpackJsonp([4],{
 	        resistance: 1
 	      })
 	    });
-	  }
-	});
+	  };
 	
-	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('__react-content'));
+	  return Demo;
+	}(_react2.default.Component);
+	
+	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
-/***/ },
+/***/ }),
 
-/***/ 299:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 305:
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(300);
+	var _from = __webpack_require__(306);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
@@ -237,38 +260,38 @@ webpackJsonp([4],{
 	  }
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 300:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 306:
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(301), __esModule: true };
+	module.exports = { "default": __webpack_require__(307), __esModule: true };
 
-/***/ },
+/***/ }),
 
-/***/ 301:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 307:
+/***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(227);
-	__webpack_require__(302);
-	module.exports = __webpack_require__(189).Array.from;
+	__webpack_require__(7);
+	__webpack_require__(308);
+	module.exports = __webpack_require__(15).Array.from;
 
-/***/ },
+/***/ }),
 
-/***/ 302:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 308:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var ctx            = __webpack_require__(190)
-	  , $export        = __webpack_require__(187)
-	  , toObject       = __webpack_require__(220)
-	  , call           = __webpack_require__(303)
-	  , isArrayIter    = __webpack_require__(304)
-	  , toLength       = __webpack_require__(211)
-	  , createProperty = __webpack_require__(305)
-	  , getIterFn      = __webpack_require__(306);
+	var ctx            = __webpack_require__(16)
+	  , $export        = __webpack_require__(13)
+	  , toObject       = __webpack_require__(50)
+	  , call           = __webpack_require__(309)
+	  , isArrayIter    = __webpack_require__(310)
+	  , toLength       = __webpack_require__(40)
+	  , createProperty = __webpack_require__(311)
+	  , getIterFn      = __webpack_require__(312);
 	
-	$export($export.S + $export.F * !__webpack_require__(308)(function(iter){ Array.from(iter); }), 'Array', {
+	$export($export.S + $export.F * !__webpack_require__(314)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -297,13 +320,13 @@ webpackJsonp([4],{
 	});
 
 
-/***/ },
+/***/ }),
 
-/***/ 303:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 309:
+/***/ (function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(194);
+	var anObject = __webpack_require__(20);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -315,56 +338,56 @@ webpackJsonp([4],{
 	  }
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 304:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 310:
+/***/ (function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(232)
-	  , ITERATOR   = __webpack_require__(238)('iterator')
+	var Iterators  = __webpack_require__(30)
+	  , ITERATOR   = __webpack_require__(48)('iterator')
 	  , ArrayProto = Array.prototype;
 	
 	module.exports = function(it){
 	  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 305:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 311:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $defineProperty = __webpack_require__(193)
-	  , createDesc      = __webpack_require__(201);
+	var $defineProperty = __webpack_require__(19)
+	  , createDesc      = __webpack_require__(27);
 	
 	module.exports = function(object, index, value){
 	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
 	  else object[index] = value;
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 306:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 312:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(307)
-	  , ITERATOR  = __webpack_require__(238)('iterator')
-	  , Iterators = __webpack_require__(232);
-	module.exports = __webpack_require__(189).getIteratorMethod = function(it){
+	var classof   = __webpack_require__(313)
+	  , ITERATOR  = __webpack_require__(48)('iterator')
+	  , Iterators = __webpack_require__(30);
+	module.exports = __webpack_require__(15).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 307:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 313:
+/***/ (function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(208)
-	  , TAG = __webpack_require__(238)('toStringTag')
+	var cof = __webpack_require__(38)
+	  , TAG = __webpack_require__(48)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 	
@@ -386,12 +409,12 @@ webpackJsonp([4],{
 	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 	};
 
-/***/ },
+/***/ }),
 
-/***/ 308:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 314:
+/***/ (function(module, exports, __webpack_require__) {
 
-	var ITERATOR     = __webpack_require__(238)('iterator')
+	var ITERATOR     = __webpack_require__(48)('iterator')
 	  , SAFE_CLOSING = false;
 	
 	try {
@@ -413,7 +436,7 @@ webpackJsonp([4],{
 	  return safe;
 	};
 
-/***/ }
+/***/ })
 
 });
 //# sourceMappingURL=refreshControl.js.map

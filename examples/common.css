@@ -101,10 +101,8 @@ li {
   overflow: hidden;
   -webkit-transform: translateZ(0px);
           transform: translateZ(0px);
-  -webkit-transition-property: opacity;
   transition-property: opacity;
-  -webkit-transition-duration: 250ms;
-          transition-duration: 250ms;
+  transition-duration: 250ms;
   opacity: 0;
 }
 .zscroller-indicator-y {
@@ -126,10 +124,8 @@ li {
   overflow: hidden;
   -webkit-transform: translateZ(0px);
           transform: translateZ(0px);
-  -webkit-transition-property: opacity;
   transition-property: opacity;
-  -webkit-transition-duration: 250ms;
-          transition-duration: 250ms;
+  transition-duration: 250ms;
   opacity: 0;
 }
 .zscroller-indicator-x {

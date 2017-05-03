@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging-sticky.js - example - rmc-list-view@0.7.5</title>
+  <title>paging-sticky.js - example - rmc-list-view@0.7.6</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.5</h1>
+      <h1>rmc-list-view@0.7.6</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -279,8 +279,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
 
-<span class="hljs-keyword">const</span> Demo = React.createClass({
-  getInitialState() {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
     <span class="hljs-keyword">const</span> getSectionData = (dataBlob, sectionID) =&gt; {
       <span class="hljs-keyword">return</span> dataBlob[sectionID];
     };
@@ -317,15 +318,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="hljs-keyword">this</span>.rowIDs = [].concat(<span class="hljs-keyword">this</span>.rowIDs);
     };
     <span class="hljs-keyword">this</span>._genData();
-    <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">this</span>.state = {
       dataSource: dataSource.cloneWithRowsAndSections(<span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs),
       headerPressCount: <span class="hljs-number">0</span>,
     };
-  },
+  }
   componentDidMount() {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.refs.lv);
-  },
-  _onEndReached(event) {
+  }
+  _onEndReached = (event) =&gt; {
     <span class="hljs-comment">// load new data</span>
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
     <span class="hljs-keyword">this</span>._genData(++pageIndex);
@@ -334,7 +335,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-keyword">this</span>.dataBlob, <span class="hljs-keyword">this</span>.sectionIDs, <span class="hljs-keyword">this</span>.rowIDs
       ),
     });
-  },
+  }
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
@@ -387,8 +388,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         }}
       /&gt;
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  },
-});
+  }
+}
 
 ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>

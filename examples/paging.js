@@ -1,33 +1,45 @@
 webpackJsonp([2],{
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(295);
+	module.exports = __webpack_require__(301);
 
 
-/***/ },
+/***/ }),
 
-/***/ 295:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 301:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(2);
+	var _classCallCheck2 = __webpack_require__(2);
 	
-	var _react = __webpack_require__(3);
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	__webpack_require__(80);
+	
+	var _react = __webpack_require__(81);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(34);
+	var _reactDom = __webpack_require__(116);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rmcListView = __webpack_require__(180);
+	var _rmcListView = __webpack_require__(262);
 	
 	var _rmcListView2 = _interopRequireDefault(_rmcListView);
 	
-	var _util = __webpack_require__(296);
+	var _util = __webpack_require__(302);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -37,10 +49,30 @@ webpackJsonp([2],{
 	
 	/* eslint react/sort-comp: 0 */
 	
-	var Demo = _react2.default.createClass({
-	  displayName: 'Demo',
-	  getInitialState: function getInitialState() {
-	    var _this = this;
+	var Demo = function (_React$Component) {
+	  (0, _inherits3.default)(Demo, _React$Component);
+	
+	  function Demo(props) {
+	    (0, _classCallCheck3.default)(this, Demo);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this._onEndReached = function (event) {
+	      // load new data
+	      console.log('reach end', event);
+	      _this.setState({ isLoading: true });
+	      setTimeout(function () {
+	        _this._genData(++pageIndex);
+	        _this.setState({
+	          dataSource: _this.state.dataSource.cloneWithRowsAndSections(_this.dataBlob, _this.sectionIDs, _this.rowIDs),
+	          isLoading: false
+	        });
+	      }, 1000);
+	    };
+	
+	    _this._ctrlBodyScroll = function (flag) {
+	      document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
+	    };
 	
 	    var getSectionData = function getSectionData(dataBlob, sectionID) {
 	      return dataBlob[sectionID];
@@ -60,10 +92,10 @@ webpackJsonp([2],{
 	      }
 	    });
 	
-	    this.dataBlob = {};
-	    this.sectionIDs = [];
-	    this.rowIDs = [];
-	    this._genData = function () {
+	    _this.dataBlob = {};
+	    _this.sectionIDs = [];
+	    _this.rowIDs = [];
+	    _this._genData = function () {
 	      var pIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 	
 	      for (var i = 0; i < NUM_SECTIONS; i++) {
@@ -83,28 +115,16 @@ webpackJsonp([2],{
 	      _this.sectionIDs = [].concat(_this.sectionIDs);
 	      _this.rowIDs = [].concat(_this.rowIDs);
 	    };
-	    this._genData();
-	    return {
-	      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
+	    _this._genData();
+	    _this.state = {
+	      dataSource: dataSource.cloneWithRowsAndSections(_this.dataBlob, _this.sectionIDs, _this.rowIDs),
 	      isLoading: false
 	    };
-	  },
-	  _onEndReached: function _onEndReached(event) {
-	    var _this2 = this;
+	    return _this;
+	  }
 	
-	    // load new data
-	    console.log('reach end', event);
-	    this.setState({ isLoading: true });
-	    setTimeout(function () {
-	      _this2._genData(++pageIndex);
-	      _this2.setState({
-	        dataSource: _this2.state.dataSource.cloneWithRowsAndSections(_this2.dataBlob, _this2.sectionIDs, _this2.rowIDs),
-	        isLoading: false
-	      });
-	    }, 1000);
-	  },
-	  render: function render() {
-	    var _this3 = this;
+	  Demo.prototype.render = function render() {
+	    var _this2 = this;
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -125,7 +145,7 @@ webpackJsonp([2],{
 	            _react2.default.createElement(
 	              'button',
 	              { onClick: function onClick() {
-	                  _this3.refs.lv.scrollTo(0, 200);
+	                  _this2.refs.lv.scrollTo(0, 200);
 	                } },
 	              'scrollTo(0, 200)'
 	            )
@@ -160,7 +180,7 @@ webpackJsonp([2],{
 	                padding: 30, textAlign: 'center'
 	              }
 	            },
-	            _this3.state.isLoading ? 'loading...' : 'loaded'
+	            _this2.state.isLoading ? 'loading...' : 'loaded'
 	          );
 	        },
 	        initialListSize: 10,
@@ -192,7 +212,7 @@ webpackJsonp([2],{
 	        _react2.default.createElement(
 	          'button',
 	          { onClick: function onClick() {
-	              _this3._ctrlBodyScroll(true);
+	              _this2._ctrlBodyScroll(true);
 	            } },
 	          'enableBodyScroll'
 	        ),
@@ -200,24 +220,23 @@ webpackJsonp([2],{
 	        _react2.default.createElement(
 	          'button',
 	          { onClick: function onClick() {
-	              _this3._ctrlBodyScroll(false);
+	              _this2._ctrlBodyScroll(false);
 	            }, style: { color: 'red' } },
 	          'disableBodyScroll'
 	        )
 	      )
 	    );
-	  },
-	  _ctrlBodyScroll: function _ctrlBodyScroll(flag) {
-	    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
-	  }
-	});
+	  };
+	
+	  return Demo;
+	}(_react2.default.Component);
 	
 	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
-/***/ },
+/***/ }),
 
-/***/ 296:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 302:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -226,11 +245,23 @@ webpackJsonp([2],{
 	});
 	exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
-	var _extends2 = __webpack_require__(183);
+	var _classCallCheck2 = __webpack_require__(2);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _extends2 = __webpack_require__(265);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _objectWithoutProperties2 = __webpack_require__(221);
+	var _objectWithoutProperties2 = __webpack_require__(270);
 	
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 	
@@ -238,7 +269,7 @@ webpackJsonp([2],{
 	exports.Image = Image;
 	exports.View = View;
 	
-	var _react = __webpack_require__(3);
+	var _react = __webpack_require__(81);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
@@ -285,21 +316,17 @@ webpackJsonp([2],{
 	  );
 	}
 	
-	var TouchableHighlight = _react2.default.createClass({
-	  displayName: 'TouchableHighlight',
-	  render: function render() {
-	    var _props = this.props,
-	        onPress = _props.onPress,
-	        children = _props.children,
-	        restProps = (0, _objectWithoutProperties3.default)(_props, ['onPress', 'children']);
+	var TouchableHighlight = function TouchableHighlight(props) {
+	  var onPress = props.onPress,
+	      children = props.children,
+	      restProps = (0, _objectWithoutProperties3.default)(props, ['onPress', 'children']);
 	
-	    return _react2.default.createElement(
-	      'div',
-	      (0, _extends3.default)({}, restProps, { onClick: onPress }),
-	      children
-	    );
-	  }
-	});
+	  return _react2.default.createElement(
+	    'div',
+	    (0, _extends3.default)({}, restProps, { onClick: onPress }),
+	    children
+	  );
+	};
 	exports.TouchableHighlight = TouchableHighlight;
 	var TouchableOpacity = exports.TouchableOpacity = TouchableHighlight;
 	
@@ -327,25 +354,36 @@ webpackJsonp([2],{
 	}
 	
 	/* eslint react/prop-types: 0, no-multi-comp: 0 */
-	var Thumb = exports.Thumb = _react2.default.createClass({
-	  displayName: 'Thumb',
-	  getInitialState: function getInitialState() {
-	    return { thumbIndex: this._getThumbIdx(), dir: 'row' };
-	  },
-	  componentWillMount: function componentWillMount() {
+	
+	var Thumb = exports.Thumb = function (_React$Component) {
+	  (0, _inherits3.default)(Thumb, _React$Component);
+	
+	  function Thumb(props) {
+	    (0, _classCallCheck3.default)(this, Thumb);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this._getThumbIdx = function () {
+	      return Math.floor(Math.random() * THUMB_URLS.length);
+	    };
+	
+	    _this._onPressThumb = function () {
+	      _this.setState({
+	        thumbIndex: _this._getThumbIdx(),
+	        dir: _this.state.dir === 'row' ? 'column' : 'row'
+	      });
+	    };
+	
+	    _this.state = { thumbIndex: _this._getThumbIdx(), dir: 'row' };
+	    return _this;
+	  }
+	
+	  Thumb.prototype.componentWillMount = function componentWillMount() {
 	    // UIManager.setLayoutAnimationEnabledExperimental &&
 	    //   UIManager.setLayoutAnimationEnabledExperimental(true);
-	  },
-	  _getThumbIdx: function _getThumbIdx() {
-	    return Math.floor(Math.random() * THUMB_URLS.length);
-	  },
-	  _onPressThumb: function _onPressThumb() {
-	    this.setState({
-	      thumbIndex: this._getThumbIdx(),
-	      dir: this.state.dir === 'row' ? 'column' : 'row'
-	    });
-	  },
-	  render: function render() {
+	  };
+	
+	  Thumb.prototype.render = function render() {
 	    var buttonContents = {
 	      display: 'flex',
 	      flexDirection: 'row',
@@ -373,10 +411,12 @@ webpackJsonp([2],{
 	        'Oooo, Let me keep typing here so it wraps at least one line.'
 	      ) : _react2.default.createElement(Text, null)
 	    );
-	  }
-	});
+	  };
+	
+	  return Thumb;
+	}(_react2.default.Component);
 
-/***/ }
+/***/ })
 
 });
 //# sourceMappingURL=paging.js.map

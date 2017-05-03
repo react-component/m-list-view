@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>util.js - example - rmc-list-view@0.7.5</title>
+  <title>util.js - example - rmc-list-view@0.7.6</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.5</h1>
+      <h1>rmc-list-view@0.7.6</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -318,12 +318,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 }
 
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableHighlight = React.createClass({
-  render() {
-    <span class="hljs-keyword">const</span> { onPress, children, ...restProps } = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...restProps</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{onPress}</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
-  },
-});
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableHighlight = (props) =&gt; {
+  <span class="hljs-keyword">const</span> { onPress, children, ...restProps } = props;
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> {<span class="hljs-attribute">...restProps</span>} <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{onPress}</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+};
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> TouchableOpacity = TouchableHighlight;
 
 
@@ -351,23 +349,24 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 }
 
 <span class="hljs-comment">/* eslint react/prop-types: 0, no-multi-comp: 0 */</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> Thumb = React.createClass({
-  getInitialState() {
-    <span class="hljs-keyword">return</span> { thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(), dir: <span class="hljs-string">'row'</span> };
-  },
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Thumb</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = { thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(), dir: <span class="hljs-string">'row'</span> };
+  }
   componentWillMount() {
     <span class="hljs-comment">// UIManager.setLayoutAnimationEnabledExperimental &amp;&amp;</span>
     <span class="hljs-comment">//   UIManager.setLayoutAnimationEnabledExperimental(true);</span>
-  },
-  _getThumbIdx() {
+  }
+  _getThumbIdx = () =&gt; {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * THUMB_URLS.length);
-  },
-  _onPressThumb() {
+  }
+  _onPressThumb = () =&gt; {
     <span class="hljs-keyword">this</span>.setState({
       thumbIndex: <span class="hljs-keyword">this</span>._getThumbIdx(),
       dir: <span class="hljs-keyword">this</span>.state.dir === <span class="hljs-string">'row'</span> ? <span class="hljs-string">'column'</span> : <span class="hljs-string">'row'</span>,
     });
-  },
+  }
   render() {
     <span class="hljs-keyword">const</span> buttonContents = {
       display: <span class="hljs-string">'flex'</span>,
@@ -397,8 +396,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         }
       <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableOpacity</span>&gt;</span>
     )</span>;
-  },
-});
+  }
+}
 </code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">

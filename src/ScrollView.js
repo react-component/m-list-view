@@ -45,6 +45,7 @@ export default class ScrollView extends React.Component {
   static propTypes = propTypes;
 
   componentDidUpdate(prevProps) {
+    // console.log('componentDidUpdate');
     if (prevProps.refreshControl && this.props.refreshControl) {
       const preRefreshing = prevProps.refreshControl.props.refreshing;
       const nowRefreshing = this.props.refreshControl.props.refreshing;
@@ -114,6 +115,7 @@ export default class ScrollView extends React.Component {
   }
 
   scrollingComplete = () => {
+    // console.log('scrolling complete');
     if (this.props.refreshControl &&
     this.refs.refreshControl && this.refs.refreshControl.state.deactive) {
       this.refs.refreshControl.setState({ deactive: false });
@@ -122,7 +124,7 @@ export default class ScrollView extends React.Component {
 
   renderZscroller() {
     const { scrollerOptions, refreshControl } = this.props;
-
+    // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
     this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
       scrollingX: false,
       onScroll: this.tsExec,
@@ -133,18 +135,23 @@ export default class ScrollView extends React.Component {
       const { distanceToRefresh, onRefresh } = refreshControl.props;
       scroller.activatePullToRefresh(distanceToRefresh,
         () => {
+          // console.log('first reach the distance');
           this.manuallyRefresh = true;
+          this.overDistanceThenRelease = false;
           this.refs.refreshControl && this.refs.refreshControl.setState({ active: true });
         },
         () => {
+          // console.log('back to the distance', this.overDistanceThenRelease);
           this.manuallyRefresh = false;
           this.refs.refreshControl && this.refs.refreshControl.setState({
-            deactive: true,
+            deactive: this.overDistanceThenRelease,
             active: false,
             loadingState: false,
           });
         },
         () => {
+          // console.log('Over distance and release to loading');
+          this.overDistanceThenRelease = true;
           this.refs.refreshControl && this.refs.refreshControl.setState({
             deactive: false,
             loadingState: true,

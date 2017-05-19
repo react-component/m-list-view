@@ -8,19 +8,24 @@
     "react-mobile-list-view",
     "m-list-view"
   ],
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "homepage": "https://github.com/react-component/m-list-view",
   "author": "hualei5280@gmail.com",
-  "repository": "react-component/m-list-view",
-  "bugs": "https://github.com/react-component/m-list-view/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-component/m-list-view.git"
+  },
+  "bugs": {
+    "url": "https://github.com/react-component/m-list-view/issues"
+  },
   "files": [
     "lib",
     "assets/*.css"
   ],
   "license": "MIT",
   "main": "./lib/index",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "config": {
     "port": 8999
   },
@@ -30,19 +35,24 @@
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
-    "karma": "rc-tools run karma",
-    "saucelabs": "rc-tools run saucelabs",
-    "test": "rc-tools run test",
-    "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage"
+    "test": "jest",
+    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*"
+    ]
   },
   "devDependencies": {
-    "expect.js": "0.3.x",
+    "coveralls": "^2.11.15",
+    "enzyme": "^2.8.2",
+    "enzyme-to-json": "^1.4.5",
+    "jest": "^19.0.2",
     "pre-commit": "1.x",
     "rc-tools": "5.x",
     "react": "15.x",
-    "react-addons-test-utils": "15.x",
-    "react-dom": "15.x"
+    "react-dom": "15.x",
+    "react-test-renderer": "15.x"
   },
   "pre-commit": [
     "lint"

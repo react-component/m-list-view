@@ -1,6 +1,8 @@
 # rmc-list-view
 ---
 
+React ListView Component, port from [React Native ListView](https://facebook.github.io/react-native/docs/listview.html)
+
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]

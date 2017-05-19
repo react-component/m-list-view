@@ -1,9 +1,9 @@
-webpackJsonp([4],{
+webpackJsonp([5],{
 
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(304);
+	module.exports = __webpack_require__(315);
 
 
 /***/ }),
@@ -202,167 +202,6 @@ webpackJsonp([4],{
 	  title: '食惠周',
 	  des: '不是所有的兼职汪都需要风吹日晒'
 	}];
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _toConsumableArray2 = __webpack_require__(305);
-	
-	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-	
-	var _classCallCheck2 = __webpack_require__(2);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _possibleConstructorReturn2 = __webpack_require__(3);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(72);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	__webpack_require__(80);
-	
-	var _react = __webpack_require__(81);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(116);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _rmcListView = __webpack_require__(262);
-	
-	var _rmcListView2 = _interopRequireDefault(_rmcListView);
-	
-	var _util = __webpack_require__(302);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
-	
-	var index = _util.myData.length - 1;
-	var pageIndex = 0;
-	
-	var Demo = function (_React$Component) {
-	  (0, _inherits3.default)(Demo, _React$Component);
-	
-	  function Demo(props) {
-	    (0, _classCallCheck3.default)(this, Demo);
-	
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
-	
-	    _this.onRefresh = function () {
-	      console.log('onRefresh');
-	      _this.setState({ refreshing: true });
-	      _this.onAjax();
-	    };
-	
-	    _this.onAjax = function () {
-	      setTimeout(function () {
-	        _this.initData = ['ref' + pageIndex++].concat((0, _toConsumableArray3.default)(_this.initData));
-	        _this.setState({
-	          dataSource: _this.state.dataSource.cloneWithRows(_this.initData),
-	          refreshing: false
-	        });
-	      }, 1000);
-	    };
-	
-	    var dataSource = new _rmcListView2.default.DataSource({
-	      rowHasChanged: function rowHasChanged(row1, row2) {
-	        return row1 !== row2;
-	      }
-	    });
-	
-	    _this.initData = [];
-	    for (var i = 0; i < 20; i++) {
-	      _this.initData.push('r' + i);
-	    }
-	    _this.state = {
-	      dataSource: dataSource.cloneWithRows(_this.initData),
-	      refreshing: false
-	    };
-	    return _this;
-	  }
-	
-	  Demo.prototype.render = function render() {
-	    return _react2.default.createElement(_rmcListView2.default, {
-	      dataSource: this.state.dataSource,
-	      renderHeader: function renderHeader() {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          '\u6CE8\u610F\u5BF9\u6BD4\u548C refreshControl-auto \u7684\u7528\u6CD5\u5DEE\u5F02'
-	        );
-	      },
-	      renderRow: function renderRow(rowData, sectionID, rowID) {
-	        if (index < 0) {
-	          index = _util.myData.length - 1;
-	        }
-	        var obj = _util.myData[index--];
-	        return _react2.default.createElement(
-	          'div',
-	          { key: rowID, style: { padding: '8px 16px' } },
-	          _react2.default.createElement(
-	            'h3',
-	            null,
-	            obj.title
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { style: { display: 'flex' } },
-	            _react2.default.createElement('img', { style: { height: 64, marginRight: 8 }, src: obj.img }),
-	            _react2.default.createElement(
-	              'div',
-	              { style: { display: 'inline-block' } },
-	              _react2.default.createElement(
-	                'div',
-	                null,
-	                rowData,
-	                '-',
-	                obj.des
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { style: { color: '#FF6E27', marginTop: 15 } },
-	                '35'
-	              )
-	            )
-	          )
-	        );
-	      },
-	      renderSeparator: function renderSeparator(sectionID, rowID) {
-	        return _react2.default.createElement('div', { key: sectionID + '-' + rowID, style: { backgroundColor: '#F5F5F9', height: 8 } });
-	      },
-	      initialListSize: 5,
-	      pageSize: 5,
-	      scrollRenderAheadDistance: 200,
-	      scrollEventThrottle: 20,
-	      style: {
-	        height: 400,
-	        border: '1px solid #ddd',
-	        margin: '10px 0'
-	      },
-	      useZscroller: true,
-	      scrollerOptions: { scrollbars: true },
-	      refreshControl: _react2.default.createElement(_rmcListView2.default.RefreshControl, {
-	        className: 'my-refresh-control',
-	        refreshing: this.state.refreshing,
-	        onRefresh: this.onRefresh,
-	        resistance: 1
-	      })
-	    });
-	  };
-	
-	  return Demo;
-	}(_react2.default.Component);
-	
-	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
 
 /***/ }),
 
@@ -567,7 +406,175 @@ webpackJsonp([4],{
 	  return safe;
 	};
 
+/***/ }),
+
+/***/ 315:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _toConsumableArray2 = __webpack_require__(305);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _classCallCheck2 = __webpack_require__(2);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	__webpack_require__(80);
+	
+	var _react = __webpack_require__(81);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(116);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _rmcListView = __webpack_require__(262);
+	
+	var _rmcListView2 = _interopRequireDefault(_rmcListView);
+	
+	var _util = __webpack_require__(302);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
+	
+	var index = _util.myData.length - 1;
+	var pageIndex = 0;
+	
+	var Demo = function (_React$Component) {
+	  (0, _inherits3.default)(Demo, _React$Component);
+	
+	  function Demo(props) {
+	    (0, _classCallCheck3.default)(this, Demo);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this.onAjax = function () {
+	      setTimeout(function () {
+	        _this.initData = ['ref' + pageIndex++].concat((0, _toConsumableArray3.default)(_this.initData));
+	        _this.setState({
+	          dataSource: _this.state.dataSource.cloneWithRows(_this.initData),
+	          refreshing: false
+	        });
+	      }, 1000);
+	    };
+	
+	    var dataSource = new _rmcListView2.default.DataSource({
+	      rowHasChanged: function rowHasChanged(row1, row2) {
+	        return row1 !== row2;
+	      }
+	    });
+	
+	    _this.initData = [];
+	    for (var i = 0; i < 20; i++) {
+	      _this.initData.push('r' + i);
+	    }
+	    _this.state = {
+	      dataSource: dataSource.cloneWithRows(_this.initData),
+	      refreshing: false
+	    };
+	    return _this;
+	  }
+	
+	  Demo.prototype.render = function render() {
+	    var _this2 = this;
+	
+	    return _react2.default.createElement(_rmcListView2.default, {
+	      dataSource: this.state.dataSource,
+	      renderHeader: function renderHeader() {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: function onClick() {
+	                return _this2.setState({ refreshing: true });
+	              } },
+	            '\u70B9\u51FB\u81EA\u52A8\u5237\u65B0'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { fontSize: 14, color: '#bbb' } },
+	            '\u6B64\u5904\u4E0D\u80FD\u624B\u52A8\u5237\u65B0'
+	          )
+	        );
+	      },
+	      renderRow: function renderRow(rowData, sectionID, rowID) {
+	        if (index < 0) {
+	          index = _util.myData.length - 1;
+	        }
+	        var obj = _util.myData[index--];
+	        return _react2.default.createElement(
+	          'div',
+	          { key: rowID, style: { padding: '8px 16px' } },
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            obj.title
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { display: 'flex' } },
+	            _react2.default.createElement('img', { style: { height: 64, marginRight: 8 }, src: obj.img }),
+	            _react2.default.createElement(
+	              'div',
+	              { style: { display: 'inline-block' } },
+	              _react2.default.createElement(
+	                'div',
+	                null,
+	                rowData,
+	                '-',
+	                obj.des
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { style: { color: '#FF6E27', marginTop: 15 } },
+	                '35'
+	              )
+	            )
+	          )
+	        );
+	      },
+	      renderSeparator: function renderSeparator(sectionID, rowID) {
+	        return _react2.default.createElement('div', { key: sectionID + '-' + rowID, style: { backgroundColor: '#F5F5F9', height: 8 } });
+	      },
+	      initialListSize: 5,
+	      pageSize: 5,
+	      scrollRenderAheadDistance: 200,
+	      scrollEventThrottle: 20,
+	      style: {
+	        height: 400,
+	        border: '1px solid #ddd',
+	        margin: '10px 0'
+	      },
+	      useZscroller: true,
+	      scrollerOptions: { scrollbars: true },
+	      refreshControl: _react2.default.createElement(_rmcListView2.default.RefreshControl, {
+	        className: 'my-refresh-control',
+	        refreshing: this.state.refreshing,
+	        onRefresh: this.onAjax,
+	        resistance: 1
+	      })
+	    });
+	  };
+	
+	  return Demo;
+	}(_react2.default.Component);
+	
+	_reactDom2.default.render(_react2.default.createElement(Demo, null), document.getElementById('__react-content'));
+
 /***/ })
 
 });
-//# sourceMappingURL=refreshControl.js.map
+//# sourceMappingURL=refreshControl-auto.js.map

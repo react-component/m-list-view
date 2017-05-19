@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>refreshControl.js - example - rmc-list-view@0.7.6</title>
+  <title>refreshControl.js - example - rmc-list-view@0.7.7</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.7.6</h1>
+      <h1>rmc-list-view@0.7.7</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -273,27 +273,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
+<span class="hljs-keyword">import</span> { myData <span class="hljs-keyword">as</span> data } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 <span class="hljs-comment">/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */</span>
 
-<span class="hljs-keyword">const</span> data = [
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png'</span>,
-    title: <span class="hljs-string">'相约酒店'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png'</span>,
-    title: <span class="hljs-string">'麦当劳邀您过周末'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png'</span>,
-    title: <span class="hljs-string">'食惠周'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-];
 <span class="hljs-keyword">let</span> index = data.length - <span class="hljs-number">1</span>;
-
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
@@ -310,7 +293,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>.state = {
       dataSource: dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.initData),
       refreshing: <span class="hljs-literal">false</span>,
-      manual: <span class="hljs-literal">false</span>,
     };
   }
   onRefresh = () =&gt; {
@@ -327,79 +309,49 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       });
     }, <span class="hljs-number">1000</span>);
   }
-  onManual = () =&gt; {
-    <span class="hljs-keyword">this</span>.setState({
-      manual: <span class="hljs-literal">true</span>,
-    });
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onManual'</span>);
-    <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
-  }
-  onScroll = () =&gt; {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'sss'</span>);
-  }
   render() {
-    <span class="hljs-keyword">const</span> separator = (sectionID, rowID) =&gt; (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-        <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">F5F5F9</span>',
-        <span class="hljs-attribute">height:</span> <span class="hljs-attribute">8</span>,
-        <span class="hljs-attribute">borderTop:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> #<span class="hljs-attribute">ECECED</span>',
-        <span class="hljs-attribute">borderBottom:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> #<span class="hljs-attribute">ECECED</span>',
-      }}
-      /&gt;</span>
-    )</span>;
-    <span class="hljs-keyword">const</span> row = (rowData, sectionID, rowID) =&gt; {
-      <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) {
-        index = data.length - <span class="hljs-number">1</span>;
-      }
-      <span class="hljs-keyword">const</span> obj = data[index--];
-      <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{rowID}</span>
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-            <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">8px</span> <span class="hljs-attribute">16px</span>',
-            <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">white</span>',
-          }}
-        &gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">h3</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-            <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">2</span>,
-            <span class="hljs-attribute">marginBottom:</span> <span class="hljs-attribute">8</span>,
-            <span class="hljs-attribute">borderBottom:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> #<span class="hljs-attribute">F6F6F6</span>',
-          }}
-          &gt;</span>{obj.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">-webkit-box</span>', <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>' }}&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">marginRight:</span> <span class="hljs-attribute">8</span> }} <span class="hljs-attribute">src</span>=<span class="hljs-value">{obj.img}</span> /&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">inline-block</span>' }}&gt;</span>
-              <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{obj.des}-{rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-              <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">fontSize:</span> '<span class="hljs-attribute">1.6em</span>', <span class="hljs-attribute">color:</span> '#<span class="hljs-attribute">FF6E27</span>' }}&gt;</span>35<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>元/任务<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-      )</span>;
-    };
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onManual}</span>&gt;</span>点击刷新<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.setState({ manual: false })}&gt;手动刷新<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+          注意对比和 refreshControl-auto 的用法差异
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
-        renderRow={row}
-        renderSeparator={separator}
-        initialListSize={5}
-        pageSize={5}
-        scrollRenderAheadDistance={200}
-        scrollEventThrottle={20}
-        onScroll={this.onScroll}
+        renderRow={(rowData, sectionID, rowID) =&gt; {
+          if (index <span class="hljs-tag">&lt; <span class="hljs-attribute">0</span>) {
+            <span class="hljs-attribute">index</span> = <span class="hljs-attribute">data.length</span> <span class="hljs-attribute">-</span> <span class="hljs-attribute">1</span>;
+          }
+          <span class="hljs-attribute">const</span> <span class="hljs-attribute">obj</span> = <span class="hljs-attribute">data</span>[<span class="hljs-attribute">index--</span>];
+          <span class="hljs-attribute">return</span> (
+            &lt;<span class="hljs-attribute">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{rowID}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">8px</span> <span class="hljs-attribute">16px</span>' }}&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>{obj.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>' }}&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">marginRight:</span> <span class="hljs-attribute">8</span> }} <span class="hljs-attribute">src</span>=<span class="hljs-value">{obj.img}</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">inline-block</span>' }}&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{rowData}-{obj.des}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '#<span class="hljs-attribute">FF6E27</span>', <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">15</span> }}&gt;</span>35<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          )</span>;
+        }}
+        renderSeparator={(sectionID, rowID) =&gt; (
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">F5F5F9</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">8</span> }} /&gt;</span>
+        )</span>}
+        initialListSize={<span class="hljs-number">5</span>}
+        pageSize={<span class="hljs-number">5</span>}
+        scrollRenderAheadDistance={<span class="hljs-number">200</span>}
+        scrollEventThrottle={<span class="hljs-number">20</span>}
         style={{
-          height: 400,
-          border: '1px solid #ddd',
-          margin: '10px 0',
+          height: <span class="hljs-number">400</span>,
+          border: <span class="hljs-string">'1px solid #ddd'</span>,
+          margin: <span class="hljs-string">'10px 0'</span>,
         }}
         useZscroller
-        scrollerOptions={{ scrollbars: true }}
-        refreshControl={<span class="hljs-tag">&lt;<span class="hljs-title">ListView.RefreshControl</span>
+        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span> }}
+        refreshControl={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView.RefreshControl</span>
           <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-refresh-control"</span>
           <span class="hljs-attribute">refreshing</span>=<span class="hljs-value">{this.state.refreshing}</span>
-          <span class="hljs-attribute">onRefresh</span>=<span class="hljs-value">{this.state.manual</span> ? <span class="hljs-attribute">this.onAjax</span> <span class="hljs-attribute">:</span> <span class="hljs-attribute">this.onRefresh</span>}
+          <span class="hljs-attribute">onRefresh</span>=<span class="hljs-value">{this.onRefresh}</span>
           <span class="hljs-attribute">resistance</span>=<span class="hljs-value">{1}</span>
         /&gt;</span>}
       /&gt;

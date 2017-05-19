@@ -53,7 +53,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		9:0
+/******/ 		10:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -99,7 +99,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"refreshControl","5":"simple","6":"simple-horizontal","7":"simple-paging","8":"simple-zscroller"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"indexed","1":"indexed-sticky","2":"paging","3":"paging-sticky","4":"refreshControl","5":"refreshControl-auto","6":"simple","7":"simple-horizontal","8":"simple-paging","9":"simple-zscroller"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -2178,7 +2178,7 @@
 
 /***/ }),
 /* 86 */
-[319, 87],
+[320, 87],
 /* 87 */
 /***/ (function(module, exports) {
 
@@ -5436,6 +5436,20 @@
 	      return emptyFunction.thatReturnsNull;
 	    }
 	
+	    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	      var checker = arrayOfTypeCheckers[i];
+	      if (typeof checker !== 'function') {
+	        warning(
+	          false,
+	          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+	          'received %s at index %s.',
+	          getPostfixForTypeWarning(checker),
+	          i
+	        );
+	        return emptyFunction.thatReturnsNull;
+	      }
+	    }
+	
 	    function validate(props, propName, componentName, location, propFullName) {
 	      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
 	        var checker = arrayOfTypeCheckers[i];
@@ -5568,6 +5582,9 @@
 	  // This handles more types than `getPropType`. Only used for error messages.
 	  // See `createPrimitiveTypeChecker`.
 	  function getPreciseType(propValue) {
+	    if (typeof propValue === 'undefined' || propValue === null) {
+	      return '' + propValue;
+	    }
 	    var propType = getPropType(propValue);
 	    if (propType === 'object') {
 	      if (propValue instanceof Date) {
@@ -5577,6 +5594,23 @@
 	      }
 	    }
 	    return propType;
+	  }
+	
+	  // Returns a string that is postfixed to a warning about an invalid type.
+	  // For example, "undefined" or "of type array"
+	  function getPostfixForTypeWarning(value) {
+	    var type = getPreciseType(value);
+	    switch (type) {
+	      case 'array':
+	      case 'object':
+	        return 'an ' + type;
+	      case 'boolean':
+	      case 'date':
+	      case 'regexp':
+	        return 'a ' + type;
+	      default:
+	        return type;
+	    }
 	  }
 	
 	  // Returns class name of the object, if any.
@@ -8098,7 +8132,7 @@
 
 /***/ }),
 /* 134 */
-[319, 119],
+[320, 119],
 /* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23626,11 +23660,14 @@
 	
 	var emptyFunction = __webpack_require__(92);
 	var invariant = __webpack_require__(88);
+	var ReactPropTypesSecret = __webpack_require__(112);
 	
 	module.exports = function() {
-	  // Important!
-	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-	  function shim() {
+	  function shim(props, propName, componentName, location, propFullName, secret) {
+	    if (secret === ReactPropTypesSecret) {
+	      // It is still safe when called from React.
+	      return;
+	    }
 	    invariant(
 	      false,
 	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
@@ -23642,6 +23679,8 @@
 	  function getShim() {
 	    return shim;
 	  };
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
 	  var ReactPropTypes = {
 	    array: shim,
 	    bool: shim,
@@ -24199,6 +24238,7 @@
 	      }
 	      return handleScroll;
 	    }, _this.scrollingComplete = function () {
+	      // console.log('scrolling complete');
 	      if (_this.props.refreshControl && _this.refs.refreshControl && _this.refs.refreshControl.state.deactive) {
 	        _this.refs.refreshControl.setState({ deactive: false });
 	      }
@@ -24206,6 +24246,7 @@
 	  }
 	
 	  ScrollView.prototype.componentDidUpdate = function componentDidUpdate(prevProps) {
+	    // console.log('componentDidUpdate');
 	    if (prevProps.refreshControl && this.props.refreshControl) {
 	      var preRefreshing = prevProps.refreshControl.props.refreshing;
 	      var nowRefreshing = this.props.refreshControl.props.refreshing;
@@ -24281,7 +24322,7 @@
 	    var _props = this.props,
 	        scrollerOptions = _props.scrollerOptions,
 	        refreshControl = _props.refreshControl;
-	
+	    // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
 	
 	    this.domScroller = new _zscroller2.default(_reactDom2.default.findDOMNode(this.refs[INNERVIEW]), (0, _objectAssign2.default)({}, {
 	      scrollingX: false,
@@ -24295,16 +24336,21 @@
 	          onRefresh = _refreshControl$props.onRefresh;
 	
 	      scroller.activatePullToRefresh(distanceToRefresh, function () {
+	        // console.log('first reach the distance');
 	        _this3.manuallyRefresh = true;
+	        _this3.overDistanceThenRelease = false;
 	        _this3.refs.refreshControl && _this3.refs.refreshControl.setState({ active: true });
 	      }, function () {
+	        // console.log('back to the distance', this.overDistanceThenRelease);
 	        _this3.manuallyRefresh = false;
 	        _this3.refs.refreshControl && _this3.refs.refreshControl.setState({
-	          deactive: true,
+	          deactive: _this3.overDistanceThenRelease,
 	          active: false,
 	          loadingState: false
 	        });
 	      }, function () {
+	        // console.log('Over distance and release to loading');
+	        _this3.overDistanceThenRelease = true;
 	        _this3.refs.refreshControl && _this3.refs.refreshControl.setState({
 	          deactive: false,
 	          loadingState: true
@@ -24838,9 +24884,9 @@
 /* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.7.1
+	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.12.2
 	(function() {
-	  var getNanoSeconds, hrtime, loadTime;
+	  var getNanoSeconds, hrtime, loadTime, moduleLoadTime, nodeLoadTime, upTime;
 	
 	  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
 	    module.exports = function() {
@@ -24848,7 +24894,7 @@
 	    };
 	  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
 	    module.exports = function() {
-	      return (getNanoSeconds() - loadTime) / 1e6;
+	      return (getNanoSeconds() - nodeLoadTime) / 1e6;
 	    };
 	    hrtime = process.hrtime;
 	    getNanoSeconds = function() {
@@ -24856,7 +24902,9 @@
 	      hr = hrtime();
 	      return hr[0] * 1e9 + hr[1];
 	    };
-	    loadTime = getNanoSeconds();
+	    moduleLoadTime = getNanoSeconds();
+	    upTime = process.uptime() * 1e9;
+	    nodeLoadTime = moduleLoadTime - upTime;
 	  } else if (Date.now) {
 	    module.exports = function() {
 	      return Date.now() - loadTime;
@@ -24870,6 +24918,8 @@
 	  }
 	
 	}).call(this);
+	
+	//# sourceMappingURL=performance-now.js.map
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
@@ -28655,7 +28705,8 @@
 /* 316 */,
 /* 317 */,
 /* 318 */,
-/* 319 */
+/* 319 */,
+/* 320 */
 /***/ (function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**

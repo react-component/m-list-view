@@ -1,9 +1,9 @@
-webpackJsonp([5],{
+webpackJsonp([6],{
 
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(315);
+	module.exports = __webpack_require__(316);
 
 
 /***/ }),
@@ -16,7 +16,7 @@ webpackJsonp([5],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
+	exports.myData = exports.Thumb = exports.TouchableOpacity = exports.TouchableHighlight = exports.THUMB_URLS = undefined;
 	
 	var _classCallCheck2 = __webpack_require__(2);
 	
@@ -188,10 +188,24 @@ webpackJsonp([5],{
 	
 	  return Thumb;
 	}(_react2.default.Component);
+	
+	var myData = exports.myData = [{
+	  img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+	  title: '相约酒店',
+	  des: '不是所有的兼职汪都需要风吹日晒'
+	}, {
+	  img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
+	  title: '麦当劳邀您过周末',
+	  des: '不是所有的兼职汪都需要风吹日晒'
+	}, {
+	  img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
+	  title: '食惠周',
+	  des: '不是所有的兼职汪都需要风吹日晒'
+	}];
 
 /***/ }),
 
-/***/ 315:
+/***/ 316:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

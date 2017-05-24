@@ -25,9 +25,6 @@
   "license": "MIT",
   "main": "./lib/index",
   "module": "./es/index",
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "config": {
     "port": 8999
   },

@@ -383,4 +383,5 @@ function keyedDictionaryFromArray(arr) {
 }
 
 
-module.exports = ListViewDataSource;
+// module.exports = ListViewDataSource;
+export default ListViewDataSource;

@@ -493,4 +493,5 @@ let ScrollResponder = {
   Mixin: ScrollResponderMixin,
 };
 
-module.exports = ScrollResponder;
+// module.exports = ScrollResponder;
+export default ScrollResponder;

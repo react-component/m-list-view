@@ -5,9 +5,6 @@ import RefreshControl from './RefreshControl';
 ListView.IndexedList = IndexedList;
 ListView.RefreshControl = RefreshControl;
 
-export {
-  IndexedList,
-  RefreshControl,
-};
-
+const DataSource = ListView.DataSource;
+export { DataSource, IndexedList, RefreshControl };
 export default ListView;

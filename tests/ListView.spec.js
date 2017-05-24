@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { render/* , mount */ } from 'enzyme';
-import { renderToJson } from 'enzyme-to-json';
 import ListView from '..';
 
 describe('ListView', () => {
@@ -24,6 +23,6 @@ describe('ListView', () => {
       }
     }
     const wrapper = render(<Minimal />);
-    expect(renderToJson(wrapper)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

@@ -31,6 +31,7 @@
   },
   "scripts": {
     "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
@@ -41,7 +42,13 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*"
-    ]
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "transform": {
+      "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
+    }
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
@@ -49,7 +56,7 @@
     "enzyme-to-json": "^1.4.5",
     "jest": "^19.0.2",
     "pre-commit": "1.x",
-    "rc-tools": "5.x",
+    "rc-tools": "6.x",
     "react": "15.x",
     "react-dom": "15.x",
     "react-test-renderer": "15.x"

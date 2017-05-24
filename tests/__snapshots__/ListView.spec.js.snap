@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListView renders correctly 1`] = `
+<div
+  class="rmc-list-view-scrollview"
+  style="position:relative;overflow:auto;-webkit-overflow-scrolling:touch;flex:1;"
+>
+  <div
+    class="rmc-list-view-scrollview-content"
+    style="position:absolute;min-width:100%;"
+  >
+    <div>
+      <div
+        class="list-view-section-body"
+      >
+        <span>
+          row 1
+        </span>
+        <span>
+          row 2
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

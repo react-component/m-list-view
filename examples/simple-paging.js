@@ -390,7 +390,7 @@ __WEBPACK_IMPORTED_MODULE_7_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 329:
+/***/ 328:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(161);
@@ -398,5 +398,5 @@ module.exports = __webpack_require__(161);
 
 /***/ })
 
-},[329]);
+},[328]);
 //# sourceMappingURL=simple-paging.js.map

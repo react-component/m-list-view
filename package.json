@@ -67,6 +67,6 @@
     "react-mixin": "^3.0.5",
     "react-sticky": "^5.0.2",
     "react-timer-mixin": "^0.13.3",
-    "zscroller": "~0.2.2"
+    "zscroller": "~0.3.0"
   }
 }

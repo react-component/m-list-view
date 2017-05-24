@@ -1,6 +1,6 @@
 {
   "name": "rmc-list-view",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "m-list-view ui component for react",
   "keywords": [
     "react",
@@ -19,10 +19,12 @@
   },
   "files": [
     "lib",
+    "es",
     "assets/*.css"
   ],
   "license": "MIT",
   "main": "./lib/index",
+  "module": "./es/index",
   "engines": {
     "node": ">=4.0.0"
   },

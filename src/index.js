@@ -4,4 +4,10 @@ import IndexedList from './Indexed';
 import RefreshControl from './RefreshControl';
 ListView.IndexedList = IndexedList;
 ListView.RefreshControl = RefreshControl;
+
+export {
+  IndexedList,
+  RefreshControl,
+};
+
 export default ListView;

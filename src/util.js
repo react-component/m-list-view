@@ -21,7 +21,7 @@ export function _event(e) {
 
 export function throttle(fn, delay) {
   let allowSample = true;
-  return function (e) {
+  return function _throttle(e) {
     if (allowSample) {
       allowSample = false;
       setTimeout(() => { allowSample = true; }, delay);

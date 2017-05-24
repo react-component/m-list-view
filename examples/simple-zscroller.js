@@ -1,3 +1,4 @@
+/* eslint-disable no-console, no-alert */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';

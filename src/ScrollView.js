@@ -200,7 +200,7 @@ export default class ScrollView extends React.Component {
     };
     const contentContainerProps = {
       ref: INNERVIEW,
-      style: assign({}, { position: 'absolute', minWidth: '100%' }, contentContainerStyle),
+      style: assign({}, { minWidth: '100%' }, contentContainerStyle),
       className: classNames({
         [`${preCls}-scrollview-content`]: true,
         [listPrefixCls]: !!listPrefixCls,

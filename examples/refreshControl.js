@@ -27,10 +27,11 @@ class Demo extends React.Component {
   }
   onRefresh = () => {
     console.log('onRefresh');
-    this.setState({ refreshing: true });
-    this.onAjax();
-  }
-  onAjax = () => {
+    if (!this.manuallyRefresh) {
+      this.setState({ refreshing: true });
+    } else {
+      this.manuallyRefresh = false;
+    }
     setTimeout(() => {
       this.initData = [`ref${pageIndex++}`, ...this.initData];
       this.setState({
@@ -44,7 +45,11 @@ class Demo extends React.Component {
       <ListView
         dataSource={this.state.dataSource}
         renderHeader={() => <div>
-          注意对比和 refreshControl-auto 的用法差异
+          <button onClick={() => {
+            this.manuallyRefresh = true;
+            this.setState({ refreshing: true });
+          }}
+          >点击自动刷新</button>
         </div>}
         renderRow={(rowData, sectionID, rowID) => {
           if (index < 0) {

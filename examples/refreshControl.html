@@ -298,10 +298,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
   onRefresh = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
-    <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
-    <span class="hljs-keyword">this</span>.onAjax();
-  }
-  onAjax = () =&gt; {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.manuallyRefresh) {
+      <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">this</span>.manuallyRefresh = <span class="hljs-literal">false</span>;
+    }
     setTimeout(() =&gt; {
       <span class="hljs-keyword">this</span>.initData = [<span class="hljs-string">`ref<span class="hljs-subst">${pageIndex++}</span>`</span>, ...this.initData];
       <span class="hljs-keyword">this</span>.setState({
@@ -315,7 +316,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-          注意对比和 refreshControl-auto 的用法差异
+          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> {
+            this.manuallyRefresh = true;
+            this.setState({ refreshing: true });
+          }}
+          &gt;点击自动刷新<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
         renderRow={(rowData, sectionID, rowID) =&gt; {
           if (index <span class="hljs-tag">&lt; <span class="hljs-attribute">0</span>) {

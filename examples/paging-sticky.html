@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging-sticky.js - example - rmc-list-view@0.8.1</title>
+  <title>paging-sticky.js - example - rmc-list-view@0.8.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.8.1</h1>
+      <h1>rmc-list-view@0.8.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -326,6 +326,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
   componentDidMount() {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.refs.lv);
+    setTimeout(() =&gt; <span class="hljs-keyword">this</span>.refs.lv.scrollTo(<span class="hljs-number">0</span>, <span class="hljs-number">200</span>), <span class="hljs-number">800</span>);
   }
   _onEndReached = (event) =&gt; {
     <span class="hljs-comment">// load new data</span>
@@ -345,7 +346,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> (
           <span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">90</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>Table Header<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this.refs.lv.scrollTo(0, 100); }}&gt;scrollTo(0, 100)<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
         )</span>}
         renderSectionHeader={(sectionData) =&gt; (

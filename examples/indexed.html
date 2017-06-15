@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>indexed.js - example - rmc-list-view@0.8.1</title>
+  <title>indexed.js - example - rmc-list-view@0.8.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.8.1</h1>
+      <h1>rmc-list-view@0.8.2</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -321,13 +321,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="hljs-keyword">this</span>.setState({
         dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
       });
-    }, <span class="hljs-number">1000</span>);
+    }, <span class="hljs-number">700</span>);
   }
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> '<span class="hljs-attribute">10px</span> <span class="hljs-attribute">auto</span>', <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">80</span>%', <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">relative</span>' }}&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView.IndexedList</span>
         <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
-        <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">500</span> }}
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
         <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
         renderFooter={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">10</span> }}&gt;</span>footer<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
@@ -342,6 +341,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           position: <span class="hljs-string">'absolute'</span>,
           top: <span class="hljs-number">20</span>, right: <span class="hljs-number">30</span>,
         }}
+        style={{ height: <span class="hljs-number">500</span> }}
         onQuickSearch={(sectionID) =&gt; <span class="hljs-built_in">console</span>.log(sectionID)}
         showQuickSearchIndicator
         delayTime={<span class="hljs-number">100</span>}

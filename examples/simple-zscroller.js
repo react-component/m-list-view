@@ -25,7 +25,7 @@ class Demo extends React.Component {
   componentDidMount() {
     // you can scroll to the specified position
     // console.log(this.refs.lv.refs);
-    setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
+    setTimeout(() => this.refs.lv.scrollTo(0, 50), 800);
   }
 
   render() {

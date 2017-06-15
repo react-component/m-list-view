@@ -96,6 +96,8 @@ export default class ScrollView extends React.Component {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       window.scrollTo(...args);
     } else if (this.props.useZscroller) {
+      // it will change zScroller's dimensions on data loaded, so it needs fire reflow.
+      this.domScroller.reflow();
       this.domScroller.scroller.scrollTo(...args);
     } else {
       const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);

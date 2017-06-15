@@ -22,18 +22,17 @@ class Demo extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // you can scroll to the specified position
+    // console.log(this.refs.lv.refs);
+    setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
+  }
+
   render() {
     return (
       <ListView
-        style={{ height: 200 }}
+        ref="lv"
         dataSource={this.state.dataSource}
-        onEndReached={e => alert(e.toString())}
-        onEndReachedThreshold={10}
-        onScroll={e => console.log(e.toString())}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={30}
-        initialListSize={5}
-        pageSize={5}
         renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <Image style={{ width: 64, height: 64 }} source={THUMB_URLS[0]} />
@@ -50,7 +49,15 @@ class Demo extends React.Component {
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
         sectionBodyClassName="sb"
+        style={{ height: 200 }}
         useZscroller
+        onEndReached={e => alert(e.toString())}
+        onEndReachedThreshold={10}
+        onScroll={e => console.log(e.toString())}
+        scrollEventThrottle={20}
+        scrollRenderAheadDistance={30}
+        initialListSize={5}
+        pageSize={5}
         scrollerOptions={{ scrollbars: true }}
       />
     );

@@ -50,13 +50,12 @@ class Demo extends React.Component {
       this.setState({
         dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
       });
-    }, 1000);
+    }, 700);
   }
   render() {
     return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
       <ListView.IndexedList
         ref="lv"
-        style={{ height: 500 }}
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}
@@ -71,6 +70,7 @@ class Demo extends React.Component {
           position: 'absolute',
           top: 20, right: 30,
         }}
+        style={{ height: 500 }}
         onQuickSearch={(sectionID) => console.log(sectionID)}
         showQuickSearchIndicator
         delayTime={100}

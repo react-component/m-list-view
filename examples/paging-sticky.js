@@ -55,6 +55,7 @@ class Demo extends React.Component {
   }
   componentDidMount() {
     console.log(this.refs.lv);
+    setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
   }
   _onEndReached = (event) => {
     // load new data
@@ -74,7 +75,6 @@ class Demo extends React.Component {
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
             <Text>Table Header</Text>
-            <button onClick={() => { this.refs.lv.scrollTo(0, 100); }}>scrollTo(0, 100)</button>
           </View>
         )}
         renderSectionHeader={(sectionData) => (

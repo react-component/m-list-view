@@ -55,6 +55,11 @@ class Demo extends React.Component {
       isLoading: false,
     };
   }
+  componentDidMount() {
+    // you can scroll to the specified position
+    // console.log(this.refs.lv.refs);
+    setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
+  }
   _onEndReached = (event) => {
     // load new data
     console.log('reach end', event);
@@ -73,12 +78,10 @@ class Demo extends React.Component {
     return (<div style={{ margin: '10px auto', width: '80%' }}>
       <ListView
         ref="lv"
-        style={{ height: 200 }}
         dataSource={this.state.dataSource}
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
             <Text>Table Header</Text>
-            <button onClick={() => { this.refs.lv.scrollTo(0, 200); }}>scrollTo(0, 200)</button>
           </View>
         )}
         renderSectionHeader={(sectionData) => (
@@ -105,6 +108,7 @@ class Demo extends React.Component {
             {this.state.isLoading ? 'loading...' : 'loaded'}
           </View>
         )}
+        style={{ height: 200 }}
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
@@ -112,7 +116,6 @@ class Demo extends React.Component {
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this._onEndReached}
         onEndReachedThreshold={10}
-        useZscroller
         scrollerOptions={{ scrollbars: true }}
         renderBodyComponent={() => <div className="for-body-demo" />}
         onLayout={() => console.log('onLayout')}

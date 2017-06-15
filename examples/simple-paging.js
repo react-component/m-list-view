@@ -51,9 +51,9 @@ class Demo extends React.Component {
       >
         {this.state.destroy ? 'create' : 'destroy'} ListView
       </button>
-      {!this.state.destroy ? <ListView ref="lv"
+      {!this.state.destroy ? <ListView
+        ref="lv"
         dataSource={this.state.dataSource}
-        useBodyScroll
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
             <Text>设置了`useBodyScroll`，使用 html body 作为滚动容器</Text>
@@ -73,6 +73,7 @@ class Demo extends React.Component {
         renderRow={(rowData) => (<tr style={{ height: 50 }}>
           <td>{rowData}Let me keep typing here so it wraps at least one line.</td>
         </tr>)}
+        useBodyScroll
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}

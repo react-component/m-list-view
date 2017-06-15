@@ -29,14 +29,7 @@ class Demo extends React.Component {
       <button onClick={() => { this.refs.lv.scrollTo(0, 100); }}>scrollTo(0, 100)</button>
       <ListView
         ref="lv"
-        style={{ height: 200 }}
         dataSource={this.state.dataSource}
-        onEndReached={e => console.log(e.toString())}
-        onEndReachedThreshold={10}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
-        initialListSize={5}
-        pageSize={5}
         renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <Image style={{ width: 64, height: 64 }} source={THUMB_URLS[0]} />
@@ -52,6 +45,13 @@ class Demo extends React.Component {
           />
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
+        style={{ height: 200 }}
+        onEndReached={e => console.log(e.toString())}
+        onEndReachedThreshold={10}
+        scrollEventThrottle={20}
+        scrollRenderAheadDistance={100}
+        initialListSize={5}
+        pageSize={5}
       />
       <div>
         <p>note: temporary disable bodyScroll can have a better experience</p>

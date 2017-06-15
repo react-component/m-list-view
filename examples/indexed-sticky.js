@@ -48,6 +48,7 @@ class Demo extends React.Component {
   render() {
     return (<div>
       <ListView.IndexedList
+        ref="lv"
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}

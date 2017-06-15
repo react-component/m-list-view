@@ -43,6 +43,7 @@ class Demo extends React.Component {
   render() {
     return (
       <ListView
+        ref="lv"
         dataSource={this.state.dataSource}
         renderHeader={() => <div>
           <button onClick={() => {

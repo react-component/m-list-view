@@ -36,24 +36,8 @@ class Demo extends React.Component {
         ` }}
       />
       <ListView horizontal
-        style={{
-          height: 120,
-          width: '90%',
-          margin: '10px auto',
-          border: '1px solid #ddd',
-          overflowX: 'scroll',
-          overflowY: 'hidden',
-        }}
-        contentContainerStyle={{
-          height: '100%',
-        }}
+        ref="lv"
         dataSource={this.state.dataSource}
-        onEndReached={e => console.log(e.toString())}
-        onEndReachedThreshold={10}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
-        initialListSize={5}
-        pageSize={5}
         renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <img src={THUMB_URLS[0]} />
@@ -70,6 +54,23 @@ class Demo extends React.Component {
           />
         )}
         renderBodyComponent={() => <div className="for-body-demo" />}
+        contentContainerStyle={{
+          height: '100%',
+        }}
+        style={{
+          height: 120,
+          width: '90%',
+          margin: '10px auto',
+          border: '1px solid #ddd',
+          overflowX: 'scroll',
+          overflowY: 'hidden',
+        }}
+        onEndReached={e => console.log(e.toString())}
+        onEndReachedThreshold={10}
+        scrollEventThrottle={20}
+        scrollRenderAheadDistance={100}
+        initialListSize={5}
+        pageSize={5}
       />
     </div>);
   }

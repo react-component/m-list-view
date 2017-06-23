@@ -241,6 +241,12 @@ var Demo = function (_React$Component) {
 
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
+    _this.changeData = function () {
+      _this.setState({
+        dataSource: _this.state.dataSource.cloneWithRows({ xx: 'xxx' })
+      });
+    };
+
     _this._onEndReached = function (event) {
       // load new data
       console.log('reach end', event);
@@ -297,6 +303,11 @@ var Demo = function (_React$Component) {
           this.state.destroy ? 'create' : 'destroy',
           ' ListView'
         ),
+        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
+          'button',
+          { onClick: this.changeData },
+          'changeData'
+        ),
         !this.state.destroy ? __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_rmc_list_view__["a" /* default */], {
           ref: 'lv',
           dataSource: this.state.dataSource,
@@ -344,10 +355,7 @@ var Demo = function (_React$Component) {
           initialListSize: 10,
           pageSize: 4,
           scrollRenderAheadDistance: 500,
-          scrollEventThrottle: 20,
-          onScroll: function onScroll() {
-            console.log('scroll');
-          },
+          scrollEventThrottle: 200,
           onEndReached: this._onEndReached,
           onEndReachedThreshold: 100
         }) : null,

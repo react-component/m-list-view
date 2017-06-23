@@ -13715,8 +13715,26 @@ var ScrollView = function (_React$Component) {
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(ScrollView, [{
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps) {
+      // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
+      // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
+      // 内容变化后 scrollTop 如果改变、会自动触发 scroll 事件，而此事件应该避免被执行
+      if ((this.props.dataSource !== nextProps.dataSource || this.props.initialListSize !== nextProps.initialListSize) && this.tsExec) {
+        // console.log('componentWillUpdate');
+        if (this.props.stickyHeader || this.props.useBodyScroll) {
+          window.removeEventListener('scroll', this.tsExec);
+        } else if (!this.props.useZscroller) {
+          // not handle useZscroller now. todo
+          __WEBPACK_IMPORTED_MODULE_7_react_dom___default.a.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+        }
+      }
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps) {
+      var _this2 = this;
+
       // console.log('componentDidUpdate');
       if (prevProps.refreshControl && this.props.refreshControl) {
         var preRefreshing = prevProps.refreshControl.props.refreshing;
@@ -13727,17 +13745,29 @@ var ScrollView = function (_React$Component) {
           this.domScroller.scroller.triggerPullToRefresh();
         }
       }
+      // handle componentWillUpdate accordingly
+      if ((this.props.dataSource !== prevProps.dataSource || this.props.initialListSize !== prevProps.initialListSize) && this.tsExec) {
+        // console.log('componentDidUpdate');
+        setTimeout(function () {
+          if (_this2.props.stickyHeader || _this2.props.useBodyScroll) {
+            window.addEventListener('scroll', _this2.tsExec);
+          } else if (!_this2.props.useZscroller) {
+            // not handle useZscroller now. todo
+            __WEBPACK_IMPORTED_MODULE_7_react_dom___default.a.findDOMNode(_this2.refs[SCROLLVIEW]).addEventListener('scroll', _this2.tsExec);
+          }
+        }, 0);
+      }
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.tsExec = this.throttleScroll();
       // IE supports onresize on all HTML elements.
       // In all other Browsers the onresize is only available at the window object
       this.onLayout = function () {
-        return _this2.props.onLayout({
+        return _this3.props.onLayout({
           nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } }
         });
       };
@@ -13794,7 +13824,7 @@ var ScrollView = function (_React$Component) {
   }, {
     key: 'renderZscroller',
     value: function renderZscroller() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _props = this.props,
           scrollerOptions = _props.scrollerOptions,
@@ -13814,31 +13844,31 @@ var ScrollView = function (_React$Component) {
 
         scroller.activatePullToRefresh(distanceToRefresh, function () {
           // console.log('first reach the distance');
-          _this3.manuallyRefresh = true;
-          _this3.overDistanceThenRelease = false;
-          _this3.refs.refreshControl && _this3.refs.refreshControl.setState({ active: true });
+          _this4.manuallyRefresh = true;
+          _this4.overDistanceThenRelease = false;
+          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({ active: true });
         }, function () {
           // console.log('back to the distance', this.overDistanceThenRelease);
-          _this3.manuallyRefresh = false;
-          _this3.refs.refreshControl && _this3.refs.refreshControl.setState({
-            deactive: _this3.overDistanceThenRelease,
+          _this4.manuallyRefresh = false;
+          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({
+            deactive: _this4.overDistanceThenRelease,
             active: false,
             loadingState: false
           });
         }, function () {
           // console.log('Over distance and release to loading');
-          _this3.overDistanceThenRelease = true;
-          _this3.refs.refreshControl && _this3.refs.refreshControl.setState({
+          _this4.overDistanceThenRelease = true;
+          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({
             deactive: false,
             loadingState: true
           });
           var finishPullToRefresh = function finishPullToRefresh() {
             scroller.finishPullToRefresh();
-            _this3.refreshControlRefresh = null;
+            _this4.refreshControlRefresh = null;
           };
           Promise.all([new Promise(function (resolve) {
             onRefresh();
-            _this3.refreshControlRefresh = resolve;
+            _this4.refreshControlRefresh = resolve;
           }),
           // at lease 1s for ux
           new Promise(function (resolve) {

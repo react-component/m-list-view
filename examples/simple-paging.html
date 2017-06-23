@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple-paging.js - example - rmc-list-view@0.8.2</title>
+  <title>simple-paging.js - example - rmc-list-view@0.8.3</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.8.2</h1>
+      <h1>rmc-list-view@0.8.3</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -303,6 +303,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       destroy: <span class="hljs-literal">false</span>,
     };
   }
+  changeData = () =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows({ xx: <span class="hljs-string">'xxx'</span> }),
+    });
+  }
   _onEndReached = (event) =&gt; {
     <span class="hljs-comment">// load new data</span>
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
@@ -322,6 +327,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       &gt;
         {this.state.destroy ? 'create' : 'destroy'} ListView
       <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.changeData}</span>&gt;</span>changeData<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
       {!this.state.destroy ? <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
         <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
@@ -348,8 +354,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         initialListSize={<span class="hljs-number">10</span>}
         pageSize={<span class="hljs-number">4</span>}
         scrollRenderAheadDistance={<span class="hljs-number">500</span>}
-        scrollEventThrottle={<span class="hljs-number">20</span>}
-        onScroll={() =&gt; { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scroll'</span>); } }
+        scrollEventThrottle={<span class="hljs-number">200</span>}
         onEndReached={<span class="hljs-keyword">this</span>._onEndReached}
         onEndReachedThreshold={<span class="hljs-number">100</span>}
       /&gt; : <span class="hljs-literal">null</span>}

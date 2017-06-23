@@ -43,7 +43,20 @@ const styles = {
 
 export default class ScrollView extends React.Component {
   static propTypes = propTypes;
-
+  componentWillUpdate(nextProps) {
+    // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
+    // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
+    // 内容变化后 scrollTop 如果改变、会自动触发 scroll 事件，而此事件应该避免被执行
+    if ((this.props.dataSource !== nextProps.dataSource ||
+        this.props.initialListSize !== nextProps.initialListSize) && this.tsExec) {
+      // console.log('componentWillUpdate');
+      if (this.props.stickyHeader || this.props.useBodyScroll) {
+        window.removeEventListener('scroll', this.tsExec);
+      } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
+        ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+      }
+    }
+  }
   componentDidUpdate(prevProps) {
     // console.log('componentDidUpdate');
     if (prevProps.refreshControl && this.props.refreshControl) {
@@ -54,6 +67,18 @@ export default class ScrollView extends React.Component {
       } else if (!this.manuallyRefresh && !preRefreshing && nowRefreshing) {
         this.domScroller.scroller.triggerPullToRefresh();
       }
+    }
+    // handle componentWillUpdate accordingly
+    if ((this.props.dataSource !== prevProps.dataSource ||
+        this.props.initialListSize !== prevProps.initialListSize) && this.tsExec) {
+      // console.log('componentDidUpdate');
+      setTimeout(() => {
+        if (this.props.stickyHeader || this.props.useBodyScroll) {
+          window.addEventListener('scroll', this.tsExec);
+        } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
+          ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.tsExec);
+        }
+      }, 0);
     }
   }
   componentDidMount() {

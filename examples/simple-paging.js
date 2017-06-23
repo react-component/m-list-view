@@ -32,6 +32,11 @@ class Demo extends React.Component {
       destroy: false,
     };
   }
+  changeData = () => {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows({ xx: 'xxx' }),
+    });
+  }
   _onEndReached = (event) => {
     // load new data
     console.log('reach end', event);
@@ -51,6 +56,7 @@ class Demo extends React.Component {
       >
         {this.state.destroy ? 'create' : 'destroy'} ListView
       </button>
+      <button onClick={this.changeData}>changeData</button>
       {!this.state.destroy ? <ListView
         ref="lv"
         dataSource={this.state.dataSource}
@@ -77,8 +83,7 @@ class Demo extends React.Component {
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
-        scrollEventThrottle={20}
-        onScroll={() => { console.log('scroll'); } }
+        scrollEventThrottle={200}
         onEndReached={this._onEndReached}
         onEndReachedThreshold={100}
       /> : null}

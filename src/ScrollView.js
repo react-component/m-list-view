@@ -43,6 +43,10 @@ const styles = {
 
 export default class ScrollView extends React.Component {
   static propTypes = propTypes;
+  getInnerViewNode() {
+    // console.log(this.refs);
+    return ReactDOM.findDOMNode(this.refs[INNERVIEW]);
+  }
   componentWillUpdate(nextProps) {
     // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
     // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
@@ -154,7 +158,7 @@ export default class ScrollView extends React.Component {
     const { scrollingComplete, onScroll, ...restProps } = scrollerOptions;
     // console.log(scrollingComplete, onScroll, restProps);
     // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
-    this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
+    this.domScroller = new DOMScroller(this.getInnerViewNode(), assign({}, {
       scrollingX: false,
       onScroll: () => {
         this.tsExec();

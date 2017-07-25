@@ -108,10 +108,12 @@ class ListView extends React.Component {
 
   setNativeProps(props) {
     this.refs[SCROLLVIEW_REF] &&
+    this.refs[SCROLLVIEW_REF].setNativeProps &&
     this.refs[SCROLLVIEW_REF].setNativeProps(props);
   }
 
   getInnerViewNode() {
+    // console.log(this.refs[SCROLLVIEW_REF]);
     return this.refs[SCROLLVIEW_REF].getInnerViewNode();
   }
 

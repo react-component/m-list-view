@@ -55,6 +55,9 @@ class Demo extends React.Component {
   }
   componentDidMount() {
     console.log(this.refs.lv);
+    // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
+    console.log(ReactDOM.findDOMNode(this.refs.lv));
+    console.log(this.refs.lv.getInnerViewNode());
     setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
   }
   _onEndReached = (event) => {

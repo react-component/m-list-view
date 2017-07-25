@@ -151,12 +151,25 @@ export default class ScrollView extends React.Component {
 
   renderZscroller() {
     const { scrollerOptions, refreshControl } = this.props;
+    const { scrollingComplete, onScroll, ...restProps } = scrollerOptions;
+    // console.log(scrollingComplete, onScroll, restProps);
     // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
     this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
       scrollingX: false,
-      onScroll: this.tsExec,
-      scrollingComplete: this.scrollingComplete,
-    }, scrollerOptions));
+      onScroll: () => {
+        this.tsExec();
+        if (onScroll) {
+          onScroll();
+        }
+      },
+      scrollingComplete: () => {
+        this.scrollingComplete();
+        if (scrollingComplete) {
+          scrollingComplete();
+        }
+      },
+      ...restProps,
+    }));
     if (refreshControl) {
       const scroller = this.domScroller.scroller;
       const { distanceToRefresh, onRefresh } = refreshControl.props;

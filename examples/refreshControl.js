@@ -25,6 +25,35 @@ class Demo extends React.Component {
       refreshing: false,
     };
   }
+  componentDidMount() {
+    // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
+    this.refs.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
+      this.tsPageY = e.touches[0].pageY;
+    });
+    this.refs.lv.getInnerViewNode().addEventListener('touchmove', this.tm = (e) => {
+      this.tmPageY = e.touches[0].pageY;
+      if (this.tmPageY > this.tsPageY && this.st <= 0 && document.body.scrollTop > 0) {
+        console.log('start pull to refresh');
+        this.domScroller.options.touchmoveNotPreventDefault = true;
+      } else {
+        this.domScroller.options.touchmoveNotPreventDefault = false;
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.refs.lv.getInnerViewNode().removeEventListener('touchstart', this.ts);
+    this.refs.lv.getInnerViewNode().removeEventListener('touchmove', this.tm);
+  }
+  onScroll = (e) => {
+    // onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229
+    this.st = e.scroller.getValues().top;
+    this.domScroller = e;
+    // console.log(e.scroller.getValues())
+    // console.log(e)
+    // if (document.body.scrollTop > 0) {
+    //   e.options.touchmoveNotPreventDefault = true;
+    // }
+  }
   onRefresh = () => {
     console.log('onRefresh');
     if (!this.manuallyRefresh) {
@@ -39,6 +68,9 @@ class Demo extends React.Component {
         refreshing: false,
       });
     }, 1000);
+  }
+  scrollingComplete = () => {
+    console.log('scrollingComplete');
   }
   render() {
     return (
@@ -83,13 +115,14 @@ class Demo extends React.Component {
           margin: '10px 0',
         }}
         useZscroller
-        scrollerOptions={{ scrollbars: true }}
+        scrollerOptions={{ scrollbars: true, scrollingComplete: this.scrollingComplete }}
         refreshControl={<ListView.RefreshControl
           className="my-refresh-control"
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
           resistance={1}
         />}
+        onScroll={this.onScroll}
       />
     );
   }

@@ -20,9 +20,9 @@ webpackJsonp([0],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_objectWithoutProperties__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react__);
@@ -214,7 +214,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react_dom__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rmc_list_view__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rmc_list_view__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__util__ = __webpack_require__(13);
 
 
@@ -240,6 +240,12 @@ var Demo = function (_React$Component) {
 
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
+    _this.onScroll = function (e) {
+      // onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229
+      _this.st = e.scroller.getValues().top;
+      _this.domScroller = e;
+    };
+
     _this.onRefresh = function () {
       console.log('onRefresh');
       if (!_this.manuallyRefresh) {
@@ -254,6 +260,10 @@ var Demo = function (_React$Component) {
           refreshing: false
         });
       }, 1000);
+    };
+
+    _this.scrollingComplete = function () {
+      console.log('scrollingComplete');
     };
 
     var dataSource = new __WEBPACK_IMPORTED_MODULE_8_rmc_list_view__["a" /* default */].DataSource({
@@ -274,9 +284,34 @@ var Demo = function (_React$Component) {
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Demo, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
+      this.refs.lv.getInnerViewNode().addEventListener('touchstart', this.ts = function (e) {
+        _this2.tsPageY = e.touches[0].pageY;
+      });
+      this.refs.lv.getInnerViewNode().addEventListener('touchmove', this.tm = function (e) {
+        _this2.tmPageY = e.touches[0].pageY;
+        if (_this2.tmPageY > _this2.tsPageY && _this2.st <= 0 && document.body.scrollTop > 0) {
+          console.log('start pull to refresh');
+          _this2.domScroller.options.preventDefaultOnTouchMove = false;
+        } else {
+          _this2.domScroller.options.preventDefaultOnTouchMove = undefined;
+        }
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.refs.lv.getInnerViewNode().removeEventListener('touchstart', this.ts);
+      this.refs.lv.getInnerViewNode().removeEventListener('touchmove', this.tm);
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_rmc_list_view__["a" /* default */], {
         ref: 'lv',
@@ -288,8 +323,8 @@ var Demo = function (_React$Component) {
             __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
               'button',
               { onClick: function onClick() {
-                  _this2.manuallyRefresh = true;
-                  _this2.setState({ refreshing: true });
+                  _this3.manuallyRefresh = true;
+                  _this3.setState({ refreshing: true });
                 }
               },
               '\u70B9\u51FB\u81EA\u52A8\u5237\u65B0'
@@ -345,13 +380,14 @@ var Demo = function (_React$Component) {
           margin: '10px 0'
         },
         useZscroller: true,
-        scrollerOptions: { scrollbars: true },
+        scrollerOptions: { scrollbars: true, scrollingComplete: this.scrollingComplete },
         refreshControl: __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_rmc_list_view__["a" /* default */].RefreshControl, {
           className: 'my-refresh-control',
           refreshing: this.state.refreshing,
           onRefresh: this.onRefresh,
           resistance: 1
-        })
+        }),
+        onScroll: this.onScroll
       });
     }
   }]);
@@ -412,7 +448,7 @@ module.exports = __webpack_require__(23).Array.from;
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
 var cof = __webpack_require__(62)
-  , TAG = __webpack_require__(18)('toStringTag')
+  , TAG = __webpack_require__(19)('toStringTag')
   // ES3 wrong here
   , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 
@@ -456,7 +492,7 @@ module.exports = function(object, index, value){
 
 // check on default Array iterator
 var Iterators  = __webpack_require__(44)
-  , ITERATOR   = __webpack_require__(18)('iterator')
+  , ITERATOR   = __webpack_require__(19)('iterator')
   , ArrayProto = Array.prototype;
 
 module.exports = function(it){
@@ -486,7 +522,7 @@ module.exports = function(iterator, fn, value, entries){
 /***/ 187:
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR     = __webpack_require__(18)('iterator')
+var ITERATOR     = __webpack_require__(19)('iterator')
   , SAFE_CLOSING = false;
 
 try {
@@ -514,7 +550,7 @@ module.exports = function(exec, skipClosing){
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof   = __webpack_require__(179)
-  , ITERATOR  = __webpack_require__(18)('iterator')
+  , ITERATOR  = __webpack_require__(19)('iterator')
   , Iterators = __webpack_require__(44);
 module.exports = __webpack_require__(23).getIteratorMethod = function(it){
   if(it != undefined)return it[ITERATOR]

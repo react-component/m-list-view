@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>refreshControl.js - example - rmc-list-view@0.8.3</title>
+  <title>refreshControl.js - example - rmc-list-view@0.8.4</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.8.3</h1>
+      <h1>rmc-list-view@0.8.4</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -296,6 +296,30 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       refreshing: <span class="hljs-literal">false</span>,
     };
   }
+  componentDidMount() {
+    <span class="hljs-comment">// console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);</span>
+    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
+      <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;
+    });
+    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
+      <span class="hljs-keyword">this</span>.tmPageY = e.touches[<span class="hljs-number">0</span>].pageY;
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.st &lt;= <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">document</span>.body.scrollTop &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'start pull to refresh'</span>);
+        <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">false</span>;
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">undefined</span>;
+      }
+    });
+  }
+  componentWillUnmount() {
+    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts);
+    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm);
+  }
+  onScroll = (e) =&gt; {
+    <span class="hljs-comment">// onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229</span>
+    <span class="hljs-keyword">this</span>.st = e.scroller.getValues().top;
+    <span class="hljs-keyword">this</span>.domScroller = e;
+  }
   onRefresh = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.manuallyRefresh) {
@@ -310,6 +334,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         refreshing: <span class="hljs-literal">false</span>,
       });
     }, <span class="hljs-number">1000</span>);
+  }
+  scrollingComplete = () =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scrollingComplete'</span>);
   }
   render() {
     <span class="hljs-keyword">return</span> (
@@ -354,13 +381,14 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           margin: <span class="hljs-string">'10px 0'</span>,
         }}
         useZscroller
-        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span> }}
+        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: <span class="hljs-keyword">this</span>.scrollingComplete }}
         refreshControl={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView.RefreshControl</span>
           <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-refresh-control"</span>
           <span class="hljs-attribute">refreshing</span>=<span class="hljs-value">{this.state.refreshing}</span>
           <span class="hljs-attribute">onRefresh</span>=<span class="hljs-value">{this.onRefresh}</span>
           <span class="hljs-attribute">resistance</span>=<span class="hljs-value">{1}</span>
         /&gt;</span>}
+        onScroll={this.onScroll}
       /&gt;
     )</span>;
   }

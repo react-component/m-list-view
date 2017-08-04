@@ -34,9 +34,9 @@ class Demo extends React.Component {
       this.tmPageY = e.touches[0].pageY;
       if (this.tmPageY > this.tsPageY && this.st <= 0 && document.body.scrollTop > 0) {
         console.log('start pull to refresh');
-        this.domScroller.options.touchmoveNotPreventDefault = true;
+        this.domScroller.options.preventDefaultOnTouchMove = false;
       } else {
-        this.domScroller.options.touchmoveNotPreventDefault = false;
+        this.domScroller.options.preventDefaultOnTouchMove = undefined;
       }
     });
   }
@@ -48,11 +48,6 @@ class Demo extends React.Component {
     // onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229
     this.st = e.scroller.getValues().top;
     this.domScroller = e;
-    // console.log(e.scroller.getValues())
-    // console.log(e)
-    // if (document.body.scrollTop > 0) {
-    //   e.options.touchmoveNotPreventDefault = true;
-    // }
   }
   onRefresh = () => {
     console.log('onRefresh');

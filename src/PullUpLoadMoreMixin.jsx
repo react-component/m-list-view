@@ -47,6 +47,9 @@ export default {
   },
   onPullUpEnd(e) {
     if (this._isPullUp && this.props.onEndReached) {
+      if (this._onScroll) {
+        this._onScroll(e);
+      }
       this.props.onEndReached(e);
     }
     this._isPullUp = false;

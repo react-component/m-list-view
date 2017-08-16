@@ -47,7 +47,8 @@ export default {
   },
   onPullUpEnd(e) {
     if (this._isPullUp && this.props.onEndReached) {
-      this.props.onEndReached(e);
+      // this.props.onEndReached(e);
+      this._onScroll(e); // need update `this.scrollProperties` in order to render correctly
     }
     this._isPullUp = false;
   },

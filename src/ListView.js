@@ -70,6 +70,7 @@ class ListView extends React.Component {
     // stickyHeaderIndices: [],
     stickyProps: {},
     stickyContainerProps: {},
+    scrollerOptions: {},
   }
 
   state = {

@@ -8040,7 +8040,8 @@ ListView.defaultProps = {
   scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
   // stickyHeaderIndices: [],
   stickyProps: {},
-  stickyContainerProps: {}
+  stickyContainerProps: {},
+  scrollerOptions: {}
 };
 
 

@@ -7,15 +7,30 @@ import ListView from 'rmc-list-view';
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
 
+function genData(ds) {
+  const dataBlob = {};
+  const sectionIDs = [];
+  const rowIDs = [];
+  for (let ii = 0; ii < NUM_SECTIONS; ii++) {
+    const sectionName = String.fromCharCode(65 + ii);
+    sectionIDs.push(sectionName);
+    dataBlob[sectionName] = sectionName;
+    rowIDs[ii] = [];
+
+    for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+      const rowName = `S${ii}, R${jj}`;
+      rowIDs[ii].push(rowName);
+      dataBlob[rowName] = rowName;
+    }
+  }
+  return ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+}
+
 class Demo extends React.Component {
   constructor(props) {
     super(props);
-    const getSectionData = (dataBlob, sectionID) => {
-      return dataBlob[sectionID];
-    };
-    const getRowData = (dataBlob, sectionID, rowID) => {
-      return dataBlob[rowID];
-    };
+    const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
+    const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
 
     const dataSource = new ListView.DataSource({
       getRowData,
@@ -25,37 +40,24 @@ class Demo extends React.Component {
     });
 
     this.state = {
-      dataSource: dataSource.cloneWithRowsAndSections({}, [], []),
-      headerPressCount: 0,
+      dataSource,
+      isLoading: true,
     };
   }
-  componentDidMount() {
-    // simulate ajax
-    setTimeout(() => {
-      const dataBlob = {};
-      const sectionIDs = [];
-      const rowIDs = [];
-      for (let ii = 0; ii < NUM_SECTIONS; ii++) {
-        const sectionName = String.fromCharCode(65 + ii);
-        sectionIDs.push(sectionName);
-        dataBlob[sectionName] = sectionName;
-        rowIDs[ii] = [];
 
-        for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-          const rowName = `S${ii}, R${jj}`;
-          rowIDs[ii].push(rowName);
-          dataBlob[rowName] = rowName;
-        }
-      }
+  componentDidMount() {
+    // simulate initial Ajax
+    setTimeout(() => {
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+        dataSource: genData(this.state.dataSource),
+        isLoading: false,
       });
-    }, 700);
+    }, 600);
   }
+
   render() {
     return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
       <ListView.IndexedList
-        ref="lv"
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}

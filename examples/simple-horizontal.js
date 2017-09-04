@@ -5,21 +5,35 @@ import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, THUMB_URLS } from './util';
 
-function _genRows(pressData) {
-  const dataBlob = [];
-  for (let ii = 0; ii < 30; ii++) {
-    dataBlob.push(`Row ${ii + pressData[ii] ? ' (pressed)' : ''}`);
+const NUM_ROWS = 20;
+
+function genData(pIndex = 0) {
+  const dataArr = [];
+  for (let i = 0; i < NUM_ROWS; i++) {
+    dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
   }
-  return dataBlob;
+  return dataArr;
 }
 
 class Demo extends React.Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2,
+    });
+
     this.state = {
-      dataSource: ds.cloneWithRows(_genRows({})),
+      dataSource,
     };
+  }
+
+  componentDidMount() {
+    // simulate initial Ajax
+    setTimeout(() => {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(genData()),
+      });
+    }, 600);
   }
 
   render() {
@@ -35,13 +49,13 @@ class Demo extends React.Component {
           }
         ` }}
       />
-      <ListView horizontal
-        ref="lv"
+      <ListView
+        horizontal
         dataSource={this.state.dataSource}
         renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <img src={THUMB_URLS[0]} />
-            <Text>{`${rowData} - Lorem ipsum dolor sit amet`}</Text>
+            <Text>{`${rowData} - Lorem ipsum`}</Text>
           </View>
         )}
         renderSeparator={(sectionID, rowID) => (

@@ -7,7 +7,17 @@ import { myData as data } from './util';
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 
 let index = data.length - 1;
+
+const NUM_ROWS = 20;
 let pageIndex = 0;
+
+function genData(pIndex = 0) {
+  const dataArr = [];
+  for (let i = 0; i < NUM_ROWS; i++) {
+    dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
+  }
+  return dataArr;
+}
 
 class Demo extends React.Component {
   constructor(props) {
@@ -16,21 +26,27 @@ class Demo extends React.Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
 
-    this.initData = [];
-    for (let i = 0; i < 20; i++) {
-      this.initData.push(`r${i}`);
-    }
     this.state = {
-      dataSource: dataSource.cloneWithRows(this.initData),
-      refreshing: false,
+      dataSource,
+      refreshing: true,
     };
   }
+
+  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.dataSource !== this.props.dataSource) {
+  //     this.setState({
+  //       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),
+  //     });
+  //   }
+  // }
+
   componentDidMount() {
-    // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
-    this.refs.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
+    // handle https://github.com/ant-design/ant-design-mobile/issues/1588
+    this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
       this.tsPageY = e.touches[0].pageY;
     });
-    this.refs.lv.getInnerViewNode().addEventListener('touchmove', this.tm = (e) => {
+    this.lv.getInnerViewNode().addEventListener('touchmove', this.tm = (e) => {
       this.tmPageY = e.touches[0].pageY;
       if (this.tmPageY > this.tsPageY && this.st <= 0 && document.body.scrollTop > 0) {
         console.log('start pull to refresh');
@@ -40,15 +56,18 @@ class Demo extends React.Component {
       }
     });
   }
+
   componentWillUnmount() {
-    this.refs.lv.getInnerViewNode().removeEventListener('touchstart', this.ts);
-    this.refs.lv.getInnerViewNode().removeEventListener('touchmove', this.tm);
+    this.lv.getInnerViewNode().removeEventListener('touchstart', this.ts);
+    this.lv.getInnerViewNode().removeEventListener('touchmove', this.tm);
   }
+
   onScroll = (e) => {
     // onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229
     this.st = e.scroller.getValues().top;
     this.domScroller = e;
-  }
+  };
+
   onRefresh = () => {
     console.log('onRefresh');
     if (!this.manuallyRefresh) {
@@ -56,29 +75,40 @@ class Demo extends React.Component {
     } else {
       this.manuallyRefresh = false;
     }
+
+    // simulate initial Ajax
     setTimeout(() => {
-      this.initData = [`ref${pageIndex++}`, ...this.initData];
+      this.rData = genData();
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.initData),
+        dataSource: this.state.dataSource.cloneWithRows(this.rData),
         refreshing: false,
       });
+    }, 600);
+  };
+
+  onEndReached = (event) => {
+    // load new data
+    // hasMore: from backend data, indicates whether it is the last page, here is false
+    if (this.state.isLoading && !this.state.hasMore) {
+      return;
+    }
+    console.log('reach end', event);
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      this.rData = [...this.rData, ...genData(++pageIndex)];
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(this.rData),
+        isLoading: false,
+      });
     }, 1000);
-  }
-  scrollingComplete = () => {
-    console.log('scrollingComplete');
-  }
+  };
+
   render() {
     return (
       <ListView
-        ref="lv"
+        ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderHeader={() => <div>
-          <button onClick={() => {
-            this.manuallyRefresh = true;
-            this.setState({ refreshing: true });
-          }}
-          >点击自动刷新</button>
-        </div>}
+        renderHeader={() => <span>Pull to refresh</span>}
         renderRow={(rowData, sectionID, rowID) => {
           if (index < 0) {
             index = data.length - 1;
@@ -91,7 +121,7 @@ class Demo extends React.Component {
                 <img style={{ height: 64, marginRight: 8 }} src={obj.img} />
                 <div style={{ display: 'inline-block' }}>
                   <div>{rowData}-{obj.des}</div>
-                  <div style={{ color: '#FF6E27', marginTop: 15 }}>35</div>
+                  <div style={{ color: '#FF6E27', marginTop: 15 }}>{rowID}</div>
                 </div>
               </div>
             </div>
@@ -102,15 +132,15 @@ class Demo extends React.Component {
         )}
         initialListSize={5}
         pageSize={5}
-        scrollRenderAheadDistance={200}
-        scrollEventThrottle={20}
         style={{
           height: 400,
           border: '1px solid #ddd',
           margin: '10px 0',
         }}
         useZscroller
-        scrollerOptions={{ scrollbars: true, scrollingComplete: this.scrollingComplete }}
+        scrollerOptions={{
+          scrollbars: true, scrollingComplete: () => console.log('scrollingComplete'),
+        }}
         refreshControl={<ListView.RefreshControl
           className="my-refresh-control"
           refreshing={this.state.refreshing}
@@ -118,6 +148,10 @@ class Demo extends React.Component {
           resistance={1}
         />}
         onScroll={this.onScroll}
+        scrollRenderAheadDistance={200}
+        scrollEventThrottle={20}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={10}
       />
     );
   }

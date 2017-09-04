@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint react/prop-types: 0, react/no-multi-comp: 0 */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,7 +9,14 @@ import { View, Text } from './util';
 const NUM_ROWS = 20;
 let pageIndex = 0;
 
-/* eslint react/prop-types: 0, react/no-multi-comp: 0 */
+function genData(pIndex = 0) {
+  const dataBlob = {};
+  for (let i = 0; i < NUM_ROWS; i++) {
+    const ii = (pIndex * NUM_ROWS) + i;
+    dataBlob[`${ii}`] = `row - ${ii}`;
+  }
+  return dataBlob;
+}
 
 class Demo extends React.Component {
   constructor(props) {
@@ -17,38 +25,54 @@ class Demo extends React.Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
 
-    this._genData = (pIndex = 0) => {
-      const dataBlob = {};
-      for (let i = 0; i < NUM_ROWS; i++) {
-        const ii = pIndex * NUM_ROWS + i;
-        dataBlob[`${ii}`] = `row - ${ii}`;
-      }
-      return dataBlob;
-    };
     this._data = {};
     this.state = {
-      dataSource: dataSource.cloneWithRows(this._genData()),
-      isLoading: false,
+      dataSource,
+      isLoading: true,
       destroy: false,
     };
   }
-  changeData = () => {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows({ xx: 'xxx' }),
-    });
+
+  componentDidMount() {
+    // you can scroll to the specified position
+    // setTimeout(() => this.lv.scrollTo(0, 120), 800);
+
+    // simulate initial Ajax
+    setTimeout(() => {
+      this.rData = genData();
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(this.rData),
+        isLoading: false,
+      });
+    }, 600);
   }
-  _onEndReached = (event) => {
+
+  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.dataSource !== this.props.dataSource) {
+  //     this.setState({
+  //       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),
+  //     });
+  //   }
+  // }
+
+  onEndReached = (event) => {
     // load new data
+    // hasMore: from backend data, indicates whether it is the last page, here is false
+    if (this.state.isLoading && !this.state.hasMore) {
+      return;
+    }
     console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this._data = { ...this._data, ...this._genData(++pageIndex) };
+      this.rData = { ...this.rData, ...genData(++pageIndex) };
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this._data),
+        dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
       });
     }, 1000);
   }
+
   render() {
     return (<div>
       <button style={{ margin: 10 }}
@@ -56,9 +80,15 @@ class Demo extends React.Component {
       >
         {this.state.destroy ? 'create' : 'destroy'} ListView
       </button>
-      <button onClick={this.changeData}>changeData</button>
+      <button onClick={() => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows({ xx: 'xxx' }),
+        });
+      }}
+      >changeData</button>
+
       {!this.state.destroy ? <ListView
-        ref="lv"
+        ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
@@ -77,14 +107,14 @@ class Demo extends React.Component {
         renderBodyComponent={() => <div className="for-body-demo" />}
         renderSectionBodyWrapper={(sectionID) => <MySectionBodyWrapper key={sectionID} />}
         renderRow={(rowData) => (<tr style={{ height: 50 }}>
-          <td>{rowData}Let me keep typing here so it wraps at least one line.</td>
+          <td>{rowData} Let me keep typing here so it wraps at least one line.</td>
         </tr>)}
         useBodyScroll
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={200}
-        onEndReached={this._onEndReached}
+        onEndReached={this.onEndReached}
         onEndReachedThreshold={100}
       /> : null}
       <div dangerouslySetInnerHTML={{

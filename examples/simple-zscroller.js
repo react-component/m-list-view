@@ -5,35 +5,44 @@ import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, Image, THUMB_URLS } from './util';
 
-function _genRows(pressData) {
-  const dataBlob = [];
-  for (let ii = 0; ii < 30; ii++) {
-    dataBlob.push(`Row ${ii + pressData[ii] ? ' (pressed)' : ''}`);
+const NUM_ROWS = 20;
+
+function genData(pIndex = 0) {
+  const dataArr = [];
+  for (let i = 0; i < NUM_ROWS; i++) {
+    dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
   }
-  return dataBlob;
+  return dataArr;
 }
 
 class Demo extends React.Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2,
+    });
+
     this.state = {
-      dataSource: ds.cloneWithRows(_genRows({})),
+      dataSource,
     };
   }
 
   componentDidMount() {
-    // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
-    console.log(ReactDOM.findDOMNode(this.refs.lv));
-    console.log(this.refs.lv.getInnerViewNode());
     // you can scroll to the specified position
-    setTimeout(() => this.refs.lv.scrollTo(0, 50), 800);
+    setTimeout(() => this.lv.scrollTo(0, 50), 800);
+
+    // simulate initial Ajax
+    setTimeout(() => {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(genData()),
+      });
+    }, 600);
   }
 
   render() {
     return (
       <ListView
-        ref="lv"
+        ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderRow={(rowData) => (
           <View style={{ display: 'flex', alignItems: 'center' }}>
@@ -53,9 +62,8 @@ class Demo extends React.Component {
         sectionBodyClassName="sb"
         style={{ height: 200 }}
         useZscroller
-        onEndReached={e => alert(e.toString())}
+        onEndReached={e => console.log(e)}
         onEndReachedThreshold={10}
-        onScroll={e => console.log(e.toString())}
         scrollEventThrottle={20}
         scrollRenderAheadDistance={30}
         initialListSize={5}

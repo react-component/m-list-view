@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint react/sort-comp: 0 */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,17 +10,32 @@ const NUM_SECTIONS = 5;
 const NUM_ROWS_PER_SECTION = 5;
 let pageIndex = 0;
 
-/* eslint react/sort-comp: 0 */
+const dataBlobs = {};
+let sectionIDs = [];
+let rowIDs = [];
+function genData(pIndex = 0) {
+  for (let i = 0; i < NUM_SECTIONS; i++) {
+    const ii = (pIndex * NUM_SECTIONS) + i;
+    const sectionName = `Section ${ii}`;
+    sectionIDs.push(sectionName);
+    dataBlobs[sectionName] = sectionName;
+    rowIDs[ii] = [];
+
+    for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
+      const rowName = `S${ii}, R${jj}`;
+      rowIDs[ii].push(rowName);
+      dataBlobs[rowName] = rowName;
+    }
+  }
+  sectionIDs = [...sectionIDs];
+  rowIDs = [...rowIDs];
+}
 
 class Demo extends React.Component {
   constructor(props) {
     super(props);
-    const getSectionData = (dataBlob, sectionID) => {
-      return dataBlob[sectionID];
-    };
-    const getRowData = (dataBlob, sectionID, rowID) => {
-      return dataBlob[rowID];
-    };
+    const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
+    const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
 
     const dataSource = new ListView.DataSource({
       getRowData,
@@ -28,58 +44,47 @@ class Demo extends React.Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     });
 
-    this.dataBlob = {};
-    this.sectionIDs = [];
-    this.rowIDs = [];
-    this._genData = (pIndex = 0) => {
-      for (let i = 0; i < NUM_SECTIONS; i++) {
-        const ii = pIndex * NUM_SECTIONS + i;
-        const sectionName = `Section ${ii}`;
-        this.sectionIDs.push(sectionName);
-        this.dataBlob[sectionName] = sectionName;
-        this.rowIDs[ii] = [];
-
-        for (let jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-          const rowName = `S${ii}, R${jj}`;
-          this.rowIDs[ii].push(rowName);
-          this.dataBlob[rowName] = rowName;
-        }
-      }
-      // new object ref
-      this.sectionIDs = [].concat(this.sectionIDs);
-      this.rowIDs = [].concat(this.rowIDs);
-    };
-    this._genData();
     this.state = {
-      dataSource: dataSource.cloneWithRowsAndSections(this.dataBlob, this.sectionIDs, this.rowIDs),
-      isLoading: false,
+      dataSource,
+      isLoading: true,
     };
   }
+
   componentDidMount() {
-    // console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);
-    console.log(ReactDOM.findDOMNode(this.refs.lv));
-    console.log(this.refs.lv.getInnerViewNode());
     // you can scroll to the specified position
-    setTimeout(() => this.refs.lv.scrollTo(0, 200), 800);
+    // setTimeout(() => this.lv.scrollTo(0, 120), 800);
+
+    // simulate initial Ajax
+    setTimeout(() => {
+      genData();
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
+        isLoading: false,
+      });
+    }, 600);
   }
-  _onEndReached = (event) => {
+
+  onEndReached = (event) => {
     // load new data
+    // hasMore: from backend data, indicates whether it is the last page, here is false
+    if (this.state.isLoading && !this.state.hasMore) {
+      return;
+    }
     console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this._genData(++pageIndex);
+      genData(++pageIndex);
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(
-          this.dataBlob, this.sectionIDs, this.rowIDs
-        ),
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
         isLoading: false,
       });
     }, 1000);
   }
+
   render() {
     return (<div style={{ margin: '10px auto', width: '80%' }}>
       <ListView
-        ref="lv"
+        ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderHeader={() => (
           <View style={{ height: 90, backgroundColor: '#bbb' }}>
@@ -116,7 +121,7 @@ class Demo extends React.Component {
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
         onScroll={() => { console.log('scroll'); } }
-        onEndReached={this._onEndReached}
+        onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
         scrollerOptions={{ scrollbars: true }}
         renderBodyComponent={() => <div className="for-body-demo" />}

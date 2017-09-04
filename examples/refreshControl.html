@@ -278,7 +278,17 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-comment">/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */</span>
 
 <span class="hljs-keyword">let</span> index = data.length - <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">genData</span>(<span class="hljs-params">pIndex = 0</span>) </span>{
+  <span class="hljs-keyword">const</span> dataArr = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_ROWS; i++) {
+    dataArr.push(<span class="hljs-string">`row - <span class="hljs-subst">${(pIndex * NUM_ROWS) + i}</span>`</span>);
+  }
+  <span class="hljs-keyword">return</span> dataArr;
+}
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   constructor(props) {
@@ -287,21 +297,27 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       rowHasChanged: (row1, row2) =&gt; row1 !== row2,
     });
 
-    <span class="hljs-keyword">this</span>.initData = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20</span>; i++) {
-      <span class="hljs-keyword">this</span>.initData.push(<span class="hljs-string">`r<span class="hljs-subst">${i}</span>`</span>);
-    }
     <span class="hljs-keyword">this</span>.state = {
-      dataSource: dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.initData),
-      refreshing: <span class="hljs-literal">false</span>,
+      dataSource,
+      refreshing: <span class="hljs-literal">true</span>,
     };
   }
+
+  <span class="hljs-comment">// If you use redux, the data maybe at props, you need use `componentWillReceiveProps`</span>
+  <span class="hljs-comment">// componentWillReceiveProps(nextProps) {</span>
+  <span class="hljs-comment">//   if (nextProps.dataSource !== this.props.dataSource) {</span>
+  <span class="hljs-comment">//     this.setState({</span>
+  <span class="hljs-comment">//       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),</span>
+  <span class="hljs-comment">//     });</span>
+  <span class="hljs-comment">//   }</span>
+  <span class="hljs-comment">// }</span>
+
   componentDidMount() {
-    <span class="hljs-comment">// console.log(this.refs.lv.refs.listviewscroll.refs.InnerScrollView);</span>
-    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
+    <span class="hljs-comment">// handle https://github.com/ant-design/ant-design-mobile/issues/1588</span>
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;
     });
-    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tmPageY = e.touches[<span class="hljs-number">0</span>].pageY;
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.st &lt;= <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">document</span>.body.scrollTop &gt; <span class="hljs-number">0</span>) {
         <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'start pull to refresh'</span>);
@@ -311,15 +327,18 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       }
     });
   }
+
   componentWillUnmount() {
-    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts);
-    <span class="hljs-keyword">this</span>.refs.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm);
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts);
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm);
   }
+
   onScroll = (e) =&gt; {
     <span class="hljs-comment">// onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229</span>
     <span class="hljs-keyword">this</span>.st = e.scroller.getValues().top;
     <span class="hljs-keyword">this</span>.domScroller = e;
-  }
+  };
+
   onRefresh = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.manuallyRefresh) {
@@ -327,29 +346,40 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">this</span>.manuallyRefresh = <span class="hljs-literal">false</span>;
     }
+
+    <span class="hljs-comment">// simulate initial Ajax</span>
     setTimeout(() =&gt; {
-      <span class="hljs-keyword">this</span>.initData = [<span class="hljs-string">`ref<span class="hljs-subst">${pageIndex++}</span>`</span>, ...this.initData];
+      <span class="hljs-keyword">this</span>.rData = genData();
       <span class="hljs-keyword">this</span>.setState({
-        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.initData),
+        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
         refreshing: <span class="hljs-literal">false</span>,
       });
+    }, <span class="hljs-number">600</span>);
+  };
+
+  onEndReached = (event) =&gt; {
+    <span class="hljs-comment">// load new data</span>
+    <span class="hljs-comment">// hasMore: from backend data, indicates whether it is the last page, here is false</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.isLoading &amp;&amp; !<span class="hljs-keyword">this</span>.state.hasMore) {
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
+    <span class="hljs-keyword">this</span>.setState({ isLoading: <span class="hljs-literal">true</span> });
+    setTimeout(() =&gt; {
+      <span class="hljs-keyword">this</span>.rData = [...this.rData, ...genData(++pageIndex)];
+      <span class="hljs-keyword">this</span>.setState({
+        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
+        isLoading: <span class="hljs-literal">false</span>,
+      });
     }, <span class="hljs-number">1000</span>);
-  }
-  scrollingComplete = () =&gt; {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scrollingComplete'</span>);
-  }
+  };
+
   render() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
-        <span class="hljs-attribute">ref</span>=<span class="hljs-value">"lv"</span>
-        <span class="hljs-attribute">dataSource</span>=<span class="hljs-value">{this.state.dataSource}</span>
-        <span class="hljs-attribute">renderHeader</span>=<span class="hljs-value">{()</span> =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> {
-            this.manuallyRefresh = true;
-            this.setState({ refreshing: true });
-          }}
-          &gt;点击自动刷新<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
+        <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
+        dataSource={this.state.dataSource}
+        renderHeader={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>Pull to refresh<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
         renderRow={(rowData, sectionID, rowID) =&gt; {
           if (index <span class="hljs-tag">&lt; <span class="hljs-attribute">0</span>) {
             <span class="hljs-attribute">index</span> = <span class="hljs-attribute">data.length</span> <span class="hljs-attribute">-</span> <span class="hljs-attribute">1</span>;
@@ -362,7 +392,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
                 <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">marginRight:</span> <span class="hljs-attribute">8</span> }} <span class="hljs-attribute">src</span>=<span class="hljs-value">{obj.img}</span> /&gt;</span>
                 <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">inline-block</span>' }}&gt;</span>
                   <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{rowData}-{obj.des}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '#<span class="hljs-attribute">FF6E27</span>', <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">15</span> }}&gt;</span>35<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '#<span class="hljs-attribute">FF6E27</span>', <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">15</span> }}&gt;</span>{rowID}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
                 <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
               <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
@@ -373,15 +403,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         )</span>}
         initialListSize={<span class="hljs-number">5</span>}
         pageSize={<span class="hljs-number">5</span>}
-        scrollRenderAheadDistance={<span class="hljs-number">200</span>}
-        scrollEventThrottle={<span class="hljs-number">20</span>}
         style={{
           height: <span class="hljs-number">400</span>,
           border: <span class="hljs-string">'1px solid #ddd'</span>,
           margin: <span class="hljs-string">'10px 0'</span>,
         }}
         useZscroller
-        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: <span class="hljs-keyword">this</span>.scrollingComplete }}
+        scrollerOptions={{
+          scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scrollingComplete'</span>),
+        }}
         refreshControl={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView.RefreshControl</span>
           <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-refresh-control"</span>
           <span class="hljs-attribute">refreshing</span>=<span class="hljs-value">{this.state.refreshing}</span>
@@ -389,6 +419,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           <span class="hljs-attribute">resistance</span>=<span class="hljs-value">{1}</span>
         /&gt;</span>}
         onScroll={this.onScroll}
+        scrollRenderAheadDistance={200}
+        scrollEventThrottle={20}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={10}
       /&gt;
     )</span>;
   }

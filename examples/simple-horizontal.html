@@ -276,21 +276,35 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
 <span class="hljs-keyword">import</span> { View, Text, THUMB_URLS } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_genRows</span>(<span class="hljs-params">pressData</span>) </span>{
-  <span class="hljs-keyword">const</span> dataBlob = [];
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">30</span>; ii++) {
-    dataBlob.push(<span class="hljs-string">`Row <span class="hljs-subst">${ii + pressData[ii] ? ' (pressed)' : ''}</span>`</span>);
+<span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">genData</span>(<span class="hljs-params">pIndex = 0</span>) </span>{
+  <span class="hljs-keyword">const</span> dataArr = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_ROWS; i++) {
+    dataArr.push(<span class="hljs-string">`row - <span class="hljs-subst">${(pIndex * NUM_ROWS) + i}</span>`</span>);
   }
-  <span class="hljs-keyword">return</span> dataBlob;
+  <span class="hljs-keyword">return</span> dataArr;
 }
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   constructor(props) {
     <span class="hljs-keyword">super</span>(props);
-    <span class="hljs-keyword">const</span> ds = <span class="hljs-keyword">new</span> ListView.DataSource({ rowHasChanged: (r1, r2) =&gt; r1 !== r2 });
+    <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
+      rowHasChanged: (row1, row2) =&gt; row1 !== row2,
+    });
+
     <span class="hljs-keyword">this</span>.state = {
-      dataSource: ds.cloneWithRows(_genRows({})),
+      dataSource,
     };
+  }
+
+  componentDidMount() {
+    <span class="hljs-comment">// simulate initial Ajax</span>
+    setTimeout(() =&gt; {
+      <span class="hljs-keyword">this</span>.setState({
+        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(genData()),
+      });
+    }, <span class="hljs-number">600</span>);
   }
 
   render() {
@@ -306,13 +320,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           }
         ` }}
       /&gt;</span><span class="css">
-      &lt;<span class="hljs-tag">ListView</span> <span class="hljs-tag">horizontal</span>
-        <span class="hljs-tag">ref</span>="<span class="hljs-tag">lv</span>"
+      &lt;<span class="hljs-tag">ListView</span>
+        <span class="hljs-tag">horizontal</span>
         <span class="hljs-tag">dataSource</span>=<span class="hljs-rules">{this.state.dataSource}</span>
         <span class="hljs-tag">renderRow</span>=<span class="hljs-rules">{(rowData) =&gt; (
           &lt;View style={{ <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value"> <span class="hljs-string">'flex'</span>, alignItems: <span class="hljs-string">'center'</span> </span></span></span>}}&gt;
             &lt;<span class="hljs-tag">img</span> <span class="hljs-tag">src</span>=<span class="hljs-rules">{THUMB_URLS[0]}</span> /&gt;
-            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{`${rowData}</span> <span class="hljs-tag">-</span> <span class="hljs-tag">Lorem</span> <span class="hljs-tag">ipsum</span> <span class="hljs-tag">dolor</span> <span class="hljs-tag">sit</span> <span class="hljs-tag">amet</span>`}&lt;/<span class="hljs-tag">Text</span>&gt;
+            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{`${rowData}</span> <span class="hljs-tag">-</span> <span class="hljs-tag">Lorem</span> <span class="hljs-tag">ipsum</span>`}&lt;/<span class="hljs-tag">Text</span>&gt;
           &lt;/<span class="hljs-tag">View</span>&gt;
         )</span></span>}
         renderSeparator={(sectionID, rowID) =&gt; (

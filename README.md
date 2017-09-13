@@ -74,32 +74,36 @@ you need to write your own scroll logic like `ScrollView` component(see `/exampl
 | refreshControl | A [RefreshControl](https://mobile.ant.design/components/refresh-control/) component, used to provide pull-to-refresh functionality for the ScrollView. | element | - |
 | onLayout | Invoked on mount and layout changes with | ({nativeEvent:{ layout:{ width, height }}}) => {} | - |
 | ---- |
-| renderBodyComponent | render listview body wrapper component | () => renderable | - |
-| renderSectionBodyWrapper | render listview section body wrapper component | (sectionID) => renderable | - |
-| useBodyScroll | use html `body`'s scroll | bool | false |
-| useZscroller | use zscroller to well support RefreshControl(`useBodyScroll` and sticky not work when enable useZscroller) | bool | false |
-| scrollerOptions | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
-| stickyHeader | if set it, auto enable `useBodyScroll` and you can also set `stickyProps` / `stickyContainerProps` (see [react-sticky](https://github.com/captivationsoftware/react-sticky)) | bool | false |
+| renderBodyComponent (`web only`) | render listview body wrapper component | () => renderable | - |
+| renderSectionBodyWrapper (`web only`) | render listview section body wrapper component | (sectionID) => renderable | - |
+| useBodyScroll (`web only`) | use html `body`'s scroll | bool | false |
+| useZscroller (`web only`) | use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers(can be used for some poor Android machine) (`useBodyScroll` and `stickyHeader` settings are automatically ignored), and can support RefreshControl well | bool | false |
+| scrollerOptions (`web only`) | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
+| stickyHeader (`web only`) | if set it, automatically enable `useBodyScroll` and you can also set `stickyProps` / `stickyContainerProps` (see [react-sticky](https://github.com/captivationsoftware/react-sticky)) | bool | false |
 
 
-### 方法
+### Methods
 
 - getMetrics() - Exports some data, e.g. for perf investigations or analytics.
 - scrollTo(...args) - Scrolls to a given x, y offset(not support smooth animation).
 
 
-## ListView.IndexedList
+## ListView.IndexedList (`web only`)
 
-**Note:** You can use almost all APIs on the ListView, except for `useZscroller`
+This component is often used in the "Contacts" / "city list" scenes, support for index navigation.
+
+> You can use almost all APIs on the ListView, except for `useZscroller`
+>
+> Note: Only two-step rendering is supported, so that the first screen priority display can be achieved, but if the list data volume is too large, the overall performance will still be affected.
 
 Properties | Descrition | Type | Default
 -----------|------------|------|--------
-| quickSearchBarTop | top button object | object{value:string, label:string} | `{ value: '#', label: '#' }` |
+| quickSearchBarTop | top button object of navigation bar | object{value:string, label:string} | `{ value: '#', label: '#' }` |
 | quickSearchBarStyle |  quickSearchBar's style | object | - |
-| onQuickSearch | callback on click quick searchbar | (sectionID) => {} | - |
+| onQuickSearch | fire on clicking navigation bar. | (sectionID: any, topId?:any) => void | - |
 | showQuickSearchIndicator | whether show quick search indicator | bool | false |
-| delayTime | delay render time (delay render these items of `totalRowCount - initialListSize`) | number |`100ms` |
-| delayActivityIndicator | delay render activity indicator | react node | - |
+| delayTime | delay rendering time setting (for the first screen optimization, the initial rendering of the number of `initialListSize` data, after which time rendering the remaining data items, ie `totalRowCount - initialListSize`) | number |`100ms` |
+| delayActivityIndicator | the loading indicator for delayed rendering. | react node | - |
 
 
 ## ListView.RefreshControl
@@ -108,9 +112,9 @@ Properties | Descrition | Type | Default
 -----------|------------|------|--------
 | icon | refresh indicator, include `pull` and `release` state | react node | - |
 | loading | loading indicator | react node | - |
-| distanceToRefresh | distance to refresh | number | 50 |
-| onRefresh | required, onRefresh callback | () => {} | - |
-| refreshing | whether to show refreshing state | bool | false |
+| distanceToRefresh | distance to refresh | number | `50px` |
+| onRefresh | required, Called when the view starts refreshing. | () => void | - |
+| refreshing | Whether the view should be indicating an active refresh | bool | false |
 
 
 ## Test Case

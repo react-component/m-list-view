@@ -62,13 +62,13 @@ class Demo extends React.Component {
         sectionBodyClassName="sb"
         style={{ height: 200 }}
         useZscroller
+        scrollerOptions={{ scrollbars: true }}
         onEndReached={e => console.log(e)}
         onEndReachedThreshold={10}
         scrollEventThrottle={20}
         scrollRenderAheadDistance={30}
         initialListSize={5}
         pageSize={5}
-        scrollerOptions={{ scrollbars: true }}
       />
     );
   }

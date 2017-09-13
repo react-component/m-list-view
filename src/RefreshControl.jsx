@@ -42,11 +42,10 @@ export default class RefreshControl extends React.Component {
 
   render() {
     const {
-      prefixCls, className = '', style, icon, loading, refreshing,
+      prefixCls, className, style, icon, loading, refreshing,
     } = this.props;
     const { active, deactive, loadingState } = this.state;
-    const wrapCls = classNames({
-      [className]: className,
+    const wrapCls = classNames(className, {
       [`${prefixCls}-ptr`]: true,
       [`${prefixCls}-active`]: active,
       [`${prefixCls}-deactive`]: deactive,

@@ -254,10 +254,7 @@ export default class IndexedList extends React.Component {
       <ListView
         {...other}
         ref="indexedListView"
-        className={classNames({
-          [className]: className,
-          [prefixCls]: true,
-        })}
+        className={classNames(prefixCls, className)}
         initialListSize={initialListSize}
         pageSize={pageSize}
         renderSectionHeader={(sectionData, sectionID) => React.cloneElement(

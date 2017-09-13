@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import DOMScroller from 'zscroller';
-import assign from 'object-assign';
 import classNames from 'classnames';
 import { throttle } from './util';
 
@@ -24,7 +23,6 @@ const propTypes = {
   contentContainerStyle: PropTypes.object,
   onScroll: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
-  removeClippedSubviews: PropTypes.bool, // offscreen views are removed
   refreshControl: PropTypes.element,
 };
 const styles = {
@@ -43,10 +41,6 @@ const styles = {
 
 export default class ScrollView extends React.Component {
   static propTypes = propTypes;
-  getInnerViewNode() {
-    // console.log(this.refs);
-    return ReactDOM.findDOMNode(this.refs[INNERVIEW]);
-  }
   componentWillUpdate(nextProps) {
     // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
     // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
@@ -121,7 +115,12 @@ export default class ScrollView extends React.Component {
       ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
     }
   }
-  scrollTo(...args) {
+
+  getInnerViewNode = () => {
+    return ReactDOM.findDOMNode(this.refs[INNERVIEW]);
+  }
+
+  scrollTo = (...args) => {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       window.scrollTo(...args);
     } else if (this.props.useZscroller) {
@@ -158,7 +157,7 @@ export default class ScrollView extends React.Component {
     const { scrollingComplete, onScroll, ...restProps } = scrollerOptions;
     // console.log(scrollingComplete, onScroll, restProps);
     // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
-    this.domScroller = new DOMScroller(this.getInnerViewNode(), assign({}, {
+    this.domScroller = new DOMScroller(this.getInnerViewNode(), {
       scrollingX: false,
       onScroll: () => {
         this.tsExec();
@@ -173,7 +172,7 @@ export default class ScrollView extends React.Component {
         }
       },
       ...restProps,
-    }));
+    });
     if (refreshControl) {
       const scroller = this.domScroller.scroller;
       const { distanceToRefresh, onRefresh } = refreshControl.props;
@@ -221,13 +220,13 @@ export default class ScrollView extends React.Component {
   render() {
     const {
       children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'rmc-list-view',
-      style = {}, contentContainerStyle,
+      style = {}, contentContainerStyle = {},
       useZscroller, refreshControl, stickyHeader, useBodyScroll,
     } = this.props;
 
     let styleBase = styles.base;
     if (stickyHeader || useBodyScroll) {
-      styleBase = null;
+      styleBase = {};
     } else if (useZscroller) {
       styleBase = styles.zScroller;
     }
@@ -236,19 +235,13 @@ export default class ScrollView extends React.Component {
 
     const containerProps = {
       ref: SCROLLVIEW,
-      style: assign({}, styleBase, style),
-      className: classNames({
-        [className]: !!className,
-        [`${preCls}-scrollview`]: true,
-      }),
+      style: { ...styleBase, ...style },
+      className: classNames(className, `${preCls}-scrollview`),
     };
     const contentContainerProps = {
       ref: INNERVIEW,
-      style: assign({}, { position: 'absolute', minWidth: '100%' }, contentContainerStyle),
-      className: classNames({
-        [`${preCls}-scrollview-content`]: true,
-        [listPrefixCls]: !!listPrefixCls,
-      }),
+      style: { position: 'absolute', minWidth: '100%', ...contentContainerStyle },
+      className: classNames(`${preCls}-scrollview-content`, listPrefixCls),
     };
 
     if (refreshControl) {

@@ -22,6 +22,8 @@ React ListView Component, port from [React Native ListView](https://facebook.git
 [download-image]: https://img.shields.io/npm/dm/rmc-list-view.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rmc-list-view
 
+port from [React Native ListView](https://facebook.github.io/react-native/docs/listview.html#content)
+(v0.26)
 
 ## Screenshots
 
@@ -50,60 +52,71 @@ see examples
 
 ## API
 
-same as [React Native ListView](https://facebook.github.io/react-native/docs/listview.html#content)
-(v0.26).
+Properties | Descrition | Type | Default
+-----------|------------|------|--------
+| dataSource | An instance of [ListView.DataSource](http://facebook.github.io/react-native/releases/0.26/docs/listviewdatasource.html) to use | ListViewDataSource | - |
+| initialListSize | How many rows to render on initial component mount. | number | - |
+| onEndReached | Called when all rows have been rendered and the list has been scrolled to within `onEndReachedThreshold` of the bottom. | (event?) => {} | - |
+| onEndReachedThreshold | Threshold in pixels (virtual, not physical) for calling `onEndReached`. | number | 1000 |
+| pageSize | Number of rows to render per event loop. | number | 1 |
+| renderHeader / renderFooter | The header and footer are always rendered (if these props are provided) on every render pass. If they are expensive to re-render, wrap them in StaticContainer or other mechanism as appropriate. Footer is always at the bottom of the list, and header at the top, on every render pass. | () => renderable | - |
+| renderRow | Takes a data entry from the data source and its ids and should return a renderable component to be rendered as the row. By default the data is exactly what was put into the data source, but it's also possible to provide custom extractors. ListView can be notified when a row is being highlighted by calling highlightRow function. | (rowData, sectionID, rowID, highlightRow) => renderable | - |
+| renderScrollComponent | A function that returns the scrollable component in which the list rows are rendered. Defaults to returning a ScrollView with the given props. (if you set `renderScrollComponent`,
+you need to write your own scroll logic like `ScrollView` component(see `/examples/MyScroller.js`)) | (props) => renderable | - |
+| renderSectionHeader | If provided, a header is rendered for this section. | (sectionData, sectionID) => renderable | - |
+| renderSeparator | If provided, a renderable component to be rendered as the separator below each row but not the last row if there is a section header below. Take a sectionID and rowID of the row above and whether its adjacent row is highlighted. | (sectionID, rowID, adjacentRowHighlighted) => renderable | - |
+| scrollRenderAheadDistance | How early to start rendering rows before they come on screen, in pixels. | number | 1000 |
+| contentContainerStyle | These styles will be applied to the scroll view content container which wraps all of the child views. | Object | - |
+| horizontal | When true, the scroll view's children are arranged horizontally in a row instead of vertically in a column. | bool | false |
+| onContentSizeChange | Called when scrollable content view of the ScrollView changes. | (contentWidth, contentHeight) => {} | - |
+| onScroll | Fires at most once per frame during scrolling. The frequency of the events can be controlled using the `scrollEventThrottle` prop. | e => {} | - |
+| scrollEventThrottle | This controls how often the scroll event will be fired while scrolling | number | 50 |
+| refreshControl | A [RefreshControl](https://mobile.ant.design/components/refresh-control/) component, used to provide pull-to-refresh functionality for the ScrollView. | element | - |
+| onLayout | Invoked on mount and layout changes with | ({nativeEvent:{ layout:{ width, height }}}) => {} | - |
+| ---- |
+| renderBodyComponent | render listview body wrapper component | () => renderable | - |
+| renderSectionBodyWrapper | render listview section body wrapper component | (sectionID) => renderable | - |
+| useBodyScroll | use html `body`'s scroll | bool | false |
+| useZscroller | use zscroller to well support RefreshControl(`useBodyScroll` and sticky not work when enable useZscroller) | bool | false |
+| scrollerOptions | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
+| stickyHeader | if set it, auto enable `useBodyScroll` and you can also set `stickyProps` / `stickyContainerProps` (see [react-sticky](https://github.com/captivationsoftware/react-sticky)) | bool | false |
 
-#### current not support:
-In general, do not support platform-specific feature,
-like: `android` endFillColor, `ios` alwaysBounceHorizontal.
-And, use css style instead of react-native's style.
 
-- onChangeVisibleRows
-- stickyHeaderIndices
-- [ScrollView](https://facebook.github.io/react-native/docs/scrollview.html#props) props:
-    - keyboardDismissMode (not support control keyboard)
-    - keyboardShouldPersistTaps (not support control keyboard)
-    - onContentSizeChange (use onLayout instead)
-    - removeClippedSubviews
-    - showsHorizontalScrollIndicator (use css style instead)
-    - showsVerticalScrollIndicator (use css style instead)
-- [View](https://facebook.github.io/react-native/docs/view.html#props) props
+### 方法
 
-#### new
-- useBodyScroll (boolean, false) - use html `body`'s scroll
-- stickyHeader (note: if set it, ScrollComponent will be render into the head of body element, auto enable `useBodyScroll`)
-    - stickyProps / stickyContainerProps (see [react-sticky](https://github.com/captivationsoftware/react-sticky))
-- renderBodyComponent - render listview body wrapper component
-- renderSectionBodyWrapper - render listview section body wrapper component
-- useZscroller (boolean, false) - use zscroller to well support RefreshControl and pull up refresh.(`useBodyScroll` and sticky not work when enable useZscroller)
-- scrollerOptions - [zscroller options](https://github.com/yiminghe/zscroller#options)
+- getMetrics() - Exports some data, e.g. for perf investigations or analytics.
+- scrollTo(...args) - Scrolls to a given x, y offset(not support smooth animation).
 
-**Note:** if you set `renderScrollComponent`, 
-you need to write your own scroll logic like `ScrollView` component(see `/examples/MyScroller.js`).
 
-### ListView.IndexedList
-- quickSearchBarTop (object{value:string, label:string}, default '#') - top button
-- quickSearchBarStyle (object) - quickSearchBar's style
-- onQuickSearch (function())
-- showQuickSearchIndicator (boolean, false) - show quick search indicator
-- delayTime (number) - default 100ms, delay render time (delay render these items of `totalRowCount - initialListSize`)
-- delayActivityIndicator (react node) - delay render activity indicator
+## ListView.IndexedList
 
-**Note:** should not enable useZscroller on IndexedList.
+**Note:** You can use almost all APIs on the ListView, except for `useZscroller`
 
-### ListView.RefreshControl
-- icon (any) - refresh indicator, include `pull` and `release` state
-- loading (any) - loading indicator
-- distanceToRefresh (number, default 50) - distance to refresh
-- onRefresh (function, required) - onRefresh callback
-- refreshing (boolean, false) - whether to show refreshing state
+Properties | Descrition | Type | Default
+-----------|------------|------|--------
+| quickSearchBarTop | top button object | object{value:string, label:string} | `{ value: '#', label: '#' }` |
+| quickSearchBarStyle |  quickSearchBar's style | object | - |
+| onQuickSearch | callback on click quick searchbar | (sectionID) => {} | - |
+| showQuickSearchIndicator | whether show quick search indicator | bool | false |
+| delayTime | delay render time (delay render these items of `totalRowCount - initialListSize`) | number |`100ms` |
+| delayActivityIndicator | delay render activity indicator | react node | - |
+
+
+## ListView.RefreshControl
+
+Properties | Descrition | Type | Default
+-----------|------------|------|--------
+| icon | refresh indicator, include `pull` and `release` state | react node | - |
+| loading | loading indicator | react node | - |
+| distanceToRefresh | distance to refresh | number | 50 |
+| onRefresh | required, onRefresh callback | () => {} | - |
+| refreshing | whether to show refreshing state | bool | false |
 
 
 ## Test Case
 
 ```
 npm test
-npm run chrome-test
 ```
 
 ## Coverage

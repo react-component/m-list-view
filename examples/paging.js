@@ -123,7 +123,6 @@ class Demo extends React.Component {
         onScroll={() => { console.log('scroll'); } }
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
-        scrollerOptions={{ scrollbars: true }}
         renderBodyComponent={() => <div className="for-body-demo" />}
         onLayout={() => console.log('onLayout')}
       />

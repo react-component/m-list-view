@@ -88,7 +88,7 @@ you need to write your own scroll logic like `ScrollView` component(see `/exampl
 - scrollTo(...args) - Scrolls to a given x, y offset(not support smooth animation).
 
 
-## ListView.IndexedList (`web only`)
+## ListView.IndexedList
 
 This component is often used in the "Contacts" / "city list" scenes, support for index navigation.
 

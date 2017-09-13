@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rmc-list-view@0.8.6 - m-list-view ui component for react</title>
+  <title>rmc-list-view@0.8.7 - m-list-view ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rmc-list-view@0.8.6</h1>
+  <h1>rmc-list-view@0.8.7</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -777,62 +777,344 @@
 <a href="https://coveralls.io/r/react-component/m-list-view?branch=master" title="null"><img src="https://img.shields.io/coveralls/react-component/m-list-view.svg?style=flat-square" alt="Test coverage"></a>
 <a href="https://gemnasium.com/react-component/m-list-view" title="null"><img src="http://img.shields.io/gemnasium/react-component/m-list-view.svg?style=flat-square" alt="gemnasium deps"></a>
 <a href="https://npmjs.org/package/rmc-list-view" title="null"><img src="https://img.shields.io/npm/dm/rmc-list-view.svg?style=flat-square" alt="npm download"></a></p>
+<p>port from <a href="https://facebook.github.io/react-native/docs/listview.html#content" title="null">React Native ListView</a>
+(v0.26)</p>
 <h2>Screenshots<a id="user-content-screenshots" name="screenshots" class="anchor" aria-hidden="true" href="#screenshots"><span class="octicon octicon-link"></span></a></h2><p><img src="https://os.alipayobjects.com/rmsportal/ddyjYtQFAIywppH.png" width="288"/></p>
 <h2>Development<a id="user-content-development" name="development" class="anchor" aria-hidden="true" href="#development"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm install
 npm start</code></pre></div><h2>Example<a id="user-content-example" name="example" class="anchor" aria-hidden="true" href="#example"><span class="octicon octicon-link"></span></a></h2><p><a href="http://localhost:8999/examples/" title="null">http://localhost:8999/examples/</a></p>
 <p>online example: <a href="http://react-component.github.io/m-list-view/" title="null">http://react-component.github.io/m-list-view/</a></p>
 <h2>install<a id="user-content-install" name="install" class="anchor" aria-hidden="true" href="#install"><span class="octicon octicon-link"></span></a></h2><p><a href="https://npmjs.org/package/rmc-list-view" title="null"><img src="https://nodei.co/npm/rmc-list-view.png" alt="rmc-list-view"></a></p>
 <h2>Usage<a id="user-content-usage" name="usage" class="anchor" aria-hidden="true" href="#usage"><span class="octicon octicon-link"></span></a></h2><p>see examples</p>
-<h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><p>same as <a href="https://facebook.github.io/react-native/docs/listview.html#content" title="null">React Native ListView</a>
-(v0.26).</p>
-<h4>current not support:<a id="user-content-current-not-support:" name="current-not-support:" class="anchor" aria-hidden="true" href="#current-not-support:"><span class="octicon octicon-link"></span></a></h4><p>In general, do not support platform-specific feature,
-like: <code>android</code> endFillColor, <code>ios</code> alwaysBounceHorizontal.
-And, use css style instead of react-native&#39;s style.</p>
-<ul>
-<li>onChangeVisibleRows</li>
-<li>stickyHeaderIndices</li>
-<li><a href="https://facebook.github.io/react-native/docs/scrollview.html#props" title="null">ScrollView</a> props:<ul>
-<li>keyboardDismissMode (not support control keyboard)</li>
-<li>keyboardShouldPersistTaps (not support control keyboard)</li>
-<li>onContentSizeChange (use onLayout instead)</li>
-<li>removeClippedSubviews</li>
-<li>showsHorizontalScrollIndicator (use css style instead)</li>
-<li>showsVerticalScrollIndicator (use css style instead)</li>
+<h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><table>
+<thead>
+<tr>
+<th>Properties</th>
+<th>Descrition</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>dataSource</td>
+<td>An instance of <a href="http://facebook.github.io/react-native/releases/0.26/docs/listviewdatasource.html" title="null">ListView.DataSource</a> to use</td>
+<td>ListViewDataSource</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>initialListSize</td>
+<td>How many rows to render on initial component mount.</td>
+<td>number</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onEndReached</td>
+<td>Called when all rows have been rendered and the list has been scrolled to within <code>onEndReachedThreshold</code> of the bottom.</td>
+<td>(event?) =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onEndReachedThreshold</td>
+<td>Threshold in pixels (virtual, not physical) for calling <code>onEndReached</code>.</td>
+<td>number</td>
+<td>1000</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>pageSize</td>
+<td>Number of rows to render per event loop.</td>
+<td>number</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderHeader / renderFooter</td>
+<td>The header and footer are always rendered (if these props are provided) on every render pass. If they are expensive to re-render, wrap them in StaticContainer or other mechanism as appropriate. Footer is always at the bottom of the list, and header at the top, on every render pass.</td>
+<td>() =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderRow</td>
+<td>Takes a data entry from the data source and its ids and should return a renderable component to be rendered as the row. By default the data is exactly what was put into the data source, but it&#39;s also possible to provide custom extractors. ListView can be notified when a row is being highlighted by calling highlightRow function.</td>
+<td>(rowData, sectionID, rowID, highlightRow) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderScrollComponent</td>
+<td>A function that returns the scrollable component in which the list rows are rendered. Defaults to returning a ScrollView with the given props. (if you set <code>renderScrollComponent</code>,</td>
+</tr>
+<tr>
+<td>you need to write your own scroll logic like <code>ScrollView</code> component(see <code>/examples/MyScroller.js</code>))</td>
+<td>(props) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderSectionHeader</td>
+<td>If provided, a header is rendered for this section.</td>
+<td>(sectionData, sectionID) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderSeparator</td>
+<td>If provided, a renderable component to be rendered as the separator below each row but not the last row if there is a section header below. Take a sectionID and rowID of the row above and whether its adjacent row is highlighted.</td>
+<td>(sectionID, rowID, adjacentRowHighlighted) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>scrollRenderAheadDistance</td>
+<td>How early to start rendering rows before they come on screen, in pixels.</td>
+<td>number</td>
+<td>1000</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>contentContainerStyle</td>
+<td>These styles will be applied to the scroll view content container which wraps all of the child views.</td>
+<td>Object</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>horizontal</td>
+<td>When true, the scroll view&#39;s children are arranged horizontally in a row instead of vertically in a column.</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onContentSizeChange</td>
+<td>Called when scrollable content view of the ScrollView changes.</td>
+<td>(contentWidth, contentHeight) =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onScroll</td>
+<td>Fires at most once per frame during scrolling. The frequency of the events can be controlled using the <code>scrollEventThrottle</code> prop.</td>
+<td>e =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>scrollEventThrottle</td>
+<td>This controls how often the scroll event will be fired while scrolling</td>
+<td>number</td>
+<td>50</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>refreshControl</td>
+<td>A <a href="https://mobile.ant.design/components/refresh-control/" title="null">RefreshControl</a> component, used to provide pull-to-refresh functionality for the ScrollView.</td>
+<td>element</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onLayout</td>
+<td>Invoked on mount and layout changes with</td>
+<td>({nativeEvent:{ layout:{ width, height }}}) =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>----</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderBodyComponent</td>
+<td>render listview body wrapper component</td>
+<td>() =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>renderSectionBodyWrapper</td>
+<td>render listview section body wrapper component</td>
+<td>(sectionID) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>useBodyScroll</td>
+<td>use html <code>body</code>&#39;s scroll</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>useZscroller</td>
+<td>use zscroller to well support RefreshControl(<code>useBodyScroll</code> and sticky not work when enable useZscroller)</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>scrollerOptions</td>
+<td><a href="https://github.com/yiminghe/zscroller#options" title="null">zscroller options</a></td>
+<td>Object</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>stickyHeader</td>
+<td>if set it, auto enable <code>useBodyScroll</code> and you can also set <code>stickyProps</code> / <code>stickyContainerProps</code> (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>方法<a id="user-content-方法" name="方法" class="anchor" aria-hidden="true" href="#方法"><span class="octicon octicon-link"></span></a></h3><ul>
+<li>getMetrics() - Exports some data, e.g. for perf investigations or analytics.</li>
+<li>scrollTo(...args) - Scrolls to a given x, y offset(not support smooth animation).</li>
 </ul>
-</li>
-<li><a href="https://facebook.github.io/react-native/docs/view.html#props" title="null">View</a> props</li>
-</ul>
-<h4>new<a id="user-content-new" name="new" class="anchor" aria-hidden="true" href="#new"><span class="octicon octicon-link"></span></a></h4><ul>
-<li>useBodyScroll (boolean, false) - use html <code>body</code>&#39;s scroll</li>
-<li>stickyHeader (note: if set it, ScrollComponent will be render into the head of body element, auto enable <code>useBodyScroll</code>)<ul>
-<li>stickyProps / stickyContainerProps (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</li>
-</ul>
-</li>
-<li>renderBodyComponent - render listview body wrapper component</li>
-<li>renderSectionBodyWrapper - render listview section body wrapper component</li>
-<li>useZscroller (boolean, false) - use zscroller to well support RefreshControl and pull up refresh.(<code>useBodyScroll</code> and sticky not work when enable useZscroller)</li>
-<li>scrollerOptions - <a href="https://github.com/yiminghe/zscroller#options" title="null">zscroller options</a></li>
-</ul>
-<p><strong>Note:</strong> if you set <code>renderScrollComponent</code>, 
-you need to write your own scroll logic like <code>ScrollView</code> component(see <code>/examples/MyScroller.js</code>).</p>
-<h3>ListView.IndexedList<a id="user-content-listview.indexedlist" name="listview.indexedlist" class="anchor" aria-hidden="true" href="#listview.indexedlist"><span class="octicon octicon-link"></span></a></h3><ul>
-<li>quickSearchBarTop (object{value:string, label:string}, default &#39;#&#39;) - top button</li>
-<li>quickSearchBarStyle (object) - quickSearchBar&#39;s style</li>
-<li>onQuickSearch (function())</li>
-<li>showQuickSearchIndicator (boolean, false) - show quick search indicator</li>
-<li>delayTime (number) - default 100ms, delay render time (delay render these items of <code>totalRowCount - initialListSize</code>)</li>
-<li>delayActivityIndicator (react node) - delay render activity indicator</li>
-</ul>
-<p><strong>Note:</strong> should not enable useZscroller on IndexedList.</p>
-<h3>ListView.RefreshControl<a id="user-content-listview.refreshcontrol" name="listview.refreshcontrol" class="anchor" aria-hidden="true" href="#listview.refreshcontrol"><span class="octicon octicon-link"></span></a></h3><ul>
-<li>icon (any) - refresh indicator, include <code>pull</code> and <code>release</code> state</li>
-<li>loading (any) - loading indicator</li>
-<li>distanceToRefresh (number, default 50) - distance to refresh</li>
-<li>onRefresh (function, required) - onRefresh callback</li>
-<li>refreshing (boolean, false) - whether to show refreshing state</li>
-</ul>
-<h2>Test Case<a id="user-content-test-case" name="test-case" class="anchor" aria-hidden="true" href="#test-case"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm test
-npm run chrome-test</code></pre></div><h2>Coverage<a id="user-content-coverage" name="coverage" class="anchor" aria-hidden="true" href="#coverage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm run coverage</code></pre></div><p>open coverage/ dir</p>
+<h2>ListView.IndexedList<a id="user-content-listview.indexedlist" name="listview.indexedlist" class="anchor" aria-hidden="true" href="#listview.indexedlist"><span class="octicon octicon-link"></span></a></h2><p><strong>Note:</strong> You can use almost all APIs on the ListView, except for <code>useZscroller</code></p>
+<table>
+<thead>
+<tr>
+<th>Properties</th>
+<th>Descrition</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>quickSearchBarTop</td>
+<td>top button object</td>
+<td>object{value:string, label:string}</td>
+<td><code>{ value: &#39;#&#39;, label: &#39;#&#39; }</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>quickSearchBarStyle</td>
+<td>quickSearchBar&#39;s style</td>
+<td>object</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onQuickSearch</td>
+<td>callback on click quick searchbar</td>
+<td>(sectionID) =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>showQuickSearchIndicator</td>
+<td>whether show quick search indicator</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>delayTime</td>
+<td>delay render time (delay render these items of <code>totalRowCount - initialListSize</code>)</td>
+<td>number</td>
+<td><code>100ms</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>delayActivityIndicator</td>
+<td>delay render activity indicator</td>
+<td>react node</td>
+<td>-</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>ListView.RefreshControl<a id="user-content-listview.refreshcontrol" name="listview.refreshcontrol" class="anchor" aria-hidden="true" href="#listview.refreshcontrol"><span class="octicon octicon-link"></span></a></h2><table>
+<thead>
+<tr>
+<th>Properties</th>
+<th>Descrition</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>icon</td>
+<td>refresh indicator, include <code>pull</code> and <code>release</code> state</td>
+<td>react node</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>loading</td>
+<td>loading indicator</td>
+<td>react node</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>distanceToRefresh</td>
+<td>distance to refresh</td>
+<td>number</td>
+<td>50</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onRefresh</td>
+<td>required, onRefresh callback</td>
+<td>() =&gt; {}</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>refreshing</td>
+<td>whether to show refreshing state</td>
+<td>bool</td>
+<td>false</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Test Case<a id="user-content-test-case" name="test-case" class="anchor" aria-hidden="true" href="#test-case"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm test</code></pre></div><h2>Coverage<a id="user-content-coverage" name="coverage" class="anchor" aria-hidden="true" href="#coverage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm run coverage</code></pre></div><p>open coverage/ dir</p>
 <h2>License<a id="user-content-license" name="license" class="anchor" aria-hidden="true" href="#license"><span class="octicon octicon-link"></span></a></h2><p>rmc-list-view is released under the MIT license.</p>
 
   </div>

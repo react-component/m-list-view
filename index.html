@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rmc-list-view@0.8.7 - m-list-view ui component for react</title>
+  <title>rmc-list-view@0.8.8 - m-list-view ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rmc-list-view@0.8.7</h1>
+  <h1>rmc-list-view@0.8.8</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -949,7 +949,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>renderBodyComponent</td>
+<td>renderBodyComponent (<code>web only</code>)</td>
 <td>render listview body wrapper component</td>
 <td>() =&gt; renderable</td>
 <td>-</td>
@@ -957,7 +957,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>renderSectionBodyWrapper</td>
+<td>renderSectionBodyWrapper (<code>web only</code>)</td>
 <td>render listview section body wrapper component</td>
 <td>(sectionID) =&gt; renderable</td>
 <td>-</td>
@@ -965,7 +965,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>useBodyScroll</td>
+<td>useBodyScroll (<code>web only</code>)</td>
 <td>use html <code>body</code>&#39;s scroll</td>
 <td>bool</td>
 <td>false</td>
@@ -973,15 +973,15 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>useZscroller</td>
-<td>use zscroller to well support RefreshControl(<code>useBodyScroll</code> and sticky not work when enable useZscroller)</td>
+<td>useZscroller (<code>web only</code>)</td>
+<td>use <a href="https://github.com/yiminghe/zscroller" title="null">zscroller</a> to simulate the implementation of rolling containers(can be used for some poor Android machine) (<code>useBodyScroll</code> and <code>stickyHeader</code> settings are automatically ignored), and can support RefreshControl well</td>
 <td>bool</td>
 <td>false</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td>scrollerOptions</td>
+<td>scrollerOptions (<code>web only</code>)</td>
 <td><a href="https://github.com/yiminghe/zscroller#options" title="null">zscroller options</a></td>
 <td>Object</td>
 <td>-</td>
@@ -989,19 +989,23 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>stickyHeader</td>
-<td>if set it, auto enable <code>useBodyScroll</code> and you can also set <code>stickyProps</code> / <code>stickyContainerProps</code> (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</td>
+<td>stickyHeader (<code>web only</code>)</td>
+<td>if set it, automatically enable <code>useBodyScroll</code> and you can also set <code>stickyProps</code> / <code>stickyContainerProps</code> (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</td>
 <td>bool</td>
 <td>false</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h3>方法<a id="user-content-方法" name="方法" class="anchor" aria-hidden="true" href="#方法"><span class="octicon octicon-link"></span></a></h3><ul>
+<h3>Methods<a id="user-content-methods" name="methods" class="anchor" aria-hidden="true" href="#methods"><span class="octicon octicon-link"></span></a></h3><ul>
 <li>getMetrics() - Exports some data, e.g. for perf investigations or analytics.</li>
 <li>scrollTo(...args) - Scrolls to a given x, y offset(not support smooth animation).</li>
 </ul>
-<h2>ListView.IndexedList<a id="user-content-listview.indexedlist" name="listview.indexedlist" class="anchor" aria-hidden="true" href="#listview.indexedlist"><span class="octicon octicon-link"></span></a></h2><p><strong>Note:</strong> You can use almost all APIs on the ListView, except for <code>useZscroller</code></p>
+<h2>ListView.IndexedList<a id="user-content-listview.indexedlist" name="listview.indexedlist" class="anchor" aria-hidden="true" href="#listview.indexedlist"><span class="octicon octicon-link"></span></a></h2><p>This component is often used in the &quot;Contacts&quot; / &quot;city list&quot; scenes, support for index navigation.</p>
+<blockquote>
+<p>You can use almost all APIs on the ListView, except for <code>useZscroller</code></p>
+<p>Note: Only two-step rendering is supported, so that the first screen priority display can be achieved, but if the list data volume is too large, the overall performance will still be affected.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -1015,7 +1019,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <tr>
 <td></td>
 <td>quickSearchBarTop</td>
-<td>top button object</td>
+<td>top button object of navigation bar</td>
 <td>object{value:string, label:string}</td>
 <td><code>{ value: &#39;#&#39;, label: &#39;#&#39; }</code></td>
 <td></td>
@@ -1031,8 +1035,8 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <tr>
 <td></td>
 <td>onQuickSearch</td>
-<td>callback on click quick searchbar</td>
-<td>(sectionID) =&gt; {}</td>
+<td>fire on clicking navigation bar.</td>
+<td>(sectionID: any, topId?:any) =&gt; void</td>
 <td>-</td>
 <td></td>
 </tr>
@@ -1047,7 +1051,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <tr>
 <td></td>
 <td>delayTime</td>
-<td>delay render time (delay render these items of <code>totalRowCount - initialListSize</code>)</td>
+<td>delay rendering time setting (for the first screen optimization, the initial rendering of the number of <code>initialListSize</code> data, after which time rendering the remaining data items, ie <code>totalRowCount - initialListSize</code>)</td>
 <td>number</td>
 <td><code>100ms</code></td>
 <td></td>
@@ -1055,7 +1059,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <tr>
 <td></td>
 <td>delayActivityIndicator</td>
-<td>delay render activity indicator</td>
+<td>the loading indicator for delayed rendering.</td>
 <td>react node</td>
 <td>-</td>
 <td></td>
@@ -1093,21 +1097,21 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <td>distanceToRefresh</td>
 <td>distance to refresh</td>
 <td>number</td>
-<td>50</td>
+<td><code>50px</code></td>
 <td></td>
 </tr>
 <tr>
 <td></td>
 <td>onRefresh</td>
-<td>required, onRefresh callback</td>
-<td>() =&gt; {}</td>
+<td>required, Called when the view starts refreshing.</td>
+<td>() =&gt; void</td>
 <td>-</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
 <td>refreshing</td>
-<td>whether to show refreshing state</td>
+<td>Whether the view should be indicating an active refresh</td>
 <td>bool</td>
 <td>false</td>
 <td></td>

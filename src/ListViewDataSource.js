@@ -1,6 +1,6 @@
 import invariant from 'fbjs/lib/invariant';
 import isEmpty from 'fbjs/lib/isEmpty';
-import warning from 'fbjs/lib/warning';
+import warning from 'warning';
 
 function defaultGetRowData(
   dataBlob,

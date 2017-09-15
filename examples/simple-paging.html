@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple-paging.js - example - rmc-list-view@0.8.8</title>
+  <title>simple-paging.js - example - rmc-list-view@0.8.9</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.8.8</h1>
+      <h1>rmc-list-view@0.8.9</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -328,6 +328,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-comment">// }</span>
 
   onEndReached = (event) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fire onEndReached'</span>);
     <span class="hljs-comment">// load new data</span>
     <span class="hljs-comment">// hasMore: from backend data, indicates whether it is the last page, here is false</span>
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.isLoading &amp;&amp; !<span class="hljs-keyword">this</span>.state.hasMore) {

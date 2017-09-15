@@ -265,6 +265,7 @@ var Demo = function (_React$Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
     _this.onEndReached = function (event) {
+      console.log('fire onEndReached');
       // load new data
       // hasMore: from backend data, indicates whether it is the last page, here is false
       if (_this.state.isLoading && !_this.state.hasMore) {
@@ -388,9 +389,7 @@ var Demo = function (_React$Component) {
           pageSize: 4,
           scrollRenderAheadDistance: 500,
           scrollEventThrottle: 20,
-          onScroll: function onScroll() {
-            console.log('scroll');
-          },
+          onScroll: function onScroll() {},
           onEndReached: this.onEndReached,
           onEndReachedThreshold: 10,
           renderBodyComponent: function renderBodyComponent() {

@@ -252,6 +252,7 @@ var Demo = function (_React$Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
     _this.onEndReached = function (event) {
+      console.log('fire onEndReached');
       // load new data
       // hasMore: from backend data, indicates whether it is the last page, here is false
       if (_this.state.isLoading && !_this.state.hasMore) {

@@ -277,6 +277,7 @@ var Demo = function (_React$Component) {
     };
 
     _this.onEndReached = function (event) {
+      console.log('fire onEndReached');
       // load new data
       // hasMore: from backend data, indicates whether it is the last page, here is false
       if (_this.state.isLoading && !_this.state.hasMore) {

@@ -7547,6 +7547,8 @@ var StaticRenderer = function (_React$Component) {
 
   return StaticRenderer;
 }(__WEBPACK_IMPORTED_MODULE_6_react___default.a.Component);
+// https://github.com/facebook/react-native/blob/0.26-stable/Libraries/CustomComponents/ListView/ListView.js
+
 
 var ListView = function (_React$Component2) {
   __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_inherits___default()(ListView, _React$Component2);
@@ -7831,9 +7833,7 @@ var _initialiseProps = function _initialiseProps() {
 
   this._maybeCallOnEndReached = function (event) {
     // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties));
-    if (_this5.props.onEndReached &&
-    // this.scrollProperties.contentLength !== this._sentEndForContentLength &&
-    _this5._getDistanceFromEnd(_this5.scrollProperties) < _this5.props.onEndReachedThreshold && _this5.state.curRenderedRowsCount === _this5.props.dataSource.getRowCount()) {
+    if (_this5.props.onEndReached && _this5.scrollProperties.contentLength !== _this5._sentEndForContentLength && _this5._getDistanceFromEnd(_this5.scrollProperties) < _this5.props.onEndReachedThreshold && _this5.state.curRenderedRowsCount === _this5.props.dataSource.getRowCount()) {
       _this5._sentEndForContentLength = _this5.scrollProperties.contentLength;
       _this5.props.onEndReached(event);
       return true;
@@ -12937,8 +12937,7 @@ RefreshControl.defaultProps = {
 var SCROLLVIEW = 'ScrollView';
 var INNERVIEW = 'InnerScrollView';
 
-// https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollView/ScrollView.js
-// https://facebook.github.io/react-native/docs/refreshcontrol.html
+// https://github.com/facebook/react-native/blob/0.26-stable/Libraries/Components/ScrollView/ScrollView.js
 
 /* eslint react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 

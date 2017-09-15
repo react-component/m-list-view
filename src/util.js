@@ -20,12 +20,22 @@ export function _event(e) {
 }
 
 export function throttle(fn, delay) {
-  let allowSample = true;
+  let delayFlag = true;
+  let firstInvoke = true;
+  // console.log('exec once');
   return function _throttle(e) {
-    if (allowSample) {
-      allowSample = false;
-      setTimeout(() => { allowSample = true; }, delay);
-      fn(e);
+    if (delayFlag) {
+      delayFlag = false;
+      setTimeout(() => {
+        delayFlag = true;
+        // console.log('exec delay time');
+        fn(e);
+      }, delay);
+      if (firstInvoke) {
+        // console.log('first invoke');
+        fn(e);
+        firstInvoke = false;
+      }
     }
   };
 }

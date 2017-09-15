@@ -370,6 +370,14 @@ export default class ListView extends React.Component {
     this.props.onScroll && this.props.onScroll(ev);
   }
 
+  /**
+   The following code was originally intended to implement the pull-up-refresh feature,
+   but not need to do it.
+
+   Coincidentally, it solves a problem, if the content is not high enough,
+   the `onScroll` and `onEndReached` event will not be fired.
+   However, there should be a better solution for this issue.
+   */
   componentDidMount() {
     this.bindEvt();
   }
@@ -415,7 +423,9 @@ export default class ListView extends React.Component {
   onPullUpEnd = (e) => {
     if (this._isPullUp && this.props.onEndReached) {
       // this.props.onEndReached(e);
-      this._onScroll(e); // need update `this.scrollProperties` in order to render correctly
+      // https://github.com/react-component/m-list-view/pull/15/files
+      // need update `this.scrollProperties` in order to render correctly
+      this._onScroll(e);
     }
     this._isPullUp = false;
   }

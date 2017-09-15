@@ -41,6 +41,7 @@ const styles = {
 export default class ScrollView extends React.Component {
   static propTypes = propTypes;
   componentWillUpdate(nextProps) {
+    // https://github.com/ant-design/ant-design-mobile/issues/1480
     // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
     // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
     // 内容变化后 scrollTop 如果改变、会自动触发 scroll 事件，而此事件应该避免被执行

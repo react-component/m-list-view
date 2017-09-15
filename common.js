@@ -7716,6 +7716,15 @@ var ListView = function (_React$Component2) {
     }
   }, {
     key: 'componentDidMount',
+
+
+    /**
+     The following code was originally intended to implement the pull-up-refresh feature,
+     but not need to do it.
+      Coincidentally, it solves a problem, if the content is not high enough,
+     the `onScroll` and `onEndReached` event will not be fired.
+     However, there should be a better solution for this issue.
+     */
     value: function componentDidMount() {
       this.bindEvt();
     }
@@ -7955,7 +7964,9 @@ var _initialiseProps = function _initialiseProps() {
   this.onPullUpEnd = function (e) {
     if (_this5._isPullUp && _this5.props.onEndReached) {
       // this.props.onEndReached(e);
-      _this5._onScroll(e); // need update `this.scrollProperties` in order to render correctly
+      // https://github.com/react-component/m-list-view/pull/15/files
+      // need update `this.scrollProperties` in order to render correctly
+      _this5._onScroll(e);
     }
     _this5._isPullUp = false;
   };
@@ -8023,14 +8034,22 @@ function _event(e) {
 }
 
 function throttle(fn, delay) {
-  var allowSample = true;
+  var delayFlag = true;
+  var firstInvoke = true;
+  // console.log('exec once');
   return function _throttle(e) {
-    if (allowSample) {
-      allowSample = false;
+    if (delayFlag) {
+      delayFlag = false;
       setTimeout(function () {
-        allowSample = true;
+        delayFlag = true;
+        // console.log('exec delay time');
+        fn(e);
       }, delay);
-      fn(e);
+      if (firstInvoke) {
+        // console.log('first invoke');
+        fn(e);
+        firstInvoke = false;
+      }
     }
   };
 }
@@ -12987,6 +13006,7 @@ var ScrollView = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_createClass___default()(ScrollView, [{
     key: 'componentWillUpdate',
     value: function componentWillUpdate(nextProps) {
+      // https://github.com/ant-design/ant-design-mobile/issues/1480
       // https://stackoverflow.com/questions/1386696/make-scrollleft-scrolltop-changes-not-trigger-scroll-event
       // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
       // 内容变化后 scrollTop 如果改变、会自动触发 scroll 事件，而此事件应该避免被执行

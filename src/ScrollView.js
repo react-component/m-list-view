@@ -8,8 +8,7 @@ import { throttle } from './util';
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
 
-// https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollView/ScrollView.js
-// https://facebook.github.io/react-native/docs/refreshcontrol.html
+// https://github.com/facebook/react-native/blob/0.26-stable/Libraries/Components/ScrollView/ScrollView.js
 
 /* eslint react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 

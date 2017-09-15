@@ -22,7 +22,7 @@ class StaticRenderer extends React.Component {
     return this.props.render();
   }
 }
-
+// https://github.com/facebook/react-native/blob/0.26-stable/Libraries/CustomComponents/ListView/ListView.js
 export default class ListView extends React.Component {
   static DataSource = ListViewDataSource
   static propTypes = {
@@ -268,7 +268,7 @@ export default class ListView extends React.Component {
   _maybeCallOnEndReached = (event) => {
     // console.log(this.scrollProperties, this._getDistanceFromEnd(this.scrollProperties));
     if (this.props.onEndReached &&
-        // this.scrollProperties.contentLength !== this._sentEndForContentLength &&
+        this.scrollProperties.contentLength !== this._sentEndForContentLength &&
         this._getDistanceFromEnd(this.scrollProperties) < this.props.onEndReachedThreshold &&
         this.state.curRenderedRowsCount === this.props.dataSource.getRowCount()) {
       this._sentEndForContentLength = this.scrollProperties.contentLength;

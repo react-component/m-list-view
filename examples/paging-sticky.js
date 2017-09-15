@@ -64,6 +64,7 @@ class Demo extends React.Component {
   }
 
   onEndReached = (event) => {
+    console.log('fire onEndReached');
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
     if (this.state.isLoading && !this.state.hasMore) {
@@ -114,7 +115,7 @@ class Demo extends React.Component {
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
-        onScroll={() => { console.log('scroll'); } }
+        onScroll={() => {}}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={500}
         renderBodyComponent={() => <div className="for-body-demo" />}

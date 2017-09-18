@@ -7508,7 +7508,7 @@ module.exports = lowPriorityWarning;
 
 
 
-/* eslint react/no-multi-comp: 0
+/* eslint no-unused-vars: 0, react/no-multi-comp: 0
 react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 
 
@@ -7595,7 +7595,9 @@ var ListView = function (_React$Component2) {
         this.setState(function (state, props) {
           _this3._prevRenderedRowsCount = 0;
           return {
-            curRenderedRowsCount: Math.min(Math.max(state.curRenderedRowsCount, props.initialListSize), props.dataSource.getRowCount())
+            curRenderedRowsCount: Math.min(Math.max(state.curRenderedRowsCount, nextProps.initialListSize // for preact
+            ), nextProps.dataSource.getRowCount() // for preact
+            )
           };
         }, function () {
           return _this3._renderMoreRowsIfNeeded();

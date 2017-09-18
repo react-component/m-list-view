@@ -1,4 +1,4 @@
-/* eslint react/no-multi-comp: 0
+/* eslint no-unused-vars: 0, react/no-multi-comp: 0
 react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -117,9 +117,9 @@ export default class ListView extends React.Component {
           curRenderedRowsCount: Math.min(
             Math.max(
               state.curRenderedRowsCount,
-              props.initialListSize
+              nextProps.initialListSize // for preact
             ),
-            props.dataSource.getRowCount()
+            nextProps.dataSource.getRowCount() // for preact
           ),
         };
       }, () => this._renderMoreRowsIfNeeded());

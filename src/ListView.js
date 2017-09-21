@@ -329,10 +329,11 @@ export default class ListView extends React.Component {
       this.scrollProperties.contentLength = target[
         isVertical ? 'scrollHeight' : 'scrollWidth'
       ];
-      // chrome61 `document.body` is invalid, use `document.documentElement` instead
-      this.scrollProperties.offset = (document.documentElement ||
-        document.body.parentNode ||
-        document.body)[
+      // In chrome61 `document.body.scrollTop` is invalid,
+      // and add new `document.scrollingElement`(chrome61, iOS support).
+      // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
+      const scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
+      this.scrollProperties.offset = scrollNode[
         isVertical ? 'scrollTop' : 'scrollLeft'
       ];
     } else if (this.props.useZscroller) {

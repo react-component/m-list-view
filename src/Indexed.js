@@ -5,6 +5,11 @@ import classNames from 'classnames';
 import ListView from './ListView';
 import { getOffsetTop, _event } from './util';
 
+function setDocumentScrollTop(val) {
+  window.document.body.scrollTop = val;  // chrome61 is invalid
+  window.document.documentElement.scrollTop = val;
+}
+
 /* eslint react/prop-types: 0 */
 export default class IndexedList extends React.Component {
   static propTypes = {
@@ -62,7 +67,7 @@ export default class IndexedList extends React.Component {
 
   onQuickSearchTop = (sectionID, topId) => {
     if (this.props.stickyHeader) {
-      window.document.body.scrollTop = 0;
+      setDocumentScrollTop(0);
     } else {
       ReactDOM.findDOMNode(this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
     }
@@ -78,8 +83,9 @@ export default class IndexedList extends React.Component {
       if (stickyComponent && stickyComponent.refs.placeholder) {
         sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
       }
-      window.document.body.scrollTop =
-        sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
+      setDocumentScrollTop(
+        sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv)
+      );
     } else {
       lv.scrollTop += sec.getBoundingClientRect().top - lv.getBoundingClientRect().top;
     }

@@ -7522,7 +7522,7 @@ var DEFAULT_INITIAL_ROWS = 10;
 var DEFAULT_SCROLL_RENDER_AHEAD = 1000;
 var DEFAULT_END_REACHED_THRESHOLD = 1000;
 var DEFAULT_SCROLL_CALLBACK_THROTTLE = 50;
-var SCROLLVIEW_REF = 'listviewscroll';
+// const SCROLLVIEW_REF = 'ListViewRef';
 
 var StaticRenderer = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_inherits___default()(StaticRenderer, _React$Component);
@@ -7710,7 +7710,9 @@ var ListView = function (_React$Component2) {
       }
 
       this._sc = __WEBPACK_IMPORTED_MODULE_6_react___default.a.cloneElement(renderScrollComponent(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, props, { onScroll: this._onScroll })), {
-        ref: SCROLLVIEW_REF,
+        ref: function ref(el) {
+          return _this4.ListViewRef = el;
+        },
         onContentSizeChange: this._onContentSizeChange,
         onLayout: this._onLayout
       }, header, bodyComponents, footer, props.children);
@@ -7804,14 +7806,13 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.scrollTo = function () {
-    var _refs$SCROLLVIEW_REF;
+    var _ListViewRef;
 
-    _this5.refs[SCROLLVIEW_REF] && _this5.refs[SCROLLVIEW_REF].scrollTo && (_refs$SCROLLVIEW_REF = _this5.refs[SCROLLVIEW_REF]).scrollTo.apply(_refs$SCROLLVIEW_REF, arguments);
+    _this5.ListViewRef && _this5.ListViewRef.scrollTo && (_ListViewRef = _this5.ListViewRef).scrollTo.apply(_ListViewRef, arguments);
   };
 
   this.getInnerViewNode = function () {
-    // console.log(this.refs[SCROLLVIEW_REF]);
-    return _this5.refs[SCROLLVIEW_REF].getInnerViewNode();
+    return _this5.ListViewRef.getInnerViewNode();
   };
 
   this.onRowHighlighted = function (sectionID, rowID) {
@@ -7886,10 +7887,10 @@ var _initialiseProps = function _initialiseProps() {
     var ev = e;
     // when the ListView is destroyed,
     // but also will trigger scroll event after `scrollEventThrottle`
-    if (!_this5.refs[SCROLLVIEW_REF]) {
+    if (!_this5.ListViewRef) {
       return;
     }
-    var target = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.refs[SCROLLVIEW_REF]);
+    var target = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.ListViewRef);
     if (_this5.props.stickyHeader || _this5.props.useBodyScroll) {
       _this5.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
       _this5.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
@@ -7899,7 +7900,7 @@ var _initialiseProps = function _initialiseProps() {
       var scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
       _this5.scrollProperties.offset = scrollNode[isVertical ? 'scrollTop' : 'scrollLeft'];
     } else if (_this5.props.useZscroller) {
-      var domScroller = _this5.refs[SCROLLVIEW_REF].domScroller;
+      var domScroller = _this5.ListViewRef.domScroller;
       ev = domScroller;
       _this5.scrollProperties.visibleLength = domScroller.container[isVertical ? 'clientHeight' : 'clientWidth'];
       _this5.scrollProperties.contentLength = domScroller.content[isVertical ? 'offsetHeight' : 'offsetWidth'];
@@ -7948,7 +7949,7 @@ var _initialiseProps = function _initialiseProps() {
     if (stickyHeader || useBodyScroll) {
       ele = document.body;
     } else {
-      ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.refs.listviewscroll.refs.ScrollView);
+      ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.ListViewRef.ScrollViewRef);
     }
     return ele;
   };
@@ -12165,7 +12166,10 @@ var IndexedList = function (_React$Component) {
       });
       return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
         'ul',
-        { ref: 'quickSearchBar',
+        {
+          ref: function ref(el) {
+            return _this2.quickSearchBarRef = el;
+          },
           className: prefixCls + '-quick-search-bar', style: quickSearchBarStyle,
           onTouchStart: this.onTouchStart,
           onTouchMove: this.onTouchMove,
@@ -12227,7 +12231,9 @@ var IndexedList = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_11__ListView__["a" /* default */],
           __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, other, {
-            ref: 'indexedListView',
+            ref: function ref(el) {
+              return _this3.indexedListViewRef = el;
+            },
             className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()(prefixCls, className),
             initialListSize: initialListSize,
             pageSize: pageSize,
@@ -12243,7 +12249,9 @@ var IndexedList = function (_React$Component) {
           children
         ),
         this.renderQuickSearchBar(quickSearchBarTop, quickSearchBarStyle),
-        showQuickSearchIndicator ? __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement('div', { className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-qsindicator', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-qsindicator-hide', !showQuickSearchIndicator || !this.state.showQuickSearchIndicator), _classNames)), ref: 'qsIndicator'
+        showQuickSearchIndicator ? __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement('div', { className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-qsindicator', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-qsindicator-hide', !showQuickSearchIndicator || !this.state.showQuickSearchIndicator), _classNames)), ref: function ref(el) {
+            return _this3.qsIndicatorRef = el;
+          }
         }) : null
       );
     }
@@ -12279,17 +12287,17 @@ var _initialiseProps = function _initialiseProps() {
     if (_this4.props.stickyHeader) {
       setDocumentScrollTop(0);
     } else {
-      __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(_this4.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
+      __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(_this4.indexedListViewRef.ListViewRef).scrollTop = 0;
     }
     _this4.props.onQuickSearch(sectionID, topId);
   };
 
   this.onQuickSearch = function (sectionID) {
-    var lv = __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(_this4.refs.indexedListView.refs.listviewscroll);
+    var lv = __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(_this4.indexedListViewRef.ListViewRef);
     var sec = __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(_this4.sectionComponents[sectionID]);
     if (_this4.props.stickyHeader) {
       // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
-      var stickyComponent = _this4.refs.indexedListView.stickyRefs[sectionID];
+      var stickyComponent = _this4.indexedListViewRef.stickyRefs[sectionID];
       if (stickyComponent && stickyComponent.refs.placeholder) {
         sec = __WEBPACK_IMPORTED_MODULE_9_react_dom___default.a.findDOMNode(stickyComponent.refs.placeholder);
       }
@@ -12302,7 +12310,7 @@ var _initialiseProps = function _initialiseProps() {
 
   this.onTouchStart = function (e) {
     _this4._target = e.target;
-    _this4._basePos = _this4.refs.quickSearchBar.getBoundingClientRect();
+    _this4._basePos = _this4.quickSearchBarRef.getBoundingClientRect();
     document.addEventListener('touchmove', _this4._disableParent, false);
     document.body.className = document.body.className + ' ' + _this4.props.prefixCls + '-qsb-moving';
     _this4.updateIndicator(_this4._target);
@@ -12347,7 +12355,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.getQsInfo = function () {
-    var quickSearchBar = _this4.refs.quickSearchBar;
+    var quickSearchBar = _this4.quickSearchBarRef;
     var height = quickSearchBar.offsetHeight;
     var hCache = [];
     [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach(function (d) {
@@ -12383,7 +12391,7 @@ var _initialiseProps = function _initialiseProps() {
         pageSize: rowCount,
         _delay: false
       }, function () {
-        return _this4.refs.indexedListView._pageInNewRows();
+        return _this4.indexedListViewRef._pageInNewRows();
       });
     }, props.delayTime);
   };
@@ -12394,7 +12402,7 @@ var _initialiseProps = function _initialiseProps() {
       el = el.parentNode;
     }
     if (_this4.props.showQuickSearchIndicator) {
-      _this4.refs.qsIndicator.innerText = el.innerText.trim();
+      _this4.qsIndicatorRef.innerText = el.innerText.trim();
       _this4.setState({
         showQuickSearchIndicator: true
       });
@@ -12867,7 +12875,8 @@ var RefreshControl = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(RefreshControl, [{
     key: 'render',
     value: function render() {
-      var _classNames;
+      var _classNames,
+          _this2 = this;
 
       var _props = this.props,
           prefixCls = _props.prefixCls,
@@ -12884,7 +12893,9 @@ var RefreshControl = function (_React$Component) {
       var wrapCls = __WEBPACK_IMPORTED_MODULE_7_classnames___default()(className, (_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-ptr', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-active', active), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-deactive', deactive), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-loading', loadingState || refreshing), _classNames));
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
-        { ref: 'ptr', className: wrapCls, style: style },
+        { ref: function ref(el) {
+            return _this2.ptrRef = el;
+          }, className: wrapCls, style: style },
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
           'div',
           { className: prefixCls + '-ptr-icon' },
@@ -12964,8 +12975,8 @@ RefreshControl.defaultProps = {
 
 
 
-var SCROLLVIEW = 'ScrollView';
-var INNERVIEW = 'InnerScrollView';
+// const SCROLLVIEW = 'ScrollViewRef';
+// const INNERVIEW = 'InnerScrollViewRef';
 
 // https://github.com/facebook/react-native/blob/0.26-stable/Libraries/Components/ScrollView/ScrollView.js
 
@@ -13027,7 +13038,7 @@ var ScrollView = function (_React$Component) {
           window.removeEventListener('scroll', this.tsExec);
         } else if (!this.props.useZscroller) {
           // not handle useZscroller now. todo
-          __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+          __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
         }
       }
     }
@@ -13054,7 +13065,7 @@ var ScrollView = function (_React$Component) {
             window.addEventListener('scroll', _this2.tsExec);
           } else if (!_this2.props.useZscroller) {
             // not handle useZscroller now. todo
-            __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this2.refs[SCROLLVIEW]).addEventListener('scroll', _this2.tsExec);
+            __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this2.ScrollViewRef).addEventListener('scroll', _this2.tsExec);
           }
         }, 0);
       }
@@ -13072,7 +13083,7 @@ var ScrollView = function (_React$Component) {
           nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } }
         });
       };
-      var ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.refs[SCROLLVIEW]);
+      var ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.ScrollViewRef);
 
       if (this.props.stickyHeader || this.props.useBodyScroll) {
         window.addEventListener('scroll', this.tsExec);
@@ -13082,7 +13093,7 @@ var ScrollView = function (_React$Component) {
       } else {
         // todo
         // ele.addEventListener('resize', this.onLayout);
-        // ReactDOM.findDOMNode(this.refs[INNERVIEW])
+        // ReactDOM.findDOMNode(this.InnerScrollViewRef)
         // .addEventListener('resize', this.onContentSizeChange);
         if (this.props.useZscroller) {
           this.renderZscroller();
@@ -13100,7 +13111,7 @@ var ScrollView = function (_React$Component) {
       } else if (this.props.useZscroller) {
         this.domScroller.destroy();
       } else {
-        __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+        __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
       }
     }
   }, {
@@ -13144,11 +13155,11 @@ var ScrollView = function (_React$Component) {
           // console.log('first reach the distance');
           _this4.manuallyRefresh = true;
           _this4.overDistanceThenRelease = false;
-          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({ active: true });
+          _this4.RefreshControlRef && _this4.RefreshControlRef.setState({ active: true });
         }, function () {
           // console.log('back to the distance', this.overDistanceThenRelease);
           _this4.manuallyRefresh = false;
-          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({
+          _this4.RefreshControlRef && _this4.RefreshControlRef.setState({
             deactive: _this4.overDistanceThenRelease,
             active: false,
             loadingState: false
@@ -13156,7 +13167,7 @@ var ScrollView = function (_React$Component) {
         }, function () {
           // console.log('Over distance and release to loading');
           _this4.overDistanceThenRelease = true;
-          _this4.refs.refreshControl && _this4.refs.refreshControl.setState({
+          _this4.RefreshControlRef && _this4.RefreshControlRef.setState({
             deactive: false,
             loadingState: true
           });
@@ -13181,6 +13192,8 @@ var ScrollView = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
       var _props2 = this.props,
           children = _props2.children,
           className = _props2.className,
@@ -13210,12 +13223,16 @@ var ScrollView = function (_React$Component) {
       var preCls = prefixCls || listViewPrefixCls || '';
 
       var containerProps = {
-        ref: SCROLLVIEW,
+        ref: function ref(el) {
+          return _this5.ScrollViewRef = el;
+        },
         style: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, styleBase, style),
         className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()(className, preCls + '-scrollview')
       };
       var contentContainerProps = {
-        ref: INNERVIEW,
+        ref: function ref(el) {
+          return _this5.InnerScrollViewRef = el;
+        },
         style: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({ position: 'absolute', minWidth: '100%' }, contentContainerStyle),
         className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()(preCls + '-scrollview-content', listPrefixCls)
       };
@@ -13227,7 +13244,9 @@ var ScrollView = function (_React$Component) {
           __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
             'div',
             contentContainerProps,
-            __WEBPACK_IMPORTED_MODULE_6_react___default.a.cloneElement(refreshControl, { ref: 'refreshControl' }),
+            __WEBPACK_IMPORTED_MODULE_6_react___default.a.cloneElement(refreshControl, { ref: function ref(el) {
+                return _this5.RefreshControlRef = el;
+              } }),
             children
           )
         );
@@ -13258,25 +13277,25 @@ var ScrollView = function (_React$Component) {
 ScrollView.propTypes = propTypes;
 
 var _initialiseProps = function _initialiseProps() {
-  var _this5 = this;
+  var _this6 = this;
 
   this.getInnerViewNode = function () {
-    return __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.refs[INNERVIEW]);
+    return __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this6.InnerScrollViewRef);
   };
 
   this.scrollTo = function () {
-    if (_this5.props.stickyHeader || _this5.props.useBodyScroll) {
+    if (_this6.props.stickyHeader || _this6.props.useBodyScroll) {
       var _window;
 
       (_window = window).scrollTo.apply(_window, arguments);
-    } else if (_this5.props.useZscroller) {
+    } else if (_this6.props.useZscroller) {
       var _domScroller$scroller;
 
       // it will change zScroller's dimensions on data loaded, so it needs fire reflow.
-      _this5.domScroller.reflow();
-      (_domScroller$scroller = _this5.domScroller.scroller).scrollTo.apply(_domScroller$scroller, arguments);
+      _this6.domScroller.reflow();
+      (_domScroller$scroller = _this6.domScroller.scroller).scrollTo.apply(_domScroller$scroller, arguments);
     } else {
-      var ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this5.refs[SCROLLVIEW]);
+      var ele = __WEBPACK_IMPORTED_MODULE_8_react_dom___default.a.findDOMNode(_this6.ScrollViewRef);
       ele.scrollLeft = arguments.length <= 0 ? undefined : arguments[0];
       ele.scrollTop = arguments.length <= 1 ? undefined : arguments[1];
     }
@@ -13284,18 +13303,18 @@ var _initialiseProps = function _initialiseProps() {
 
   this.throttleScroll = function () {
     var handleScroll = function handleScroll() {};
-    if (_this5.props.scrollEventThrottle && _this5.props.onScroll) {
+    if (_this6.props.scrollEventThrottle && _this6.props.onScroll) {
       handleScroll = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11__util__["c" /* throttle */])(function (e) {
-        _this5.props.onScroll && _this5.props.onScroll(e);
-      }, _this5.props.scrollEventThrottle);
+        _this6.props.onScroll && _this6.props.onScroll(e);
+      }, _this6.props.scrollEventThrottle);
     }
     return handleScroll;
   };
 
   this.scrollingComplete = function () {
     // console.log('scrolling complete');
-    if (_this5.props.refreshControl && _this5.refs.refreshControl && _this5.refs.refreshControl.state.deactive) {
-      _this5.refs.refreshControl.setState({ deactive: false });
+    if (_this6.props.refreshControl && _this6.RefreshControlRef && _this6.RefreshControlRef.state.deactive) {
+      _this6.RefreshControlRef.setState({ deactive: false });
     }
   };
 };

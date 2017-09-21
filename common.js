@@ -7893,8 +7893,11 @@ var _initialiseProps = function _initialiseProps() {
     if (_this5.props.stickyHeader || _this5.props.useBodyScroll) {
       _this5.scrollProperties.visibleLength = window[isVertical ? 'innerHeight' : 'innerWidth'];
       _this5.scrollProperties.contentLength = target[isVertical ? 'scrollHeight' : 'scrollWidth'];
-      // chrome61 `document.body` is invalid, use `document.documentElement` instead
-      _this5.scrollProperties.offset = (document.documentElement || document.body.parentNode || document.body)[isVertical ? 'scrollTop' : 'scrollLeft'];
+      // In chrome61 `document.body.scrollTop` is invalid,
+      // and add new `document.scrollingElement`(chrome61, iOS support).
+      // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
+      var scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
+      _this5.scrollProperties.offset = scrollNode[isVertical ? 'scrollTop' : 'scrollLeft'];
     } else if (_this5.props.useZscroller) {
       var domScroller = _this5.refs[SCROLLVIEW_REF].domScroller;
       ev = domScroller;

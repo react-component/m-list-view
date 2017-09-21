@@ -116,6 +116,18 @@ Properties | Descrition | Type | Default
 | refreshing | Whether the view should be indicating an active refresh | bool | false |
 
 
+## Tips
+
+ListView has three types of scroll containers:
+
+1. Partial div container
+    - default, note: **need to manually set the height of the ListView**
+2. html body container
+    - set `useBodyScroll` or `stickyHeader` to take effect (do not need to set height)
+3. Use [zscroller](https://github.com/yiminghe/zscroller) to simulate the rolling container
+    - set `useZscroller` to take effect, then you can set `scrollerOptions`
+
+
 ## Test Case
 
 ```

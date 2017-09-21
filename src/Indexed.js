@@ -69,17 +69,17 @@ export default class IndexedList extends React.Component {
     if (this.props.stickyHeader) {
       setDocumentScrollTop(0);
     } else {
-      ReactDOM.findDOMNode(this.refs.indexedListView.refs.listviewscroll).scrollTop = 0;
+      ReactDOM.findDOMNode(this.indexedListViewRef.ListViewRef).scrollTop = 0;
     }
     this.props.onQuickSearch(sectionID, topId);
   }
 
   onQuickSearch = (sectionID) => {
-    const lv = ReactDOM.findDOMNode(this.refs.indexedListView.refs.listviewscroll);
+    const lv = ReactDOM.findDOMNode(this.indexedListViewRef.ListViewRef);
     let sec = ReactDOM.findDOMNode(this.sectionComponents[sectionID]);
     if (this.props.stickyHeader) {
       // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
-      const stickyComponent = this.refs.indexedListView.stickyRefs[sectionID];
+      const stickyComponent = this.indexedListViewRef.stickyRefs[sectionID];
       if (stickyComponent && stickyComponent.refs.placeholder) {
         sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
       }
@@ -94,7 +94,7 @@ export default class IndexedList extends React.Component {
 
   onTouchStart = (e) => {
     this._target = e.target;
-    this._basePos = this.refs.quickSearchBar.getBoundingClientRect();
+    this._basePos = this.quickSearchBarRef.getBoundingClientRect();
     document.addEventListener('touchmove', this._disableParent, false);
     document.body.className = `${document.body.className} ${this.props.prefixCls}-qsb-moving`;
     this.updateIndicator(this._target);
@@ -138,7 +138,7 @@ export default class IndexedList extends React.Component {
   }
 
   getQsInfo = () => {
-    const quickSearchBar = this.refs.quickSearchBar;
+    const quickSearchBar = this.quickSearchBarRef;
     const height = quickSearchBar.offsetHeight;
     const hCache = [];
     [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach((d) => {
@@ -172,7 +172,7 @@ export default class IndexedList extends React.Component {
       this.setState({
         pageSize: rowCount,
         _delay: false,
-      }, () => this.refs.indexedListView._pageInNewRows());
+      }, () => this.indexedListViewRef._pageInNewRows());
     }, props.delayTime);
   }
 
@@ -182,7 +182,7 @@ export default class IndexedList extends React.Component {
       el = el.parentNode;
     }
     if (this.props.showQuickSearchIndicator) {
-      this.refs.qsIndicator.innerText = el.innerText.trim();
+      this.qsIndicatorRef.innerText = el.innerText.trim();
       this.setState({
         showQuickSearchIndicator: true,
       });
@@ -220,7 +220,8 @@ export default class IndexedList extends React.Component {
       };
     });
     return (
-      <ul ref="quickSearchBar"
+      <ul
+        ref={el => this.quickSearchBarRef = el}
         className={`${prefixCls}-quick-search-bar`} style={quickSearchBarStyle}
         onTouchStart={this.onTouchStart}
         onTouchMove={this.onTouchMove}
@@ -259,7 +260,7 @@ export default class IndexedList extends React.Component {
       {_delay && this.props.delayActivityIndicator}
       <ListView
         {...other}
-        ref="indexedListView"
+        ref={el => this.indexedListViewRef = el}
         className={classNames(prefixCls, className)}
         initialListSize={initialListSize}
         pageSize={pageSize}
@@ -278,7 +279,7 @@ export default class IndexedList extends React.Component {
         [`${prefixCls}-qsindicator`]: true,
         [`${prefixCls}-qsindicator-hide`]:
         !showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
-      })} ref="qsIndicator"
+      })} ref={el => this.qsIndicatorRef = el}
       /> : null}
     </div>);
   }

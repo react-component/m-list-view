@@ -12,7 +12,7 @@ const DEFAULT_INITIAL_ROWS = 10;
 const DEFAULT_SCROLL_RENDER_AHEAD = 1000;
 const DEFAULT_END_REACHED_THRESHOLD = 1000;
 const DEFAULT_SCROLL_CALLBACK_THROTTLE = 50;
-const SCROLLVIEW_REF = 'listviewscroll';
+// const SCROLLVIEW_REF = 'ListViewRef';
 
 class StaticRenderer extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -85,14 +85,13 @@ export default class ListView extends React.Component {
   }
 
   scrollTo = (...args) => {
-    this.refs[SCROLLVIEW_REF] &&
-    this.refs[SCROLLVIEW_REF].scrollTo &&
-    this.refs[SCROLLVIEW_REF].scrollTo(...args);
+    this.ListViewRef &&
+    this.ListViewRef.scrollTo &&
+    this.ListViewRef.scrollTo(...args);
   }
 
   getInnerViewNode = () => {
-    // console.log(this.refs[SCROLLVIEW_REF]);
-    return this.refs[SCROLLVIEW_REF].getInnerViewNode();
+    return this.ListViewRef.getInnerViewNode();
   }
 
   componentWillMount() {
@@ -239,7 +238,7 @@ export default class ListView extends React.Component {
     }
 
     this._sc = React.cloneElement(renderScrollComponent({ ...props, onScroll: this._onScroll }), {
-      ref: SCROLLVIEW_REF,
+      ref: el => this.ListViewRef = el,
       onContentSizeChange: this._onContentSizeChange,
       onLayout: this._onLayout,
     }, header, bodyComponents, footer, props.children);
@@ -318,10 +317,10 @@ export default class ListView extends React.Component {
     let ev = e;
     // when the ListView is destroyed,
     // but also will trigger scroll event after `scrollEventThrottle`
-    if (!this.refs[SCROLLVIEW_REF]) {
+    if (!this.ListViewRef) {
       return;
     }
-    const target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
+    const target = ReactDOM.findDOMNode(this.ListViewRef);
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       this.scrollProperties.visibleLength = window[
         isVertical ? 'innerHeight' : 'innerWidth'
@@ -337,7 +336,7 @@ export default class ListView extends React.Component {
         isVertical ? 'scrollTop' : 'scrollLeft'
       ];
     } else if (this.props.useZscroller) {
-      const domScroller = this.refs[SCROLLVIEW_REF].domScroller;
+      const domScroller = this.ListViewRef.domScroller;
       ev = domScroller;
       this.scrollProperties.visibleLength = domScroller.container[
         isVertical ? 'clientHeight' : 'clientWidth'
@@ -408,7 +407,7 @@ export default class ListView extends React.Component {
     if (stickyHeader || useBodyScroll) {
       ele = document.body;
     } else {
-      ele = ReactDOM.findDOMNode(this.refs.listviewscroll.refs.ScrollView);
+      ele = ReactDOM.findDOMNode(this.ListViewRef.ScrollViewRef);
     }
     return ele;
   }

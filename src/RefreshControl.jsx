@@ -52,7 +52,7 @@ export default class RefreshControl extends React.Component {
       [`${prefixCls}-loading`]: loadingState || refreshing,
     });
     return (
-      <div ref="ptr" className={wrapCls} style={style}>
+      <div ref={el => this.ptrRef = el} className={wrapCls} style={style}>
         <div className={`${prefixCls}-ptr-icon`}>{icon}</div>
         <div className={`${prefixCls}-ptr-loading`}>{loading}</div>
       </div>

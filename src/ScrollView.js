@@ -5,8 +5,8 @@ import DOMScroller from 'zscroller';
 import classNames from 'classnames';
 import { throttle } from './util';
 
-const SCROLLVIEW = 'ScrollView';
-const INNERVIEW = 'InnerScrollView';
+// const SCROLLVIEW = 'ScrollViewRef';
+// const INNERVIEW = 'InnerScrollViewRef';
 
 // https://github.com/facebook/react-native/blob/0.26-stable/Libraries/Components/ScrollView/ScrollView.js
 
@@ -51,7 +51,7 @@ export default class ScrollView extends React.Component {
       if (this.props.stickyHeader || this.props.useBodyScroll) {
         window.removeEventListener('scroll', this.tsExec);
       } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
-        ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+        ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
       }
     }
   }
@@ -74,7 +74,7 @@ export default class ScrollView extends React.Component {
         if (this.props.stickyHeader || this.props.useBodyScroll) {
           window.addEventListener('scroll', this.tsExec);
         } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
-          ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).addEventListener('scroll', this.tsExec);
+          ReactDOM.findDOMNode(this.ScrollViewRef).addEventListener('scroll', this.tsExec);
         }
       }, 0);
     }
@@ -86,7 +86,7 @@ export default class ScrollView extends React.Component {
     this.onLayout = () => this.props.onLayout({
       nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } },
     });
-    const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
 
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       window.addEventListener('scroll', this.tsExec);
@@ -96,7 +96,7 @@ export default class ScrollView extends React.Component {
     } else {
       // todo
       // ele.addEventListener('resize', this.onLayout);
-      // ReactDOM.findDOMNode(this.refs[INNERVIEW])
+      // ReactDOM.findDOMNode(this.InnerScrollViewRef)
       // .addEventListener('resize', this.onContentSizeChange);
       if (this.props.useZscroller) {
         this.renderZscroller();
@@ -112,12 +112,12 @@ export default class ScrollView extends React.Component {
     } else if (this.props.useZscroller) {
       this.domScroller.destroy();
     } else {
-      ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+      ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
     }
   }
 
   getInnerViewNode = () => {
-    return ReactDOM.findDOMNode(this.refs[INNERVIEW]);
+    return ReactDOM.findDOMNode(this.InnerScrollViewRef);
   }
 
   scrollTo = (...args) => {
@@ -128,7 +128,7 @@ export default class ScrollView extends React.Component {
       this.domScroller.reflow();
       this.domScroller.scroller.scrollTo(...args);
     } else {
-      const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+      const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
       ele.scrollLeft = args[0];
       ele.scrollTop = args[1];
     }
@@ -147,8 +147,8 @@ export default class ScrollView extends React.Component {
   scrollingComplete = () => {
     // console.log('scrolling complete');
     if (this.props.refreshControl &&
-    this.refs.refreshControl && this.refs.refreshControl.state.deactive) {
-      this.refs.refreshControl.setState({ deactive: false });
+    this.RefreshControlRef && this.RefreshControlRef.state.deactive) {
+      this.RefreshControlRef.setState({ deactive: false });
     }
   }
 
@@ -181,12 +181,12 @@ export default class ScrollView extends React.Component {
           // console.log('first reach the distance');
           this.manuallyRefresh = true;
           this.overDistanceThenRelease = false;
-          this.refs.refreshControl && this.refs.refreshControl.setState({ active: true });
+          this.RefreshControlRef && this.RefreshControlRef.setState({ active: true });
         },
         () => {
           // console.log('back to the distance', this.overDistanceThenRelease);
           this.manuallyRefresh = false;
-          this.refs.refreshControl && this.refs.refreshControl.setState({
+          this.RefreshControlRef && this.RefreshControlRef.setState({
             deactive: this.overDistanceThenRelease,
             active: false,
             loadingState: false,
@@ -195,7 +195,7 @@ export default class ScrollView extends React.Component {
         () => {
           // console.log('Over distance and release to loading');
           this.overDistanceThenRelease = true;
-          this.refs.refreshControl && this.refs.refreshControl.setState({
+          this.RefreshControlRef && this.RefreshControlRef.setState({
             deactive: false,
             loadingState: true,
           });
@@ -234,12 +234,12 @@ export default class ScrollView extends React.Component {
     const preCls = prefixCls || listViewPrefixCls || '';
 
     const containerProps = {
-      ref: SCROLLVIEW,
+      ref: el => this.ScrollViewRef = el,
       style: { ...styleBase, ...style },
       className: classNames(className, `${preCls}-scrollview`),
     };
     const contentContainerProps = {
-      ref: INNERVIEW,
+      ref: el => this.InnerScrollViewRef = el,
       style: { position: 'absolute', minWidth: '100%', ...contentContainerStyle },
       className: classNames(`${preCls}-scrollview-content`, listPrefixCls),
     };
@@ -248,7 +248,7 @@ export default class ScrollView extends React.Component {
       return (
         <div {...containerProps}>
           <div {...contentContainerProps}>
-            {React.cloneElement(refreshControl, { ref: 'refreshControl' })}
+            {React.cloneElement(refreshControl, { ref: el => this.RefreshControlRef = el })}
             {children}
           </div>
         </div>

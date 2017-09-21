@@ -125,7 +125,7 @@ ListView has three types of scroll containers:
 2. html body container
     - set `useBodyScroll` or `stickyHeader` to take effect (do not need to set height)
 3. Use [zscroller](https://github.com/yiminghe/zscroller) to simulate the rolling container
-    - set `useZscroller` to take effect, then you can set `scrollerOptions`
+    - set `useZscroller` to take effect, then you can set `scrollerOptions` (need to manually set the height of the ListView)
 
 
 ## Test Case

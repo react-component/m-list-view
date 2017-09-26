@@ -1,4 +1,4 @@
-webpackJsonp([4],{
+webpackJsonp([7],{
 
 /***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -193,7 +193,7 @@ var myData = [{
 
 /***/ }),
 
-/***/ 163:
+/***/ 159:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -218,14 +218,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/* eslint-disable no-console, no-alert */
+/* eslint-disable no-console */
+/* eslint react/sort-comp: 0 */
 
 
 
 
 
 
-var NUM_ROWS = 20;
+var NUM_ROWS = 6;
 
 function genData() {
   var pIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
@@ -245,6 +246,10 @@ var Demo = function (_React$Component) {
 
     var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
+    _this._ctrlBodyScroll = function (flag) {
+      document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
+    };
+
     var dataSource = new __WEBPACK_IMPORTED_MODULE_7_rmc_list_view__["a" /* default */].DataSource({
       rowHasChanged: function rowHasChanged(row1, row2) {
         return row1 !== row2;
@@ -252,7 +257,9 @@ var Demo = function (_React$Component) {
     });
 
     _this.state = {
-      dataSource: dataSource
+      dataSource: dataSource,
+      useBodyScroll: true,
+      pullUpRefreshing: false
     };
     return _this;
   }
@@ -279,47 +286,79 @@ var Demo = function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rmc_list_view__["a" /* default */], {
-        ref: function ref(el) {
-          return _this3.lv = el;
-        },
-        dataSource: this.state.dataSource,
-        renderRow: function renderRow(rowData) {
-          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_8__util__["a" /* View */],
-            { style: { display: 'flex', alignItems: 'center' } },
-            __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__util__["b" /* Image */], { style: { width: 64, height: 64 }, source: __WEBPACK_IMPORTED_MODULE_8__util__["c" /* THUMB_URLS */][0] }),
-            __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_8__util__["d" /* Text */],
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('style', { dangerouslySetInnerHTML: { __html: '#qrcode, .highlight { display: none; }' } }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'div',
+          { style: { paddingBottom: 30 } },
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { onClick: function onClick() {
+                _this3._ctrlBodyScroll(true);
+              } },
+            'enableBodyScroll'
+          ),
+          '\xA0',
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { onClick: function onClick() {
+                _this3._ctrlBodyScroll(false);
+              }, style: { color: 'red' } },
+            'disableBodyScroll'
+          ),
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { onClick: function onClick() {
+                return _this3.setState({ useBodyScroll: !_this3.state.useBodyScroll });
+              } },
+            'switch useBodyScroll'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rmc_list_view__["a" /* default */], { key: this.state.useBodyScroll ? 1 : 0,
+          ref: function ref(el) {
+            return _this3.lv = el;
+          },
+          dataSource: this.state.dataSource,
+          renderRow: function renderRow(rowData) {
+            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+              __WEBPACK_IMPORTED_MODULE_8__util__["a" /* View */],
+              { style: { display: 'flex', alignItems: 'center' } },
+              __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__util__["b" /* Image */], { style: { width: 64, height: 64 }, source: __WEBPACK_IMPORTED_MODULE_8__util__["c" /* THUMB_URLS */][0] }),
+              __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+                __WEBPACK_IMPORTED_MODULE_8__util__["d" /* Text */],
+                null,
+                rowData + ' - Lorem ipsum dolor sit amet'
+              )
+            );
+          },
+          renderFooter: function renderFooter() {
+            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+              'div',
               null,
-              rowData + ' - Lorem ipsum dolor sit amet'
-            )
-          );
-        },
-        renderSeparator: function renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
-          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__util__["a" /* View */], { key: sectionID + '-' + rowID,
-            style: {
-              height: adjacentRowHighlighted ? 4 : 1,
-              backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC'
-            }
-          });
-        },
-        renderBodyComponent: function renderBodyComponent() {
-          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('div', { className: 'for-body-demo' });
-        },
-        sectionBodyClassName: 'sb',
-        style: { height: 200 },
-        useZscroller: true,
-        scrollerOptions: { scrollbars: true },
-        onEndReached: function onEndReached(e) {
-          return console.log(e);
-        },
-        onEndReachedThreshold: 10,
-        scrollEventThrottle: 20,
-        scrollRenderAheadDistance: 30,
-        initialListSize: 5,
-        pageSize: 5
-      });
+              'footer'
+            );
+          },
+          useBodyScroll: this.state.useBodyScroll,
+          style: !this.state.useBodyScroll ? { height: 200, border: '1px solid gray' } : {},
+          pullUpEnabled: true,
+          pullUpRefreshing: this.state.pullUpRefreshing,
+          pullUpOnRefresh: function pullUpOnRefresh() {
+            _this3.setState({ pullUpRefreshing: true });
+            setTimeout(function () {
+              _this3.setState({ pullUpRefreshing: false });
+            }, 1000);
+          },
+          pullUpRenderer: function pullUpRenderer(st) {
+            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+              'div',
+              { className: 'my-render' },
+              st
+            );
+          }
+        })
+      );
     }
   }]);
 
@@ -330,13 +369,13 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 324:
+/***/ 320:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(163);
+module.exports = __webpack_require__(159);
 
 
 /***/ })
 
-},[324]);
-//# sourceMappingURL=simple-zscroller.js.map
+},[320]);
+//# sourceMappingURL=pullup.js.map

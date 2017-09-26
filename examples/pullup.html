@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rmc-list-view@0.9.1</title>
+  <title>pullup.js - example - rmc-list-view@0.9.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -277,7 +277,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
 <span class="hljs-keyword">import</span> { View, Text, Image, THUMB_URLS } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
-<span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
+<span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">6</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">genData</span>(<span class="hljs-params">pIndex = 0</span>) </span>{
   <span class="hljs-keyword">const</span> dataArr = [];
@@ -296,6 +296,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
     <span class="hljs-keyword">this</span>.state = {
       dataSource,
+      useBodyScroll: <span class="hljs-literal">true</span>,
+      pullUpRefreshing: <span class="hljs-literal">false</span>,
     };
   }
 
@@ -313,49 +315,47 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
   render() {
     <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this.lv.scrollTo(0, 100); }}&gt;scrollTo(0, 100)<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
-        <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
-        dataSource={this.state.dataSource}
-        renderRow={(rowData) =&gt; (
-          <span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>', <span class="hljs-attribute">alignItems:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span> }} <span class="hljs-attribute">source</span>=<span class="hljs-value">{THUMB_URLS[0]}</span> /&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">Text</span>&gt;</span>{`${rowData} - Lorem ipsum dolor sit amet`}<span class="hljs-tag">&lt;/<span class="hljs-title">Text</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>
-        )</span>}
-        renderSeparator={(sectionID, rowID, adjacentRowHighlighted) =&gt; (
-          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span>
-            <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-              <span class="hljs-attribute">height:</span> <span class="hljs-attribute">adjacentRowHighlighted</span> ? <span class="hljs-attribute">4</span> <span class="hljs-attribute">:</span> <span class="hljs-attribute">1</span>,
-              <span class="hljs-attribute">backgroundColor:</span> <span class="hljs-attribute">adjacentRowHighlighted</span> ? '#<span class="hljs-attribute">3B5998</span>' <span class="hljs-attribute">:</span> '#<span class="hljs-attribute">CCCCCC</span>',
-            }}
-          /&gt;</span>
-        )</span>}
-        renderBodyComponent={() =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-body-demo"</span> /&gt;</span>}
-        style={{ height: 200 }}
-        onEndReached={e =&gt; console.log(e)}
-        onEndReachedThreshold={10}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
-        initialListSize={5}
-        pageSize={5}
+      <span class="hljs-tag">&lt;<span class="hljs-title">style</span> <span class="hljs-attribute">dangerouslySetInnerHTML</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">__html:</span> '#<span class="hljs-attribute">qrcode</span>, <span class="hljs-attribute">.highlight</span> { <span class="hljs-attribute">display:</span> <span class="hljs-attribute">none</span>; }' }}/&gt;</span><span class="css">
+      &lt;<span class="hljs-tag">div</span> <span class="hljs-tag">style</span>=<span class="hljs-rules">{{ <span class="hljs-rule"><span class="hljs-attribute">paddingBottom</span>:<span class="hljs-value"> <span class="hljs-number">30</span> </span></span></span>}}&gt;
+        &lt;<span class="hljs-tag">button</span> <span class="hljs-tag">onClick</span>=<span class="hljs-rules">{() =&gt; { this._ctrlBodyScroll(true); }</span>}&gt;<span class="hljs-tag">enableBodyScroll</span>&lt;/<span class="hljs-tag">button</span>&gt;&amp;<span class="hljs-tag">nbsp</span>;
+        &lt;<span class="hljs-tag">button</span> <span class="hljs-tag">onClick</span>=<span class="hljs-rules">{() =&gt; { this._ctrlBodyScroll(false); }</span>} <span class="hljs-tag">style</span>=<span class="hljs-rules">{{ <span class="hljs-rule"><span class="hljs-attribute">color</span>:<span class="hljs-value"> <span class="hljs-string">'red'</span> </span></span></span>}}&gt;
+          <span class="hljs-tag">disableBodyScroll</span>
+        &lt;/<span class="hljs-tag">button</span>&gt;
+        &lt;<span class="hljs-tag">button</span> <span class="hljs-tag">onClick</span>=<span class="hljs-rules">{() =&gt; this.setState({ <span class="hljs-rule"><span class="hljs-attribute">useBodyScroll</span>:<span class="hljs-value"> !this.state.useBodyScroll </span></span></span>})}&gt;
+          <span class="hljs-tag">switch</span> <span class="hljs-tag">useBodyScroll</span>
+        &lt;/<span class="hljs-tag">button</span>&gt;
+      &lt;/<span class="hljs-tag">div</span>&gt;
+      &lt;<span class="hljs-tag">ListView</span> <span class="hljs-tag">key</span>=<span class="hljs-rules">{this.state.useBodyScroll ? 1 : 0}</span>
+        <span class="hljs-tag">ref</span>=<span class="hljs-rules">{el =&gt; this.lv = el}</span>
+        <span class="hljs-tag">dataSource</span>=<span class="hljs-rules">{this.state.dataSource}</span>
+        <span class="hljs-tag">renderRow</span>=<span class="hljs-rules">{(rowData) =&gt; (
+          &lt;View style={{ <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value"> <span class="hljs-string">'flex'</span>, alignItems: <span class="hljs-string">'center'</span> </span></span></span>}}&gt;
+            &lt;<span class="hljs-tag">Image</span> <span class="hljs-tag">style</span>=<span class="hljs-rules">{{ <span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"> <span class="hljs-number">64</span>, height: <span class="hljs-number">64</span> </span></span></span>}} <span class="hljs-tag">source</span>=<span class="hljs-rules">{THUMB_URLS[0]}</span> /&gt;
+            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{`${rowData}</span> <span class="hljs-tag">-</span> <span class="hljs-tag">Lorem</span> <span class="hljs-tag">ipsum</span> <span class="hljs-tag">dolor</span> <span class="hljs-tag">sit</span> <span class="hljs-tag">amet</span>`}&lt;/<span class="hljs-tag">Text</span>&gt;
+          &lt;/<span class="hljs-tag">View</span>&gt;
+        )</span></span>}
+        renderFooter={() =&gt; (<span class="xml"><span class="css">&lt;<span class="hljs-tag">div</span>&gt;<span class="hljs-tag">footer</span>&lt;/<span class="hljs-tag">div</span>&gt;)</span></span>}
+        useBodyScroll={<span class="hljs-keyword">this</span>.state.useBodyScroll}
+        style={!<span class="hljs-keyword">this</span>.state.useBodyScroll ? { height: <span class="hljs-number">200</span>, border: <span class="hljs-string">'1px solid gray'</span> } : {}}
+        pullUpEnabled
+        pullUpRefreshing={<span class="hljs-keyword">this</span>.state.pullUpRefreshing}
+        pullUpOnRefresh={() =&gt; {
+          <span class="hljs-keyword">this</span>.setState({ pullUpRefreshing: <span class="hljs-literal">true</span> });
+          setTimeout(() =&gt; {
+            <span class="hljs-keyword">this</span>.setState({ pullUpRefreshing: <span class="hljs-literal">false</span> });
+          }, <span class="hljs-number">1000</span>);
+        }}
+        pullUpRenderer={st =&gt; <span class="xml"><span class="css">&lt;<span class="hljs-tag">div</span> <span class="hljs-tag">className</span>="<span class="hljs-tag">my-render</span>"&gt;<span class="hljs-rules">{st}</span>&lt;/<span class="hljs-tag">div</span>&gt;}
       /&gt;
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">paddingTop:</span> <span class="hljs-attribute">30</span> }}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>note: temporary disable bodyScroll can have a better experience<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this._ctrlBodyScroll(true); }}&gt;enableBodyScroll<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>&amp;nbsp;
-        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> { this._ctrlBodyScroll(false); }} style={{ color: 'red' }}&gt;
-          disableBodyScroll
-        <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+    &lt;/<span class="hljs-tag">div</span>&gt;)</span></span>;
   }
   _ctrlBodyScroll = (flag) =&gt; {
     <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'body'</span>)[<span class="hljs-number">0</span>].style.overflowY = flag ? <span class="hljs-string">'auto'</span> : <span class="hljs-string">'hidden'</span>;
   }
 }
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre></div>
+ReactDOM.render(<span class="xml"><span class="css">&lt;<span class="hljs-tag">Demo</span> /&gt;, <span class="hljs-tag">document</span><span class="hljs-class">.getElementById</span>('__<span class="hljs-tag">react-content</span>'));
+</span></span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">
     <img style="position: absolute; top: 0; right: 0; border: 0;"
@@ -365,7 +365,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   <script>FastClick.attach(document.body);</script>
   <script src="../common.js?nowrap"></script>
-  <script src="simple.js?nowrap"></script>
+  <script src="pullup.js?nowrap"></script>
 </body>
 
 </html>

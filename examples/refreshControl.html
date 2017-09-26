@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>refreshControl.js - example - rmc-list-view@0.9.0</title>
+  <title>refreshControl.js - example - rmc-list-view@0.9.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.9.0</h1>
+      <h1>rmc-list-view@0.9.1</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -317,9 +317,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;
     });
+    <span class="hljs-comment">// In chrome61 `document.body.scrollTop` is invalid</span>
+    <span class="hljs-keyword">const</span> scrollNode = <span class="hljs-built_in">document</span>.scrollingElement ? <span class="hljs-built_in">document</span>.scrollingElement : <span class="hljs-built_in">document</span>.body;
     <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tmPageY = e.touches[<span class="hljs-number">0</span>].pageY;
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.st &lt;= <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">document</span>.body.scrollTop &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.scrollerTop &lt;= <span class="hljs-number">0</span> &amp;&amp; scrollNode.scrollTop &gt; <span class="hljs-number">0</span>) {
         <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'start pull to refresh'</span>);
         <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">false</span>;
       } <span class="hljs-keyword">else</span> {
@@ -335,7 +337,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
   onScroll = (e) =&gt; {
     <span class="hljs-comment">// onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229</span>
-    <span class="hljs-keyword">this</span>.st = e.scroller.getValues().top;
+    <span class="hljs-keyword">this</span>.scrollerTop = e.scroller.getValues().top;
     <span class="hljs-keyword">this</span>.domScroller = e;
   };
 
@@ -354,7 +356,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
         refreshing: <span class="hljs-literal">false</span>,
       });
-    }, <span class="hljs-number">600</span>);
+    }, <span class="hljs-number">200</span>);
   };
 
   onEndReached = (event) =&gt; {

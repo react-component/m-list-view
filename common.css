@@ -41,38 +41,37 @@ li {
 .rmc-indexed-list-qsindicator-hide {
   display: none;
 }
-.list-view-refresh-control {
-  position: relative;
-  overflow: hidden;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+.rmc-list-view-pull-up-indicator {
+  color: grey;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: -50px;
 }
-.list-view-refresh-control-content {
-  -webkit-transform-origin: left top;
-          transform-origin: left top;
-  -webkit-transform: translateZ(0);
-          transform: translateZ(0);
+.rmc-list-view-pull-up-dropped {
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform;
+  transition-timing-function: linear;
+  transition-duration: 0.3s;
 }
-.list-view-refresh-control-ptr {
+.list-view-refresh-control-indicator {
   color: grey;
   text-align: center;
   height: 50px;
   line-height: 50px;
   margin-top: -50px;
-  overflow: hidden;
 }
-.list-view-refresh-control-ptr-icon {
+.list-view-refresh-control-indicator-icon-wrapper {
   display: block;
 }
-.list-view-refresh-control-ptr-loading {
+.list-view-refresh-control-indicator-loading-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-ptr-icon {
+.list-view-refresh-control-loading .list-view-refresh-control-indicator-icon-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-ptr-loading {
+.list-view-refresh-control-loading .list-view-refresh-control-indicator-loading-wrapper {
   display: block;
 }
 .list-view-refresh-control-pull {
@@ -87,8 +86,8 @@ li {
 .list-view-refresh-control-active .list-view-refresh-control-release {
   display: block;
 }
-.list-view-refresh-control-deactive .list-view-refresh-control-ptr-icon,
-.list-view-refresh-control-deactive .list-view-refresh-control-ptr-loading {
+.list-view-refresh-control-deactive .list-view-refresh-control-indicator-icon-wrapper,
+.list-view-refresh-control-deactive .list-view-refresh-control-indicator-loading-wrapper {
   display: none;
 }
 .zscroller-scrollbar-y {

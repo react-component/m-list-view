@@ -44,12 +44,19 @@ export default class ListView extends React.Component {
     // another added
     renderBodyComponent: PropTypes.func,
     renderSectionBodyWrapper: PropTypes.func,
-    sectionBodyClassName: PropTypes.string,
+    sectionBodyClassName: PropTypes.string, // for web
+    listViewPrefixCls: PropTypes.string, // for web
     useZscroller: PropTypes.bool, // for web
     useBodyScroll: PropTypes.bool, // for web
     stickyHeader: PropTypes.bool, // for web
     stickyProps: PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
     stickyContainerProps: PropTypes.object,
+    // pullUp
+    pullUpEnabled: PropTypes.bool,
+    pullUpRefreshing: PropTypes.bool,
+    pullUpOnRefresh: PropTypes.func,
+    pullUpDistance: PropTypes.number,
+    pullUpRenderer: PropTypes.func,
   }
 
   static defaultProps = {
@@ -59,12 +66,18 @@ export default class ListView extends React.Component {
     renderBodyComponent: () => <div />,
     renderSectionBodyWrapper: (sectionID) => <div key={sectionID} />,
     sectionBodyClassName: 'list-view-section-body',
+    listViewPrefixCls: 'rmc-list-view',
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
     stickyProps: {},
     stickyContainerProps: {},
     scrollerOptions: {},
+    // pullUp
+    pullUpEnabled: false,
+    pullUpRefreshing: false,
+    pullUpOnRefresh: () => {},
+    pullUpDistance: 50,
   }
 
   state = {
@@ -371,72 +384,5 @@ export default class ListView extends React.Component {
     }
 
     this.props.onScroll && this.props.onScroll(ev);
-  }
-
-  /**
-   The following code was originally intended to implement the pull-up-refresh feature,
-   but not need to do it.
-
-   Coincidentally, it solves a problem, if the content is not high enough,
-   the `onScroll` and `onEndReached` event will not be fired.
-   However, there should be a better solution for this issue.
-   */
-  componentDidMount() {
-    this.bindEvt();
-  }
-  componentWillUnmount() {
-    this.unBindEvt();
-  }
-  bindEvt = () => {
-    const ele = this.getEle();
-    ele.addEventListener('touchstart', this.onPullUpStart);
-    ele.addEventListener('touchmove', this.onPullUpMove);
-    ele.addEventListener('touchend', this.onPullUpEnd);
-    ele.addEventListener('touchcancel', this.onPullUpEnd);
-  }
-  unBindEvt = () => {
-    const ele = this.getEle();
-    ele.removeEventListener('touchstart', this.onPullUpStart);
-    ele.removeEventListener('touchmove', this.onPullUpMove);
-    ele.removeEventListener('touchend', this.onPullUpEnd);
-    ele.removeEventListener('touchcancel', this.onPullUpEnd);
-  }
-  getEle = () => {
-    const { stickyHeader, useBodyScroll } = this.props;
-    let ele;
-    if (stickyHeader || useBodyScroll) {
-      ele = document.body;
-    } else {
-      ele = ReactDOM.findDOMNode(this.ListViewRef.ScrollViewRef);
-    }
-    return ele;
-  }
-  onPullUpStart = (e) => {
-    this._pullUpStartPageY = e.touches[0].screenY;
-    this._isPullUp = false;
-    this._pullUpEle = this.getEle();
-  }
-  onPullUpMove = (e) => {
-    // 使用 pageY 对比有问题
-    if (e.touches[0].screenY < this._pullUpStartPageY && this._reachBottom()) {
-      // console.log('滚动条到了底部，pull up');
-      this._isPullUp = true;
-    }
-  }
-  onPullUpEnd = (e) => {
-    if (this._isPullUp && this.props.onEndReached) {
-      // this.props.onEndReached(e);
-      // https://github.com/react-component/m-list-view/pull/15/files
-      // need update `this.scrollProperties` in order to render correctly
-      this._onScroll(e);
-    }
-    this._isPullUp = false;
-  }
-  _reachBottom = () => {
-    const element = this._pullUpEle;
-    if (element === document.body) {
-      return element.scrollHeight - element.scrollTop === window.innerHeight;
-    }
-    return element.scrollHeight - element.scrollTop === element.clientHeight;
   }
 }

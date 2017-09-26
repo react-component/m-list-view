@@ -46,15 +46,15 @@ export default class RefreshControl extends React.Component {
     } = this.props;
     const { active, deactive, loadingState } = this.state;
     const wrapCls = classNames(className, {
-      [`${prefixCls}-ptr`]: true,
+      [`${prefixCls}-indicator`]: true,
       [`${prefixCls}-active`]: active,
       [`${prefixCls}-deactive`]: deactive,
       [`${prefixCls}-loading`]: loadingState || refreshing,
     });
     return (
       <div ref={el => this.ptrRef = el} className={wrapCls} style={style}>
-        <div className={`${prefixCls}-ptr-icon`}>{icon}</div>
-        <div className={`${prefixCls}-ptr-loading`}>{loading}</div>
+        <div className={`${prefixCls}-indicator-icon-wrapper`}>{icon}</div>
+        <div className={`${prefixCls}-indicator-loading-wrapper`}>{loading}</div>
       </div>
     );
   }

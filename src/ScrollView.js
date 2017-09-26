@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import DOMScroller from 'zscroller';
 import classNames from 'classnames';
-import { throttle } from './util';
+import { throttle, setTransform, setTransformOrigin } from './util';
 
 // const SCROLLVIEW = 'ScrollViewRef';
 // const INNERVIEW = 'InnerScrollViewRef';
@@ -60,8 +60,8 @@ export default class ScrollView extends React.Component {
     if (prevProps.refreshControl && this.props.refreshControl) {
       const preRefreshing = prevProps.refreshControl.props.refreshing;
       const nowRefreshing = this.props.refreshControl.props.refreshing;
-      if (preRefreshing && !nowRefreshing && this.refreshControlRefresh) {
-        this.refreshControlRefresh();
+      if (preRefreshing && !nowRefreshing && !this._refreshControlTimer) {
+        this.domScroller.scroller.finishPullToRefresh();
       } else if (!this.manuallyRefresh && !preRefreshing && nowRefreshing) {
         this.domScroller.scroller.triggerPullToRefresh();
       }
@@ -78,6 +78,15 @@ export default class ScrollView extends React.Component {
         }
       }, 0);
     }
+
+    // for pullUp
+    if (this.props.pullUpEnabled) {
+      const preRefreshing = prevProps.pullUpRefreshing;
+      const nowRefreshing = this.props.pullUpRefreshing;
+      if (preRefreshing && !nowRefreshing && !this._pullUpTimer) {
+        this.pullUpFinish();
+      }
+    }
   }
   componentDidMount() {
     this.tsExec = this.throttleScroll();
@@ -86,33 +95,30 @@ export default class ScrollView extends React.Component {
     this.onLayout = () => this.props.onLayout({
       nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } },
     });
-    const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
 
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       window.addEventListener('scroll', this.tsExec);
       window.addEventListener('resize', this.onLayout);
-      // todo
-      // ele.addEventListener('resize', this.onContentSizeChange);
+      this.initPullUp(document.body); // for pullUp
+    } else if (this.props.useZscroller) {
+      this.renderZscroller();
     } else {
-      // todo
-      // ele.addEventListener('resize', this.onLayout);
-      // ReactDOM.findDOMNode(this.InnerScrollViewRef)
-      // .addEventListener('resize', this.onContentSizeChange);
-      if (this.props.useZscroller) {
-        this.renderZscroller();
-      } else {
-        ele.addEventListener('scroll', this.tsExec);
-      }
+      const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
+      ele.addEventListener('scroll', this.tsExec);
+      this.initPullUp(ele); // for pullUp
     }
   }
   componentWillUnmount() {
     if (this.props.stickyHeader || this.props.useBodyScroll) {
       window.removeEventListener('scroll', this.tsExec);
       window.removeEventListener('resize', this.onLayout);
+      this.destroyPullUp(document.body); // for pullUp
     } else if (this.props.useZscroller) {
       this.domScroller.destroy();
     } else {
-      ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
+      const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
+      ele.removeEventListener('scroll', this.tsExec);
+      this.destroyPullUp(ele); // for pullUp
     }
   }
 
@@ -178,13 +184,13 @@ export default class ScrollView extends React.Component {
       const { distanceToRefresh, onRefresh } = refreshControl.props;
       scroller.activatePullToRefresh(distanceToRefresh,
         () => {
-          // console.log('first reach the distance');
+          // console.log('reach to the distance');
           this.manuallyRefresh = true;
           this.overDistanceThenRelease = false;
           this.RefreshControlRef && this.RefreshControlRef.setState({ active: true });
         },
         () => {
-          // console.log('back to the distance', this.overDistanceThenRelease);
+          // console.log('back to the distance');
           this.manuallyRefresh = false;
           this.RefreshControlRef && this.RefreshControlRef.setState({
             deactive: this.overDistanceThenRelease,
@@ -199,18 +205,13 @@ export default class ScrollView extends React.Component {
             deactive: false,
             loadingState: true,
           });
-          const finishPullToRefresh = () => {
-            scroller.finishPullToRefresh();
-            this.refreshControlRefresh = null;
-          };
-          Promise.all([
-            new Promise(resolve => {
-              onRefresh();
-              this.refreshControlRefresh = resolve;
-            }),
-            // at lease 1s for ux
-            new Promise(resolve => setTimeout(resolve, 1000)),
-          ]).then(finishPullToRefresh, finishPullToRefresh);
+          this._refreshControlTimer = setTimeout(() => {
+            if (!this.props.refreshControl.props.refreshing) {
+              scroller.finishPullToRefresh();
+            }
+            this._refreshControlTimer = undefined;
+          }, 1000);
+          onRefresh();
         });
       if (refreshControl.props.refreshing) {
         scroller.triggerPullToRefresh();
@@ -219,9 +220,9 @@ export default class ScrollView extends React.Component {
   }
   render() {
     const {
-      children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'rmc-list-view',
+      children, className, prefixCls, listPrefixCls, listViewPrefixCls,
       style = {}, contentContainerStyle = {},
-      useZscroller, refreshControl, stickyHeader, useBodyScroll,
+      useZscroller, refreshControl, stickyHeader, useBodyScroll, pullUpEnabled, pullUpRenderer,
     } = this.props;
 
     let styleBase = styles.base;
@@ -255,17 +256,191 @@ export default class ScrollView extends React.Component {
       );
     }
 
+    const createPullUp = () => {
+      const pullUpCls = classNames(`${preCls}-pull-up-content`,
+        !this.state.isTouching && `${preCls}-pull-up-dropped`);
+      let defaultRenderer = this.pullUpDisplay.deactivate;
+      switch (this.state.pullUp) {
+        case 'activate':
+        case 'deactivate':
+        case 'release':
+        case 'finish':
+        default:
+          defaultRenderer = this.pullUpDisplay[this.state.pullUp];
+      }
+      return (
+        <div className={pullUpCls} ref={el => this.pullUpContentRef = el}>
+          {children}
+          <div ref={el => this.pullUpIndicatorRef = el} className={`${preCls}-pull-up-indicator`}>
+            {pullUpRenderer ? pullUpRenderer(this.state.pullUp) : defaultRenderer}
+          </div>
+        </div>
+      );
+    };
+
     if (stickyHeader || useBodyScroll) {
+      if (pullUpEnabled) {
+        containerProps.style.overflow = 'hidden';
+        return (
+          <div {...containerProps}>
+            {createPullUp()}
+          </div>
+        );
+      }
       return (
         <div {...containerProps}>
           {children}
         </div>
       );
     }
+
+    if (pullUpEnabled) {
+      contentContainerProps.style.overflow = 'hidden';
+      return (
+        <div {...containerProps}>
+          <div {...contentContainerProps}>
+            {createPullUp()}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div {...containerProps}>
-        <div {...contentContainerProps}>{children}</div>
+        <div {...contentContainerProps}>
+          {children}
+        </div>
       </div>
     );
+  }
+
+  /**
+   The following code was intended to implement the pull-up-to-load-more feature,
+
+   Coincidentally, it solves a problem, if the content is not high enough,
+   the `onScroll` and `onEndReached` event will not be fired.
+   However, there should be a better solution for this issue.
+   */
+  // https://github.com/yiminghe/zscroller/blob/2d97973287135745818a0537712235a39a6a62a1/src/Scroller.js#L355
+  // states: `activate` / `deactivate` / `release` / `finish`
+  state = {
+    pullUp: false,
+    isTouching: false,
+  };
+
+  pullUpStats = {
+    activate: 'activate',
+    deactivate: 'deactivate',
+    release: 'release',
+    finish: 'finish',
+  };
+
+  pullUpDisplay = {
+    activate: '释放刷新',
+    deactivate: '上拉 ↑',
+    release: '加载中...',
+    finish: '完成刷新',
+  };
+
+  genEvtHandler = (ele) => {
+    return {
+      touchstart: this.onTouchStart.bind(this, ele),
+      touchmove: this.onTouchMove.bind(this, ele),
+      touchend: this.onTouchEnd.bind(this, ele),
+      touchcancel: this.onTouchEnd.bind(this, ele),
+    };
+  }
+
+  initPullUp = (ele) => {
+    if (this.pullUpContentRef) {
+      setTransformOrigin(this.pullUpContentRef.style, 'left top');
+    }
+
+    this._to = this.genEvtHandler(ele);
+    Object.keys(this._to).forEach(key => {
+      ele.addEventListener(key, this._to[key]);
+    });
+  }
+
+  destroyPullUp = (ele) => {
+    Object.keys(this._to).forEach(key => {
+      ele.removeEventListener(key, this._to[key]);
+    });
+  }
+
+  onTouchStart = (ele, e) => {
+    this._pullUpScreenY = this._pullUpStartScreenY = e.touches[0].screenY;
+    this._pullUpLastScreenY = 0;
+    if (this.props.pullUpEnabled) {
+      this.setState({ isTouching: true });
+    }
+  }
+
+  onTouchMove = (ele, e) => {
+    if (!this.props.pullUpEnabled) {
+      return;
+    }
+
+    // 使用 pageY 对比有问题
+    const _screenY = e.touches[0].screenY;
+    if (this._pullUpStartScreenY - _screenY > 0) {
+      // console.log('is pull up', _screenY);
+
+      let isReachBottom;
+      if (this.props.stickyHeader || this.props.useBodyScroll) {
+        // In chrome61 `document.body.scrollTop` is invalid, here `ele === document.body`
+        const scrollNode = document.scrollingElement ? document.scrollingElement : ele;
+        isReachBottom = ele.scrollHeight - scrollNode.scrollTop <= window.innerHeight;
+        // console.log(ele.scrollHeight, scrollNode.scrollTop, window.innerHeight);
+      } else {
+        isReachBottom = ele.scrollHeight - ele.scrollTop === ele.clientHeight;
+      }
+      if (isReachBottom) {
+        const _diff = Math.round(_screenY - this._pullUpScreenY);
+        this._pullUpScreenY = _screenY;
+        this._pullUpLastScreenY += _diff;
+
+        setTransform(this.pullUpContentRef.style,
+          `translate3d(0px,${this._pullUpLastScreenY}px,0)`);
+
+        if (Math.abs(this._pullUpLastScreenY) < this.props.pullUpDistance) {
+          if (this.state.pullUp !== this.pullUpStats.deactivate) {
+            // console.log('back to the distance');
+            this.setState({ pullUp: this.pullUpStats.deactivate });
+          }
+        } else {
+          if (this.state.pullUp === this.pullUpStats.deactivate) {
+            // console.log('reach to the distance');
+            this.setState({ pullUp: this.pullUpStats.activate });
+          }
+        }
+      }
+    }
+  }
+
+  onTouchEnd = () => {
+    if (this.props.pullUpEnabled) {
+      this.setState({ isTouching: false });
+    }
+    if (this.state.pullUp === this.pullUpStats.deactivate) {
+      this.pullUpFinish();
+    } else if (this.state.pullUp === this.pullUpStats.activate) {
+      this.setState({ pullUp: this.pullUpStats.release });
+      this._pullUpTimer = setTimeout(() => {
+        if (!this.props.pullUpRefreshing) {
+          this.pullUpFinish();
+        }
+        this._pullUpTimer = undefined;
+      }, 1000);
+      this.props.pullUpOnRefresh();
+    }
+  }
+
+  pullUpFinish = () => {
+    this._pullUpLastScreenY = 0;
+    setTransform(this.pullUpContentRef.style, `translate3d(0px,0px,0)`);
+    if (this.state.pullUp === this.pullUpStats.release) {
+      this.setState({ pullUp: this.pullUpStats.finish });
+    }
   }
 }

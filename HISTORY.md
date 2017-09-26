@@ -1,6 +1,15 @@
 # History
 ----
 
+## 0.9.1 / 2017-09-26
+
+- Change `RefreshControl`'s inner dom className
+    - from `${prefixCls}-ptr` to `${prefixCls}-indicator`
+    - from `${prefixCls}-ptr-icon` to `${prefixCls}-indicator-icon-wrapper`
+    - from `${prefixCls}-ptr-loading` to `${prefixCls}-indicator-loading-wrapper`
+- Remove `Promise`.
+- Support pull-up fully.
+
 ## 0.9.0 / 2017-09-21
 
 - Change `ref` from `string` to `function`.

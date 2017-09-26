@@ -39,3 +39,15 @@ export function throttle(fn, delay) {
     }
   };
 }
+
+export function setTransform(nodeStyle, value) {
+  nodeStyle.transform = value;
+  nodeStyle.webkitTransform = value;
+  nodeStyle.MozTransform = value;
+}
+
+export function setTransformOrigin(nodeStyle, value) {
+  nodeStyle.transformOrigin = value;
+  nodeStyle.webkitTransformOrigin = value;
+  nodeStyle.MozTransformOrigin = value;
+}

@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
 import { View, Text, Image, THUMB_URLS } from './util';
 
-const NUM_ROWS = 20;
+const NUM_ROWS = 6;
 
 function genData(pIndex = 0) {
   const dataArr = [];
@@ -25,6 +25,8 @@ class Demo extends React.Component {
 
     this.state = {
       dataSource,
+      useBodyScroll: true,
+      pullUpRefreshing: false,
     };
   }
 
@@ -42,8 +44,17 @@ class Demo extends React.Component {
 
   render() {
     return (<div>
-      <button onClick={() => { this.lv.scrollTo(0, 100); }}>scrollTo(0, 100)</button>
-      <ListView
+      <style dangerouslySetInnerHTML={{ __html: '#qrcode, .highlight { display: none; }' }}/>
+      <div style={{ paddingBottom: 30 }}>
+        <button onClick={() => { this._ctrlBodyScroll(true); }}>enableBodyScroll</button>&nbsp;
+        <button onClick={() => { this._ctrlBodyScroll(false); }} style={{ color: 'red' }}>
+          disableBodyScroll
+        </button>
+        <button onClick={() => this.setState({ useBodyScroll: !this.state.useBodyScroll })}>
+          switch useBodyScroll
+        </button>
+      </div>
+      <ListView key={this.state.useBodyScroll ? 1 : 0}
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderRow={(rowData) => (
@@ -52,30 +63,19 @@ class Demo extends React.Component {
             <Text>{`${rowData} - Lorem ipsum dolor sit amet`}</Text>
           </View>
         )}
-        renderSeparator={(sectionID, rowID, adjacentRowHighlighted) => (
-          <View key={`${sectionID}-${rowID}`}
-            style={{
-              height: adjacentRowHighlighted ? 4 : 1,
-              backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
-            }}
-          />
-        )}
-        renderBodyComponent={() => <div className="for-body-demo" />}
-        style={{ height: 200 }}
-        onEndReached={e => console.log(e)}
-        onEndReachedThreshold={10}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={100}
-        initialListSize={5}
-        pageSize={5}
+        renderFooter={() => (<div>footer</div>)}
+        useBodyScroll={this.state.useBodyScroll}
+        style={!this.state.useBodyScroll ? { height: 200, border: '1px solid gray' } : {}}
+        pullUpEnabled
+        pullUpRefreshing={this.state.pullUpRefreshing}
+        pullUpOnRefresh={() => {
+          this.setState({ pullUpRefreshing: true });
+          setTimeout(() => {
+            this.setState({ pullUpRefreshing: false });
+          }, 1000);
+        }}
+        pullUpRenderer={st => <div className="my-render">{st}</div>}
       />
-      <div style={{ paddingTop: 30 }}>
-        <p>note: temporary disable bodyScroll can have a better experience</p>
-        <button onClick={() => { this._ctrlBodyScroll(true); }}>enableBodyScroll</button>&nbsp;
-        <button onClick={() => { this._ctrlBodyScroll(false); }} style={{ color: 'red' }}>
-          disableBodyScroll
-        </button>
-      </div>
     </div>);
   }
   _ctrlBodyScroll = (flag) => {

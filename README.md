@@ -79,7 +79,12 @@ Properties | Descrition | Type | Default
 | useZscroller (`web only`) | use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers(can be used for some poor Android machine) (`useBodyScroll` and `stickyHeader` settings are automatically ignored), and can support RefreshControl well | bool | false |
 | scrollerOptions (`web only`) | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
 | stickyHeader (`web only`) | if set it, automatically enable `useBodyScroll` and you can also set `stickyProps` / `stickyContainerProps` (see [react-sticky](https://github.com/captivationsoftware/react-sticky)) | bool | false |
-
+| ---- |
+| pullUpEnabled (`web only`) | Whether enable pull-up | bool | false |
+| pullUpRefreshing (`web only`) | Whether the view should be indicating an active refresh | bool | false |
+| pullUpOnRefresh (`web only`) | required, Called when the view starts refreshing. | () => void | - |
+| pullUpDistance (`web only`) | distance to pull up | number | `50` |
+| pullUpRenderer (`web only`) | custom renderer text, the params are one of `activate` / `deactivate` / `release` / `finish` | () => void | - |
 
 ### Methods
 
@@ -111,7 +116,7 @@ Properties | Descrition | Type | Default
 -----------|------------|------|--------
 | icon | refresh indicator, include `pull` and `release` state | react node | - |
 | loading | loading indicator | react node | - |
-| distanceToRefresh | distance to refresh | number | `50px` |
+| distanceToRefresh | distance to refresh | number | `50` |
 | onRefresh | required, Called when the view starts refreshing. | () => void | - |
 | refreshing | Whether the view should be indicating an active refresh | bool | false |
 

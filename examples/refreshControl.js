@@ -46,9 +46,11 @@ class Demo extends React.Component {
     this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
       this.tsPageY = e.touches[0].pageY;
     });
+    // In chrome61 `document.body.scrollTop` is invalid
+    const scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
     this.lv.getInnerViewNode().addEventListener('touchmove', this.tm = (e) => {
       this.tmPageY = e.touches[0].pageY;
-      if (this.tmPageY > this.tsPageY && this.st <= 0 && document.body.scrollTop > 0) {
+      if (this.tmPageY > this.tsPageY && this.scrollerTop <= 0 && scrollNode.scrollTop > 0) {
         console.log('start pull to refresh');
         this.domScroller.options.preventDefaultOnTouchMove = false;
       } else {
@@ -64,7 +66,7 @@ class Demo extends React.Component {
 
   onScroll = (e) => {
     // onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229
-    this.st = e.scroller.getValues().top;
+    this.scrollerTop = e.scroller.getValues().top;
     this.domScroller = e;
   };
 
@@ -83,7 +85,7 @@ class Demo extends React.Component {
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         refreshing: false,
       });
-    }, 600);
+    }, 200);
   };
 
   onEndReached = (event) => {

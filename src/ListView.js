@@ -145,16 +145,10 @@ export default class ListView extends React.Component {
   stickyRefs = {}
 
   render() {
-    let bodyComponents = [];
-
     const dataSource = this.props.dataSource;
     const allRowIDs = dataSource.rowIdentities;
     let rowCount = 0;
-    const sectionHeaderIndices = [];
-
-    const header = this.props.renderHeader && this.props.renderHeader();
-    const footer = this.props.renderFooter && this.props.renderFooter();
-    let totalIndex = header ? 1 : 0;
+    let bodyComponents = [];
 
     for (let sectionIdx = 0; sectionIdx < allRowIDs.length; sectionIdx++) {
       const sectionID = dataSource.sectionIdentities[sectionIdx];
@@ -184,7 +178,6 @@ export default class ListView extends React.Component {
           >{renderSectionHeader}</Sticky>);
         }
         bodyComponents.push(renderSectionHeader);
-        sectionHeaderIndices.push(totalIndex++);
       }
 
       const sectionBody = [];
@@ -204,9 +197,7 @@ export default class ListView extends React.Component {
             this.onRowHighlighted
           )}
         />);
-        // bodyComponents.push(row);
         sectionBody.push(row);
-        totalIndex++;
 
         if (this.props.renderSeparator &&
             (rowIdx !== rowIDs.length - 1 || sectionIdx === allRowIDs.length - 1)) {
@@ -221,9 +212,7 @@ export default class ListView extends React.Component {
             adjacentRowHighlighted
           );
           if (separator) {
-            // bodyComponents.push(separator);
             sectionBody.push(separator);
-            totalIndex++;
           }
         }
         if (++rowCount === this.state.curRenderedRowsCount) {
@@ -238,10 +227,7 @@ export default class ListView extends React.Component {
       }
     }
 
-    const {
-      renderScrollComponent,
-      ...props,
-    } = this.props;
+    const { renderScrollComponent, ...props } = this.props;
 
     bodyComponents = React.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
     if (props.stickyHeader) {
@@ -250,11 +236,18 @@ export default class ListView extends React.Component {
       </StickyContainer>);
     }
 
-    this._sc = React.cloneElement(renderScrollComponent({ ...props, onScroll: this._onScroll }), {
-      ref: el => this.ListViewRef = el,
-      onContentSizeChange: this._onContentSizeChange,
-      onLayout: this._onLayout,
-    }, header, bodyComponents, footer, props.children);
+    this._sc = React.cloneElement(
+      renderScrollComponent({ ...props, onScroll: this._onScroll }),
+      {
+        ref: el => this.ListViewRef = el,
+        onContentSizeChange: this._onContentSizeChange,
+        onLayout: this._onLayout,
+      },
+      this.props.renderHeader ? this.props.renderHeader() : null,
+      bodyComponents,
+      this.props.renderFooter ? this.props.renderFooter() : null,
+      props.children
+    );
     return this._sc;
   }
 

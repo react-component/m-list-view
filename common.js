@@ -7518,16 +7518,10 @@ var ListView = function (_React$Component2) {
     value: function render() {
       var _this4 = this;
 
-      var bodyComponents = [];
-
       var dataSource = this.props.dataSource;
       var allRowIDs = dataSource.rowIdentities;
       var rowCount = 0;
-      var sectionHeaderIndices = [];
-
-      var header = this.props.renderHeader && this.props.renderHeader();
-      var footer = this.props.renderFooter && this.props.renderFooter();
-      var totalIndex = header ? 1 : 0;
+      var bodyComponents = [];
 
       var _loop = function _loop(sectionIdx) {
         var sectionID = dataSource.sectionIdentities[sectionIdx];
@@ -7556,7 +7550,6 @@ var ListView = function (_React$Component2) {
             );
           }
           bodyComponents.push(renderSectionHeader);
-          sectionHeaderIndices.push(totalIndex++);
         }
 
         var sectionBody = [];
@@ -7569,17 +7562,13 @@ var ListView = function (_React$Component2) {
             shouldUpdate: !!shouldUpdateRow,
             render: _this4.props.renderRow.bind(null, dataSource.getRowData(sectionIdx, rowIdx), sectionID, rowID, _this4.onRowHighlighted)
           });
-          // bodyComponents.push(row);
           sectionBody.push(row);
-          totalIndex++;
 
           if (_this4.props.renderSeparator && (rowIdx !== rowIDs.length - 1 || sectionIdx === allRowIDs.length - 1)) {
             var adjacentRowHighlighted = _this4.state.highlightedRow.sectionID === sectionID && (_this4.state.highlightedRow.rowID === rowID || _this4.state.highlightedRow.rowID === rowIDs[rowIdx + 1]);
             var separator = _this4.props.renderSeparator(sectionID, rowID, adjacentRowHighlighted);
             if (separator) {
-              // bodyComponents.push(separator);
               sectionBody.push(separator);
-              totalIndex++;
             }
           }
           if (++rowCount === _this4.state.curRenderedRowsCount) {
@@ -7624,7 +7613,7 @@ var ListView = function (_React$Component2) {
         },
         onContentSizeChange: this._onContentSizeChange,
         onLayout: this._onLayout
-      }, header, bodyComponents, footer, props.children);
+      }, this.props.renderHeader ? this.props.renderHeader() : null, bodyComponents, this.props.renderFooter ? this.props.renderFooter() : null, props.children);
       return this._sc;
     }
   }]);

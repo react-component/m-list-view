@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rmc-list-view@0.9.2 - m-list-view ui component for react</title>
+  <title>rmc-list-view@0.10.0 - m-list-view ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rmc-list-view@0.9.2</h1>
+  <h1>rmc-list-view@0.10.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -956,6 +956,15 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
+<td>renderSectionWrapper (<code>web only</code>)</td>
+<td></td>
+<td>render listview section wrapper component</td>
+<td>(sectionID) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
 <td>renderSectionBodyWrapper (<code>web only</code>)</td>
 <td>render listview section body wrapper component</td>
 <td>(sectionID) =&gt; renderable</td>
@@ -973,7 +982,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <tr>
 <td></td>
 <td>useZscroller (<code>web only</code>)</td>
-<td>use <a href="https://github.com/yiminghe/zscroller" title="null">zscroller</a> to simulate the implementation of rolling containers(can be used for some poor Android machine) (<code>useBodyScroll</code> and <code>stickyHeader</code> settings are automatically ignored), and can support RefreshControl well</td>
+<td>use <a href="https://github.com/yiminghe/zscroller" title="null">zscroller</a> to simulate the implementation of rolling containers(can be used for some poor Android machine) (<code>useBodyScroll</code> settings are automatically ignored), and can support RefreshControl well</td>
 <td>bool</td>
 <td>false</td>
 <td></td>
@@ -984,14 +993,6 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 <td><a href="https://github.com/yiminghe/zscroller#options" title="null">zscroller options</a></td>
 <td>Object</td>
 <td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>stickyHeader (<code>web only</code>)</td>
-<td>if set it, automatically enable <code>useBodyScroll</code> and you can also set <code>stickyProps</code> / <code>stickyContainerProps</code> (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</td>
-<td>bool</td>
-<td>false</td>
 <td></td>
 </tr>
 <tr>

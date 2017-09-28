@@ -44,16 +44,14 @@ li {
 .rmc-list-view-pull-up-indicator {
   color: grey;
   text-align: center;
-  height: 50px;
-  line-height: 50px;
-  margin-bottom: -50px;
+  height: 25px;
+  line-height: 25px;
+  margin-bottom: -25px;
 }
 .rmc-list-view-pull-up-dropped {
-  transition-property: -webkit-transform;
-  transition-property: transform;
-  transition-property: transform, -webkit-transform;
-  transition-timing-function: linear;
-  transition-duration: 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
 }
 .list-view-refresh-control-indicator {
   color: grey;

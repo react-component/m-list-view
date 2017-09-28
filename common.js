@@ -7627,7 +7627,7 @@ ListView.propTypes = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__
   pullUpEnabled: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.bool,
   pullUpRefreshing: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.bool,
   pullUpOnRefresh: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.func,
-  pullUpDistance: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.number,
+  pullUpDistanceToRefresh: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.number,
   pullUpRenderer: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.func
 });
 ListView.defaultProps = {
@@ -7652,7 +7652,7 @@ ListView.defaultProps = {
   pullUpEnabled: false,
   pullUpRefreshing: false,
   pullUpOnRefresh: function pullUpOnRefresh() {},
-  pullUpDistance: 50
+  pullUpDistanceToRefresh: 25
 };
 
 var _initialiseProps = function _initialiseProps() {
@@ -13195,7 +13195,7 @@ var _initialiseProps = function _initialiseProps() {
 
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11__util__["e" /* setTransform */])(_this6.pullUpContentRef.style, 'translate3d(0px,' + _this6._pullUpLastScreenY + 'px,0)');
 
-        if (Math.abs(_this6._pullUpLastScreenY) < _this6.props.pullUpDistance) {
+        if (Math.abs(_this6._pullUpLastScreenY) < _this6.props.pullUpDistanceToRefresh) {
           if (_this6.state.pullUp !== _this6.pullUpStats.deactivate) {
             // console.log('back to the distance');
             _this6.setState({ pullUp: _this6.pullUpStats.deactivate });

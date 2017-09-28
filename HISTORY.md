@@ -1,6 +1,12 @@
 # History
 ----
 
+## 0.10.0 / 2017-09-28
+
+- Remove `stickyHeader` prop and [react-sticky](https://github.com/captivationsoftware/react-sticky) dependency, but you can also use react-sticky and `useBodyScroll` in listview by your self. (see demo)
+    > Because this feature is not commonly used and does not contain UI, so it is not suitable for integration.
+- Add `renderSectionWrapper` prop, for more precise control.
+
 ## 0.9.1 / 2017-09-26
 
 - Change `RefreshControl`'s inner dom className

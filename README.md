@@ -74,11 +74,11 @@ Properties | Descrition | Type | Default
 | onLayout | Invoked on mount and layout changes with | ({nativeEvent:{ layout:{ width, height }}}) => {} | - |
 | ---- |
 | renderBodyComponent (`web only`) | render listview body wrapper component | () => renderable | - |
+| renderSectionWrapper (`web only`) | | render listview section wrapper component | (sectionID) => renderable | - |
 | renderSectionBodyWrapper (`web only`) | render listview section body wrapper component | (sectionID) => renderable | - |
 | useBodyScroll (`web only`) | use html `body`'s scroll | bool | false |
-| useZscroller (`web only`) | use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers(can be used for some poor Android machine) (`useBodyScroll` and `stickyHeader` settings are automatically ignored), and can support RefreshControl well | bool | false |
+| useZscroller (`web only`) | use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers(can be used for some poor Android machine) (`useBodyScroll` settings are automatically ignored), and can support RefreshControl well | bool | false |
 | scrollerOptions (`web only`) | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
-| stickyHeader (`web only`) | if set it, automatically enable `useBodyScroll` and you can also set `stickyProps` / `stickyContainerProps` (see [react-sticky](https://github.com/captivationsoftware/react-sticky)) | bool | false |
 | ---- |
 | pullUpEnabled (`web only`) | Whether enable pull-up | bool | false |
 | pullUpRefreshing (`web only`) | Whether the view should be indicating an active refresh | bool | false |

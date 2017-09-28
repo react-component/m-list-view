@@ -48,7 +48,7 @@ export default class ScrollView extends React.Component {
     if ((this.props.dataSource !== nextProps.dataSource ||
         this.props.initialListSize !== nextProps.initialListSize) && this.tsExec) {
       // console.log('componentWillUpdate');
-      if (this.props.stickyHeader || this.props.useBodyScroll) {
+      if (this.props.useBodyScroll) {
         window.removeEventListener('scroll', this.tsExec);
       } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
         ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
@@ -71,7 +71,7 @@ export default class ScrollView extends React.Component {
         this.props.initialListSize !== prevProps.initialListSize) && this.tsExec) {
       // console.log('componentDidUpdate');
       setTimeout(() => {
-        if (this.props.stickyHeader || this.props.useBodyScroll) {
+        if (this.props.useBodyScroll) {
           window.addEventListener('scroll', this.tsExec);
         } else if (!this.props.useZscroller) { // not handle useZscroller now. todo
           ReactDOM.findDOMNode(this.ScrollViewRef).addEventListener('scroll', this.tsExec);
@@ -96,7 +96,7 @@ export default class ScrollView extends React.Component {
       nativeEvent: { layout: { width: window.innerWidth, height: window.innerHeight } },
     });
 
-    if (this.props.stickyHeader || this.props.useBodyScroll) {
+    if (this.props.useBodyScroll) {
       window.addEventListener('scroll', this.tsExec);
       window.addEventListener('resize', this.onLayout);
       this.initPullUp(document.body); // for pullUp
@@ -109,7 +109,7 @@ export default class ScrollView extends React.Component {
     }
   }
   componentWillUnmount() {
-    if (this.props.stickyHeader || this.props.useBodyScroll) {
+    if (this.props.useBodyScroll) {
       window.removeEventListener('scroll', this.tsExec);
       window.removeEventListener('resize', this.onLayout);
       this.destroyPullUp(document.body); // for pullUp
@@ -127,7 +127,7 @@ export default class ScrollView extends React.Component {
   }
 
   scrollTo = (...args) => {
-    if (this.props.stickyHeader || this.props.useBodyScroll) {
+    if (this.props.useBodyScroll) {
       window.scrollTo(...args);
     } else if (this.props.useZscroller) {
       // it will change zScroller's dimensions on data loaded, so it needs fire reflow.
@@ -222,11 +222,11 @@ export default class ScrollView extends React.Component {
     const {
       children, className, prefixCls, listPrefixCls, listViewPrefixCls,
       style = {}, contentContainerStyle = {},
-      useZscroller, refreshControl, stickyHeader, useBodyScroll, pullUpEnabled, pullUpRenderer,
+      useZscroller, refreshControl, useBodyScroll, pullUpEnabled, pullUpRenderer,
     } = this.props;
 
     let styleBase = styles.base;
-    if (stickyHeader || useBodyScroll) {
+    if (useBodyScroll) {
       styleBase = {};
     } else if (useZscroller) {
       styleBase = styles.zScroller;
@@ -278,7 +278,7 @@ export default class ScrollView extends React.Component {
       );
     };
 
-    if (stickyHeader || useBodyScroll) {
+    if (useBodyScroll) {
       if (pullUpEnabled) {
         containerProps.style.overflow = 'hidden';
         return (
@@ -387,7 +387,7 @@ export default class ScrollView extends React.Component {
       // console.log('is pull up', _screenY);
 
       let isReachBottom;
-      if (this.props.stickyHeader || this.props.useBodyScroll) {
+      if (this.props.useBodyScroll) {
         // In chrome61 `document.body.scrollTop` is invalid, here `ele === document.body`
         const scrollNode = document.scrollingElement ? document.scrollingElement : ele;
         isReachBottom = ele.scrollHeight - scrollNode.scrollTop <= window.innerHeight;

@@ -3,6 +3,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -59,20 +60,20 @@ class Demo extends React.Component {
     return (<div>
       <ListView.IndexedList
         dataSource={this.state.dataSource}
+        useBodyScroll
+        renderSectionWrapper={(sectionID) => (
+          <StickyContainer
+            key={`s_${sectionID}_c`} className="for-stickyContainer" style={{ zIndex: 4 }}
+          />
+        )}
+        renderSectionHeader={(sectionData) => (
+          <Sticky style={{ color: 'blue', padding: 10, backgroundColor: '#ddd' }}>
+            {sectionData}
+          </Sticky>
+        )}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
         renderFooter={() => <span style={{ padding: 10 }}>footer</span>}
-        renderSectionHeader={(sectionData) => (
-          <div style={{ color: 'blue', padding: 10, backgroundColor: '#ddd' }}>
-            {sectionData}
-          </div>
-        )}
         renderRow={(rowData) => (<div style={{ padding: 10 }}>Hello: {rowData}</div>)}
-        stickyHeader
-        stickyProps={{
-          stickyStyle: { zIndex: 999 },
-          topOffset: -83,
-          // isActive: false,
-        }}
         quickSearchBarStyle={{
           top: 20,
         }}

@@ -66,7 +66,7 @@ export default class IndexedList extends React.Component {
   }
 
   onQuickSearchTop = (sectionID, topId) => {
-    if (this.props.stickyHeader) {
+    if (this.props.useBodyScroll) {
       setDocumentScrollTop(0);
     } else {
       ReactDOM.findDOMNode(this.indexedListViewRef.ListViewRef).scrollTop = 0;
@@ -76,13 +76,8 @@ export default class IndexedList extends React.Component {
 
   onQuickSearch = (sectionID) => {
     const lv = ReactDOM.findDOMNode(this.indexedListViewRef.ListViewRef);
-    let sec = ReactDOM.findDOMNode(this.sectionComponents[sectionID]);
-    if (this.props.stickyHeader) {
-      // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
-      const stickyComponent = this.indexedListViewRef.stickyRefs[sectionID];
-      if (stickyComponent && stickyComponent.refs.placeholder) {
-        sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
-      }
+    const sec = ReactDOM.findDOMNode(this.sectionComponents[sectionID]);
+    if (this.props.useBodyScroll) {
       setDocumentScrollTop(
         sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv)
       );

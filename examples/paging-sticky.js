@@ -3,7 +3,8 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, Thumb } from './util';
+import { StickyContainer, Sticky } from 'react-sticky';
+import { Thumb } from './util';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -86,31 +87,30 @@ class Demo extends React.Component {
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderHeader={() => (
-          <View style={{ height: 90, backgroundColor: '#bbb' }}>
-            <Text>Table Header</Text>
-          </View>
+        useBodyScroll
+        renderSectionWrapper={(sectionID) => (
+          <StickyContainer
+            key={`s_${sectionID}_c`} className="for-stickyContainer" style={{ zIndex: 4 }}
+          />
         )}
         renderSectionHeader={(sectionData) => (
-          <View style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            padding: 6,
-            backgroundColor: '#5890ff',
-          }}
+          <Sticky
+            className="for-sticky"
+            style={{
+              zIndex: 3,
+              padding: 16,
+              backgroundColor: parseInt(sectionData.replace('Section ', ''), 10) % 2 ?
+                '#5890ff' : '#F8591A',
+              color: 'white',
+            }}
+            onStickyStateChange={isSticky => console.log(isSticky)}
           >
-            <Text style={{ color: 'white' }}>
-              {sectionData}
-            </Text>
-          </View>
+            {sectionData}
+          </Sticky>
         )}
+        renderHeader={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Header</div>}
+        renderFooter={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Footer</div>}
         renderRow={(rowData) => (<Thumb text={rowData} />) }
-        renderFooter={() => (
-          <View style={{ height: 90, backgroundColor: '#bbb', textAlign: 'center' }}>
-            Table Footer
-          </View>
-        )}
         initialListSize={10}
         pageSize={4}
         scrollRenderAheadDistance={500}
@@ -118,18 +118,6 @@ class Demo extends React.Component {
         onScroll={() => {}}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={500}
-        renderBodyComponent={() => <div className="for-body-demo" />}
-        stickyHeader
-        stickyProps={{
-          className: 'for-sticky-demo',
-          stickyStyle: { top: '10px', WebkitTransform: 'none', transform: 'none' },
-          onStickyStateChange: (isSticky) => {
-            console.log(isSticky);
-          },
-        }}
-        stickyContainerProps={{
-          className: 'for-stickyContainer-demo',
-        }}
       />
     </div>);
   }

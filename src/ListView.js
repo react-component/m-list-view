@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ListViewDataSource from './ListViewDataSource';
 import ScrollView from './ScrollView';
-import { StickyContainer, Sticky } from 'react-sticky';
 
 const DEFAULT_PAGE_SIZE = 1;
 const DEFAULT_INITIAL_ROWS = 10;
@@ -43,14 +42,12 @@ export default class ListView extends React.Component {
     scrollEventThrottle: PropTypes.number,
     // another added
     renderBodyComponent: PropTypes.func,
+    renderSectionWrapper: PropTypes.func,
     renderSectionBodyWrapper: PropTypes.func,
     sectionBodyClassName: PropTypes.string, // for web
     listViewPrefixCls: PropTypes.string, // for web
     useZscroller: PropTypes.bool, // for web
     useBodyScroll: PropTypes.bool, // for web
-    stickyHeader: PropTypes.bool, // for web
-    stickyProps: PropTypes.object, // https://github.com/captivationsoftware/react-sticky/blob/master/README.md#sticky--props
-    stickyContainerProps: PropTypes.object,
     // pullUp
     pullUpEnabled: PropTypes.bool,
     pullUpRefreshing: PropTypes.bool,
@@ -70,8 +67,6 @@ export default class ListView extends React.Component {
     scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
-    stickyProps: {},
-    stickyContainerProps: {},
     scrollerOptions: {},
     // pullUp
     pullUpEnabled: false,
@@ -142,13 +137,11 @@ export default class ListView extends React.Component {
     this.setState({ highlightedRow: { sectionID, rowID } });
   }
 
-  stickyRefs = {}
-
   render() {
     const dataSource = this.props.dataSource;
     const allRowIDs = dataSource.rowIdentities;
+    const bodyComponents = [];
     let rowCount = 0;
-    let bodyComponents = [];
 
     for (let sectionIdx = 0; sectionIdx < allRowIDs.length; sectionIdx++) {
       const sectionID = dataSource.sectionIdentities[sectionIdx];
@@ -157,11 +150,12 @@ export default class ListView extends React.Component {
         continue;
       }
 
+      let renderSectionHeader;
       if (this.props.renderSectionHeader) {
         const shouldUpdateHeader = rowCount >= this._prevRenderedRowsCount &&
           dataSource.sectionHeaderShouldUpdate(sectionIdx);
 
-        let renderSectionHeader = (
+        renderSectionHeader = (
           <StaticRenderer
             key={`s_${sectionID}`}
             shouldUpdate={!!shouldUpdateHeader}
@@ -172,12 +166,6 @@ export default class ListView extends React.Component {
             )}
           />
         );
-        if (this.props.stickyHeader) {
-          renderSectionHeader = (<Sticky {...this.props.stickyProps} key={`s_${sectionID}`}
-            ref={c => { this.stickyRefs[sectionID] = c; }}
-          >{renderSectionHeader}</Sticky>);
-        }
-        bodyComponents.push(renderSectionHeader);
       }
 
       const sectionBody = [];
@@ -219,22 +207,27 @@ export default class ListView extends React.Component {
           break;
         }
       }
-      bodyComponents.push(React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
+
+      const rowsAndSeparators = React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
         className: this.props.sectionBodyClassName,
-      }, sectionBody));
+      }, sectionBody);
+
+      if (this.props.renderSectionWrapper) {
+        bodyComponents.push(
+          React.cloneElement(
+            this.props.renderSectionWrapper(sectionID), {}, renderSectionHeader, rowsAndSeparators
+          )
+        );
+      } else {
+        bodyComponents.push(renderSectionHeader);
+        bodyComponents.push(rowsAndSeparators);
+      }
       if (rowCount >= this.state.curRenderedRowsCount) {
         break;
       }
     }
 
     const { renderScrollComponent, ...props } = this.props;
-
-    bodyComponents = React.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
-    if (props.stickyHeader) {
-      bodyComponents = (<StickyContainer {...props.stickyContainerProps}>
-        {bodyComponents}
-      </StickyContainer>);
-    }
 
     this._sc = React.cloneElement(
       renderScrollComponent({ ...props, onScroll: this._onScroll }),
@@ -244,7 +237,7 @@ export default class ListView extends React.Component {
         onLayout: this._onLayout,
       },
       this.props.renderHeader ? this.props.renderHeader() : null,
-      bodyComponents,
+      React.cloneElement(props.renderBodyComponent(), {}, bodyComponents),
       this.props.renderFooter ? this.props.renderFooter() : null,
       props.children
     );
@@ -327,7 +320,7 @@ export default class ListView extends React.Component {
       return;
     }
     const target = ReactDOM.findDOMNode(this.ListViewRef);
-    if (this.props.stickyHeader || this.props.useBodyScroll) {
+    if (this.props.useBodyScroll) {
       this.scrollProperties.visibleLength = window[
         isVertical ? 'innerHeight' : 'innerWidth'
       ];

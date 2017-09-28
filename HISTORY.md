@@ -1,6 +1,9 @@
 # History
 ----
 
+## 0.10.1 / 2017-09-28
+- Rename `pullUpDistance` prop to `pullUpDistanceToRefresh`.
+
 ## 0.10.0 / 2017-09-28
 
 - Remove `stickyHeader` prop and [react-sticky](https://github.com/captivationsoftware/react-sticky) dependency, but you can also use react-sticky and `useBodyScroll` in listview by your self. (see demo)

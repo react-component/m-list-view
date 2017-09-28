@@ -403,7 +403,7 @@ export default class ScrollView extends React.Component {
         setTransform(this.pullUpContentRef.style,
           `translate3d(0px,${this._pullUpLastScreenY}px,0)`);
 
-        if (Math.abs(this._pullUpLastScreenY) < this.props.pullUpDistance) {
+        if (Math.abs(this._pullUpLastScreenY) < this.props.pullUpDistanceToRefresh) {
           if (this.state.pullUp !== this.pullUpStats.deactivate) {
             // console.log('back to the distance');
             this.setState({ pullUp: this.pullUpStats.deactivate });

@@ -52,7 +52,7 @@ export default class ListView extends React.Component {
     pullUpEnabled: PropTypes.bool,
     pullUpRefreshing: PropTypes.bool,
     pullUpOnRefresh: PropTypes.func,
-    pullUpDistance: PropTypes.number,
+    pullUpDistanceToRefresh: PropTypes.number,
     pullUpRenderer: PropTypes.func,
   }
 
@@ -72,7 +72,7 @@ export default class ListView extends React.Component {
     pullUpEnabled: false,
     pullUpRefreshing: false,
     pullUpOnRefresh: () => {},
-    pullUpDistance: 50,
+    pullUpDistanceToRefresh: 25,
   }
 
   state = {

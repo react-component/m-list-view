@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
-/* eslint react/sort-comp: 0 */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, Thumb } from './util';
+import { StickyContainer, Sticky } from 'react-sticky';
 
-const NUM_SECTIONS = 5;
-const NUM_ROWS_PER_SECTION = 5;
+const NUM_SECTIONS = 20;
+const NUM_ROWS_PER_SECTION = 10;
 let pageIndex = 0;
 
 const dataBlobs = {};
@@ -83,61 +82,43 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div style={{ margin: '10px auto', width: '80%' }}>
+    return (<div>
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderHeader={() => (
-          <View style={{ height: 90, backgroundColor: '#bbb' }}>
-            <Text>Table Header</Text>
-          </View>
+        useBodyScroll
+        renderSectionWrapper={(sectionID) => (
+          <StickyContainer
+            key={`s_${sectionID}_c`} className="sticky-container" style={{ zIndex: 4 }}
+          />
         )}
         renderSectionHeader={(sectionData) => (
-          <View style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            padding: 6,
-            backgroundColor: '#5890ff',
-          }}
+          <Sticky
+            className="sticky"
+            style={{
+              zIndex: 3,
+              padding: 16,
+              backgroundColor: parseInt(sectionData.replace('Section ', ''), 10) % 2 ?
+                '#5890ff' : '#F8591A',
+              color: 'white',
+            }}
+            onStickyStateChange={isSticky => console.log(isSticky)}
           >
-            <Text style={{ color: 'white' }}>
-              {sectionData}
-            </Text>
-          </View>
+            {sectionData}
+          </Sticky>
         )}
-        renderRow={(rowData) => (<Thumb text={rowData} />) }
-        renderFooter={() => (
-          <View style={{
-            backgroundColor: '#bbb', color: 'white',
-            padding: 30, textAlign: 'center',
-          }}
-          >
-            {this.state.isLoading ? 'loading...' : 'loaded'}
-          </View>
-        )}
-        style={{ height: 200 }}
-        initialListSize={10}
-        pageSize={4}
-        scrollRenderAheadDistance={500}
-        scrollEventThrottle={20}
-        onScroll={() => {}}
+        renderHeader={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Header</div>}
+        renderFooter={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Footer</div>}
+        renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
         onEndReached={this.onEndReached}
-        onEndReachedThreshold={10}
-        renderBodyComponent={() => <div className="for-body-demo" />}
-        onLayout={() => console.log('onLayout')}
+        pageSize={10}
       />
-      <div>
-        <p>note: temporary disable bodyScroll can have a better experience</p>
-        <button onClick={() => { this._ctrlBodyScroll(true); }}>enableBodyScroll</button>&nbsp;
-        <button onClick={() => { this._ctrlBodyScroll(false); } } style={{ color: 'red' }}>
-          disableBodyScroll
-        </button>
-      </div>
+      <div dangerouslySetInnerHTML={{
+        __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ?
+          '<style>#qrcode, .highlight{ display: none }</style>' : '',
+      }}
+      />
     </div>);
-  }
-  _ctrlBodyScroll = (flag) => {
-    document.getElementsByTagName('body')[0].style.overflowY = flag ? 'auto' : 'hidden';
   }
 }
 

@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
+/* eslint react/sort-comp: 0 */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { StickyContainer, Sticky } from 'react-sticky';
-import { Thumb } from './util';
 
-const NUM_SECTIONS = 20;
-const NUM_ROWS_PER_SECTION = 10;
+const NUM_SECTIONS = 5;
+const NUM_ROWS_PER_SECTION = 5;
 let pageIndex = 0;
 
 const dataBlobs = {};
@@ -51,6 +50,8 @@ class Demo extends React.Component {
   }
 
   componentDidMount() {
+    document.body.style.overflowY =
+      navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
     // you can scroll to the specified position
     // setTimeout(() => this.lv.scrollTo(0, 120), 800);
 
@@ -83,41 +84,20 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div>
+    return (<div style={{ border: '1px solid #ccc', margin: 10 }}>
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        useBodyScroll
-        renderSectionWrapper={(sectionID) => (
-          <StickyContainer
-            key={`s_${sectionID}_c`} className="for-stickyContainer" style={{ zIndex: 4 }}
-          />
-        )}
-        renderSectionHeader={(sectionData) => (
-          <Sticky
-            className="for-sticky"
-            style={{
-              zIndex: 3,
-              padding: 16,
-              backgroundColor: parseInt(sectionData.replace('Section ', ''), 10) % 2 ?
-                '#5890ff' : '#F8591A',
-              color: 'white',
-            }}
-            onStickyStateChange={isSticky => console.log(isSticky)}
-          >
-            {sectionData}
-          </Sticky>
-        )}
-        renderHeader={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Header</div>}
-        renderFooter={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Footer</div>}
-        renderRow={(rowData) => (<Thumb text={rowData} />) }
-        initialListSize={10}
-        pageSize={4}
-        scrollRenderAheadDistance={500}
-        scrollEventThrottle={20}
-        onScroll={() => {}}
+        style={{ height: 200 }}
+        renderHeader={() => <div style={{ height: 40 }}>Header</div>}
+        renderSectionHeader={sectionData =>
+          <div style={{ padding: 6, background: '#bbb' }}>{sectionData}</div>}
+        renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div> }
+        renderFooter={() => (<div style={{ padding: 20, background: '#e34' }}>
+          {this.state.isLoading ? 'loading...' : 'loaded'}</div>)}
         onEndReached={this.onEndReached}
-        onEndReachedThreshold={500}
+        onEndReachedThreshold={10}
+        pageSize={10}
       />
     </div>);
   }

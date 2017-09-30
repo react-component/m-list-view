@@ -1,9 +1,9 @@
-/* eslint-disable no-console, no-alert */
+/* eslint-disable no-console */
+/* eslint react/sort-comp: 0 */
 import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text, Image, THUMB_URLS } from './util';
 
 const NUM_ROWS = 20;
 
@@ -28,6 +28,8 @@ class Demo extends React.Component {
   }
 
   componentDidMount() {
+    document.body.style.overflowY =
+      navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
     // you can scroll to the specified position
     setTimeout(() => this.lv.scrollTo(0, 50), 800);
 
@@ -40,37 +42,17 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (
+    return (<div style={{ border: '1px solid #ccc', margin: 10 }}>
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderRow={(rowData) => (
-          <View style={{ display: 'flex', alignItems: 'center' }}>
-            <Image style={{ width: 64, height: 64 }} source={THUMB_URLS[0]} />
-            <Text>{`${rowData} - Lorem ipsum dolor sit amet`}</Text>
-          </View>
-        )}
-        renderSeparator={(sectionID, rowID, adjacentRowHighlighted) => (
-          <View key={`${sectionID}-${rowID}`}
-            style={{
-              height: adjacentRowHighlighted ? 4 : 1,
-              backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
-            }}
-          />
-        )}
-        renderBodyComponent={() => <div className="for-body-demo" />}
-        sectionBodyClassName="sb"
         style={{ height: 200 }}
-        useZscroller
-        scrollerOptions={{ scrollbars: true }}
-        onEndReached={e => console.log(e)}
+        renderHeader={() =>
+          <button onClick={() => this.lv.scrollTo(0, 100)}>scrollTo(0, 100)</button>}
+        renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
         onEndReachedThreshold={10}
-        scrollEventThrottle={20}
-        scrollRenderAheadDistance={30}
-        initialListSize={5}
-        pageSize={5}
       />
-    );
+    </div>);
   }
 }
 

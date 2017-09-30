@@ -3,9 +3,25 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { myData as data } from './util';
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 
+export const data = [
+  {
+    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+    title: '相约酒店',
+    des: '不是所有的兼职汪都需要风吹日晒',
+  },
+  {
+    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
+    title: '麦当劳邀您过周末',
+    des: '不是所有的兼职汪都需要风吹日晒',
+  },
+  {
+    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
+    title: '食惠周',
+    des: '不是所有的兼职汪都需要风吹日晒',
+  },
+];
 let index = data.length - 1;
 
 const NUM_ROWS = 20;
@@ -133,8 +149,6 @@ class Demo extends React.Component {
         renderSeparator={(sectionID, rowID) => (
           <div key={`${sectionID}-${rowID}`} style={{ backgroundColor: '#F5F5F9', height: 8 }} />
         )}
-        initialListSize={5}
-        pageSize={5}
         style={{
           height: 400,
           border: '1px solid #ddd',
@@ -151,10 +165,9 @@ class Demo extends React.Component {
           resistance={1}
         />}
         onScroll={this.onScroll}
-        scrollRenderAheadDistance={200}
-        scrollEventThrottle={20}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
+        pageSize={10}
       />
     );
   }

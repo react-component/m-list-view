@@ -4,7 +4,6 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
-import { View, Text } from './util';
 
 const NUM_ROWS = 20;
 let pageIndex = 0;
@@ -18,6 +17,13 @@ function genData(pIndex = 0) {
   return dataBlob;
 }
 
+const MySectionBodyWrapper = (props) => {
+  return (<table className="my-section-body">
+    <thead><tr><td>table title</td></tr></thead>
+    <tbody>{props.children}</tbody>
+  </table>);
+};
+
 class Demo extends React.Component {
   constructor(props) {
     super(props);
@@ -25,18 +31,13 @@ class Demo extends React.Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
 
-    this._data = {};
     this.state = {
       dataSource,
       isLoading: true,
-      destroy: false,
     };
   }
 
   componentDidMount() {
-    // you can scroll to the specified position
-    // setTimeout(() => this.lv.scrollTo(0, 120), 800);
-
     // simulate initial Ajax
     setTimeout(() => {
       this.rData = genData();
@@ -46,15 +47,6 @@ class Demo extends React.Component {
       });
     }, 600);
   }
-
-  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.dataSource !== this.props.dataSource) {
-  //     this.setState({
-  //       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),
-  //     });
-  //   }
-  // }
 
   onEndReached = (event) => {
     console.log('fire onEndReached');
@@ -76,64 +68,29 @@ class Demo extends React.Component {
 
   render() {
     return (<div>
-      <button style={{ margin: 10 }}
-        onClick={() => this.setState({ destroy: !this.state.destroy })}
-      >
-        {this.state.destroy ? 'create' : 'destroy'} ListView
-      </button>
-      <button onClick={() => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows({ xx: 'xxx' }),
-        });
-      }}
-      >changeData</button>
-
-      {!this.state.destroy ? <ListView
+      <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderHeader={() => (
-          <View style={{ height: 90, backgroundColor: '#bbb' }}>
-            <Text>设置了`useBodyScroll`，使用 html body 作为滚动容器</Text>
-          </View>
-        )}
-        renderFooter={() => (
-          <View style={{
-            backgroundColor: '#bbb', color: 'white',
-            padding: 30, textAlign: 'center',
-          }}
-          >
-            {this.state.isLoading ? 'loading...' : 'loaded'}
-          </View>
-        )}
+        useBodyScroll
+        renderHeader={() => <div style={{ padding: 30 }}>设置了`useBodyScroll`</div>}
+        renderFooter={() =>
+          <div style={{ padding: 30 }}>{this.state.isLoading ? 'loading...' : 'loaded'}</div>}
         renderBodyComponent={() => <div className="for-body-demo" />}
         renderSectionBodyWrapper={(sectionID) => <MySectionBodyWrapper key={sectionID} />}
         renderRow={(rowData) => (<tr style={{ height: 50 }}>
           <td>{rowData} Let me keep typing here so it wraps at least one line.</td>
         </tr>)}
-        useBodyScroll
-        initialListSize={10}
-        pageSize={4}
-        scrollRenderAheadDistance={500}
-        scrollEventThrottle={200}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={100}
-      /> : null}
+        pageSize={10}
+      />
       <div dangerouslySetInnerHTML={{
-        __html: `<style>
-        #qrcode{ display: none }
-        .highlight{ display: none }
-        </style>`,
+        __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ?
+          '<style>#qrcode, .highlight{ display: none }</style>' : '',
       }}
       />
     </div>);
   }
 }
-
-const MySectionBodyWrapper = (props) => {
-  return (<table className="my-section-body">
-    <thead><tr><td>table title</td></tr></thead>
-    <tbody>{props.children}</tbody>
-  </table>);
-};
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));

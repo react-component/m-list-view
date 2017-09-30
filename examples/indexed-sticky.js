@@ -80,6 +80,11 @@ class Demo extends React.Component {
         onQuickSearch={(sectionID) => console.log(sectionID) }
         sectionBodyClassName="sb"
       />
+      <div dangerouslySetInnerHTML={{
+        __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ?
+          '<style>#qrcode, .highlight{ display: none }</style>' : '',
+      }}
+      />
     </div>);
   }
 }

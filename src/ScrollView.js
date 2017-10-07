@@ -65,6 +65,9 @@ export default class ScrollView extends React.Component {
       window.addEventListener('resize', this.onLayout);
     } else {
       ReactDOM.findDOMNode(this.ScrollViewRef).addEventListener('scroll', this.tsExec);
+      if (this.props.pullToRefresh) {
+        this.forceUpdate();
+      }
     }
   }
   componentWillUnmount() {
@@ -103,7 +106,7 @@ export default class ScrollView extends React.Component {
   render() {
     const {
       children, className, prefixCls, listPrefixCls, listViewPrefixCls,
-      style = {}, contentContainerStyle = {}, useBodyScroll,
+      style = {}, contentContainerStyle = {}, useBodyScroll, pullToRefresh,
     } = this.props;
 
     const styleBase = {
@@ -126,9 +129,32 @@ export default class ScrollView extends React.Component {
     };
 
     if (useBodyScroll) {
+      if (pullToRefresh) {
+        return (
+          <div {...containerProps}>
+            {React.cloneElement(pullToRefresh, {
+              prefixCls: `${preCls}-pull-to-refresh`,
+              getScrollContainer: () => document.body,
+            }, children)}
+          </div>
+        );
+      }
       return (
         <div {...containerProps}>
           {children}
+        </div>
+      );
+    }
+
+    if (pullToRefresh && this.ScrollViewRef) {
+      return (
+        <div {...containerProps}>
+          <div {...contentContainerProps}>
+            {React.cloneElement(pullToRefresh, {
+              prefixCls: `${preCls}-pull-to-refresh`,
+              getScrollContainer: () => this.ScrollViewRef,
+            }, children)}
+          </div>
         </div>
       );
     }

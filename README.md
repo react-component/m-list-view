@@ -80,11 +80,7 @@ Properties | Descrition | Type | Default
 | useZscroller (`web only`) | use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers(can be used for some poor Android machine) (`useBodyScroll` settings are automatically ignored), and can support RefreshControl well | bool | false |
 | scrollerOptions (`web only`) | [zscroller options](https://github.com/yiminghe/zscroller#options) | Object | - |
 | ---- |
-| pullUpEnabled (`web only`) | Whether enable pull-up (It is not supported with `useZscroller`) | bool | false |
-| pullUpRefreshing (`web only`) | Whether the view should be indicating an active refresh | bool | false |
-| pullUpOnRefresh (`web only`) | Called when the view starts refreshing. | () => void | - |
-| pullUpDistanceToRefresh (`web only`) | distance to pull up | number | `25` |
-| pullUpRenderer (`web only`) | custom renderer text, the params are one of `activate` / `deactivate` / `release` / `finish` | (arg) => void | - |
+| pullToRefresh (`web only`) | Whether enable pullToRefresh, you need use it with [rmc-pull-to-refresh]() | bool | false |
 
 ### Methods
 

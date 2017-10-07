@@ -4,6 +4,7 @@ import 'rmc-list-view/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ListView from 'rmc-list-view';
+import PullToRefresh from 'rmc-pull-to-refresh';
 
 const NUM_ROWS = 6;
 
@@ -25,7 +26,7 @@ class Demo extends React.Component {
     this.state = {
       dataSource,
       useBodyScroll: true,
-      pullUpRefreshing: false,
+      refreshing: false,
     };
   }
 
@@ -55,18 +56,23 @@ class Demo extends React.Component {
         key={this.state.useBodyScroll ? 1 : 0}
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
         useBodyScroll={this.state.useBodyScroll}
         style={!this.state.useBodyScroll ? { height: 200, border: '1px solid gray' } : {}}
-        pullUpEnabled
-        pullUpRefreshing={this.state.pullUpRefreshing}
-        pullUpOnRefresh={() => {
-          this.setState({ pullUpRefreshing: true });
-          setTimeout(() => {
-            this.setState({ pullUpRefreshing: false });
-          }, 1000);
-        }}
-        pullUpRenderer={st => <div className="my-render">{st}</div>}
+        renderHeader={() => <span style={{ padding: 10 }}>header</span>}
+        renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
+        pullToRefresh={
+          <PullToRefresh
+            className="forTest"
+            direction="up"
+            refreshing={this.state.refreshing}
+            onRefresh={() => {
+              this.setState({ refreshing: true });
+              setTimeout(() => {
+                this.setState({ refreshing: false });
+              }, 1000);
+            }}
+          />
+        }
       />
       <div dangerouslySetInnerHTML={{
         __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ?

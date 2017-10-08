@@ -229,7 +229,7 @@ export default class ListView extends React.Component {
 
     const { renderScrollComponent, ...props } = this.props;
 
-    this._sc = React.cloneElement(
+    return React.cloneElement(
       renderScrollComponent({ ...props, onScroll: this._onScroll }),
       {
         ref: el => this.ListViewRef = el,
@@ -241,7 +241,6 @@ export default class ListView extends React.Component {
       this.props.renderFooter ? this.props.renderFooter() : null,
       props.children
     );
-    return this._sc;
   }
 
   _onContentSizeChange = (width, height) => {

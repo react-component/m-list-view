@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { throttle } from './util';
 
@@ -19,7 +18,6 @@ const propTypes = {
   style: PropTypes.object,
   contentContainerStyle: PropTypes.object,
   onScroll: PropTypes.func,
-  scrollEventThrottle: PropTypes.number,
 };
 
 export default class ScrollView extends React.Component {
@@ -30,30 +28,35 @@ export default class ScrollView extends React.Component {
     // 问题情景：用户滚动内容后，改变 dataSource 触发 ListView componentWillReceiveProps
     // 内容变化后 scrollTop 如果改变、会自动触发 scroll 事件，而此事件应该避免被执行
     if ((this.props.dataSource !== nextProps.dataSource ||
-        this.props.initialListSize !== nextProps.initialListSize) && this.tsExec) {
+        this.props.initialListSize !== nextProps.initialListSize) && this.handleScroll) {
       // console.log('componentWillUpdate');
       if (this.props.useBodyScroll) {
-        window.removeEventListener('scroll', this.tsExec);
+        window.removeEventListener('scroll', this.handleScroll);
       } else {
-        ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
+        this.ScrollViewRef.removeEventListener('scroll', this.handleScroll);
       }
     }
   }
   componentDidUpdate(prevProps) {
     // handle componentWillUpdate accordingly
     if ((this.props.dataSource !== prevProps.dataSource ||
-        this.props.initialListSize !== prevProps.initialListSize) && this.tsExec) {
+        this.props.initialListSize !== prevProps.initialListSize) && this.handleScroll) {
       setTimeout(() => {
         if (this.props.useBodyScroll) {
-          window.addEventListener('scroll', this.tsExec);
+          window.addEventListener('scroll', this.handleScroll);
         } else {
-          ReactDOM.findDOMNode(this.ScrollViewRef).addEventListener('scroll', this.tsExec);
+          this.ScrollViewRef.addEventListener('scroll', this.handleScroll);
         }
       }, 0);
     }
   }
   componentDidMount() {
-    this.tsExec = this.throttleScroll();
+    let handleScroll = e => this.props.onScroll && this.props.onScroll(e, this.getMetrics());
+    if (this.props.scrollEventThrottle) {
+      handleScroll = throttle(handleScroll, this.props.scrollEventThrottle);
+    }
+    this.handleScroll = handleScroll;
+
     // IE supports onresize on all HTML elements.
     // In all other Browsers the onresize is only available at the window object
     this.onLayout = () => this.props.onLayout({
@@ -61,43 +64,50 @@ export default class ScrollView extends React.Component {
     });
 
     if (this.props.useBodyScroll) {
-      window.addEventListener('scroll', this.tsExec);
+      window.addEventListener('scroll', this.handleScroll);
       window.addEventListener('resize', this.onLayout);
     } else {
-      ReactDOM.findDOMNode(this.ScrollViewRef).addEventListener('scroll', this.tsExec);
+      this.ScrollViewRef.addEventListener('scroll', this.handleScroll);
     }
   }
   componentWillUnmount() {
     if (this.props.useBodyScroll) {
-      window.removeEventListener('scroll', this.tsExec);
+      window.removeEventListener('scroll', this.handleScroll);
       window.removeEventListener('resize', this.onLayout);
     } else {
-      ReactDOM.findDOMNode(this.ScrollViewRef).removeEventListener('scroll', this.tsExec);
+      this.ScrollViewRef.removeEventListener('scroll', this.handleScroll);
     }
   }
 
-  getInnerViewNode = () => {
-    return ReactDOM.findDOMNode(this.InnerScrollViewRef);
+  getMetrics = () => {
+    const isVertical = !this.props.horizontal;
+    if (this.props.useBodyScroll) {
+      // In chrome61 `document.body.scrollTop` is invalid,
+      // and add new `document.scrollingElement`(chrome61, iOS support).
+      // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
+      const scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
+      return {
+        visibleLength: window[isVertical ? 'innerHeight' : 'innerWidth'],
+        contentLength: this.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'],
+        offset: scrollNode[isVertical ? 'scrollTop' : 'scrollLeft'],
+      };
+    }
+    return {
+      visibleLength: this.ScrollViewRef[isVertical ? 'offsetHeight' : 'offsetWidth'],
+      contentLength: this.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'],
+      offset: this.ScrollViewRef[isVertical ? 'scrollTop' : 'scrollLeft'],
+    };
   }
+
+  getInnerViewNode = () => this.InnerScrollViewRef;
 
   scrollTo = (...args) => {
     if (this.props.useBodyScroll) {
       window.scrollTo(...args);
     } else {
-      const ele = ReactDOM.findDOMNode(this.ScrollViewRef);
-      ele.scrollLeft = args[0];
-      ele.scrollTop = args[1];
+      this.ScrollViewRef.scrollLeft = args[0];
+      this.ScrollViewRef.scrollTop = args[1];
     }
-  }
-
-  throttleScroll = () => {
-    let handleScroll = () => {};
-    if (this.props.scrollEventThrottle && this.props.onScroll) {
-      handleScroll = throttle(e => {
-        this.props.onScroll && this.props.onScroll(e);
-      }, this.props.scrollEventThrottle);
-    }
-    return handleScroll;
   }
 
   render() {
@@ -124,7 +134,7 @@ export default class ScrollView extends React.Component {
       style: { position: 'absolute', minWidth: '100%', ...contentContainerStyle },
       className: classNames(`${preCls}-scrollview-content`, listPrefixCls),
     };
-    
+
     const clonePullToRefresh = isBody => React.cloneElement(pullToRefresh, {
       prefixCls: `${preCls}-pull-to-refresh`,
       getScrollContainer: isBody ? () => document.body : () => this.ScrollViewRef,

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint react/sort-comp: 0 */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 
 const NUM_ROWS = 20;
 
@@ -42,17 +42,17 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div style={{ border: '1px solid #ccc', margin: 10 }}>
+    return (
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        style={{ height: 200 }}
+        style={{ height: 200, border: '1px solid #ccc', margin: 10 }}
         renderHeader={() =>
           <button onClick={() => this.lv.scrollTo(0, 100)}>scrollTo(0, 100)</button>}
         renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
         onEndReachedThreshold={10}
       />
-    </div>);
+    );
   }
 }
 

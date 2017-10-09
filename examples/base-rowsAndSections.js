@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint react/sort-comp: 0 */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 
 const NUM_SECTIONS = 5;
 const NUM_ROWS_PER_SECTION = 5;

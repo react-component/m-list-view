@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint react/sort-comp: 0 */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 import PullToRefresh from 'rmc-pull-to-refresh';
 
 const NUM_ROWS = 6;
@@ -27,6 +27,7 @@ class Demo extends React.Component {
       dataSource,
       useBodyScroll: true,
       refreshing: false,
+      down: false,
     };
   }
 
@@ -52,6 +53,12 @@ class Demo extends React.Component {
       >
         useBodyScroll: {this.state.useBodyScroll ? 'true' : 'false'}
       </button>
+      <button
+        style={{ display: 'inline-block', marginBottom: 30, marginLeft: 10, border: 1 }}
+        onClick={() => this.setState({ down: !this.state.down })}
+      >
+        direction: {this.state.down ? 'down' : 'up'}
+      </button>
       <ListView
         key={this.state.useBodyScroll ? 1 : 0}
         ref={el => this.lv = el}
@@ -63,7 +70,7 @@ class Demo extends React.Component {
         pullToRefresh={
           <PullToRefresh
             className="forTest"
-            direction="up"
+            direction={this.state.down ? 'down' : 'up'}
             refreshing={this.state.refreshing}
             onRefresh={() => {
               this.setState({ refreshing: true });

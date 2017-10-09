@@ -1,8 +1,9 @@
 /* eslint-disable no-console, no-alert */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
+import Zscroller from '../src/Zscroller';
 
 const NUM_ROWS = 20;
 
@@ -27,6 +28,8 @@ class Demo extends React.Component {
   }
 
   componentDidMount() {
+    document.body.style.overflowY =
+      navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
     // you can scroll to the specified position
     setTimeout(() => this.lv.scrollTo(0, 50), 800);
 
@@ -43,8 +46,8 @@ class Demo extends React.Component {
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        style={{ height: 200 }}
-        useZscroller
+        style={{ height: 200, border: '1px solid #ccc', margin: 10 }}
+        renderScrollComponent={props => <Zscroller {...props} />}
         renderRow={rowData => <div style={{ padding: 16 }}>{rowData}</div>}
         renderBodyComponent={() => <div className="for-body-demo" />}
         sectionBodyClassName="sb"

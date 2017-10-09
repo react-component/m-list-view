@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;

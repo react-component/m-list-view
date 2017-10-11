@@ -10,11 +10,30 @@
 
 **Note: 0.11.0 version has very big optimization**, if you use `useZscroller`/`ListView.RefreshControl` before. You need to follow new usage.
 
-Now `useZscroller` `scrollerOptions` `refreshControl` these props no longer work by default. But you can also use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers like bofore(**Note we do not recommend using simulated scroller**). For ease of upgrade and forward compatibility. We have already implemented a Zscroller ScrollView in 'rmc-list-view/lib/Zscroller', you can use it directly(or you can do it yourself). the complete example is here: [zscroller](https://github.com/react-component/m-list-view/blob/master/examples/zscroller.js).
+Now `useZscroller` `scrollerOptions` `refreshControl` these props no longer work. **Use the web's native scroller instead of zscroller, using the [`PullToRefresh`](https://github.com/react-component/m-pull-to-refresh) component instead of the `ListView.RefreshControl` component**.
 
-**At the same time, we strongly recommend using `PullToRefresh` instead of `RefreshControl`**.
+Upgrade example:
 
-But for some reason, you still need to use zscroller and RefreshControl, then the following props table is in the `ListView.RefreshControl` before,
+  ```diff
+  + import { ListView, PullToRefresh } from 'antd-mobile';
+  <ListView
+     dataSource={this.state.dataSource}
+  -  refreshControl={<RefreshControl
+  +  pullToRefresh={<PullToRefresh
+       refreshing={this.state.refreshing}
+       onRefresh={this.onRefresh}
+  -    icon={this.renderCustomIcon()}
+  +    indicator={{ deactivate: '下拉' }}
+     />}
+  />
+  ```
+
+#### zscroller
+
+> **Note: we do not recommend using simulated scroller**. But you can also use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers like bofore.
+You can use 'rmc-list-view/lib/Zscroller'(or archive it yourself) and the complete example is here: [zscroller](https://github.com/react-component/m-list-view/blob/master/examples/zscroller.js).
+
+The following props table is in the `ListView.RefreshControl` before,
 
 Properties | Descrition | Type | Default
 -----------|------------|------|--------
@@ -43,7 +62,7 @@ now just directly attach them in `ListView` component, and they will still work 
   />
   ```
 
-the complete example is here: [zscroller-pulldown](https://github.com/react-component/m-list-view/blob/master/examples/zscroller-pulldown.js)
+The complete example is here: [zscroller-pulldown](https://github.com/react-component/m-list-view/blob/master/examples/zscroller-pulldown.js)
 
 
 ## 0.10.1 / 2017-09-28

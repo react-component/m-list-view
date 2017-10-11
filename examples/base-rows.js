@@ -1,6 +1,6 @@
-webpackJsonp([6],{
+webpackJsonp([8],{
 
-/***/ 167:
+/***/ 162:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25,31 +25,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* eslint-disable no-console */
+/* eslint react/sort-comp: 0 */
 
 
 
 
 
-var NUM_SECTIONS = 20;
-var NUM_ROWS_PER_SECTION = 10;
+var NUM_ROWS = 20;
 
-function genData(ds) {
-  var dataBlob = {};
-  var sectionIDs = [];
-  var rowIDs = [];
-  for (var ii = 0; ii < NUM_SECTIONS; ii++) {
-    var sectionName = String.fromCharCode(65 + ii);
-    sectionIDs.push(sectionName);
-    dataBlob[sectionName] = sectionName;
-    rowIDs[ii] = [];
+function genData() {
+  var pIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
-    for (var jj = 0; jj < NUM_ROWS_PER_SECTION; jj++) {
-      var rowName = 'S' + ii + ', R' + jj;
-      rowIDs[ii].push(rowName);
-      dataBlob[rowName] = rowName;
-    }
+  var dataArr = [];
+  for (var i = 0; i < NUM_ROWS; i++) {
+    dataArr.push('row - ' + (pIndex * NUM_ROWS + i));
   }
-  return ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+  return dataArr;
 }
 
 var Demo = function (_React$Component) {
@@ -60,27 +51,14 @@ var Demo = function (_React$Component) {
 
     var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
-    var getSectionData = function getSectionData(dataBlob, sectionID) {
-      return dataBlob[sectionID];
-    };
-    var getRowData = function getRowData(dataBlob, sectionID, rowID) {
-      return dataBlob[rowID];
-    };
-
     var dataSource = new __WEBPACK_IMPORTED_MODULE_7__src__["a" /* default */].DataSource({
-      getRowData: getRowData,
-      getSectionHeaderData: getSectionData,
       rowHasChanged: function rowHasChanged(row1, row2) {
         return row1 !== row2;
-      },
-      sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
-        return s1 !== s2;
       }
     });
 
     _this.state = {
-      dataSource: dataSource,
-      isLoading: true
+      dataSource: dataSource
     };
     return _this;
   }
@@ -90,75 +68,48 @@ var Demo = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      document.body.style.overflowY = navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
+      // you can scroll to the specified position
+      setTimeout(function () {
+        return _this2.lv.scrollTo(0, 50);
+      }, 800);
+
       // simulate initial Ajax
       setTimeout(function () {
         _this2.setState({
-          dataSource: genData(_this2.state.dataSource),
-          isLoading: false
+          dataSource: _this2.state.dataSource.cloneWithRows(genData())
         });
       }, 600);
     }
   }, {
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-        'div',
-        { style: { margin: '10px auto', width: '90%', position: 'relative' } },
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__src__["a" /* default */].IndexedList, {
-          dataSource: this.state.dataSource,
-          renderHeader: function renderHeader() {
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-              'span',
-              { style: { padding: 10 } },
-              'header'
-            );
-          },
-          renderFooter: function renderFooter() {
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-              'span',
-              { style: { padding: 10 } },
-              'footer'
-            );
-          },
-          renderSectionHeader: function renderSectionHeader(sectionData) {
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-              'div',
-              { style: { color: 'blue', padding: 10, backgroundColor: '#ddd' } },
-              sectionData
-            );
-          },
-          renderRow: function renderRow(rowData) {
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-              'div',
-              { style: { padding: 10 } },
-              'Hello: ',
-              rowData
-            );
-          },
-          contentContainerStyle: { textAlign: 'left' },
-          quickSearchBarStyle: {
-            position: 'absolute',
-            top: 20, right: 10
-          },
-          style: { height: 500 },
-          onQuickSearch: function onQuickSearch(sectionID) {
-            return console.log(sectionID);
-          },
-          showQuickSearchIndicator: true,
-          delayTime: 100,
-          delayActivityIndicator: __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      var _this3 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__src__["a" /* default */], {
+        ref: function ref(el) {
+          return _this3.lv = el;
+        },
+        dataSource: this.state.dataSource,
+        style: { height: 200, border: '1px solid #ccc', margin: 10 },
+        renderHeader: function renderHeader() {
+          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { onClick: function onClick() {
+                return _this3.lv.scrollTo(0, 100);
+              } },
+            'scrollTo(0, 100)'
+          );
+        },
+        renderRow: function renderRow(rowData) {
+          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
             'div',
-            { style: { padding: 25, textAlign: 'center' } },
-            'delay rendering...'
-          ),
-          sectionHeaderClassName: 'sh',
-          sectionBodyClassName: 'sb'
-        }),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('div', { dangerouslySetInnerHTML: {
-            __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? '<style>#qrcode, .highlight{ display: none }</style>' : ''
-          }
-        })
-      );
+            { style: { padding: 16 } },
+            rowData
+          );
+        },
+        onEndReachedThreshold: 10
+      });
     }
   }]);
 
@@ -169,13 +120,13 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 320:
+/***/ 315:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(167);
+module.exports = __webpack_require__(162);
 
 
 /***/ })
 
-},[320]);
-//# sourceMappingURL=indexed.js.map
+},[315]);
+//# sourceMappingURL=base-rows.js.map

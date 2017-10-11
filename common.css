@@ -41,51 +41,62 @@ li {
 .rmc-indexed-list-qsindicator-hide {
   display: none;
 }
-.rmc-list-view-pull-up-indicator {
+.rmc-list-view-pull-to-refresh-content {
+  -webkit-transform-origin: left top 0px;
+          transform-origin: left top 0px;
+}
+.rmc-list-view-pull-to-refresh-content-wrapper {
+  overflow: hidden;
+}
+.rmc-list-view-pull-to-refresh-indicator {
   color: grey;
   text-align: center;
   height: 25px;
   line-height: 25px;
+}
+.rmc-list-view-pull-to-refresh-down .rmc-list-view-pull-to-refresh-indicator {
+  margin-top: -25px;
+}
+.rmc-list-view-pull-to-refresh-up .rmc-list-view-pull-to-refresh-indicator {
   margin-bottom: -25px;
 }
-.rmc-list-view-pull-up-dropped {
+.rmc-list-view-pull-to-refresh-transition {
   transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   transition: transform 0.3s, -webkit-transform 0.3s;
 }
-.list-view-refresh-control-indicator {
+.zscroller-refresh-control-indicator {
   color: grey;
   text-align: center;
-  height: 50px;
-  line-height: 50px;
-  margin-top: -50px;
+  height: 25px;
+  line-height: 25px;
+  margin-top: -25px;
 }
-.list-view-refresh-control-indicator-icon-wrapper {
+.zscroller-refresh-control-indicator-icon-wrapper {
   display: block;
 }
-.list-view-refresh-control-indicator-loading-wrapper {
+.zscroller-refresh-control-indicator-loading-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-indicator-icon-wrapper {
+.zscroller-refresh-control-loading .zscroller-refresh-control-indicator-icon-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-indicator-loading-wrapper {
+.zscroller-refresh-control-loading .zscroller-refresh-control-indicator-loading-wrapper {
   display: block;
 }
-.list-view-refresh-control-pull {
+.zscroller-refresh-control-pull {
   display: block;
 }
-.list-view-refresh-control-release {
+.zscroller-refresh-control-release {
   display: none;
 }
-.list-view-refresh-control-active .list-view-refresh-control-pull {
+.zscroller-refresh-control-active .zscroller-refresh-control-pull {
   display: none;
 }
-.list-view-refresh-control-active .list-view-refresh-control-release {
+.zscroller-refresh-control-active .zscroller-refresh-control-release {
   display: block;
 }
-.list-view-refresh-control-deactive .list-view-refresh-control-indicator-icon-wrapper,
-.list-view-refresh-control-deactive .list-view-refresh-control-indicator-loading-wrapper {
+.zscroller-refresh-control-deactive .zscroller-refresh-control-indicator-loading-wrapper {
   display: none;
 }
 .zscroller-scrollbar-y {

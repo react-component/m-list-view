@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>paging-sticky.js - example - rmc-list-view@0.10.1</title>
+  <title>base-rowsAndSections.js - example - rmc-list-view@0.11.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,22 +263,21 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.10.1</h1>
+      <h1>rmc-list-view@0.11.0</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
     <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint-disable no-console */</span>
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
+<span class="hljs-comment">/* eslint react/sort-comp: 0 */</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'../assets/index.less'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
-<span class="hljs-keyword">import</span> { StickyContainer, Sticky } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-sticky'</span>;
-<span class="hljs-keyword">import</span> { Thumb } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'../src'</span>;
 
-<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">20</span>;
-<span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">const</span> NUM_SECTIONS = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">const</span> NUM_ROWS_PER_SECTION = <span class="hljs-number">5</span>;
 <span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
 
 <span class="hljs-keyword">const</span> dataBlobs = {};
@@ -322,6 +321,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 
   componentDidMount() {
+    <span class="hljs-built_in">document</span>.body.style.overflowY =
+      navigator.userAgent.match(<span class="hljs-regexp">/Android|iPhone|iPad|iPod/i</span>) ? <span class="hljs-string">'hidden'</span> : <span class="hljs-string">'auto'</span>;
     <span class="hljs-comment">// you can scroll to the specified position</span>
     <span class="hljs-comment">// setTimeout(() =&gt; this.lv.scrollTo(0, 120), 800);</span>
 
@@ -354,41 +355,20 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 
   render() {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">border:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> #<span class="hljs-attribute">ccc</span>', <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }}&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
         dataSource={this.state.dataSource}
-        useBodyScroll
-        renderSectionWrapper={(sectionID) =&gt; (
-          <span class="hljs-tag">&lt;<span class="hljs-title">StickyContainer</span>
-            <span class="hljs-attribute">key</span>=<span class="hljs-value">{`s_${sectionID}_c`}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-stickyContainer"</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">zIndex:</span> <span class="hljs-attribute">4</span> }}
-          /&gt;</span>
-        )</span>}
-        renderSectionHeader={(sectionData) =&gt; (
-          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Sticky</span>
-            <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-sticky"</span>
-            <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-              <span class="hljs-attribute">zIndex:</span> <span class="hljs-attribute">3</span>,
-              <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">16</span>,
-              <span class="hljs-attribute">backgroundColor:</span> <span class="hljs-attribute">parseInt</span>(<span class="hljs-attribute">sectionData.replace</span>('<span class="hljs-attribute">Section</span> ', ''), <span class="hljs-attribute">10</span>) % <span class="hljs-attribute">2</span> ?
-                '#<span class="hljs-attribute">5890ff</span>' <span class="hljs-attribute">:</span> '#<span class="hljs-attribute">F8591A</span>',
-              <span class="hljs-attribute">color:</span> '<span class="hljs-attribute">white</span>',
-            }}
-            <span class="hljs-attribute">onStickyStateChange</span>=<span class="hljs-value">{isSticky</span> =&gt;</span> console.log(isSticky)}
-          &gt;
-            {sectionData}
-          <span class="hljs-tag">&lt;/<span class="hljs-title">Sticky</span>&gt;</span>
-        )</span>}
-        renderHeader={() =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">90</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
-        renderFooter={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">90</span>, <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>Footer<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
-        renderRow={(rowData) =&gt; (<span class="hljs-tag">&lt;<span class="hljs-title">Thumb</span> <span class="hljs-attribute">text</span>=<span class="hljs-value">{rowData}</span> /&gt;</span>)</span> }
-        initialListSize={<span class="hljs-number">10</span>}
-        pageSize={<span class="hljs-number">4</span>}
-        scrollRenderAheadDistance={<span class="hljs-number">500</span>}
-        scrollEventThrottle={<span class="hljs-number">20</span>}
-        onScroll={() =&gt; {}}
+        style={{ height: 200 }}
+        renderHeader={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">40</span> }}&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
+        renderSectionHeader={sectionData =&gt;
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">6</span>, <span class="hljs-attribute">background:</span> '#<span class="hljs-attribute">bbb</span>' }}&gt;</span>{sectionData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
+        renderRow={rowData =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">16</span> }}&gt;</span>{rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span> }
+        renderFooter={() =&gt; (<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">20</span>, <span class="hljs-attribute">background:</span> '#<span class="hljs-attribute">e34</span>' }}&gt;</span>
+          {this.state.isLoading ? 'loading...' : 'loaded'}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
         onEndReached={<span class="hljs-keyword">this</span>.onEndReached}
-        onEndReachedThreshold={<span class="hljs-number">500</span>}
+        onEndReachedThreshold={<span class="hljs-number">10</span>}
+        pageSize={<span class="hljs-number">10</span>}
       /&gt;
     <span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
   }
@@ -405,7 +385,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   <script>FastClick.attach(document.body);</script>
   <script src="../common.js?nowrap"></script>
-  <script src="paging-sticky.js?nowrap"></script>
+  <script src="base-rowsAndSections.js?nowrap"></script>
 </body>
 
 </html>

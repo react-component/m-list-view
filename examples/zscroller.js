@@ -30,6 +30,7 @@ class Demo extends React.Component {
   componentDidMount() {
     document.body.style.overflowY =
       navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
+
     // you can scroll to the specified position
     setTimeout(() => this.lv.scrollTo(0, 50), 800);
 

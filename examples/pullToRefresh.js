@@ -25,7 +25,7 @@ class Demo extends React.Component {
 
     this.state = {
       dataSource,
-      useBodyScroll: true,
+      useBodyScroll: false,
       refreshing: false,
       down: false,
     };

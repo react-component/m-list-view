@@ -46,6 +46,7 @@ class Demo extends React.Component {
     this.state = {
       dataSource,
       refreshing: true,
+      height: document.documentElement.clientHeight,
     };
   }
 
@@ -59,6 +60,9 @@ class Demo extends React.Component {
   // }
 
   componentDidMount() {
+    document.body.style.overflowY =
+      navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
+
     // handle https://github.com/ant-design/ant-design-mobile/issues/1588
     this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
       this.tsPageY = e.touches[0].pageY;

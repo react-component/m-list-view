@@ -136,7 +136,6 @@ export default class ScrollView extends React.Component {
     };
 
     const clonePullToRefresh = isBody => React.cloneElement(pullToRefresh, {
-      prefixCls: `${preCls}-pull-to-refresh`,
       getScrollContainer: isBody ? () => document.body : () => this.ScrollViewRef,
     }, children);
 
@@ -155,7 +154,7 @@ export default class ScrollView extends React.Component {
       );
     }
 
-    if (pullToRefresh && this.ScrollViewRef) {
+    if (pullToRefresh) {
       return (
         <div {...containerProps}>
           <div {...contentContainerProps}>

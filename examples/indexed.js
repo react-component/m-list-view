@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 
 const NUM_SECTIONS = 20;
 const NUM_ROWS_PER_SECTION = 10;
@@ -56,7 +56,7 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div style={{ margin: '10px auto', width: '80%', position: 'relative' }}>
+    return (<div style={{ margin: '10px auto', width: '90%', position: 'relative' }}>
       <ListView.IndexedList
         dataSource={this.state.dataSource}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}
@@ -70,7 +70,7 @@ class Demo extends React.Component {
         contentContainerStyle={{ textAlign: 'left' }}
         quickSearchBarStyle={{
           position: 'absolute',
-          top: 20, right: 30,
+          top: 20, right: 10,
         }}
         style={{ height: 500 }}
         onQuickSearch={(sectionID) => console.log(sectionID)}
@@ -81,6 +81,11 @@ class Demo extends React.Component {
         }
         sectionHeaderClassName="sh"
         sectionBodyClassName="sb"
+      />
+      <div dangerouslySetInnerHTML={{
+        __html: navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ?
+          '<style>#qrcode, .highlight{ display: none }</style>' : '',
+      }}
       />
     </div>);
   }

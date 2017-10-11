@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { render/* , mount */ } from 'enzyme';
-import ListView from '..';
+import ListView from '../src';
 
 describe('ListView', () => {
   it('renders correctly', () => {

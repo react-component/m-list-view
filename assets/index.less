@@ -47,28 +47,44 @@ ul, li {
   }
 }
 
-@pull-up: rmc-list-view-pull-up;
-.@{pull-up} {
+@pull-to-refresh: rmc-list-view-pull-to-refresh;
+.@{pull-to-refresh} {
+  &-content {
+    &-wrapper {
+      overflow: hidden;
+    }
+
+    transform-origin: left top 0px;
+  }
+
   &-indicator {
     color: grey;
     text-align: center;
     height: 25px;
     line-height: 25px;
+  }
+  
+  &-down .@{pull-to-refresh}-indicator {
+    margin-top: -25px;
+  }
+  
+  &-up .@{pull-to-refresh}-indicator {
     margin-bottom: -25px;
   }
-  &-dropped {
+  
+  &-transition {
     transition: transform 0.3s;
   }
 }
 
-@pull-to-refresh: list-view-refresh-control;
-.@{pull-to-refresh} {
+@refresh-control: zscroller-refresh-control;
+.@{refresh-control} {
   &-indicator {
     color: grey;
     text-align: center;
-    height: 50px;
-    line-height: 50px;
-    margin-top: -50px;
+    height: 25px;
+    line-height: 25px;
+    margin-top: -25px;
     &-icon-wrapper {
       display: block;
     }
@@ -77,7 +93,7 @@ ul, li {
     }
   }
   &-loading {
-    .@{pull-to-refresh}-indicator {
+    .@{refresh-control}-indicator {
       &-icon-wrapper {
         display: none;
       }
@@ -100,8 +116,7 @@ ul, li {
     display: block;
   }
   &-deactive {
-    .@{pull-to-refresh}-indicator {
-      &-icon-wrapper,
+    .@{refresh-control}-indicator {
       &-loading-wrapper {
         display: none;
       }

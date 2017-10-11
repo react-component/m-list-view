@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint react/prop-types: 0, react/no-multi-comp: 0 */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 
 const NUM_ROWS = 20;
 let pageIndex = 0;

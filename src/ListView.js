@@ -44,16 +44,9 @@ export default class ListView extends React.Component {
     renderBodyComponent: PropTypes.func,
     renderSectionWrapper: PropTypes.func,
     renderSectionBodyWrapper: PropTypes.func,
-    sectionBodyClassName: PropTypes.string, // for web
-    listViewPrefixCls: PropTypes.string, // for web
-    useZscroller: PropTypes.bool, // for web
-    useBodyScroll: PropTypes.bool, // for web
-    // pullUp
-    pullUpEnabled: PropTypes.bool,
-    pullUpRefreshing: PropTypes.bool,
-    pullUpOnRefresh: PropTypes.func,
-    pullUpDistanceToRefresh: PropTypes.number,
-    pullUpRenderer: PropTypes.func,
+    sectionBodyClassName: PropTypes.string,
+    listViewPrefixCls: PropTypes.string,
+    useBodyScroll: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -68,11 +61,6 @@ export default class ListView extends React.Component {
     onEndReachedThreshold: DEFAULT_END_REACHED_THRESHOLD,
     scrollEventThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
     scrollerOptions: {},
-    // pullUp
-    pullUpEnabled: false,
-    pullUpRefreshing: false,
-    pullUpOnRefresh: () => {},
-    pullUpDistanceToRefresh: 25,
   }
 
   state = {
@@ -92,14 +80,14 @@ export default class ListView extends React.Component {
     };
   }
 
+  getInnerViewNode = () => {
+    return this.ListViewRef.getInnerViewNode();
+  }
+
   scrollTo = (...args) => {
     this.ListViewRef &&
     this.ListViewRef.scrollTo &&
     this.ListViewRef.scrollTo(...args);
-  }
-
-  getInnerViewNode = () => {
-    return this.ListViewRef.getInnerViewNode();
   }
 
   componentWillMount() {
@@ -229,7 +217,7 @@ export default class ListView extends React.Component {
 
     const { renderScrollComponent, ...props } = this.props;
 
-    this._sc = React.cloneElement(
+    return React.cloneElement(
       renderScrollComponent({ ...props, onScroll: this._onScroll }),
       {
         ref: el => this.ListViewRef = el,
@@ -241,7 +229,6 @@ export default class ListView extends React.Component {
       this.props.renderFooter ? this.props.renderFooter() : null,
       props.children
     );
-    return this._sc;
   }
 
   _onContentSizeChange = (width, height) => {
@@ -311,55 +298,16 @@ export default class ListView extends React.Component {
       scrollProperties.visibleLength - scrollProperties.offset;
   }
 
-  _onScroll = (e) => {
-    const isVertical = !this.props.horizontal;
-    let ev = e;
+  _onScroll = (e, metrics) => {
     // when the ListView is destroyed,
     // but also will trigger scroll event after `scrollEventThrottle`
     if (!this.ListViewRef) {
       return;
     }
-    const target = ReactDOM.findDOMNode(this.ListViewRef);
-    if (this.props.useBodyScroll) {
-      this.scrollProperties.visibleLength = window[
-        isVertical ? 'innerHeight' : 'innerWidth'
-      ];
-      this.scrollProperties.contentLength = target[
-        isVertical ? 'scrollHeight' : 'scrollWidth'
-      ];
-      // In chrome61 `document.body.scrollTop` is invalid,
-      // and add new `document.scrollingElement`(chrome61, iOS support).
-      // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
-      const scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
-      this.scrollProperties.offset = scrollNode[
-        isVertical ? 'scrollTop' : 'scrollLeft'
-      ];
-    } else if (this.props.useZscroller) {
-      const domScroller = this.ListViewRef.domScroller;
-      ev = domScroller;
-      this.scrollProperties.visibleLength = domScroller.container[
-        isVertical ? 'clientHeight' : 'clientWidth'
-      ];
-      this.scrollProperties.contentLength = domScroller.content[
-        isVertical ? 'offsetHeight' : 'offsetWidth'
-      ];
-      this.scrollProperties.offset = domScroller.scroller.getValues()[
-        isVertical ? 'top' : 'left'
-      ];
-      // console.log(this.scrollProperties, domScroller.scroller.getScrollMax())
-    } else {
-      this.scrollProperties.visibleLength = target[
-        isVertical ? 'offsetHeight' : 'offsetWidth'
-      ];
-      this.scrollProperties.contentLength = target[
-        isVertical ? 'scrollHeight' : 'scrollWidth'
-      ];
-      this.scrollProperties.offset = target[
-        isVertical ? 'scrollTop' : 'scrollLeft'
-      ];
-    }
 
-    if (!this._maybeCallOnEndReached(ev)) {
+    this.scrollProperties = metrics;
+
+    if (!this._maybeCallOnEndReached(e)) {
       this._renderMoreRowsIfNeeded();
     }
 
@@ -369,6 +317,6 @@ export default class ListView extends React.Component {
       this._sentEndForContentLength = null;
     }
 
-    this.props.onScroll && this.props.onScroll(ev);
+    this.props.onScroll && this.props.onScroll(e);
   }
 }

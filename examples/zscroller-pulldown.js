@@ -1,24 +1,25 @@
 /* eslint-disable no-console */
-import 'rmc-list-view/assets/index.less';
+/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
-/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
+import ListView from '../src';
+import Zscroller from '../src/Zscroller';
 
-export const data = [
+const data = [
   {
     img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: '相约酒店',
+    title: 'Meet hotel',
     des: '不是所有的兼职汪都需要风吹日晒',
   },
   {
     img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: '麦当劳邀您过周末',
+    title: 'McDonald\'s invites you',
     des: '不是所有的兼职汪都需要风吹日晒',
   },
   {
     img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: '食惠周',
+    title: 'Eat the week',
     des: '不是所有的兼职汪都需要风吹日晒',
   },
 ];
@@ -89,7 +90,7 @@ class Demo extends React.Component {
   onRefresh = () => {
     console.log('onRefresh');
     if (!this.manuallyRefresh) {
-      this.setState({ refreshing: true });
+      this.setState({ refreshing: true, isLoading: true });
     } else {
       this.manuallyRefresh = false;
     }
@@ -100,7 +101,12 @@ class Demo extends React.Component {
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         refreshing: false,
+        isLoading: false,
+        showFinishTxt: true,
       });
+      if (this.domScroller) {
+        this.domScroller.scroller.options.animationDuration = 500;
+      }
     }, 200);
   };
 
@@ -122,12 +128,35 @@ class Demo extends React.Component {
     }, 1000);
   };
 
+  scrollingComplete = () => {
+    // In general, this.scrollerTop should be 0 at the end, but it may be -0.000051 in chrome61.
+    if (this.scrollerTop >= -1) {
+      this.setState({ showFinishTxt: false });
+    }
+  }
+
+  renderCustomIcon() {
+    return [
+      <div key="0" className="zscroller-refresh-control-pull">
+        <span>{this.state.showFinishTxt ? '刷新完毕' : '下拉可以刷新'}</span>
+      </div>,
+      <div key="1" className="zscroller-refresh-control-release">
+        <span>松开立即刷新</span>
+      </div>,
+    ];
+  }
+
   render() {
     return (
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
+        style={{ height: 400, border: '1px solid #ddd', margin: '10px 0' }}
+        renderScrollComponent={props => <Zscroller {...props} />}
         renderHeader={() => <span>Pull to refresh</span>}
+        renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+          {this.state.isLoading ? 'Loading...' : 'Loaded'}
+        </div>)}
         renderRow={(rowData, sectionID, rowID) => {
           if (index < 0) {
             index = data.length - 1;
@@ -149,21 +178,11 @@ class Demo extends React.Component {
         renderSeparator={(sectionID, rowID) => (
           <div key={`${sectionID}-${rowID}`} style={{ backgroundColor: '#F5F5F9', height: 8 }} />
         )}
-        style={{
-          height: 400,
-          border: '1px solid #ddd',
-          margin: '10px 0',
-        }}
-        useZscroller
-        scrollerOptions={{
-          scrollbars: true, scrollingComplete: () => console.log('scrollingComplete'),
-        }}
-        refreshControl={<ListView.RefreshControl
-          className="my-refresh-control"
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-          resistance={1}
-        />}
+        scrollerOptions={{ scrollbars: true, scrollingComplete: this.scrollingComplete }}
+        refreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this.onRefresh}
+        icon={this.renderCustomIcon()}
         onScroll={this.onScroll}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}

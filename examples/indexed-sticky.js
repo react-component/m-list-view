@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import 'rmc-list-view/assets/index.less';
+import '../assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListView from 'rmc-list-view';
+import ListView from '../src';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 const NUM_SECTIONS = 20;

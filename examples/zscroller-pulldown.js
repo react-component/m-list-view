@@ -1896,7 +1896,8 @@ var Demo = function (_React$Component) {
 
     _this.state = {
       dataSource: dataSource,
-      refreshing: true
+      refreshing: true,
+      height: document.documentElement.clientHeight
     };
     return _this;
   }
@@ -1914,6 +1915,8 @@ var Demo = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
+
+      document.body.style.overflowY = navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
 
       // handle https://github.com/ant-design/ant-design-mobile/issues/1588
       this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = function (e) {

@@ -61,7 +61,7 @@ var Demo = function (_React$Component) {
 
     _this.state = {
       dataSource: dataSource,
-      useBodyScroll: true,
+      useBodyScroll: false,
       refreshing: false,
       down: false
     };
@@ -326,7 +326,7 @@ var PullToRefresh = function (_React$Component) {
         };
         _this.reset = function () {
             _this._lastScreenY = 0;
-            setTransform(_this.contentRef.style, 'translate3d(0px,0px,0)');
+            setTimeout(() => setTransform(_this.contentRef.style, 'translate3d(0px,0px,0)'))
         };
         return _this;
     }
@@ -355,7 +355,9 @@ var PullToRefresh = function (_React$Component) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             // Should have no setTimeout here!
+            // setTimeout(function () {
             this.destroyPullUp(this.props.getScrollContainer() || this.containerRef);
+          // });
         }
     }, {
         key: 'render',
@@ -420,6 +422,7 @@ PullToRefresh.defaultProps = {
     distanceToRefresh: 25,
     indicator: INDICATOR
 };
+
 
 /***/ }),
 

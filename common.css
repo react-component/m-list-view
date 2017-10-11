@@ -41,26 +41,26 @@ li {
 .rmc-indexed-list-qsindicator-hide {
   display: none;
 }
-.rmc-list-view-pull-to-refresh-content {
+.rmc-pull-to-refresh-content {
   -webkit-transform-origin: left top 0px;
           transform-origin: left top 0px;
 }
-.rmc-list-view-pull-to-refresh-content-wrapper {
+.rmc-pull-to-refresh-content-wrapper {
   overflow: hidden;
 }
-.rmc-list-view-pull-to-refresh-indicator {
+.rmc-pull-to-refresh-indicator {
   color: grey;
   text-align: center;
   height: 25px;
   line-height: 25px;
 }
-.rmc-list-view-pull-to-refresh-down .rmc-list-view-pull-to-refresh-indicator {
+.rmc-pull-to-refresh-down .rmc-pull-to-refresh-indicator {
   margin-top: -25px;
 }
-.rmc-list-view-pull-to-refresh-up .rmc-list-view-pull-to-refresh-indicator {
+.rmc-pull-to-refresh-up .rmc-pull-to-refresh-indicator {
   margin-bottom: -25px;
 }
-.rmc-list-view-pull-to-refresh-transition {
+.rmc-pull-to-refresh-transition {
   transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   transition: transform 0.3s, -webkit-transform 0.3s;

@@ -12663,7 +12663,6 @@ var ScrollView = function (_React$Component) {
 
       var clonePullToRefresh = function clonePullToRefresh(isBody) {
         return __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(pullToRefresh, {
-          prefixCls: preCls + '-pull-to-refresh',
           getScrollContainer: isBody ? function () {
             return document.body;
           } : function () {
@@ -12687,7 +12686,7 @@ var ScrollView = function (_React$Component) {
         );
       }
 
-      if (pullToRefresh && this.ScrollViewRef) {
+      if (pullToRefresh) {
         return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
           'div',
           containerProps,

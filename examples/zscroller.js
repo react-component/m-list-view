@@ -1832,6 +1832,7 @@ var Demo = function (_React$Component) {
       var _this2 = this;
 
       document.body.style.overflowY = navigator.userAgent.match(/Android|iPhone|iPad|iPod/i) ? 'hidden' : 'auto';
+
       // you can scroll to the specified position
       setTimeout(function () {
         return _this2.lv.scrollTo(0, 50);

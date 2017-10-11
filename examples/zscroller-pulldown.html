@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>zscroller-pulldown.js - example - rmc-list-view@0.11.0</title>
+  <title>zscroller-pulldown.js - example - rmc-list-view@0.11.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.11.0</h1>
+      <h1>rmc-list-view@0.11.1</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
@@ -317,6 +317,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>.state = {
       dataSource,
       refreshing: <span class="hljs-literal">true</span>,
+      height: <span class="hljs-built_in">document</span>.documentElement.clientHeight,
     };
   }
 
@@ -330,6 +331,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-comment">// }</span>
 
   componentDidMount() {
+    <span class="hljs-built_in">document</span>.body.style.overflowY =
+      navigator.userAgent.match(<span class="hljs-regexp">/Android|iPhone|iPad|iPod/i</span>) ? <span class="hljs-string">'hidden'</span> : <span class="hljs-string">'auto'</span>;
+
     <span class="hljs-comment">// handle https://github.com/ant-design/ant-design-mobile/issues/1588</span>
     <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;

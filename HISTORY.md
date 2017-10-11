@@ -31,7 +31,7 @@ Upgrade example:
 #### zscroller
 
 > **Note: we do not recommend using simulated scroller**. But you can also use [zscroller](https://github.com/yiminghe/zscroller) to simulate the implementation of rolling containers like bofore.
-You can use 'rmc-list-view/lib/Zscroller'(or archive it yourself) and the complete example is here: [zscroller](https://github.com/react-component/m-list-view/blob/master/examples/zscroller.js).
+You can use 'rmc-list-view/lib/Zscroller'(or archive it yourself) and the complete example is here: [zscroller example](http://react-component.github.io/m-list-view/examples/zscroller.html).
 
 The following props table is in the `ListView.RefreshControl` before,
 
@@ -62,7 +62,7 @@ now just directly attach them in `ListView` component, and they will still work 
   />
   ```
 
-The complete example is here: [zscroller-pulldown](https://github.com/react-component/m-list-view/blob/master/examples/zscroller-pulldown.js)
+The complete example is here: [zscroller-pulldown example](http://react-component.github.io/m-list-view/examples/zscroller-pulldown.html)
 
 
 ## 0.10.1 / 2017-09-28

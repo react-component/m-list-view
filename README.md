@@ -111,7 +111,7 @@ ListView has two types of scroll containers:
 2. html body container
     - set `useBodyScroll` to take effect (do not need to set height)
 
-> In addition, you can also use simulated scroller(**But we do not recommend using simulated scroller**), please see zscroller examples and [0.11.0 upgrade tips](./HISTORY.md#upgrade-tips).
+> please see [0.11.0 upgrade tips](./HISTORY.md#upgrade-tips).
 
 
 ## Test Case

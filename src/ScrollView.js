@@ -86,9 +86,11 @@ export default class ScrollView extends React.Component {
       // and add new `document.scrollingElement`(chrome61, iOS support).
       // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
       const scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
+      // todos: Why sometimes do not have `this.ScrollViewRef` ?
       return {
         visibleLength: window[isVertical ? 'innerHeight' : 'innerWidth'],
-        contentLength: this.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'],
+        contentLength: this.ScrollViewRef ?
+          this.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'] : 0,
         offset: scrollNode[isVertical ? 'scrollTop' : 'scrollLeft'],
       };
     }

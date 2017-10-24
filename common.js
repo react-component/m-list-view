@@ -12725,9 +12725,10 @@ var _initialiseProps = function _initialiseProps() {
       // and add new `document.scrollingElement`(chrome61, iOS support).
       // In old-android-browser and iOS `document.documentElement.scrollTop` is invalid.
       var scrollNode = document.scrollingElement ? document.scrollingElement : document.body;
+      // todos: Why sometimes do not have `this.ScrollViewRef` ?
       return {
         visibleLength: window[isVertical ? 'innerHeight' : 'innerWidth'],
-        contentLength: _this5.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'],
+        contentLength: _this5.ScrollViewRef ? _this5.ScrollViewRef[isVertical ? 'scrollHeight' : 'scrollWidth'] : 0,
         offset: scrollNode[isVertical ? 'scrollTop' : 'scrollLeft']
       };
     }

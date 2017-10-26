@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>zscroller.js - example - rmc-list-view@0.11.2</title>
+  <title>simple-horizontal.js - example - rmc-list-view@0.8.14</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,18 +263,18 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.11.2</h1>
+      <h1>rmc-list-view@0.8.14</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint-disable no-console, no-alert */</span>
-<span class="hljs-keyword">import</span> <span class="hljs-string">'../assets/index.less'</span>;
+    <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint-disable no-console */</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'../src'</span>;
-<span class="hljs-keyword">import</span> Zscroller <span class="hljs-keyword">from</span> <span class="hljs-string">'../src/Zscroller'</span>;
+<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
+<span class="hljs-keyword">import</span> { View, Text, THUMB_URLS } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
 
 <span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
 
@@ -299,12 +299,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 
   componentDidMount() {
-    <span class="hljs-built_in">document</span>.body.style.overflowY =
-      navigator.userAgent.match(<span class="hljs-regexp">/Android|iPhone|iPad|iPod/i</span>) ? <span class="hljs-string">'hidden'</span> : <span class="hljs-string">'auto'</span>;
-
-    <span class="hljs-comment">// you can scroll to the specified position</span>
-    setTimeout(() =&gt; <span class="hljs-keyword">this</span>.lv.scrollTo(<span class="hljs-number">0</span>, <span class="hljs-number">50</span>), <span class="hljs-number">800</span>);
-
     <span class="hljs-comment">// simulate initial Ajax</span>
     setTimeout(() =&gt; {
       <span class="hljs-keyword">this</span>.setState({
@@ -314,27 +308,61 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 
   render() {
-    <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
-        <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
-        dataSource={this.state.dataSource}
-        style={{ height: 200, border: '1px solid #ccc', margin: 10 }}
-        renderScrollComponent={props =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">Zscroller</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
-        renderRow={rowData =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">16</span> }}&gt;</span>{rowData}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>}
-        renderBodyComponent={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"for-body-demo"</span> /&gt;</span>}
-        sectionBodyClassName="sb"
-        scrollerOptions={{ scrollbars: true }}
-        onEndReached={e =&gt; console.log(e)}
-        onEndReachedThreshold={10}
-        scrollRenderAheadDistance={30}
-        pageSize={10}
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">style</span> <span class="hljs-attribute">dangerouslySetInnerHTML</span>=<span class="hljs-value">{{</span>
+        <span class="hljs-attribute">__html:</span> `
+          <span class="hljs-attribute">.list-view-section-body</span> {
+            <span class="hljs-attribute">display:</span> <span class="hljs-attribute">flex</span>;
+            <span class="hljs-attribute">align-items:</span> <span class="hljs-attribute">center</span>;
+          }
+          <span class="hljs-attribute">.for-body-demo</span>, <span class="hljs-attribute">.list-view-section-body</span> {
+            <span class="hljs-attribute">height:</span> <span class="hljs-attribute">100</span>%;
+          }
+        ` }}
+      /&gt;</span><span class="css">
+      &lt;<span class="hljs-tag">ListView</span>
+        <span class="hljs-tag">horizontal</span>
+        <span class="hljs-tag">dataSource</span>=<span class="hljs-rules">{this.state.dataSource}</span>
+        <span class="hljs-tag">renderRow</span>=<span class="hljs-rules">{(rowData) =&gt; (
+          &lt;View style={{ <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value"> <span class="hljs-string">'flex'</span>, alignItems: <span class="hljs-string">'center'</span> </span></span></span>}}&gt;
+            &lt;<span class="hljs-tag">img</span> <span class="hljs-tag">src</span>=<span class="hljs-rules">{THUMB_URLS[0]}</span> /&gt;
+            &lt;<span class="hljs-tag">Text</span>&gt;<span class="hljs-rules">{`${rowData}</span> <span class="hljs-tag">-</span> <span class="hljs-tag">Lorem</span> <span class="hljs-tag">ipsum</span>`}&lt;/<span class="hljs-tag">Text</span>&gt;
+          &lt;/<span class="hljs-tag">View</span>&gt;
+        )</span></span>}
+        renderSeparator={(sectionID, rowID) =&gt; (
+          <span class="xml"><span class="css">&lt;<span class="hljs-tag">View</span> <span class="hljs-tag">key</span>=<span class="hljs-rules">{`${sectionID}</span><span class="hljs-tag">-</span>$<span class="hljs-rules">{rowID}</span>`}
+            <span class="hljs-tag">style</span>=<span class="hljs-rules">{{
+              <span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"> <span class="hljs-number">4</span>,
+              height: <span class="hljs-string">'100%'</span>,
+              backgroundColor: <span class="hljs-string">'#3B5998'</span>,
+            </span></span></span>}}
+          /&gt;
+        )</span></span>}
+        renderBodyComponent={() =&gt; <span class="xml"><span class="css">&lt;<span class="hljs-tag">div</span> <span class="hljs-tag">className</span>="<span class="hljs-tag">for-body-demo</span>" /&gt;}
+        <span class="hljs-tag">contentContainerStyle</span>=<span class="hljs-rules">{{
+          <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-string">'100%'</span>,
+        </span></span></span>}}
+        <span class="hljs-tag">style</span>=<span class="hljs-rules">{{
+          <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">120</span>,
+          width: <span class="hljs-string">'90%'</span>,
+          margin: <span class="hljs-string">'10px auto'</span>,
+          border: <span class="hljs-string">'1px solid #ddd'</span>,
+          overflowX: <span class="hljs-string">'scroll'</span>,
+          overflowY: <span class="hljs-string">'hidden'</span>,
+        </span></span></span>}}
+        <span class="hljs-tag">onEndReached</span>=<span class="hljs-rules">{e =&gt; console.log(e.toString())}</span>
+        <span class="hljs-tag">onEndReachedThreshold</span>=<span class="hljs-rules">{10}</span>
+        <span class="hljs-tag">scrollEventThrottle</span>=<span class="hljs-rules">{20}</span>
+        <span class="hljs-tag">scrollRenderAheadDistance</span>=<span class="hljs-rules">{100}</span>
+        <span class="hljs-tag">initialListSize</span>=<span class="hljs-rules">{5}</span>
+        <span class="hljs-tag">pageSize</span>=<span class="hljs-rules">{5}</span>
       /&gt;
-    )</span>;
+    &lt;/<span class="hljs-tag">div</span>&gt;)</span></span>;
   }
 }
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre></div>
+ReactDOM.render(<span class="xml"><span class="css">&lt;<span class="hljs-tag">Demo</span> /&gt;, <span class="hljs-tag">document</span><span class="hljs-class">.getElementById</span>('__<span class="hljs-tag">react-content</span>'));
+</span></span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/m-list-view">
     <img style="position: absolute; top: 0; right: 0; border: 0;"
@@ -344,7 +372,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   <script>FastClick.attach(document.body);</script>
   <script src="../common.js?nowrap"></script>
-  <script src="zscroller.js?nowrap"></script>
+  <script src="simple-horizontal.js?nowrap"></script>
 </body>
 
 </html>

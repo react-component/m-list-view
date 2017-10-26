@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>zscroller-pulldown.js - example - rmc-list-view@0.11.2</title>
+  <title>refreshControl.js - example - rmc-list-view@0.8.14</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,37 +263,20 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rmc-list-view@0.11.2</h1>
+      <h1>rmc-list-view@0.8.14</h1>
 
       <p>m-list-view ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
     <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint-disable no-console */</span>
-<span class="hljs-comment">/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */</span>
-<span class="hljs-keyword">import</span> <span class="hljs-string">'../assets/index.less'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'rmc-list-view/assets/index.css'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'../src'</span>;
-<span class="hljs-keyword">import</span> Zscroller <span class="hljs-keyword">from</span> <span class="hljs-string">'../src/Zscroller'</span>;
+<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'rmc-list-view'</span>;
+<span class="hljs-keyword">import</span> { myData <span class="hljs-keyword">as</span> data } <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>;
+<span class="hljs-comment">/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */</span>
 
-<span class="hljs-keyword">const</span> data = [
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png'</span>,
-    title: <span class="hljs-string">'Meet hotel'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png'</span>,
-    title: <span class="hljs-string">'McDonald\'s invites you'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-  {
-    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png'</span>,
-    title: <span class="hljs-string">'Eat the week'</span>,
-    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
-  },
-];
 <span class="hljs-keyword">let</span> index = data.length - <span class="hljs-number">1</span>;
 
 <span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
@@ -317,7 +300,6 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">this</span>.state = {
       dataSource,
       refreshing: <span class="hljs-literal">true</span>,
-      height: <span class="hljs-built_in">document</span>.documentElement.clientHeight,
     };
   }
 
@@ -331,18 +313,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-comment">// }</span>
 
   componentDidMount() {
-    <span class="hljs-built_in">document</span>.body.style.overflowY =
-      navigator.userAgent.match(<span class="hljs-regexp">/Android|iPhone|iPad|iPod/i</span>) ? <span class="hljs-string">'hidden'</span> : <span class="hljs-string">'auto'</span>;
-
     <span class="hljs-comment">// handle https://github.com/ant-design/ant-design-mobile/issues/1588</span>
     <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;
     });
-    <span class="hljs-comment">// In chrome61 `document.body.scrollTop` is invalid</span>
-    <span class="hljs-keyword">const</span> scrollNode = <span class="hljs-built_in">document</span>.scrollingElement ? <span class="hljs-built_in">document</span>.scrollingElement : <span class="hljs-built_in">document</span>.body;
     <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
       <span class="hljs-keyword">this</span>.tmPageY = e.touches[<span class="hljs-number">0</span>].pageY;
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.scrollerTop &lt;= <span class="hljs-number">0</span> &amp;&amp; scrollNode.scrollTop &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.st &lt;= <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">document</span>.body.scrollTop &gt; <span class="hljs-number">0</span>) {
         <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'start pull to refresh'</span>);
         <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">false</span>;
       } <span class="hljs-keyword">else</span> {
@@ -358,14 +335,14 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
   onScroll = (e) =&gt; {
     <span class="hljs-comment">// onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229</span>
-    <span class="hljs-keyword">this</span>.scrollerTop = e.scroller.getValues().top;
+    <span class="hljs-keyword">this</span>.st = e.scroller.getValues().top;
     <span class="hljs-keyword">this</span>.domScroller = e;
   };
 
   onRefresh = () =&gt; {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.manuallyRefresh) {
-      <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span>, isLoading: <span class="hljs-literal">true</span> });
+      <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span> });
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">this</span>.manuallyRefresh = <span class="hljs-literal">false</span>;
     }
@@ -376,13 +353,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       <span class="hljs-keyword">this</span>.setState({
         dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
         refreshing: <span class="hljs-literal">false</span>,
-        isLoading: <span class="hljs-literal">false</span>,
-        showFinishTxt: <span class="hljs-literal">true</span>,
       });
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.domScroller) {
-        <span class="hljs-keyword">this</span>.domScroller.scroller.options.animationDuration = <span class="hljs-number">500</span>;
-      }
-    }, <span class="hljs-number">200</span>);
+    }, <span class="hljs-number">600</span>);
   };
 
   onEndReached = (event) =&gt; {
@@ -403,42 +375,19 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     }, <span class="hljs-number">1000</span>);
   };
 
-  scrollingComplete = () =&gt; {
-    <span class="hljs-comment">// In general, this.scrollerTop should be 0 at the end, but it may be -0.000051 in chrome61.</span>
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.scrollerTop &gt;= -<span class="hljs-number">1</span>) {
-      <span class="hljs-keyword">this</span>.setState({ showFinishTxt: <span class="hljs-literal">false</span> });
-    }
-  }
-
-  renderCustomIcon() {
-    <span class="hljs-keyword">return</span> [
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">"0"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"zscroller-refresh-control-pull"</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>{this.state.showFinishTxt ? '刷新完毕' : '下拉可以刷新'}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">"1"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"zscroller-refresh-control-release"</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>松开立即刷新<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
-    ];
-  }
-
   render() {
-    return (
-      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
         <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
         dataSource={this.state.dataSource}
-        style={{ height: 400, border: '1px solid #ddd', margin: '10px 0' }}
-        renderScrollComponent={props =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">Zscroller</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
         renderHeader={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>Pull to refresh<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
-        renderFooter={() =&gt; (<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">30</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>
-          {this.state.isLoading ? 'Loading...' : 'Loaded'}
-        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
         renderRow={(rowData, sectionID, rowID) =&gt; {
-          <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) {
-            index = data.length - <span class="hljs-number">1</span>;
+          if (index <span class="hljs-tag">&lt; <span class="hljs-attribute">0</span>) {
+            <span class="hljs-attribute">index</span> = <span class="hljs-attribute">data.length</span> <span class="hljs-attribute">-</span> <span class="hljs-attribute">1</span>;
           }
-          <span class="hljs-keyword">const</span> obj = data[index--];
-          <span class="hljs-keyword">return</span> (
-            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{rowID}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">8px</span> <span class="hljs-attribute">16px</span>' }}&gt;</span>
+          <span class="hljs-attribute">const</span> <span class="hljs-attribute">obj</span> = <span class="hljs-attribute">data</span>[<span class="hljs-attribute">index--</span>];
+          <span class="hljs-attribute">return</span> (
+            &lt;<span class="hljs-attribute">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{rowID}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">8px</span> <span class="hljs-attribute">16px</span>' }}&gt;</span>
               <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>{obj.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
               <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>' }}&gt;</span>
                 <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">marginRight:</span> <span class="hljs-attribute">8</span> }} <span class="hljs-attribute">src</span>=<span class="hljs-value">{obj.img}</span> /&gt;</span>
@@ -453,17 +402,30 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         renderSeparator={(sectionID, rowID) =&gt; (
           <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">F5F5F9</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">8</span> }} /&gt;</span>
         )</span>}
-        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: <span class="hljs-keyword">this</span>.scrollingComplete }}
-        refreshControl
-        refreshing={<span class="hljs-keyword">this</span>.state.refreshing}
-        onRefresh={<span class="hljs-keyword">this</span>.onRefresh}
-        icon={<span class="hljs-keyword">this</span>.renderCustomIcon()}
-        onScroll={<span class="hljs-keyword">this</span>.onScroll}
-        onEndReached={<span class="hljs-keyword">this</span>.onEndReached}
-        onEndReachedThreshold={<span class="hljs-number">10</span>}
-        pageSize={<span class="hljs-number">10</span>}
+        initialListSize={<span class="hljs-number">5</span>}
+        pageSize={<span class="hljs-number">5</span>}
+        style={{
+          height: <span class="hljs-number">400</span>,
+          border: <span class="hljs-string">'1px solid #ddd'</span>,
+          margin: <span class="hljs-string">'10px 0'</span>,
+        }}
+        useZscroller
+        scrollerOptions={{
+          scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'scrollingComplete'</span>),
+        }}
+        refreshControl={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ListView.RefreshControl</span>
+          <span class="hljs-attribute">className</span>=<span class="hljs-value">"my-refresh-control"</span>
+          <span class="hljs-attribute">refreshing</span>=<span class="hljs-value">{this.state.refreshing}</span>
+          <span class="hljs-attribute">onRefresh</span>=<span class="hljs-value">{this.onRefresh}</span>
+          <span class="hljs-attribute">resistance</span>=<span class="hljs-value">{1}</span>
+        /&gt;</span>}
+        onScroll={this.onScroll}
+        scrollRenderAheadDistance={200}
+        scrollEventThrottle={20}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={10}
       /&gt;
-    );
+    )</span>;
   }
 }
 
@@ -478,7 +440,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   <script>FastClick.attach(document.body);</script>
   <script src="../common.js?nowrap"></script>
-  <script src="zscroller-pulldown.js?nowrap"></script>
+  <script src="refreshControl.js?nowrap"></script>
 </body>
 
 </html>

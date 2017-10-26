@@ -41,54 +41,62 @@ li {
 .rmc-indexed-list-qsindicator-hide {
   display: none;
 }
-.list-view-refresh-control {
-  position: relative;
+.rmc-pull-to-refresh-content {
+  -webkit-transform-origin: left top 0px;
+          transform-origin: left top 0px;
+}
+.rmc-pull-to-refresh-content-wrapper {
   overflow: hidden;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
 }
-.list-view-refresh-control-content {
-  -webkit-transform-origin: left top;
-          transform-origin: left top;
-  -webkit-transform: translateZ(0);
-          transform: translateZ(0);
-}
-.list-view-refresh-control-ptr {
+.rmc-pull-to-refresh-indicator {
   color: grey;
   text-align: center;
-  height: 50px;
-  line-height: 50px;
-  margin-top: -50px;
-  overflow: hidden;
+  height: 25px;
+  line-height: 25px;
 }
-.list-view-refresh-control-ptr-icon {
+.rmc-pull-to-refresh-down .rmc-pull-to-refresh-indicator {
+  margin-top: -25px;
+}
+.rmc-pull-to-refresh-up .rmc-pull-to-refresh-indicator {
+  margin-bottom: -25px;
+}
+.rmc-pull-to-refresh-transition {
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+}
+.zscroller-refresh-control-indicator {
+  color: grey;
+  text-align: center;
+  height: 25px;
+  line-height: 25px;
+  margin-top: -25px;
+}
+.zscroller-refresh-control-indicator-icon-wrapper {
   display: block;
 }
-.list-view-refresh-control-ptr-loading {
+.zscroller-refresh-control-indicator-loading-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-ptr-icon {
+.zscroller-refresh-control-loading .zscroller-refresh-control-indicator-icon-wrapper {
   display: none;
 }
-.list-view-refresh-control-loading .list-view-refresh-control-ptr-loading {
+.zscroller-refresh-control-loading .zscroller-refresh-control-indicator-loading-wrapper {
   display: block;
 }
-.list-view-refresh-control-pull {
+.zscroller-refresh-control-pull {
   display: block;
 }
-.list-view-refresh-control-release {
+.zscroller-refresh-control-release {
   display: none;
 }
-.list-view-refresh-control-active .list-view-refresh-control-pull {
+.zscroller-refresh-control-active .zscroller-refresh-control-pull {
   display: none;
 }
-.list-view-refresh-control-active .list-view-refresh-control-release {
+.zscroller-refresh-control-active .zscroller-refresh-control-release {
   display: block;
 }
-.list-view-refresh-control-deactive .list-view-refresh-control-ptr-icon,
-.list-view-refresh-control-deactive .list-view-refresh-control-ptr-loading {
+.zscroller-refresh-control-deactive .zscroller-refresh-control-indicator-loading-wrapper {
   display: none;
 }
 .zscroller-scrollbar-y {

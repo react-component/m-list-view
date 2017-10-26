@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>zscroller-pulldown.js - example - rmc-list-view@0.11.3</title>
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="https://a.alipayobjects.com/normalize.css/3.0.1/normalize.css" rel="stylesheet"/>
+  <style>
+    .highlight pre {
+      padding: .8em 1em;
+      font: 14px/20px Consolas, Monaco, 'Andale Mono', monospace;
+      border: 1px solid #e5e8ec;
+      border-radius: 3px;
+      background-color: #21221d;
+      background-image: -webkit-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -moz-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -ms-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -o-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: linear-gradient(#21221d 50%, #272822 50%);
+      background-size: 40px 40px;
+      background-origin: content-box;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .highlight pre > code {
+      font-family: inherit;
+      direction: ltr;
+      text-align: left;
+      white-space: pre;
+      word-spacing: normal;
+      vertical-align: 2px;
+      display: block;
+      -moz-tab-size: 2;
+      -o-tab-size: 2;
+      tab-size: 2;
+      -webkit-hyphens: none;
+      -moz-hyphens: none;
+      -ms-hyphens: none;
+      hyphens: none;
+      color: #E5E5C2;
+    }
+  </style>
+  <style>
+/*
+
+Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-license.org/
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #23241f;
+  -webkit-text-size-adjust: none;
+}
+
+.hljs,
+.hljs-tag,
+.css .hljs-rule,
+.css .hljs-value,
+.aspectj .hljs-function,
+.css .hljs-function
+.hljs-preprocessor,
+.hljs-pragma {
+  color: #f8f8f2;
+}
+
+.hljs-strongemphasis,
+.hljs-strong,
+.hljs-emphasis {
+  color: #a8a8a2;
+}
+
+.hljs-bullet,
+.hljs-blockquote,
+.hljs-horizontal_rule,
+.hljs-number,
+.hljs-regexp,
+.alias .hljs-keyword,
+.hljs-literal,
+.hljs-hexcolor {
+  color: #ae81ff;
+}
+
+.hljs-code,
+.hljs-title,
+.css .hljs-class,
+.hljs-class .hljs-title:last-child {
+  color: #a6e22e;
+  /*color: #e6db74;*/
+}
+
+.hljs-link_url {
+  font-size: 80%;
+}
+
+.hljs-strong,
+.hljs-strongemphasis {
+  font-weight: bold;
+}
+
+.hljs-emphasis,
+.hljs-strongemphasis,
+.hljs-class .hljs-title:last-child,
+.hljs-typename {
+  font-style: italic;
+}
+
+.hljs-keyword,
+.ruby .hljs-class .hljs-keyword:first-child,
+.ruby .hljs-function .hljs-keyword,
+.hljs-function,
+.hljs-change,
+.hljs-winutils,
+.hljs-flow,
+.nginx .hljs-title,
+.tex .hljs-special,
+.hljs-header,
+.hljs-symbol,
+.hljs-symbol .hljs-string,
+.hljs-tag .hljs-title,
+.hljs-value,
+.alias .hljs-keyword:first-child,
+.css .hljs-tag,
+.css .unit,
+.css .hljs-important {
+  color: #f92672;
+}
+
+.hljs-function .hljs-keyword,
+.hljs-class .hljs-keyword:first-child,
+.hljs-aspect .hljs-keyword:first-child,
+.hljs-constant,
+.hljs-typename,
+.hljs-name,
+.css .hljs-attribute {
+  color: #66d9ef;
+}
+
+.hljs-variable,
+.hljs-params,
+.hljs-class .hljs-title,
+.hljs-aspect .hljs-title {
+  color: #f8f8f2;
+}
+
+.hljs-tag .hljs-value,
+.hljs-string,
+.css .hljs-id,
+.hljs-subst,
+.hljs-type,
+.ruby .hljs-class .hljs-parent,
+.django .hljs-template_tag,
+.django .hljs-variable,
+.smalltalk .hljs-class,
+.django .hljs-filter .hljs-argument,
+.smalltalk .hljs-localvars,
+.smalltalk .hljs-array,
+.hljs-attr_selector,
+.hljs-pseudo,
+.hljs-addition,
+.hljs-stream,
+.hljs-envvar,
+.apache .hljs-tag,
+.apache .hljs-cbracket,
+.tex .hljs-command,
+.hljs-prompt,
+.hljs-link_label,
+.hljs-link_url {
+  color: #e6db74;
+}
+
+.hljs-comment,
+.hljs-annotation,
+.hljs-decorator,
+.hljs-pi,
+.hljs-doctype,
+.hljs-deletion,
+.hljs-shebang,
+.apache .hljs-sqbracket,
+.tex .hljs-formula {
+  color: #75715e;
+}
+
+.coffeescript .javascript,
+.javascript .xml,
+.tex .hljs-formula,
+.xml .javascript,
+.xml .vbscript,
+.xml .css,
+.xml .hljs-cdata,
+.xml .php,
+.php .xml {
+  opacity: 0.5;
+}
+/***********/
+.hljs-attribute{
+  color: #a6e22e;
+}
+/***** node keyword ******/
+.hljs-built_in{
+  color: #3396dc;
+  font-weight: bold;
+}
+  </style>
+  <style>
+    .container {
+      width: 86%;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .header p {
+      color: #666;
+    }
+
+    .example {
+      padding: 20px 0;
+    }
+  </style>
+
+  <script>
+    // Console-polyfill. MIT license.
+    // https://github.com/paulmillr/console-polyfill
+    // Make it safe to do console.log() always.
+    (function (global) {
+      'use strict';
+      global.console = global.console || {};
+      var con = global.console;
+      var prop, method;
+      var empty = {};
+      var dummy = function () {
+      };
+      var properties = 'memory'.split(',');
+      var methods = ('assert,clear,count,debug,dir,dirxml,error,exception,group,' +
+      'groupCollapsed,groupEnd,info,log,markTimeline,profile,profiles,profileEnd,' +
+      'show,table,time,timeEnd,timeline,timelineEnd,timeStamp,trace,warn').split(',');
+      while (prop = properties.pop()) con[prop] = con[prop] || empty;
+      while (method = methods.pop()) con[method] = con[method] || dummy;
+    })(typeof window === 'undefined' ? this : window);
+    // Using `this` for web workers while maintaining compatibility with browser
+    // targeted script loaders such as Browserify or Webpack where the only way to
+    // get to the global object is via `window`.
+  </script>
+  <!--[if lt IE 9]>
+  <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js,es5-shim/4.0.5/es5-sham.js,html5shiv/3.7.2/src/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://as.alipayobjects.com/g/component/??modernizr/2.8.3/modernizr.js,fastclick/1.0.6/fastclick.js"></script>
+  <script>
+  if(!window.Promise) {
+    document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+  }
+  </script>
+  <link rel="stylesheet" href="../common.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>rmc-list-view@0.11.3</h1>
+
+      <p>m-list-view ui component for react</p>
+    </div>
+    <div class="example" id="__react-content"></div>
+
+    <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint-disable no-console */</span>
+<span class="hljs-comment">/* eslint no-dupe-keys: 0, no-mixed-operators: 0 */</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'../assets/index.less'</span>;
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
+<span class="hljs-keyword">import</span> ListView <span class="hljs-keyword">from</span> <span class="hljs-string">'../src'</span>;
+<span class="hljs-keyword">import</span> Zscroller <span class="hljs-keyword">from</span> <span class="hljs-string">'../src/Zscroller'</span>;
+
+<span class="hljs-keyword">const</span> data = [
+  {
+    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png'</span>,
+    title: <span class="hljs-string">'Meet hotel'</span>,
+    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
+  },
+  {
+    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png'</span>,
+    title: <span class="hljs-string">'McDonald\'s invites you'</span>,
+    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
+  },
+  {
+    img: <span class="hljs-string">'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png'</span>,
+    title: <span class="hljs-string">'Eat the week'</span>,
+    des: <span class="hljs-string">'不是所有的兼职汪都需要风吹日晒'</span>,
+  },
+];
+<span class="hljs-keyword">let</span> index = data.length - <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">const</span> NUM_ROWS = <span class="hljs-number">20</span>;
+<span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">0</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">genData</span>(<span class="hljs-params">pIndex = 0</span>) </span>{
+  <span class="hljs-keyword">const</span> dataArr = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; NUM_ROWS; i++) {
+    dataArr.push(<span class="hljs-string">`row - <span class="hljs-subst">${(pIndex * NUM_ROWS) + i}</span>`</span>);
+  }
+  <span class="hljs-keyword">return</span> dataArr;
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> ListView.DataSource({
+      rowHasChanged: (row1, row2) =&gt; row1 !== row2,
+    });
+
+    <span class="hljs-keyword">this</span>.state = {
+      dataSource,
+      refreshing: <span class="hljs-literal">true</span>,
+      height: <span class="hljs-built_in">document</span>.documentElement.clientHeight,
+    };
+  }
+
+  <span class="hljs-comment">// If you use redux, the data maybe at props, you need use `componentWillReceiveProps`</span>
+  <span class="hljs-comment">// componentWillReceiveProps(nextProps) {</span>
+  <span class="hljs-comment">//   if (nextProps.dataSource !== this.props.dataSource) {</span>
+  <span class="hljs-comment">//     this.setState({</span>
+  <span class="hljs-comment">//       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),</span>
+  <span class="hljs-comment">//     });</span>
+  <span class="hljs-comment">//   }</span>
+  <span class="hljs-comment">// }</span>
+
+  componentDidMount() {
+    <span class="hljs-built_in">document</span>.body.style.overflowY =
+      navigator.userAgent.match(<span class="hljs-regexp">/Android|iPhone|iPad|iPod/i</span>) ? <span class="hljs-string">'hidden'</span> : <span class="hljs-string">'auto'</span>;
+
+    <span class="hljs-comment">// handle https://github.com/ant-design/ant-design-mobile/issues/1588</span>
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts = (e) =&gt; {
+      <span class="hljs-keyword">this</span>.tsPageY = e.touches[<span class="hljs-number">0</span>].pageY;
+    });
+    <span class="hljs-comment">// In chrome61 `document.body.scrollTop` is invalid</span>
+    <span class="hljs-keyword">const</span> scrollNode = <span class="hljs-built_in">document</span>.scrollingElement ? <span class="hljs-built_in">document</span>.scrollingElement : <span class="hljs-built_in">document</span>.body;
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().addEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm = (e) =&gt; {
+      <span class="hljs-keyword">this</span>.tmPageY = e.touches[<span class="hljs-number">0</span>].pageY;
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.tmPageY &gt; <span class="hljs-keyword">this</span>.tsPageY &amp;&amp; <span class="hljs-keyword">this</span>.scrollerTop &lt;= <span class="hljs-number">0</span> &amp;&amp; scrollNode.scrollTop &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'start pull to refresh'</span>);
+        <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">false</span>;
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">this</span>.domScroller.options.preventDefaultOnTouchMove = <span class="hljs-literal">undefined</span>;
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchstart'</span>, <span class="hljs-keyword">this</span>.ts);
+    <span class="hljs-keyword">this</span>.lv.getInnerViewNode().removeEventListener(<span class="hljs-string">'touchmove'</span>, <span class="hljs-keyword">this</span>.tm);
+  }
+
+  onScroll = (e) =&gt; {
+    <span class="hljs-comment">// onScroll will trigger on container touchstart, ref https://github.com/yiminghe/zscroller/blob/a67854c8dc0a1fda15acae4ffdb08e65aac79fb3/src/DOMScroller.js#L229</span>
+    <span class="hljs-keyword">this</span>.scrollerTop = e.scroller.getValues().top;
+    <span class="hljs-keyword">this</span>.domScroller = e;
+  };
+
+  onRefresh = () =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onRefresh'</span>);
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.manuallyRefresh) {
+      <span class="hljs-keyword">this</span>.setState({ refreshing: <span class="hljs-literal">true</span>, isLoading: <span class="hljs-literal">true</span> });
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">this</span>.manuallyRefresh = <span class="hljs-literal">false</span>;
+    }
+
+    <span class="hljs-comment">// simulate initial Ajax</span>
+    setTimeout(() =&gt; {
+      <span class="hljs-keyword">this</span>.rData = genData();
+      <span class="hljs-keyword">this</span>.setState({
+        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
+        refreshing: <span class="hljs-literal">false</span>,
+        isLoading: <span class="hljs-literal">false</span>,
+        showFinishTxt: <span class="hljs-literal">true</span>,
+      });
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.domScroller) {
+        <span class="hljs-keyword">this</span>.domScroller.scroller.options.animationDuration = <span class="hljs-number">500</span>;
+      }
+    }, <span class="hljs-number">200</span>);
+  };
+
+  onEndReached = (event) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fire onEndReached'</span>);
+    <span class="hljs-comment">// load new data</span>
+    <span class="hljs-comment">// hasMore: from backend data, indicates whether it is the last page, here is false</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.isLoading &amp;&amp; !<span class="hljs-keyword">this</span>.state.hasMore) {
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'reach end'</span>, event);
+    <span class="hljs-keyword">this</span>.setState({ isLoading: <span class="hljs-literal">true</span> });
+    setTimeout(() =&gt; {
+      <span class="hljs-keyword">this</span>.rData = [...this.rData, ...genData(++pageIndex)];
+      <span class="hljs-keyword">this</span>.setState({
+        dataSource: <span class="hljs-keyword">this</span>.state.dataSource.cloneWithRows(<span class="hljs-keyword">this</span>.rData),
+        isLoading: <span class="hljs-literal">false</span>,
+      });
+    }, <span class="hljs-number">1000</span>);
+  };
+
+  scrollingComplete = () =&gt; {
+    <span class="hljs-comment">// In general, this.scrollerTop should be 0 at the end, but it may be -0.000051 in chrome61.</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.scrollerTop &gt;= -<span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">this</span>.setState({ showFinishTxt: <span class="hljs-literal">false</span> });
+    }
+  }
+
+  renderCustomIcon() {
+    <span class="hljs-keyword">return</span> [
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">"0"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"zscroller-refresh-control-pull"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>{this.state.showFinishTxt ? '刷新完毕' : '下拉可以刷新'}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
+      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">"1"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"zscroller-refresh-control-release"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>松开立即刷新<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
+    ];
+  }
+
+  render() {
+    return (
+      <span class="hljs-tag">&lt;<span class="hljs-title">ListView</span>
+        <span class="hljs-attribute">ref</span>=<span class="hljs-value">{el</span> =&gt;</span> this.lv = el}
+        dataSource={this.state.dataSource}
+        style={{ height: 400, border: '1px solid #ddd', margin: '10px 0' }}
+        renderScrollComponent={props =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">Zscroller</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>}
+        renderHeader={() =&gt; <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>Pull to refresh<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>}
+        renderFooter={() =&gt; (<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> <span class="hljs-attribute">30</span>, <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>
+          {this.state.isLoading ? 'Loading...' : 'Loaded'}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>}
+        renderRow={(rowData, sectionID, rowID) =&gt; {
+          <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) {
+            index = data.length - <span class="hljs-number">1</span>;
+          }
+          <span class="hljs-keyword">const</span> obj = data[index--];
+          <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{rowID}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">8px</span> <span class="hljs-attribute">16px</span>' }}&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>{obj.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">flex</span>' }}&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">height:</span> <span class="hljs-attribute">64</span>, <span class="hljs-attribute">marginRight:</span> <span class="hljs-attribute">8</span> }} <span class="hljs-attribute">src</span>=<span class="hljs-value">{obj.img}</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">display:</span> '<span class="hljs-attribute">inline-block</span>' }}&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{rowData}-{obj.des}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">color:</span> '#<span class="hljs-attribute">FF6E27</span>', <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">15</span> }}&gt;</span>{rowID}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          )</span>;
+        }}
+        renderSeparator={(sectionID, rowID) =&gt; (
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{`${sectionID}-${rowID}`}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '#<span class="hljs-attribute">F5F5F9</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">8</span> }} /&gt;</span>
+        )</span>}
+        scrollerOptions={{ scrollbars: <span class="hljs-literal">true</span>, scrollingComplete: <span class="hljs-keyword">this</span>.scrollingComplete }}
+        refreshControl
+        refreshing={<span class="hljs-keyword">this</span>.state.refreshing}
+        onRefresh={<span class="hljs-keyword">this</span>.onRefresh}
+        icon={<span class="hljs-keyword">this</span>.renderCustomIcon()}
+        onScroll={<span class="hljs-keyword">this</span>.onScroll}
+        onEndReached={<span class="hljs-keyword">this</span>.onEndReached}
+        onEndReachedThreshold={<span class="hljs-number">10</span>}
+        pageSize={<span class="hljs-number">10</span>}
+      /&gt;
+    );
+  }
+}
+
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
+</span></code></pre></div>
+  </div>
+  <a href="https://github.com/react-component/m-list-view">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+  </a>
+  <script>FastClick.attach(document.body);</script>
+  <script src="../common.js?nowrap"></script>
+  <script src="zscroller-pulldown.js?nowrap"></script>
+</body>
+
+</html>

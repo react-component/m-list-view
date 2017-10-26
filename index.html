@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rmc-list-view@0.8.14 - m-list-view ui component for react</title>
+  <title>rmc-list-view@0.11.3 - m-list-view ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,32 +737,30 @@
 
 <body>
 <div class="header">
-  <h1>rmc-list-view@0.8.14</h1>
+  <h1>rmc-list-view@0.11.3</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
       
+      <li><a href="examples/base-rows.html">base-rows</a></li>
+      
+      <li><a href="examples/base-rowsAndSections.html">base-rowsAndSections</a></li>
+      
+      <li><a href="examples/base-sticky.html">base-sticky</a></li>
+      
+      <li><a href="examples/base-useBodyScroll.html">base-useBodyScroll</a></li>
+      
       <li><a href="examples/indexed-sticky.html">indexed-sticky</a></li>
       
       <li><a href="examples/indexed.html">indexed</a></li>
       
-      <li><a href="examples/paging-sticky.html">paging-sticky</a></li>
+      <li><a href="examples/pullToRefresh.html">pullToRefresh</a></li>
       
-      <li><a href="examples/paging.html">paging</a></li>
+      <li><a href="examples/zscroller-pulldown.html">zscroller-pulldown</a></li>
       
-      <li><a href="examples/refreshControl.html">refreshControl</a></li>
-      
-      <li><a href="examples/simple-horizontal.html">simple-horizontal</a></li>
-      
-      <li><a href="examples/simple-paging.html">simple-paging</a></li>
-      
-      <li><a href="examples/simple-zscroller.html">simple-zscroller</a></li>
-      
-      <li><a href="examples/simple.html">simple</a></li>
-      
-      <li><a href="examples/util.html">util</a></li>
+      <li><a href="examples/zscroller.html">zscroller</a></li>
       
     </ul>
   </div>
@@ -925,14 +923,6 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>refreshControl</td>
-<td>A <a href="https://mobile.ant.design/components/refresh-control/" title="null">RefreshControl</a> component, used to provide pull-to-refresh functionality for the ScrollView.</td>
-<td>element</td>
-<td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
 <td>onLayout</td>
 <td>Invoked on mount and layout changes with</td>
 <td>({nativeEvent:{ layout:{ width, height }}}) =&gt; {}</td>
@@ -954,6 +944,15 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
+<td>renderSectionWrapper (<code>web only</code>)</td>
+<td></td>
+<td>render listview section wrapper component</td>
+<td>(sectionID) =&gt; renderable</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
 <td>renderSectionBodyWrapper (<code>web only</code>)</td>
 <td>render listview section body wrapper component</td>
 <td>(sectionID) =&gt; renderable</td>
@@ -970,24 +969,8 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 <tr>
 <td></td>
-<td>useZscroller (<code>web only</code>)</td>
-<td>use <a href="https://github.com/yiminghe/zscroller" title="null">zscroller</a> to simulate the implementation of rolling containers(can be used for some poor Android machine) (<code>useBodyScroll</code> and <code>stickyHeader</code> settings are automatically ignored), and can support RefreshControl well</td>
-<td>bool</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>scrollerOptions (<code>web only</code>)</td>
-<td><a href="https://github.com/yiminghe/zscroller#options" title="null">zscroller options</a></td>
-<td>Object</td>
-<td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>stickyHeader (<code>web only</code>)</td>
-<td>if set it, automatically enable <code>useBodyScroll</code> and you can also set <code>stickyProps</code> / <code>stickyContainerProps</code> (see <a href="https://github.com/captivationsoftware/react-sticky" title="null">react-sticky</a>)</td>
+<td>pullToRefresh (<code>web only</code>)</td>
+<td>Whether enable pullToRefresh, you need use it with <a href="https://github.com/react-component/m-pull-to-refresh" title="null">rmc-pull-to-refresh</a></td>
 <td>bool</td>
 <td>false</td>
 <td></td>
@@ -1000,7 +983,7 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </ul>
 <h2>ListView.IndexedList<a id="user-content-listview.indexedlist" name="listview.indexedlist" class="anchor" aria-hidden="true" href="#listview.indexedlist"><span class="octicon octicon-link"></span></a></h2><p>This component is often used in the &quot;Contacts&quot; / &quot;city list&quot; scenes, support for index navigation.</p>
 <blockquote>
-<p>You can use almost all APIs on the ListView, except for <code>useZscroller</code></p>
+<p>You can use almost all APIs on the ListView.</p>
 <p>Note: Only two-step rendering is supported, so that the first screen priority display can be achieved, but if the list data volume is too large, the overall performance will still be affected.</p>
 </blockquote>
 <table>
@@ -1063,73 +1046,20 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 </tr>
 </tbody>
 </table>
-<h2>ListView.RefreshControl<a id="user-content-listview.refreshcontrol" name="listview.refreshcontrol" class="anchor" aria-hidden="true" href="#listview.refreshcontrol"><span class="octicon octicon-link"></span></a></h2><table>
-<thead>
-<tr>
-<th>Properties</th>
-<th>Descrition</th>
-<th>Type</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>icon</td>
-<td>refresh indicator, include <code>pull</code> and <code>release</code> state</td>
-<td>react node</td>
-<td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>loading</td>
-<td>loading indicator</td>
-<td>react node</td>
-<td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>distanceToRefresh</td>
-<td>distance to refresh</td>
-<td>number</td>
-<td><code>50px</code></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>onRefresh</td>
-<td>required, Called when the view starts refreshing.</td>
-<td>() =&gt; void</td>
-<td>-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>refreshing</td>
-<td>Whether the view should be indicating an active refresh</td>
-<td>bool</td>
-<td>false</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2>Tips<a id="user-content-tips" name="tips" class="anchor" aria-hidden="true" href="#tips"><span class="octicon octicon-link"></span></a></h2><p>ListView has three types of scroll containers:</p>
+<h2>Tips<a id="user-content-tips" name="tips" class="anchor" aria-hidden="true" href="#tips"><span class="octicon octicon-link"></span></a></h2><p>ListView has two types of scroll containers:</p>
 <ol>
 <li>Partial div container<ul>
 <li>default, note: <strong>need to manually set the height of the ListView</strong></li>
 </ul>
 </li>
 <li>html body container<ul>
-<li>set <code>useBodyScroll</code> or <code>stickyHeader</code> to take effect (do not need to set height)</li>
-</ul>
-</li>
-<li>Use <a href="https://github.com/yiminghe/zscroller" title="null">zscroller</a> to simulate the rolling container<ul>
-<li>set <code>useZscroller</code> to take effect, then you can set <code>scrollerOptions</code></li>
+<li>set <code>useBodyScroll</code> to take effect (do not need to set height)</li>
 </ul>
 </li>
 </ol>
+<blockquote>
+<p>please see <a href="./HISTORY.md#upgrade-tips" title="0.11.0 upgrade tips">0.11.0 upgrade tips</a>.</p>
+</blockquote>
 <h2>Test Case<a id="user-content-test-case" name="test-case" class="anchor" aria-hidden="true" href="#test-case"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm test</code></pre></div><h2>Coverage<a id="user-content-coverage" name="coverage" class="anchor" aria-hidden="true" href="#coverage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm run coverage</code></pre></div><p>open coverage/ dir</p>
 <h2>License<a id="user-content-license" name="license" class="anchor" aria-hidden="true" href="#license"><span class="octicon octicon-link"></span></a></h2><p>rmc-list-view is released under the MIT license.</p>
 

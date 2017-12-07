@@ -127,7 +127,7 @@ export default class ScrollView extends React.Component {
     const preCls = prefixCls || listViewPrefixCls || '';
 
     const containerProps = {
-      ref: el => this.ScrollViewRef = el,
+      ref: el => this.ScrollViewRef = el || this.ScrollViewRef,
       style: { ...(useBodyScroll ? {} : styleBase), ...style },
       className: classNames(className, `${preCls}-scrollview`),
     };

@@ -12646,7 +12646,7 @@ var ScrollView = function (_React$Component) {
 
       var containerProps = {
         ref: function ref(el) {
-          return _this4.ScrollViewRef = el;
+          return _this4.ScrollViewRef = el || _this4.ScrollViewRef;
         },
         style: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, useBodyScroll ? {} : styleBase, style),
         className: __WEBPACK_IMPORTED_MODULE_7_classnames___default()(className, preCls + '-scrollview')

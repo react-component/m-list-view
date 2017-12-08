@@ -236,6 +236,19 @@ var isWebView = typeof navigator !== 'undefined' && /(iPhone|iPod|iPad).*AppleWe
 var DOWN = 'down';
 var UP = 'up';
 var INDICATOR = { activate: 'release', deactivate: 'pull', release: 'loading', finish: 'finish' };
+var supportsPassive = false;
+try {
+    var opts = Object.defineProperty({}, 'passive', {
+        get: function get() {
+            supportsPassive = true;
+        }
+    });
+    window.addEventListener('test', null, opts);
+} catch (e) {
+    // empty
+}
+var willPreventDefault = supportsPassive ? { passive: false } : false;
+// const willNotPreventDefault = supportsPassive ? { passive: true } : false;
 
 var PullToRefresh = function (_React$Component2) {
     __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(PullToRefresh, _React$Component2);
@@ -286,7 +299,7 @@ var PullToRefresh = function (_React$Component2) {
                 touchcancel: _this2.onTouchEnd.bind(_this2, ele)
             };
             Object.keys(_this2._to).forEach(function (key) {
-                ele.addEventListener(key, _this2._to[key]);
+                ele.addEventListener(key, _this2._to[key], willPreventDefault);
             });
         };
         _this2.destroy = function (ele) {
@@ -302,6 +315,7 @@ var PullToRefresh = function (_React$Component2) {
             _this2._ScreenY = _this2._startScreenY = e.touches[0].screenY;
             // 一开始 refreshing 为 true 时 this._lastScreenY 有值
             _this2._lastScreenY = _this2._lastScreenY || 0;
+            e.stopPropagation();
         };
         _this2.isEdge = function (ele, direction) {
             var container = _this2.props.getScrollContainer();
@@ -355,7 +369,6 @@ var PullToRefresh = function (_React$Component2) {
                 // https://github.com/ant-design/ant-design-mobile/issues/573#issuecomment-339560829
                 // iOS UIWebView issue, It seems no problem in WKWebView
                 if (isWebView && e.changedTouches[0].clientY < 0) {
-                  document.body.style.background = '#ccc'
                     _this2.onTouchEnd();
                 }
             }
@@ -490,7 +503,6 @@ PullToRefresh.defaultProps = {
     distanceToRefresh: 25,
     indicator: INDICATOR
 };
-
 
 /***/ }),
 

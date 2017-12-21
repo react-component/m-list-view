@@ -122,7 +122,6 @@ export default class ScrollView extends React.Component {
       position: 'relative',
       overflow: 'auto',
       WebkitOverflowScrolling: 'touch',
-      flex: 1,
     };
     const preCls = prefixCls || listViewPrefixCls || '';
 

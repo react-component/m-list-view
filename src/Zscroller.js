@@ -151,7 +151,7 @@ export default class ScrollView extends React.Component {
 
     const containerProps = {
       ref: el => this.ScrollViewRef = el,
-      style: { position: 'relative', overflow: 'hidden', flex: 1, ...style },
+      style: { position: 'relative', overflow: 'hidden', ...style },
       className: classNames(className, `${preCls}-scrollview`),
     };
     const contentContainerProps = {

@@ -2577,7 +2577,7 @@ var ScrollView = function (_React$Component) {
         ref: function ref(el) {
           return _this4.ScrollViewRef = el;
         },
-        style: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ position: 'relative', overflow: 'hidden', flex: 1 }, style),
+        style: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ position: 'relative', overflow: 'hidden' }, style),
         className: __WEBPACK_IMPORTED_MODULE_10_classnames___default()(className, preCls + '-scrollview')
       };
       var contentContainerProps = {

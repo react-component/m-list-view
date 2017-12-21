@@ -12639,8 +12639,7 @@ var ScrollView = function (_React$Component) {
       var styleBase = {
         position: 'relative',
         overflow: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        flex: 1
+        WebkitOverflowScrolling: 'touch'
       };
       var preCls = prefixCls || listViewPrefixCls || '';
 

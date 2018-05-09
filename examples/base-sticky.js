@@ -93,18 +93,22 @@ class Demo extends React.Component {
           />
         )}
         renderSectionHeader={(sectionData) => (
-          <Sticky
-            className="sticky"
-            style={{
-              zIndex: 3,
-              padding: 16,
-              backgroundColor: parseInt(sectionData.replace('Section ', ''), 10) % 2 ?
-                '#5890ff' : '#F8591A',
-              color: 'white',
-            }}
-            onStickyStateChange={isSticky => console.log(isSticky)}
-          >
-            {sectionData}
+          <Sticky>
+            {({
+              style,
+            }) => (
+              <div
+                className="sticky"
+                style={{
+                  ...style,
+                  zIndex: 3,
+                  padding: 16,
+                  backgroundColor: parseInt(sectionData.replace('Section ', ''), 10) % 2 ?
+                    '#5890ff' : '#F8591A',
+                  color: 'white',
+                }}
+              >{sectionData}</div>
+            )}
           </Sticky>
         )}
         renderHeader={() => <div style={{ height: 90, backgroundColor: '#bbb' }}>Header</div>}

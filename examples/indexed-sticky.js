@@ -67,8 +67,16 @@ class Demo extends React.Component {
           />
         )}
         renderSectionHeader={(sectionData) => (
-          <Sticky style={{ color: 'blue', padding: 10, backgroundColor: '#ddd' }}>
-            {sectionData}
+          <Sticky>
+            {({
+              style,
+            }) => (
+              <div
+                style={{
+                  ...style, color: 'blue', padding: 10, backgroundColor: '#ddd',
+                }}
+              >{sectionData}</div>
+            )}
           </Sticky>
         )}
         renderHeader={() => <span style={{ padding: 10 }}>header</span>}

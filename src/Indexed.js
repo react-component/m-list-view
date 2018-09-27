@@ -177,8 +177,8 @@ export default class IndexedList extends React.Component {
       el = el.parentNode;
     }
     if (this.props.showQuickSearchIndicator) {
-      this.qsIndicatorRef.innerText = el.innerText.trim();
       this.setState({
+        quickSearchIndicatorText: el.innerText.trim(),
         showQuickSearchIndicator: true,
       });
       if (this._indicatorTimer) {
@@ -274,8 +274,8 @@ export default class IndexedList extends React.Component {
         [`${prefixCls}-qsindicator`]: true,
         [`${prefixCls}-qsindicator-hide`]:
         !showQuickSearchIndicator || !this.state.showQuickSearchIndicator,
-      })} ref={el => this.qsIndicatorRef = el}
-      /> : null}
+      })}
+      >{this.state.quickSearchIndicatorText || ''}</div> : null}
     </div>);
   }
 }

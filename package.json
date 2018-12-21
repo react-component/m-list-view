@@ -55,7 +55,7 @@
     "enzyme-to-json": "^1.4.5",
     "jest": "^19.0.2",
     "pre-commit": "1.x",
-    "rc-tools": "6.x",
+    "rc-tools": "8.x",
     "react": "15.x",
     "react-dom": "15.x",
     "react-sticky": "^6.0.2",

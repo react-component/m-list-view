@@ -59,7 +59,7 @@
     "react": "15.x",
     "react-dom": "15.x",
     "react-sticky": "^6.0.2",
-    "react-test-renderer": "15.x",
+    "react-test-renderer": "16.x",
     "rmc-pull-to-refresh": "^1.0.0-alpha.0"
   },
   "jest": {

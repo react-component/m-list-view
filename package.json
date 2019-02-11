@@ -46,7 +46,7 @@
     "classnames": "^2.2.5",
     "fbjs": "^0.8.3",
     "prop-types": "^15.5.8",
-    "warning": "^3.0.0",
+    "warning": "^4.0.3",
     "zscroller": "~0.4.0"
   },
   "devDependencies": {
